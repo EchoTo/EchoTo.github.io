@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>OpenShift | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">OpenShift</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 17, 2025&nbsp;&nbsp;15:07:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/OpenShift/">OpenShift</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="第一章-OpenShift概述"><a href="#第一章-OpenShift概述" class="headerlink" title="第一章 OpenShift概述"></a>第一章 OpenShift概述</h2><hr>
+<h3 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h3><hr>
+<ul>
+<li>Red Hat OpenShift Container Platform 基于kubernetes容器基础架构构建</li>
+<li>增添了：远程管理、租户、安全性增强、监控与审计、应用生命周期管理和自服务接口等</li>
+<li>是一个生产用的PaaS平台</li>
+<li>RHOCP v4开始，集群中所有主机均采用CoreOS作为底层操作系统</li>
+</ul>
+<p>OpenShift功能</p>
+<ul>
+<li>集成式开发流：OCP内置registry、CI&#x2F;CD管道和S2I功能</li>
+<li>路由：向外界发布service</li>
+<li>Metrics和日志记录：包含内置自我分析metrics服务和聚合日志记录(EKF)</li>
+<li>统一UI：OC命令和Web Console</li>
+</ul>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token namespace">[root@redhat1 ~]</span><span class="token comment"># podman images</span>
+REPOSITORY                           TAG         IMAGE ID      CREATED     SIZE
+registry<span class="token punctuation">.</span>access<span class="token punctuation">.</span>redhat<span class="token punctuation">.</span>com/ubi9/ubi  latest      a87631f6cdda  4 days ago  251 MB
+
+<span class="token namespace">[root@redhat1 ~]</span><span class="token comment"># podman run registry.access.redhat.com/ubi9/ubi:latest echo "Hello World!"</span>
+Hello World!
+
+<span class="token namespace">[root@redhat1 ~]</span><span class="token comment"># podman run -d -p 8080 registry.access.redhat.com/ubi9/ubi:latest</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="第二章-搭建OpenShift"><a href="#第二章-搭建OpenShift" class="headerlink" title="第二章 搭建OpenShift"></a>第二章 搭建OpenShift</h2><hr>
+<h3 id="2-1-资源规划"><a href="#2-1-资源规划" class="headerlink" title="2.1 资源规划"></a>2.1 资源规划</h3><hr>
+<table>
+<thead>
+<tr>
+<th align="center">作用</th>
+<th align="center">IP地址</th>
+<th align="center">操作系统</th>
+<th align="center">配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Master</td>
+<td align="center">172.16.140.133</td>
+<td align="center">Centos7.9   基础设施服务器</td>
+<td align="center">2颗CPU 2G内存 50G硬盘</td>
+</tr>
+<tr>
+<td align="center">Node1</td>
+<td align="center">172.16.140.135</td>
+<td align="center">Centos7.9   基础设施服务器</td>
+<td align="center">2颗CPU 2G内存 50G硬盘</td>
+</tr>
+<tr>
+<td align="center">Node2</td>
+<td align="center">172.16.140.134</td>
+<td align="center">Centos7.9   基础设施服务器</td>
+<td align="center">2颗CPU 2G内存 50G硬盘</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="2-2-安装过程"><a href="#2-2-安装过程" class="headerlink" title="2.2 安装过程"></a>2.2 安装过程</h3><hr>
+<h4 id="2-2-1-前期配置"><a href="#2-2-1-前期配置" class="headerlink" title="2.2.1 前期配置"></a>2.2.1 前期配置</h4><p>开启所有节点的SELinux(所有主机执行)</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token namespace">[root@master ~]</span><span class="token comment"># grep -v ^# /etc/selinux/config | grep -v ^$</span>
+SELINUX=enforcing
+SELINUXTYPE=targeted<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>所有节点关闭防火墙(所有主机执行)</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token namespace">[root@master ~]</span><span class="token comment"># systemctl stop firewalld &amp;&amp; systemctl disable firewalld</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="2-2-2-安装依赖包"><a href="#2-2-2-安装依赖包" class="headerlink" title="2.2.2 安装依赖包"></a>2.2.2 安装依赖包</h4><p>安装OpenShift依赖的软件包(所有主机执行)</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token namespace">[root@master ~]</span><span class="token comment"># yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct bash-completion.noarch python-passlib NetworkManager vim</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>安装docker(所有主机执行)</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token namespace">[root@master ~]</span><span class="token comment"># docker version</span>
+Client:
+ Version:           18<span class="token punctuation">.</span>06<span class="token punctuation">.</span>3-ce
+ API version:       1<span class="token punctuation">.</span>38
+ Go version:        go1<span class="token punctuation">.</span>10<span class="token punctuation">.</span>3
+ Git commit:        d7080c1
+ Built:             Wed Feb 20 02:24:54 2019
+ OS/Arch:           linux/arm64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          18<span class="token punctuation">.</span>06<span class="token punctuation">.</span>3-ce
+  API version:      1<span class="token punctuation">.</span>38 <span class="token punctuation">(</span>minimum version 1<span class="token punctuation">.</span>12<span class="token punctuation">)</span>
+  Go version:       go1<span class="token punctuation">.</span>10<span class="token punctuation">.</span>3
+  Git commit:       d7080c1
+  Built:            Wed Feb 20 02:28:12 2019
+  OS/Arch:          linux/arm64
+  Experimental:     false<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>配置Docker镜像仓库(所有主机执行)</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token comment"># 可以搭建私服，挂🪜把镜像推上去</span>
+<span class="token namespace">[root@master ~]</span><span class="token comment"># less /etc/docker/daemon.json</span>
+<span class="token punctuation">&#123;</span>
+        <span class="token string">"exec-opts"</span>: <span class="token punctuation">[</span><span class="token string">"native.cgroupdriver=systemd"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">"registry-mirrors"</span>: <span class="token punctuation">[</span><span class="token string">"https://kn0t2bca.mirror.aliyuncs.com"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">"insecure-registries"</span> : <span class="token punctuation">[</span><span class="token string">"47.93.22.25:5000"</span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># 重启docker使配置生效</span>
+<span class="token namespace">[root@master ~]</span><span class="token comment"># systemctl daemon-reload &amp;&amp; systemctl restart docker &amp;&amp; systemctl enable docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>Master主机上安装Ansible(自动化运维工具)</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token namespace">[root@master ~]</span><span class="token comment"># yum -y install epel-release</span>
+<span class="token namespace">[root@master ~]</span><span class="token comment"># yum -y install centos-release-ansible-28.noarch</span>
+<span class="token namespace">[root@master ~]</span><span class="token comment"># yum list ansible --showduplicates</span>
+已加载插件：fastestmirror<span class="token punctuation">,</span> langpacks
+Loading mirror speeds <span class="token keyword">from</span> cached hostfile
+ <span class="token operator">*</span> epel: d2lzkl7pfhq30w<span class="token punctuation">.</span>cloudfront<span class="token punctuation">.</span>net
+可安装的软件包
+ansible<span class="token punctuation">.</span>noarch                                                                2<span class="token punctuation">.</span>8<span class="token punctuation">.</span>5-1<span class="token punctuation">.</span>el7                                                                 epel
+<span class="token namespace">[root@master ~]</span><span class="token comment"># yum -y install ansible-2.8.5</span>
+
+<span class="token comment"># 查看ansible版本</span>
+<span class="token namespace">[root@master ~]</span><span class="token comment"># ansible --version</span>
+ansible 2<span class="token punctuation">.</span>8<span class="token punctuation">.</span>5
+  config file = <span class="token operator">/</span>etc/ansible/ansible<span class="token punctuation">.</span>cfg
+  configured module search path = <span class="token punctuation">[</span>u<span class="token string">'/root/.ansible/plugins/modules'</span><span class="token punctuation">,</span> u<span class="token string">'/usr/share/ansible/plugins/modules'</span><span class="token punctuation">]</span>
+  ansible python module location = <span class="token operator">/</span>usr/lib/python2<span class="token punctuation">.</span>7/site-packages/ansible
+  executable location = <span class="token operator">/</span>usr/bin/ansible
+  python version = 2<span class="token punctuation">.</span>7<span class="token punctuation">.</span>5 <span class="token punctuation">(</span>default<span class="token punctuation">,</span> Oct 14 2020<span class="token punctuation">,</span> 14:56:59<span class="token punctuation">)</span> <span class="token namespace">[GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="2-2-3-安装-x2F-配置-OpenShift"><a href="#2-2-3-安装-x2F-配置-OpenShift" class="headerlink" title="2.2.3 安装&#x2F;配置 OpenShift"></a>2.2.3 安装&#x2F;配置 OpenShift</h4><p>Master主机上下载安装<code>openshift-ansible-3.11.764-1.tar.gz</code></p>
+<p>下载安装包，解压后文件夹重命名</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token comment">#下载链接</span>
+<span class="token comment"># https://tonkyshan.cn/files/openshift-ansible-3.11.764-1.tar.gz</span>
+<span class="token namespace">[root@master ~]</span><span class="token comment"># tar -zxvf openshift-ansible-openshift-ansible-3.11.764-1.tar.gz</span>
+<span class="token namespace">[root@master ~]</span><span class="token comment"># mv openshift-ansible-openshift-ansible-3.11.764-1/  openshift-ansible</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token comment"># 修改内容如下</span>
+<span class="token namespace">[OSEv3:children]</span>
+masters
+nodes
+etcd
+
+<span class="token namespace">[OSEv3:vars]</span>
+ansible_ssh_user=root
+<span class="token comment"># 使用origin社区版</span>
+openshift_deployment_type=origin
+deployment_type=origin
+<span class="token comment"># 指定安装版本</span>
+openshift_release=v3<span class="token punctuation">.</span>11
+<span class="token comment"># 指定默认域名,访问时需要使用该域名,无dns服务器时需要手动添加本地hosts文件</span>
+openshift_master_default_subdomain=tonkyshan<span class="token punctuation">.</span>cn
+<span class="token comment"># 禁止磁盘、内存、镜像的检查</span>
+openshift_disable_check=disk_availability<span class="token punctuation">,</span>docker_storage<span class="token punctuation">,</span>memory_availability
+<span class="token comment"># disk_availability: 报错信息是推荐的master磁盘空间剩余量大于40GB。测试环境无法满足;跳过检测</span>
+<span class="token comment"># memory_availability: 报错信息是推荐的master内存为16GB;node内存为8GB;测试环境无法满足;跳过检测</span>
+<span class="token comment"># docker_image_availability: 报错信息是需要的几个镜像未找到;选择跳过;装完集群后;在使用的时候再自行下载</span>
+<span class="token comment"># docker_storage: 报错信息是推荐选择一块磁盘空间存储镜像;这里选择跳过。采用docker默认的方式存储镜像</span>
+openshift_master_identity_providers=<span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token string">'name'</span>: <span class="token string">'htpasswd_auth'</span><span class="token punctuation">,</span> <span class="token string">'login'</span>: <span class="token string">'true'</span><span class="token punctuation">,</span> <span class="token string">'challenge'</span>: <span class="token string">'true'</span><span class="token punctuation">,</span> <span class="token string">'kind'</span>: <span class="token string">'HTPasswdPasswordIdentityProvider'</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+openshift_master_htpasswd_file=<span class="token operator">/</span>etc/origin/master/htpasswd
+<span class="token comment"># ntp时间同步</span>
+openshift_clock_enabled=true
+<span class="token comment"># 节点配额</span>
+openshift_node_groups<span class="token punctuation">.</span>edits=<span class="token punctuation">&#123;</span><span class="token string">'pods-per-core'</span>: <span class="token punctuation">[</span><span class="token string">'10'</span><span class="token punctuation">]</span><span class="token punctuation">&#125;</span>
+<span class="token comment"># 主机组</span>
+<span class="token namespace">[masters]</span>
+master openshift_schedulable=True
+<span class="token comment"># 节点的主机组,包含region和infra</span>
+<span class="token namespace">[nodes]</span>
+master openshift_node_groups<span class="token punctuation">.</span>labels=<span class="token string">"&#123;'region': 'infra'&#125;"</span>
+node1 openshift_node_groups<span class="token punctuation">.</span>labels=<span class="token string">"&#123;'region': 'infra', 'zone': 'default'&#125;"</span>
+node2 openshift_node_groups<span class="token punctuation">.</span>labels=<span class="token string">"&#123;'region': 'infra', 'zone': 'default'&#125;"</span>
+master openshift_node_group_name=<span class="token string">'node-config-master'</span>
+node1 openshift_node_group_name=<span class="token string">'node-config-compute'</span>
+node2 openshift_node_group_name=<span class="token string">'node-config-compute'</span>
+
+<span class="token comment"># 至少有一个节点需要是node-config-infra</span>
+node2 openshift_node_group_name=<span class="token string">'node-config-infra'</span>
+
+<span class="token namespace">[etcd]</span>
+master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>部署前检测</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2025/03/17/OpenShift/">https://tonkyshan.cn/2025/03/17/OpenShift/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/K8s/"># K8s</a>
+                    
+                        <a href="../../../../tags/OpenShift/"># OpenShift</a>
+                    
+                        <a href="../../../../tags/Docker/"># Docker</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../04/25/%E5%B9%B4%E7%BB%88%E8%BF%B0%E8%81%8C/">年终述职</a>
+            
+            
+            <a class="next" rel="next" href="../../../02/05/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%B8%88%E5%A4%87%E8%80%83%E7%AC%94%E8%AE%B0/">系统架构师备考笔记</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

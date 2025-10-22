@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>流/批/OLAP一体的Flink引擎 | 青训营笔记 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">流/批/OLAP一体的Flink引擎 | 青训营笔记</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 31, 2022&nbsp;&nbsp;11:40:58</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="流-x2F-批-x2F-OLAP一体的Flink引擎"><a href="#流-x2F-批-x2F-OLAP一体的Flink引擎" class="headerlink" title="流&#x2F;批&#x2F;OLAP一体的Flink引擎"></a>流&#x2F;批&#x2F;OLAP一体的Flink引擎</h2><hr>
+<h3 id="1-1Flink概述"><a href="#1-1Flink概述" class="headerlink" title="1.1Flink概述"></a>1.1Flink概述</h3><hr>
+<h4 id="1-1-1Apache-Flink的诞生背景"><a href="#1-1-1Apache-Flink的诞生背景" class="headerlink" title="1.1.1Apache Flink的诞生背景"></a>1.1.1Apache Flink的诞生背景</h4><hr>
+<p>一、什么是大数据</p>
+<p>大数据(Big Data)：指无法在一定时间内用常规软件工具对其进行获取、存储、管理和处理的数据集合。</p>
+<ul>
+<li>价值化：Value</li>
+<li>海量化：Volumes</li>
+<li>快速化：Velocity</li>
+<li>多样化：Variety</li>
+</ul>
+<p>二、发展历史</p>
+<table>
+<thead>
+<tr>
+<th>史前阶段~2006</th>
+<th>Hadoop</th>
+<th>Spark</th>
+<th>Flink</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>传统数仓</td>
+<td>分布式</td>
+<td>批处理</td>
+<td>流计算</td>
+</tr>
+<tr>
+<td>Oracle</td>
+<td>Map-Reduce</td>
+<td>流处理</td>
+<td>实时、更快</td>
+</tr>
+<tr>
+<td>单机</td>
+<td>离线计算</td>
+<td>SQL高阶API</td>
+<td>流批一体</td>
+</tr>
+<tr>
+<td>黑箱使用</td>
+<td></td>
+<td>内存迭代计算</td>
+<td>Streaming&#x2F;Batch SQL</td>
+</tr>
+</tbody></table>
+<p>三、为什么需要流式计算</p>
+<p>大数据实时性带来<strong>价值更大</strong></p>
+<table>
+<thead>
+<tr>
+<th>批式计算</th>
+<th>流式计算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>离线计算，非实时</td>
+<td>实时计算，快速、低延迟</td>
+</tr>
+<tr>
+<td>静态数据集</td>
+<td>无线流、动态、无边界</td>
+</tr>
+<tr>
+<td>小时&#x2F;天等周期性计算</td>
+<td>7 * 24h持续运行</td>
+</tr>
+<tr>
+<td></td>
+<td>流批一体</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="1-1-2为什么Apache-Flink会脱颖而出"><a href="#1-1-2为什么Apache-Flink会脱颖而出" class="headerlink" title="1.1.2为什么Apache Flink会脱颖而出"></a>1.1.2为什么Apache Flink会脱颖而出</h4><hr>
+<ul>
+<li>Storm<ul>
+<li>Storm API 的 low-level 以及开发效率低下</li>
+<li>一致性问题：Storm 更多考虑到实时流计算的处理时延而非数据的一致性保证</li>
+</ul>
+</li>
+<li>Spark Streaming<ul>
+<li>Spark Streaming 相比于 Storm 的低阶 API 以及无法正确性语义保证，Spark 是流处理的分水岭：第一个广泛使用的大规模流处理引擎，既提供较为高阶的 API 抽象，同时提供流式处理正确性保证</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d7e04b47dd6a4343a2d59d9edcd2ed70~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731120312.png"></p>
+<ul>
+<li>Flink<ul>
+<li>Exactly-Once：精确一次的计算语义</li>
+<li>状态容错：Checkpoint</li>
+<li>Dataflow编程模型，Window等高阶需求支持友好</li>
+<li>流批一体</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-1-3Apache-Flink开源生态"><a href="#1-1-3Apache-Flink开源生态" class="headerlink" title="1.1.3Apache Flink开源生态"></a>1.1.3Apache Flink开源生态</h4><hr>
+<ul>
+<li><p>流批一体：支持流式计算和批式计算</p>
+</li>
+<li><p>OLAP：Flink 可以支持 OLAP 这种短查询场景</p>
+</li>
+<li><p>Flink ML：pyFlink、ALink、AIFlow 等生态支持 Flink 在 ML 场景的应用</p>
+</li>
+<li><p>Gelly：图计算</p>
+</li>
+<li><p>Stateful Function：支持有状态的 FAAS 场景</p>
+</li>
+<li><p>. . .</p>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fefa1a6cd1ff4943b136a0e001d5153c~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7122754431371706404#heading-14">来自</a></p>
+<hr>
+<h3 id="1-2Flink整体架构"><a href="#1-2Flink整体架构" class="headerlink" title="1.2Flink整体架构"></a>1.2Flink整体架构</h3><hr>
+<h4 id="1-2-1Flink分层架构"><a href="#1-2-1Flink分层架构" class="headerlink" title="1.2.1Flink分层架构"></a>1.2.1Flink分层架构</h4><hr>
+<p><strong>一、SDK层</strong></p>
+<p>Flink的SDK目前主要有三类：SQL&#x2F;Table、DataStream、Python</p>
+<p><strong>二、执行引擎层(Runtime层)</strong></p>
+<p>执行引擎层提供了统一的DAG，用来描述数据处理的Pipeline，不管是流还是批，都会转化为DAG图，调度层再把DAG转化成分布式环境下的Task，Task之间通过Shuffle传输数据。</p>
+<p><strong>三、状态存储层</strong></p>
+<p>负责存储算子的状态信息</p>
+<p><strong>四、资源调度层</strong></p>
+<p>目前Flink可以支持部署在多种环境</p>
+<hr>
+<h4 id="1-2-2Flink整体架构"><a href="#1-2-2Flink整体架构" class="headerlink" title="1.2.2Flink整体架构"></a>1.2.2Flink整体架构</h4><hr>
+<p>一个Flink集群，主要包括以下两个核心组件：</p>
+<p><strong>一、JobManager(JM)</strong></p>
+<p>负责整个任务的协调工作，包括：调度task、触发协调Task做Checkpoint、协调容错恢复等</p>
+<ul>
+<li>Dispatcher: 接收作业，拉起 JobManager 来执行作业，并在 JobMaster 挂掉之后恢复作业</li>
+<li>JobMaster: 管理一个 job 的整个生命周期，会向 ResourceManager 申请 slot，并将 task 调度到对应 TM 上</li>
+<li>ResourceManager：负责 slot 资源的管理和调度，Task manager 拉起之后会向 RM 注册</li>
+</ul>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9c807b1243784d36ab7b33f90622fea3~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731130248.png"></p>
+<p><strong>二、TaskManager(TM)</strong></p>
+<p>负责执行一个DataFlow Graph的各个task以及data streams的buffer和数据交换</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8398ed4aebcd474594f9070ce91bb0e5~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<hr>
+<h4 id="1-2-3Flink如何做到流批一体"><a href="#1-2-3Flink如何做到流批一体" class="headerlink" title="1.2.3Flink如何做到流批一体"></a>1.2.3Flink如何做到流批一体</h4><hr>
+<p><strong>一、为什么需要流批一体</strong></p>
+<p>抖音：实时统计短视频播放量，点赞数。按天统计创造者的一些数据信息，如昨天的播放量多少。</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/77c32a809e444091a8f3b20cf1e49bfa~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731132741.png"></p>
+<p>这种架构有一些痛点：</p>
+<ul>
+<li>人力成本比较高：批、流两套系统，相同逻辑需要开发两遍</li>
+<li>数据链路冗余：本身计算内容是一致的，由于是两套链路，相同逻辑需要运行两遍，产生一定的资源浪费</li>
+<li>数据口径不一致：两套系统、两套算子、两套 UDF，通常会产生不同程度的误差，这些误差会给业务方带来非常大的困扰</li>
+</ul>
+<p><strong>二、流批一体的挑战</strong></p>
+<table>
+<thead>
+<tr>
+<th>流式计算</th>
+<th>批式计算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实时计算</td>
+<td>离线计算</td>
+</tr>
+<tr>
+<td>延迟在秒级以内</td>
+<td>处理时间为分钟到小时级别，甚至天级别</td>
+</tr>
+<tr>
+<td>0 ~ 1s</td>
+<td>10s ~ 1h+</td>
+</tr>
+<tr>
+<td>广告推荐、金融风控</td>
+<td>搜索引擎构建索引、批式数据分析</td>
+</tr>
+</tbody></table>
+<p>批式计算相比于流式计算核心区别：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>流式计算</th>
+<th>批式计算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据流</td>
+<td>无限数据集</td>
+<td>有限数据集</td>
+</tr>
+<tr>
+<td>时延</td>
+<td>低延迟、业务会感知运行中的情况</td>
+<td>实时性要求不高，只关注最终结果产出时间</td>
+</tr>
+</tbody></table>
+<p><strong>三、Flink如何做到流批一体</strong></p>
+<p>批式计算是流式计算的特例，Everything is Streams，有界数据集（批式数据）也是一种数据流、一种特殊的数据流</p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2d3f271cf85d42f581ce33c2a1d7ac77~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731133357.png"></p>
+<p>站在 Flink 的角度，Everything is Streams，无边界数据集是一种数据流，一个无边界的数据流可以按时间切段成一有边界的数据集，所以有界数据集（批式数据）也是一种数据流。因此，不管是有边界的数据集（批式数据）还是无边界数据集，Flink 都可以天然地支持，这是 Flink 支持流批一体的基础。并且 Flink 在流批一体上，从上面的 API 到底层的处理机制都是统一的，是真正意义上的流批一体</p>
+<p>Apache Flink 主要从以下几个模块来做流批一体：</p>
+<ul>
+<li>SQL 层</li>
+<li>DataStream API 层统一，批和流都可以使用 DataStream API 来开发</li>
+<li>Scheduler 层架构统一，支持流批场景</li>
+<li>Failover Recovery 层 架构统一，支持流批场景</li>
+<li>Shuffle Service 层架构统一，流批场景选择不同的 Shuffle Service</li>
+</ul>
+<p><strong>四、流批一体的Scheduler层</strong></p>
+<p>Scheduler 主要负责将作业的 DAG 转化为在分布式环境中可以执行的 Task</p>
+<p>在1.12之前的Flink版本中，Flink支持以下两种调度模式：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>特点</th>
+<th>场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EAGER</td>
+<td>申请一 个作业所需要的全部资源，然后同时调度。这个作业的全部Task，所有的Task之间采取。Pipeline的方式进行通信</td>
+<td>Stream作业场景</td>
+</tr>
+<tr>
+<td>LAZY</td>
+<td>先调度上游，等待上游产生数据或结束后再调度。下游，类似Spark的Stage执行模式。</td>
+<td>Batch作业场景</td>
+</tr>
+</tbody></table>
+<p>EAGER模式（Streaming 场景）</p>
+<ul>
+<li>12个task会一起调度，集群需要有足够的资源</li>
+<li>申请一个作业所需要的全部资源，然后同时调度这个作业的全部 Task，所有的 Task 之间采取 Pipeline 的方式进行通信</li>
+</ul>
+<p>LAZY（Batch 场景）</p>
+<ul>
+<li>最小调度一个 task即可，集群有1个slot资源可以运行</li>
+<li>先调度上游，等待上游产生数据或结束后再调度下游，类似 Spark 的 Stage 执行模式</li>
+</ul>
+<p>Pipeline Region</p>
+<p>由Pipeline的数据交换方式连接的Task构成一个Pipeline Region</p>
+<p>本质上，不管是流作业还是批作业，都是按照Pipeline Region粒度来申请资源和调度任务</p>
+<p>ALL_EDGES_BLOCKIN</p>
+<ul>
+<li>所有Task之间的数据交换都是BLOCKING模式</li>
+<li>分为12个pipeline region</li>
+</ul>
+<p>ALL_EDGES_PIPELINED</p>
+<ul>
+<li>所有Task之间的数据交换都是PIPELINED模式</li>
+<li>分为1个pipeline region</li>
+</ul>
+<p><strong>五、流批一体的Shuffle Service层</strong></p>
+<p>Shuffle：在分布式计算中，用来连接上下游数据交互的过程叫做 Shuffle。</p>
+<p>实际上，分布式计算中所有涉及到上下游衔接的过程，都可以理解为 Shuffle</p>
+<p>Shuffle 分类：</p>
+<ul>
+<li>基于文件的 Pull Based Shuffle，比如 Spark 或 MR，它的特点是具有较高的容错性，适合较大规模的批处理作业，由于是基于文件的，它的容错性和稳定性会更好一些</li>
+<li>基于 Pipeline 的 Push Based Shuffle，比如 Flink、Storm、Presto 等，它的特点是低延迟和高性能，但是因为 shuffle 数据没有存储下来，如果是 batch 任务的话，就需要进行重跑恢复</li>
+</ul>
+<p>流和批 Shuffle 之间的差异：</p>
+<ul>
+<li>Shuffle 数据的生命周期：流作业的 Shuffle 数据与 Task 是绑定的，而批作业的 Shuffle 数据与 Task 是解耦的</li>
+<li>Shuffle 数据存储介质：流作业的生命周期比较短、而且流作业为了实时性，Shuffle 通常存储在内存中，批作业因为数据量比较大以及容错的需求，一般会存储在磁盘里</li>
+<li>Shuffle 的部署方式：流作业 Shuffle 服务和计算节点部署在一起，可以减少网络开销，从而减少 latency，而批作业则不同</li>
+</ul>
+<p>Pluggable Shuffle Service：Flink 的目标是提供一套统一的 Shuffle 架构，既可以满足不同 Shuffle 在策略上的定制，同时还能避免在共性需求上进行重复开发</p>
+<p>Flink 流批一体总结</p>
+<ul>
+<li>经过相应的改造和优化之后，Flink 在架构设计上，针对 DataStream 层、调度层、Shuffle Service 层，均完成了对流和批的支持</li>
+<li>业务已经可以非常方便地使用 Flink 解决流和批场景的问题了</li>
+</ul>
+<hr>
+<h3 id="1-3Flink架构优化"><a href="#1-3Flink架构优化" class="headerlink" title="1.3Flink架构优化"></a>1.3Flink架构优化</h3><hr>
+<h4 id="1-3-1流-x2F-批-x2F-OLAP业务场景概述"><a href="#1-3-1流-x2F-批-x2F-OLAP业务场景概述" class="headerlink" title="1.3.1流&#x2F;批&#x2F;OLAP业务场景概述"></a>1.3.1流&#x2F;批&#x2F;OLAP业务场景概述</h4><hr>
+<p>三种业务场景的特点：</p>
+<table>
+<thead>
+<tr>
+<th>流式计算</th>
+<th>批式计算</th>
+<th>交互式分析</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实时计算</td>
+<td>离线计算</td>
+<td>OLAP</td>
+</tr>
+<tr>
+<td>延迟在秒级以内</td>
+<td>处理时间为分钟到小时级别，甚至天级别</td>
+<td>处理时间秒级</td>
+</tr>
+<tr>
+<td>0 ~ 1s</td>
+<td>10s ~ 1h+</td>
+<td>1 ~ 10s</td>
+</tr>
+<tr>
+<td>广告推荐、金融风控</td>
+<td>搜索引擎构建索引、批式数据分析</td>
+<td>数据分析BI报表</td>
+</tr>
+</tbody></table>
+<p>三种业务场景的解决方案的要求及带来的挑战：</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>流式计算</th>
+<th>批式计算</th>
+<th>交互式分析(OLAP)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SQL</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>实时性</td>
+<td>高、处理延迟毫秒级别</td>
+<td>低</td>
+<td>高、查询延迟在秒级，但要求<strong>高并发查询</strong></td>
+</tr>
+<tr>
+<td>容错能力</td>
+<td>高</td>
+<td>中，大作业失败重跑代价高</td>
+<td>No，失败重试即可</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>准确性</td>
+<td>Exactly Once，要求高，重跑需要恢复之前的状态</td>
+<td>Exactly Once，失败重跑即可</td>
+<td>Exactly Once，失败重跑即可</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="1-3-2为什么三种场景可以用一套引擎来解决"><a href="#1-3-2为什么三种场景可以用一套引擎来解决" class="headerlink" title="1.3.2为什么三种场景可以用一套引擎来解决"></a>1.3.2为什么三种场景可以用一套引擎来解决</h4><hr>
+<p>场景上对比发现：</p>
+<ul>
+<li>批式计算是流式计算的特例，Everything is Streams，有界数据集（批式数据）也是一种数据流、一种特殊的数据流</li>
+<li>OLAP 计算是一种特殊的批式计算，它对并发和实时性要求更高，其他情况与普通批式作业没有特别大区别</li>
+</ul>
+<p>Apache Flink从流式计算出发，需要想支持Batch和OLAP场景，就需要解决下面的问题：</p>
+<table>
+<thead>
+<tr>
+<th>Batch场景需求</th>
+<th>OLAP场景需求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>流批一体支持</td>
+<td>短查询作业场景</td>
+</tr>
+<tr>
+<td>Unify DataStream API</td>
+<td>高并发支持</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>极致处理性能</td>
+</tr>
+<tr>
+<td>Shuffle Service</td>
+<td></td>
+</tr>
+<tr>
+<td>Failover Recovery</td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="1-3-3Flink如何支持OLAP场景"><a href="#1-3-3Flink如何支持OLAP场景" class="headerlink" title="1.3.3Flink如何支持OLAP场景"></a>1.3.3Flink如何支持OLAP场景</h4><hr>
+<p>一、Flink 做 OLAP 的优势</p>
+<ul>
+<li>统一引擎：流处理、批处理、OLAP 统一使用 Flink 引擎<ul>
+<li>降低学习成本，仅需要学习一个引擎</li>
+<li>提高开发效率，很多 SQL 是流批通</li>
+<li>提高维护效率，可以更集中维护好一个引擎</li>
+</ul>
+</li>
+<li>既有优势：利用 Flink 已有的很多特性，使 OLAP 使用场景更为广泛<ul>
+<li>使用流处理的内存计算、Pipeline</li>
+<li>支持代码动态生成</li>
+<li>也可以支持批处理数据落盘能力</li>
+</ul>
+</li>
+<li>相互增强：OLAP 能享有现有引擎的优势，同时也能增强引擎能力<ul>
+<li>无统计信息场景的优化</li>
+<li>开发更高效的算子</li>
+<li>使 Flink 同时兼备流、批、OLAP 处理的能力，成为更通用的框架</li>
+</ul>
+</li>
+</ul>
+<p>二、Flink OLAP 场景的挑战</p>
+<ul>
+<li>秒级和毫秒级的小作业</li>
+<li>作业频繁启停、资源碎片<ul>
+<li>Flink OLAP 计算相比流式和批式计算，最大的特点是 Flink OLAP 计算是一个面向秒级和毫秒级的小作业，作业在启动过程中会频繁申请内存、网络以及磁盘资源，导致 Flink 集群内产生大量的资源碎片</li>
+</ul>
+</li>
+<li>Latency + 高 APS 要求<ul>
+<li>OLAP 最大的特点是查询作业对 Latency 和 QPS 有要求的，需要保证作业在 Latency 的前提下提供比较高的并发调度和执行能力，这就对 Flink 引擎提出了一个新的要求</li>
+</ul>
+</li>
+</ul>
+<p>三、Flink OLAP 架构现状</p>
+<ul>
+<li>Client：提交 SQL Query</li>
+<li>Gateway：接收 Client 提交的 SQL Query，对 SQL 进行语法解析和查询优化，生成 Flink 作业执行计划，提交给 Session 集群</li>
+<li>Session Cluster：执行作业调度及计算，并返回结果<ul>
+<li>JobManager 管理作业的执行，在接收到 Gateway 提交过来的作业逻辑执行计划后，将逻辑执行计划转换为物理执行计划，为每个物理计算任务分配资源，将每个计算任务分发给不同的 TaskManager 执行，同时管理作业以及每个计算任务执行状态</li>
+<li>TaskManager执行具体的计算任务，采用线程模型，为每个计算任务创建计算线程，根据计算任务的上下游数据依赖关系跟上游计算任务建立&#x2F;复用网络连接，向上游计算任务发送数据请求，并处理上游分发给它的数据</li>
+</ul>
+</li>
+</ul>
+<p>四、Flink 在 OLAP 架构上的问题与设想</p>
+<ul>
+<li>架构与功能模块：<ul>
+<li>JobManager 与 ResourceManager 在一个进程内启动，无法对JobManager 进行水平扩展；</li>
+<li>Gateway 与 Flink Session Cluster 互相独立，无法进行统一管理；</li>
+</ul>
+</li>
+<li>作业管理及部署模块：<ul>
+<li>JobManager 处理和调度作业时，负责的功能比较多，导致单作业处理时间长、并占用了过多的内存；</li>
+<li>TaskManager 部署计算任务时，任务初始化部分耗时验证，消耗大量 CPU；</li>
+</ul>
+</li>
+<li>资源管理及计算任务调度：<ul>
+<li>资源申请及资源释放流程链路过长；</li>
+<li>Slot 作为资源管理单元，JM 管理 slot 资源，导致 JM 无法感知到 TM 维度的资源分布，使得资源管理完全依赖于 ResourceManager；</li>
+</ul>
+</li>
+<li>其他：<ul>
+<li>作业心跳与 Failover 机制，并不合适 AP 这种秒级或毫秒级计算场景；</li>
+<li>AP 目前使用 Batch 算子进行计算，这些算子初始化比较耗时；</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a859f4048c184656b270ed2380f8f537~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<hr>
+<h3 id="1-4Flink使用案例"><a href="#1-4Flink使用案例" class="headerlink" title="1.4Flink使用案例"></a>1.4Flink使用案例</h3><hr>
+<h4 id="1-4-1电商流批一体实践"><a href="#1-4-1电商流批一体实践" class="headerlink" title="1.4.1电商流批一体实践"></a>1.4.1电商流批一体实践</h4><hr>
+<p>抖音电商业务原有的离线和实时数仓架构：</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/77c32a809e444091a8f3b20cf1e49bfa~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731132741.png"></p>
+<p>Flink社区现状</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9854df9984cb4bfbbe46730cba0ecba9~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731183827.png"></p>
+<p>目前电商业务数据分为离线数仓和实时数仓建设，离线和实时数据源，计算引擎和业务代码没有统一，在开<br>发相同需求的时候经常需要离线和实时对齐口径，同时，由于需要维护两套计算路径，对运维也带来压力。</p>
+<p>从数据源，业务逻辑，计算引擎完成统一,提高开发和运维效率。</p>
+<hr>
+<h4 id="1-4-2Flink-OLAP场景实践"><a href="#1-4-2Flink-OLAP场景实践" class="headerlink" title="1.4.2Flink OLAP场景实践"></a>1.4.2Flink OLAP场景实践</h4><hr>
+<p>HTAP场景</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3f9898a53f2d45cdbfed3a6b2e4da085~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731184024.png"></p>
+<p>原来的链路</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/364499be12ba422d95cd5fbd725376bc~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731184101.png"></p>
+<p>走HTAP之后的链路，Flink之间提供数据查询与分析能力</p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e56b11fd1874ab18e9d097bcd6d6681~tplv-k3u1fbpfcp-watermark.image" alt="QQ截图20220731184108.png"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2022/07/31/%E6%B5%81-%E6%89%B9-OLAP%E4%B8%80%E4%BD%93%E7%9A%84Flink%E5%BC%95%E6%93%8E-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/">https://tonkyshan.cn/2022/07/31/%E6%B5%81-%E6%89%B9-OLAP%E4%B8%80%E4%BD%93%E7%9A%84Flink%E5%BC%95%E6%93%8E-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"># 大数据</a>
+                    
+                        <a href="../../../../tags/%E6%B5%81-%E6%89%B9-OLAP%E4%B8%80%E4%BD%93%E7%9A%84Flink%E5%BC%95%E6%93%8E/"># 流/批/OLAP一体的Flink引擎</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../08/01/Exactly-Once%E8%AF%AD%E4%B9%89%E5%9C%A8Flink%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/">Exactly Once语义在Flink中的实现 | 青训营笔记</a>
+            
+            
+            <a class="next" rel="next" href="../../25/SQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8%E6%B5%85%E6%9E%90-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/">SQL查询优化器浅析 | 青训营笔记</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

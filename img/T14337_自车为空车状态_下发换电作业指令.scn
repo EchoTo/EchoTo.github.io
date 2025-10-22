@@ -1,0 +1,485 @@
+{
+  "business_scene": [
+    "port_yongzhou"
+  ],
+  "function_tag": {
+    "变道": "",
+    "路径规划": "",
+    "选道": "",
+    "障碍物交互": ""
+  },
+  "jira_number": "ATRUCK-0",
+  "level_tag": "1",
+  "ones_link": "",
+  "scenario_actor_states": [
+    {
+      "actor_attr": {
+        "vehicle_attr": {
+          "ai_planner": {
+            "is_enabled": false,
+            "route_name": ""
+          },
+          "control_info": {
+            "driving_mode": "COMPLETE_AUTO_DRIVE",
+            "mode": "CLIENT"
+          },
+          "dynamics": {
+            "acceleration": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "angular_velocity": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": -2.8599182086598417e-11
+            },
+            "velocity": {
+              "x": -1.0048688473031551e-07,
+              "y": 1.816016044606536e-07,
+              "z": 0.0
+            }
+          },
+          "message_info": {},
+          "monitor_info": {},
+          "noise_curve": {},
+          "noise_info": {
+            "dir_noise": 0.0,
+            "pos_noise": 0.0,
+            "size_noise": 0.0
+          },
+          "schedule_info": {
+            "priority": 0
+          },
+          "sumo": {
+            "is_enabled": false
+          },
+          "trailer_info": {
+            "container_front": {
+              "dist_front": -1.0,
+              "dist_up": -1.0,
+              "exist": false,
+              "is_dist_front_valid": false,
+              "is_dist_up_valid": false,
+              "is_exist_valid": true
+            },
+            "container_rear": {
+              "dist_front": -1.0,
+              "dist_up": -1.0,
+              "exist": false,
+              "is_dist_front_valid": false,
+              "is_dist_up_valid": false,
+              "is_exist_valid": true
+            },
+            "has_container": false,
+            "lock_hmi_channel": "CHANNEL_ALL",
+            "lock_hmi_sensor": false,
+            "theta": 0.0
+          },
+          "vehicle_info": {
+            "ego_to_imu_tran": {
+              "direction": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "position": {
+                "x": 7.3571,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            "has_v2i": true,
+            "has_vision_lane": false,
+            "loc_noise": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "loc_noise_global_coord": false,
+            "vehicle_model_fps": 200,
+            "vehicle_model_type": "DYNAMICS",
+            "vehicle_type": "AGV"
+          },
+          "visibility": {
+            "perception_hidden": false
+          }
+        }
+      },
+      "actor_id": 1001,
+      "actor_name": "yzhowo1_test",
+      "actor_type": "VEHICLE",
+      "transform": {
+        "direction": {
+          "x": 0.0,
+          "y": 2.076255047207148,
+          "z": -0.0
+        },
+        "position": {
+          "x": 388917.78344893456,
+          "y": 3317066.154865265,
+          "z": 0.0
+        }
+      }
+    },
+    {
+      "actor_attr": {
+        "gantry_attr": {
+          "antenna": {
+            "gantry_block_type": "BLOCK_JOB",
+            "gantry_state": "NO_JOB",
+            "notify_antennaserver": true,
+            "vehicle_id": 0
+          },
+          "collider_left": {
+            "offset": {
+              "x": 0.0,
+              "y": -4.5,
+              "z": 0.0
+            },
+            "size": {
+              "x": 13.0,
+              "y": 1.65,
+              "z": 20.1
+            }
+          },
+          "collider_right": {
+            "offset": {
+              "x": 0.0,
+              "y": -28.0,
+              "z": 0.0
+            },
+            "size": {
+              "x": 13.0,
+              "y": 1.65,
+              "z": 20.1
+            }
+          },
+          "dynamics": {
+            "acceleration": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "angular_velocity": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "velocity": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "efficiency": {
+            "is_enable": false,
+            "target": 0.0
+          },
+          "gantry_info": {
+            "block_nul": 1,
+            "cps_guide": 0,
+            "gantry_center_offset": -16.25,
+            "gantry_id": 0,
+            "gantry_position": -46558,
+            "spreader_height": 18000,
+            "spreader_horizonal_position": 26600,
+            "spreader_lock": 0,
+            "spreader_size": "SIZE_45_FEET",
+            "target_dist_offset": 0.0,
+            "working_lane": 0
+          },
+          "gantry_spreader": {
+            "horizonal_position": 25000,
+            "is_reverse": false
+          },
+          "noise_info": {
+            "dir_noise": 0.0,
+            "pos_noise": 0.0,
+            "size_noise": 0.0
+          }
+        }
+      },
+      "actor_id": 1002,
+      "actor_name": "gantry_801",
+      "actor_type": "GANTRY",
+      "transform": {
+        "direction": {
+          "x": 0.0,
+          "y": -1.0641853071795861,
+          "z": 0.0
+        },
+        "position": {
+          "x": 388933.17018802435,
+          "y": 3317154.6494714785,
+          "z": 0.0
+        }
+      }
+    },
+    {
+      "actor_attr": {
+        "gantry_attr": {
+          "antenna": {
+            "gantry_block_type": "BLOCK_JOB",
+            "gantry_state": "NO_JOB",
+            "notify_antennaserver": true,
+            "vehicle_id": 0
+          },
+          "collider_left": {
+            "offset": {
+              "x": 0.0,
+              "y": 28.0,
+              "z": 0.0
+            },
+            "size": {
+              "x": 13.0,
+              "y": 1.65,
+              "z": 20.1
+            }
+          },
+          "collider_right": {
+            "offset": {
+              "x": 0.0,
+              "y": 4.5,
+              "z": 0.0
+            },
+            "size": {
+              "x": 13.0,
+              "y": 1.65,
+              "z": 20.1
+            }
+          },
+          "dynamics": {
+            "acceleration": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "angular_velocity": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "velocity": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "efficiency": {
+            "is_enable": false,
+            "target": 0.0
+          },
+          "gantry_info": {
+            "block_nul": 2,
+            "cps_guide": 0,
+            "gantry_center_offset": 16.25,
+            "gantry_id": 0,
+            "gantry_position": 147772,
+            "spreader_height": 18000,
+            "spreader_horizonal_position": 26600,
+            "spreader_lock": 0,
+            "spreader_size": "SIZE_45_FEET",
+            "target_dist_offset": 0.0,
+            "working_lane": 0
+          },
+          "gantry_spreader": {
+            "horizonal_position": 25000,
+            "is_reverse": true
+          },
+          "noise_info": {
+            "dir_noise": 0.0,
+            "pos_noise": 0.0,
+            "size_noise": 0.0
+          }
+        }
+      },
+      "actor_id": 1003,
+      "actor_name": "gantry_802",
+      "actor_type": "GANTRY",
+      "transform": {
+        "direction": {
+          "x": 0.0,
+          "y": -1.0641853071795861,
+          "z": 0.0
+        },
+        "position": {
+          "x": 388991.36835616134,
+          "y": 3317080.3795018247,
+          "z": 0.0
+        }
+      }
+    }
+  ],
+  "scenario_desc": "",
+  "scenario_id": "f6c6bb44b14a11efa2c00242ac110003",
+  "scenario_init": {
+    "map": {
+      "map_name": ""
+    },
+    "timeout": 1800.0
+  },
+  "scenario_name": "T14337_自车为空车状态_下发换电作业指令",
+  "scenario_tree": {
+    "root": {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "node_class": "CreateActorAction",
+                      "node_name": "",
+                      "node_params": {
+                        "actor_id": "0",
+                        "actor_name": "\"gantry_801\"",
+                        "actor_type": "4"
+                      }
+                    },
+                    {
+                      "node_class": "CreateActorAction",
+                      "node_name": "",
+                      "node_params": {
+                        "actor_id": "0",
+                        "actor_name": "\"gantry_802\"",
+                        "actor_type": "4"
+                      }
+                    }
+                  ],
+                  "node_class": "Sequence",
+                  "node_name": "create actors"
+                },
+                {
+                  "node_class": "Timer",
+                  "node_name": "",
+                  "node_params": {
+                    "duration": "1.0"
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "node_class": "ChangeActorStateAction",
+                      "node_name": "",
+                      "node_params": {
+                        "actor_id": "801",
+                        "actor_name": "\"gantry_801\"",
+                        "actor_state_actor_id": "1002",
+                        "actor_state_idx": "-1"
+                      }
+                    },
+                    {
+                      "node_class": "ChangeActorStateAction",
+                      "node_name": "",
+                      "node_params": {
+                        "actor_id": "802",
+                        "actor_name": "\"gantry_802\"",
+                        "actor_state_actor_id": "1003",
+                        "actor_state_idx": "-1"
+                      }
+                    }
+                  ],
+                  "node_class": "Sequence",
+                  "node_name": "change states"
+                }
+              ],
+              "node_class": "Sequence",
+              "node_name": "setup obs"
+            },
+            {
+              "children": [
+                {
+                  "node_class": "ChangeActorStateAction",
+                  "node_name": "",
+                  "node_params": {
+                    "actor_id": "0",
+                    "actor_name": "\"yzhowo1_test\"",
+                    "actor_state_actor_id": "-1",
+                    "actor_state_idx": "0"
+                  }
+                },
+                {
+                  "node_class": "Timer",
+                  "node_name": "",
+                  "node_params": {
+                    "duration": "3.0"
+                  }
+                }
+              ],
+              "node_class": "Sequence",
+              "node_name": "setup egos"
+            }
+          ],
+          "node_class": "Sequence",
+          "node_name": "init"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "node_class": "ExecuteTosCommandAction",
+                  "node_name": "",
+                  "node_params": {
+                    "actor_name": "\"yzhowo1_test\"",
+                    "cancel_last_cmd": "true",
+                    "reset_cmd": "false",
+                    "tos_command_json": "{\"command_action\": \"CHANGE\", \"command_type\": \"GOTO\", \"container_size\": 40, \"destination\": \"BSS01\", \"lane\": 3, \"priority\": 1}"
+                  }
+                },
+                {
+                  "node_class": "Timer",
+                  "node_name": "",
+                  "node_params": {
+                    "duration": "10.0"
+                  }
+                },
+                {
+                  "node_class": "YongzhouTosRunnerAction",
+                  "node_name": "",
+                  "node_params": {
+                    "actor_name": "\"yzhowo1_test\"",
+                    "crane_time": "1.0",
+                    "gantry_time": "1.0",
+                    "lock_time": "5.0",
+                    "loop_forever": "0",
+                    "min_duration": "5.0",
+                    "stacker_time": "1.0",
+                    "trailer_angle": "2.0",
+                    "unlock_time": "5.0"
+                  }
+                },
+                {
+                  "node_class": "WaitAntennaFinishAction",
+                  "node_name": "",
+                  "node_params": {
+                    "actor_name": "\"yzhowo1_test\"",
+                    "min_duration": "5.0",
+                    "timeout": "-1",
+                    "wait_stop": "true"
+                  }
+                }
+              ],
+              "node_class": "Sequence",
+              "node_name": ""
+            }
+          ],
+          "node_class": "Parallel",
+          "node_name": "job",
+          "node_params": {
+            "policy": "\"SuccessOnAll\""
+          }
+        }
+      ],
+      "node_class": "Sequence",
+      "node_name": ""
+    }
+  }
+}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>个人总结——2024 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">个人总结——2024</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 30, 2024&nbsp;&nbsp;11:49:55</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/">个人总结</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="凡是过往-皆为序章"><a href="#凡是过往-皆为序章" class="headerlink" title="凡是过往 皆为序章"></a>凡是过往 皆为序章</h2><img src="https://tonkyshan.cn/img/20241230112922.jpg" alt="begin" style="zoom: 40%;" />
+
+
+
+<h3 id="岁初"><a href="#岁初" class="headerlink" title="岁初"></a>岁初</h3><blockquote>
+<p>一朝入姑苏，满眼是江南</p>
+</blockquote>
+<p>一月入职同城旅行，负责后端Java开发，进入了互联网～</p>
+<img src="https://tonkyshan.cn/img/20241230112927.jpg" alt="同城旅行" style="zoom: 40%;" />
+
+
+
+<h3 id="去年元夜时-花市灯如昼"><a href="#去年元夜时-花市灯如昼" class="headerlink" title="去年元夜时 花市灯如昼"></a>去年元夜时 花市灯如昼</h3><p>元宵节去了盘门灯会！</p>
+<img src="https://tonkyshan.cn/img/20241230112924.jpg" alt="元夕" style="zoom: 40%;" />
+
+
+
+<h3 id="十里洋场"><a href="#十里洋场" class="headerlink" title="十里洋场"></a>十里洋场</h3><p>周末坐地铁去了上海(<del>已经记不清多少站了</del>)，外滩人真的好多</p>
+<img src="https://tonkyshan.cn/img/20241230112923.jpg" alt="上海" style="zoom: 50%;" />
+
+
+
+<h3 id="To-Be-Continued"><a href="#To-Be-Continued" class="headerlink" title="To Be Continued"></a>To Be Continued</h3><p>再见啦👋～</p>
+<p>在这里学到了很多，认识了许多有趣的人</p>
+<img src="https://tonkyshan.cn/img/20241230112926.JPG" alt="tc" style="zoom: 50%;" />
+
+
+
+<h3 id="特别鸣谢一起成长的我们"><a href="#特别鸣谢一起成长的我们" class="headerlink" title="特别鸣谢一起成长的我们"></a>特别鸣谢一起成长的我们</h3><p>六月，我们毕业了</p>
+<p>在这里，我认识了最好的兄弟们。祝前程似锦～</p>
+<p>剩下的话，留给盛夏</p>
+<img src="https://tonkyshan.cn/img/20241230112925.jpg" alt="sylu" style="zoom: 50%;" />
+
+
+
+<h3 id="西湖无日不入梦"><a href="#西湖无日不入梦" class="headerlink" title="西湖无日不入梦"></a>西湖无日不入梦</h3><p>7月底 入职飞步(Java后端) 来杭州啦</p>
+<p>接触新的业务，刚刚开始理解起来还有一些困难的，随着大家的帮助和需求任务的积累，慢慢理解了数据流向和上下游的系统，也逐渐熟悉了起来</p>
+<img src="https://tonkyshan.cn/img/20241230113127.jpg" alt="杭州" style="zoom: 50%;" />
+
+
+
+<h3 id="巴尔干"><a href="#巴尔干" class="headerlink" title="巴尔干"></a>巴尔干</h3><p>吴山 城隍阁</p>
+<img src="https://tonkyshan.cn/img/20241230113128.jpg" alt="吴山" style="zoom: 50%;" />
+
+
+
+<h3 id="黄山四千仞"><a href="#黄山四千仞" class="headerlink" title="黄山四千仞"></a>黄山四千仞</h3><blockquote>
+<p>五岳归来不看山，黄山归来不看岳</p>
+</blockquote>
+<img src="https://tonkyshan.cn/img/20241230113129.jpg" alt="黄山" style="zoom: 50%;" />
+
+
+
+<h3 id="月饼"><a href="#月饼" class="headerlink" title="月饼"></a>月饼</h3><p>你好啊👋 月饼</p>
+<img src="https://tonkyshan.cn/img/20241230113130.jpg" alt="月饼" style="zoom: 50%;" />
+
+
+
+<h3 id="岁末"><a href="#岁末" class="headerlink" title="岁末"></a>岁末</h3><p>继续做Java微服务，或Go，做开源</p>
+<img src="https://tonkyshan.cn/img/20241230113132.jpg" alt="岁末" style="zoom: 50%;" />
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2024/12/30/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93%E2%80%94%E2%80%942024/">https://tonkyshan.cn/2024/12/30/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93%E2%80%94%E2%80%942024/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/"># 个人总结</a>
+                    
+                        <a href="../../../../tags/2024/"># 2024</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../../2025/01/16/Netty/">Netty</a>
+            
+            
+            <a class="next" rel="next" href="../../05/K8s/">K8s</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

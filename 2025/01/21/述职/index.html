@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>述职 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">述职</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 21, 2025&nbsp;&nbsp;14:34:16</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E8%BF%B0%E8%81%8C%E6%8A%A5%E5%91%8A/">述职报告</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="述职"><a href="#述职" class="headerlink" title="述职"></a>述职</h1><hr>
+<h2 id="工作概述"><a href="#工作概述" class="headerlink" title="工作概述"></a>工作概述</h2><hr>
+<h3 id="1、云控"><a href="#1、云控" class="headerlink" title="1、云控"></a>1、云控</h3><ul>
+<li>熟悉业务</li>
+<li>了解数据流向</li>
+<li>日常需求 &amp; 做船报告数据输出</li>
+</ul>
+<h3 id="2、api-server-甬舟强控-、command-server-指令解析"><a href="#2、api-server-甬舟强控-、command-server-指令解析" class="headerlink" title="2、api-server(甬舟强控)、command-server(指令解析)"></a>2、api-server(甬舟强控)、command-server(指令解析)</h3><ul>
+<li>日常需求 &amp; 做船报告数据输出</li>
+<li>重构指令解析</li>
+<li>排查线上bug，配合内部测试回归</li>
+</ul>
+<h3 id="3、fms"><a href="#3、fms" class="headerlink" title="3、fms"></a>3、fms</h3><ul>
+<li>指令解析处理</li>
+<li>停车场、换电站等日常需求</li>
+<li>排查线上bug，生产迭代更新</li>
+</ul>
+<p><img src="https://tonkyshan.cn/img/20250121144756.png" alt="contributed projects"></p>
+<hr>
+<h2 id="亮点成绩展示"><a href="#亮点成绩展示" class="headerlink" title="亮点成绩展示"></a>亮点成绩展示</h2><hr>
+<h3 id="1、fms"><a href="#1、fms" class="headerlink" title="1、fms"></a>1、fms</h3><ul>
+<li>通过车辆自身坐标及绘制电子围栏，判断车辆的状态，进行停车场及停车位到达和驶离上报</li>
+<li>使用kakfa进行数据传输，创建对应生产者和消费者进行数据处理</li>
+<li>通过逻辑判断添加对应小指令</li>
+<li>调整锁站预到达及驶离范围，进行车辆状态上报</li>
+<li>潮汐引桥，通过heading值计算锁站点位坐标数据，通过rpc接口提供</li>
+</ul>
+<h3 id="2、个人成长"><a href="#2、个人成长" class="headerlink" title="2、个人成长"></a>2、个人成长</h3><ul>
+<li>完成日常需求40+</li>
+<li>通过需求和线上bug排查，熟悉整体作业流程及上下游数据流向</li>
+<li>梅山现场 熟悉无人车港口作业完整业务流程 </li>
+<li>梳理深入fms代码逻辑，为后续系统迭代优化做准备</li>
+<li>通过需求中对中间件的使用，加深对Java微服务理解</li>
+</ul>
+<hr>
+<h2 id="职业精神"><a href="#职业精神" class="headerlink" title="职业精神"></a>职业精神</h2><hr>
+<ul>
+<li>遵守公司各项规章制度</li>
+<li>按期完成开发任务，加强团队协作</li>
+<li>积极乐观 迎接挑战</li>
+</ul>
+<hr>
+<h2 id="复盘与总结-x2F-未来工作规划"><a href="#复盘与总结-x2F-未来工作规划" class="headerlink" title="复盘与总结 &#x2F; 未来工作规划"></a>复盘与总结 &#x2F; 未来工作规划</h2><hr>
+<h3 id="1、复盘"><a href="#1、复盘" class="headerlink" title="1、复盘"></a>1、复盘</h3><ul>
+<li>初期对系统内部逻辑不熟悉，不清楚数据流向，通过线上bug排查及同事帮助，目前已经清晰</li>
+<li>注重细节，代码逻辑的写法优化及工具使用</li>
+<li>重视自测，确保代码逻辑顺利跑通</li>
+<li>熟悉fms上下游数据流向，深入理解需求</li>
+</ul>
+<h3 id="2、未来"><a href="#2、未来" class="headerlink" title="2、未来"></a>2、未来</h3><ul>
+<li>初期对系统内部逻辑不熟悉，不清楚数据流向，通过线上bug排查及同事帮助，目前已经清晰</li>
+<li>注重细节，代码逻辑的写法优化及工具使用</li>
+<li>重视自测，确保代码逻辑顺利跑通</li>
+<li>熟悉fms上下游数据流向，深入理解需求</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2025/01/21/%E8%BF%B0%E8%81%8C/">https://tonkyshan.cn/2025/01/21/%E8%BF%B0%E8%81%8C/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E8%BD%AC%E6%AD%A3%E8%BF%B0%E8%81%8C/"># 转正述职</a>
+                    
+                        <a href="../../../../tags/2025/"># 2025</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../02/05/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%B8%88%E5%A4%87%E8%80%83%E7%AC%94%E8%AE%B0/">系统架构师备考笔记</a>
+            
+            
+            <a class="next" rel="next" href="../../17/Nacos/">Nacos</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

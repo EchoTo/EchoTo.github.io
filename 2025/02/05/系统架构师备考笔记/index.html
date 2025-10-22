@@ -1,0 +1,3373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>系统架构师备考笔记 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">系统架构师备考笔记</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 5, 2025&nbsp;&nbsp;15:01:43</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="第一章-计算机系统基础-1-7"><a href="#第一章-计算机系统基础-1-7" class="headerlink" title="第一章 计算机系统基础 1-7"></a>第一章 计算机系统基础 1-7</h2><hr>
+<p>考点：</p>
+<ul>
+<li>计算机组成原理与体系结构：<strong>磁盘管理</strong> 0-2分</li>
+<li>系统配置与性能评价：基准程序测试、计算机性能优化&#x2F;性能评价、<strong>计算机性能指标</strong> 0-2分</li>
+<li>操作系统：概念、前趋图与PV操作、死锁与银行家算法、段页式存储、页面置换算法、索引文件、位示图 1-3分</li>
+</ul>
+<hr>
+<h3 id="1-1-计算机系统"><a href="#1-1-计算机系统" class="headerlink" title="1.1 计算机系统"></a>1.1 计算机系统</h3><hr>
+<p><strong>计算机系统：</strong></p>
+<ul>
+<li>硬件：处理器、存储器、总线、接口和外部设备等</li>
+<li>软件：<ul>
+<li>系统软件：操作系统、编译工具等</li>
+<li>应用软件：办公软件、娱乐软件、信息系统软件等</li>
+</ul>
+</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250205160401.png" alt="计算机组成" style="zoom:33%;" />
+
+<table>
+<thead>
+<tr>
+<th align="center">指令系统类型</th>
+<th align="center">指令</th>
+<th align="center">寻址方式</th>
+<th align="center">实现方式</th>
+<th align="center">其他</th>
+<th align="center">代表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">CISC(复杂)</td>
+<td align="center">数量多，使用频率差别大，可变长格式</td>
+<td align="center">支持多种</td>
+<td align="center"><strong>微程序</strong>控制技术(微码)</td>
+<td align="center">研制周期长</td>
+<td align="center">Intel、AMD的x86CPU</td>
+</tr>
+<tr>
+<td align="center">RISC(精简)</td>
+<td align="center">数量少，使用频率接近，定长格式，大部分为单周期指令，操作寄存器，只有Load&#x2F;Store操作内存</td>
+<td align="center">支持方式少，多寄存器寻址</td>
+<td align="center">增加了通用寄存器;<strong>硬布线逻辑</strong>控制为主;适合采用流水线</td>
+<td align="center">优化编译，有效支持高级语言</td>
+<td align="center">ARM和Power</td>
+</tr>
+</tbody></table>
+<p><strong>分级存储：</strong> </p>
+<p>解决存储的容量、价格和速度之间的矛盾</p>
+<p>存取数据速度由快到慢为：</p>
+<ul>
+<li>CPU 寄存器</li>
+<li>Cache 按内存存取(相联存储器) SRAM 静态</li>
+<li>内存(主存) DRAM 周期性刷新</li>
+<li>外存(辅存) 硬盘、光盘、U盘等</li>
+</ul>
+<p>RAM(随机访问存储器) 内存：掉电数据会丢失</p>
+<p>ROM(只读存储器) 内存：掉电数据不丢失</p>
+<ul>
+<li>时间局部性：指程序中的某条指令一旦执行，不久以后该指令可能再次执行，典型原因是由于程序中存在着大量的<strong>循环操作</strong></li>
+<li>空间局部性：指一旦程序访问了某个存储单元，不久以后，其附近的存储单元也将被访问，即程序在一段时间内所访问的地址可能集中在一定的范围内，其典型情况是程序<strong>顺序执行</strong></li>
+</ul>
+<p><strong>IO数据传输控制方式：</strong> 由上到下效率越来越高</p>
+<ul>
+<li>程序控制(查询)方式：分为无条件传送和程序查询方式两种，方法简单，硬件开销小，但I&#x2F;O能力不高，严重影响CPU的利用率</li>
+<li>程序中断方式：与程序控制方式相比，中断方式因为CPU无需等待而提高了传输请求的响应速度【CPU与I&#x2F;O传输可并行】</li>
+<li>DMA方式：DMA方式是为了在<strong>主存与外设</strong>之间实现高速、批量数据交换而设置的。DMA方式比程序控制方式和中断方式都高效【CPU与I&#x2F;O传输可并行】</li>
+<li>通道方式</li>
+<li>I&#x2F;O处理机</li>
+</ul>
+<hr>
+<h3 id="1-2-操作系统概述"><a href="#1-2-操作系统概述" class="headerlink" title="1.2 操作系统概述"></a>1.2 操作系统概述</h3><hr>
+<table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">批处理操作系统</td>
+<td>单道批：一次一个作业入内存，作业由程序、数据、作业说明书组成<br />多道批：一次多个作业入内存，特点：多道、宏观上并行微观上串行</td>
+</tr>
+<tr>
+<td align="left">分时操作系统</td>
+<td>采用时间片轮转的方式为多个用户提供服务，每个用户感觉独占系统<br />特点：多路性、独立性、交互性和及时性</td>
+</tr>
+<tr>
+<td align="left">实时操作系统</td>
+<td>实时控制系统和实时信息系统<br />交互能力要求不高，可靠性要求高**(规定时间内响应并处理)**</td>
+</tr>
+<tr>
+<td align="left">网络操作系统</td>
+<td>方便有效共享网络资源，提供服务软件和有关协议的集合<br />主要的网络操作系统有：Unix、Linux和Windows Server系统</td>
+</tr>
+<tr>
+<td align="left">分布式操作系统</td>
+<td>任意两台计算机可以通过通信交换信息<br />是网络操作系统的更高级形式，具有透明性、可靠性和高性能等特性</td>
+</tr>
+<tr>
+<td align="left">微机操作系统</td>
+<td>Windows：Microsoft开发的图形用户界面、多任务、多线程操作系统<br />Linux：免费使用和自由传播的类Unix操作系统，多用户、多任务、多线程和多CPU的操作系统</td>
+</tr>
+<tr>
+<td align="left">嵌入式操作系统</td>
+<td>运行在智能芯片环境中<br />特点：微型化，<strong>可定制(针对硬件变化配置)<strong>、实时性、可靠性、</strong>易移植性(HAL和BSP支持)</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="1-3-进程管理"><a href="#1-3-进程管理" class="headerlink" title="1.3 进程管理"></a>1.3 进程管理</h3><hr>
+<p>进程是程序在一个数据集合上运行的过程，它是系统进行自由分配和调度的一个独立单位，它由程序块、进程控制块(PCB)和数据块三部分组成</p>
+<ul>
+<li>PCB：PCB时进程存在的唯一标志、内容包含进程标识符、状态、位置信息、队列指针(链接同一状态的进程)、优先级、现场保护区等</li>
+</ul>
+<p>一个进程之中存在多个线程，线程之间</p>
+<ul>
+<li>可共享：内存地址空间、代码、数据、文件等</li>
+<li>不可共享：程序计数器、寄存器、栈</li>
+</ul>
+<p>进程状态</p>
+<ul>
+<li>运行：当一个进程在CPU上运行时(单处理机处于运行态的进程只有一个，<strong>多进程在CPU上交替运行</strong>)</li>
+<li>就绪：一个进程获得了除CPU外的一切所需资源，一旦得到处理机即可运行</li>
+<li>阻塞：阻塞也称等待或睡眠状态，一个进程正在等待某一事件发生(例如请求I&#x2F;O、等待I&#x2F;O完成等)而暂时停止运行，此时即使把CPU分配给进程也无法运行，故称进程处于阻塞状态</li>
+</ul>
+<p>进程的同步与互斥</p>
+<p>临界资源：诸进程间需要互斥方式对其进行共享的资源(进程中访问临界资源的那段代码称为临界区)</p>
+<ul>
+<li>互斥：间接制约关系</li>
+<li>同步：直接制约关系</li>
+</ul>
+<h4 id="1-3-1-PV操作"><a href="#1-3-1-PV操作" class="headerlink" title="1.3.1 PV操作"></a>1.3.1 PV操作</h4><p>信号量：是一种特殊的变量</p>
+<ul>
+<li>信号量可以表示资源数量</li>
+<li>信号量为负数时还可以表示排队进程数</li>
+</ul>
+<p>信号量表示资源数量：信号量初值(最大)，表示没有任何操作时，资源的总数</p>
+<p>P(S)：获取资源</p>
+<ul>
+<li>S &#x3D; S - 1：申请&#x2F;锁定资源</li>
+<li>S &lt; 0：检查资源是否足够 —— true 进入阻塞进程对列</li>
+</ul>
+<p>V(S)：释放资源</p>
+<ul>
+<li>S &#x3D; S + 1：释放&#x2F;解锁资源</li>
+<li>S &lt;&#x3D; 0：检查时都有进程排队 —— true 进入阻塞进程对列</li>
+</ul>
+<p>n个资源，m个进程互斥获取资源，整个pv过程，信号量S初始值为多少，取值范围是多少</p>
+<ul>
+<li>初始值为n，取值范围是    - (m - n) ~ 2</li>
+</ul>
+<p><strong>用P、V操作管理临界区时,一个任务在进入临界区前应对信号量执行P操作,退出临界区时应对信号量执行V操作</strong></p>
+<h4 id="1-3-2-前趋图"><a href="#1-3-2-前趋图" class="headerlink" title="1.3.2 前趋图"></a>1.3.2 前趋图</h4><ul>
+<li>1个箭头表示1个前趋关系</li>
+<li>A有箭头指向D，则记录为(A, D)</li>
+<li>没有前趋进程的结点是起始进程，没有后继进程的结点是终结进程</li>
+<li>某活动有后继就有V操作释放资源并通知后继活动，有前趋就有P操作检查资源是否足够</li>
+<li>实现并发的信号量初值一般为0，有几个箭头就有几个信号量</li>
+</ul>
+<h4 id="1-3-3-死锁与银行家算法"><a href="#1-3-3-死锁与银行家算法" class="headerlink" title="1.3.3 死锁与银行家算法"></a>1.3.3 死锁与银行家算法</h4><p>两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。此时称系统处于死锁状态或系统产生了死锁，这些永远在互相等待的进程称为死锁进程</p>
+<p>有n个进程，每个进程需要m个系统资源，至少有多少个资源，不可能发生死锁</p>
+<ul>
+<li>如果资源数 &lt; m，必定死锁</li>
+<li>如果资源数 &gt;&#x3D; m 且 &lt;&#x3D; n * (m - 1)，可能死锁，可能不死锁</li>
+<li>如果资源数 &gt; n * (m - 1)，不可能发生死锁</li>
+</ul>
+<p>银行家算法：分配资源的原则</p>
+<ul>
+<li>当一个进程对资源的最大需求量不超过系统中的资源数时可以接纳该进程</li>
+<li>进程可以分期请求资源，但请求的总数不能超过最大需求值</li>
+<li>当系统现有的资源不能满足进程尚需资源数时，对进程的请求可以推迟分配，但总能使进程在有限的时间里得到资源</li>
+</ul>
+<hr>
+<h3 id="1-4-存储管理"><a href="#1-4-存储管理" class="headerlink" title="1.4 存储管理"></a>1.4 存储管理</h3><hr>
+<h4 id="1-4-1-页式存储"><a href="#1-4-1-页式存储" class="headerlink" title="1.4.1 页式存储"></a>1.4.1 页式存储</h4><p>将程序与内存均划分为同样大小的块，以页为单位将程序调入内存</p>
+<ul>
+<li>优点：利用率高，碎片小，分配及管理简单</li>
+<li>缺点：增加了系统开销；可能产生抖动现象</li>
+</ul>
+<p>高级程序语言使用逻辑地址</p>
+<p>运行状态，内存中使用物理地址</p>
+<ul>
+<li>逻辑地址 &#x3D; 页号 + 页内地址</li>
+<li>物理地址 &#x3D; 页帧号 + 页内地址</li>
+</ul>
+<p>例如，页式存储系统中，每个页的大小为4kb</p>
+<p>逻辑地址：10 1100 1101 1110        低12位为页内地址  那么10为页号，查表得到对应的页帧号(如 6)</p>
+<p>对应的物理地址为？ </p>
+<ul>
+<li><p>页内地址：需要12位二进制 即 4 x 1024 &#x3D; 2的12次方</p>
+</li>
+<li><p>物理地址：页帧号的二进制 + 1100 1101 1110 例如：110 1100 1101 1110</p>
+</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250207144614.png" alt="页式存储" style="zoom:43%;" />
+
+<ul>
+<li>存在访问位为0，修改位为1的情况</li>
+<li>根据局部性原理，访问位为1的页面，尽量保留</li>
+<li>淘汰的页面必定已在内存</li>
+<li>优先淘汰访问位为0的页面</li>
+<li>如果有多个可选，则考虑修改位为0</li>
+</ul>
+<h4 id="1-4-2-段式存储"><a href="#1-4-2-段式存储" class="headerlink" title="1.4.2 段式存储"></a>1.4.2 段式存储</h4><p>按用户作业中的自然段来划分逻辑空间，然后调入内存，段段长度可以不一样</p>
+<img src="https://tonkyshan.cn/img/20250207153657.png" alt="段式存储" style="zoom:43%;" />
+
+<p>合法段地址：(0, 25k)</p>
+<p>非法段地址：(0, 35k)</p>
+<ul>
+<li>优点：多道程序共享内存，各段程序修改互不影响</li>
+<li>缺点：内存利用率低，内存碎片浪费大</li>
+</ul>
+<h4 id="1-4-3-段页式存储"><a href="#1-4-3-段页式存储" class="headerlink" title="1.4.3 段页式存储"></a>1.4.3 段页式存储</h4><p>段式与页式的综合体。先分段，再分页，1个程序有若干个段，每个段中可以有若干页，每个页的大小相同，但每个段段大小不同</p>
+<img src="https://tonkyshan.cn/img/20250207155217.png" alt="段页式存储" style="zoom:43%;" />
+
+<ul>
+<li>优点：空间浪费小、存储共享容易、存储保护容易、能动态连接</li>
+<li>缺点：由于管理软件的增加，复杂性和开销也随之增加，需要的硬件以及占用的内存也有所增加，使得执行速度大大下降</li>
+</ul>
+<p>页内地址：[0, 8]    2的9次方，每个页最多512字节</p>
+<p>页号：[9 ,13]    2的5次方，每个段最多32个页</p>
+<p>段号：[14, 15]    2的平方，最多4个段</p>
+<hr>
+<h3 id="1-5-磁盘管理"><a href="#1-5-磁盘管理" class="headerlink" title="1.5 磁盘管理"></a>1.5 磁盘管理</h3><hr>
+<p><strong>存取时间 &#x3D; 寻道时间 + 等待时间</strong>，寻道时间是指磁头移动到磁道所需的时间，等待时间为等待读写的扇区转到磁头下方所用的时间</p>
+<p>读取磁盘数据的时间应包括以下三个部分</p>
+<ul>
+<li>找磁道的时间</li>
+<li>找块(扇区)的时间，即旋转延迟时间</li>
+<li>传输时间：磁头在对应扇区上移动的时间，也就是数据读取的时间</li>
+</ul>
+<p>某磁盘磁头从一个磁道移至另一个磁道需要10ms。文件在磁盘上非连续存放，逻辑上相邻数据块的平均移动距离为10个磁道，每块的旋转延迟时间及传输时间分别为100ms和2ms，则读取一个100块的文件需要多少ms的时间</p>
+<p>( (10 * 10) + 100 + 2) * 100 &#x3D; 20,200ms</p>
+<p>​                      <img src="https://tonkyshan.cn/img/20250207170805.png" alt="段页式存储" style="zoom:43%;" /></p>
+<p>旋转周期为33ms，11个物理块，每个分区读取时间为3ms，记录处理时间为3ms</p>
+<p>初始：R0：读取时间 + 记录时间 &#x3D; 3 + 3</p>
+<p>这是磁头位于R2，要读取R1</p>
+<p>R1：旋转等待时间 + 读取时间 + 记录时间 &#x3D; 3 * 10 + 3 + 3 &#x3D; 36</p>
+<p>这是磁头位于R4，要读取R3</p>
+<p>R3：旋转等待时间 + 读取时间 + 记录时间 &#x3D; 3 * 10 + 3 + 3 &#x3D; 36</p>
+<p>……</p>
+<p>最长时间 &#x3D; 36 * 10 + 6 &#x3D; 366ms，选C</p>
+<p>优化分布 R0 R6 R1 R7 R2 R8 R3 R9 R4 R10 R5，环形，时间 (3 + 3) * 11 &#x3D; 66，选B</p>
+<hr>
+<h4 id="1-5-1-移臂调度算法"><a href="#1-5-1-移臂调度算法" class="headerlink" title="1.5.1 移臂调度算法"></a>1.5.1 移臂调度算法</h4><ul>
+<li>先来先服务(FCFS)</li>
+<li>最短寻道时间有限(SSTF)</li>
+<li>扫描算法(SCAN)：电梯算法：内 —&gt; 外 再 外 —&gt; 内</li>
+<li>循环扫描(CSCAN)算法：单向 内 —&gt; 外</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250207192933.png" alt="FCFS" style="zoom:43%;" />
+
+<img src="https://tonkyshan.cn/img/20250207192951.png" alt="SSTF" style="zoom:43%;" />
+
+<img src="https://tonkyshan.cn/img/20250207194135.png" alt="习题" style="zoom:43%;" />
+
+<p>不考虑磁头号，找离20号柱面最近的，如果有多个请求，扇区号从小到大排列</p>
+<p>选C</p>
+<hr>
+<h3 id="1-6-文件系统"><a href="#1-6-文件系统" class="headerlink" title="1.6 文件系统"></a>1.6 文件系统</h3><hr>
+<h4 id="1-6-1-索引文件结构"><a href="#1-6-1-索引文件结构" class="headerlink" title="1.6.1 索引文件结构"></a>1.6.1 索引文件结构</h4><img src="https://tonkyshan.cn/img/20250207194625.png" alt="索引文件结构" style="zoom:43%;" />
+
+<p>默认13个节点</p>
+<ul>
+<li>地址项 4B</li>
+<li>前10个节点都是直接指向具体逻辑块</li>
+<li>直接索引 0-9号页</li>
+<li>假设数据块&#x2F;逻辑块大小为1kb，一级间接索引 [10, 265]  256个逻辑页</li>
+<li>二级间接索引，65536个逻辑页</li>
+<li>三级间接索引，256的三次方个逻辑页</li>
+</ul>
+<h4 id="1-6-2-位示图"><a href="#1-6-2-位示图" class="headerlink" title="1.6.2 位示图"></a>1.6.2 位示图</h4><img src="https://tonkyshan.cn/img/20250207201117.png" alt="位示图" style="zoom:43%;" />
+
+<ul>
+<li>0 —&gt; 空闲</li>
+<li>1 —&gt; 占用</li>
+<li>按字长分组，每个磁盘块的情况由1个bit进行记录</li>
+</ul>
+<p>字长16bit 字的编号、位的编号、磁盘块的编号都是从0开始的</p>
+<p>第65号磁盘块放在几号字？几号bit位</p>
+<p>第65号磁盘块是第66个：4号字，第5行，1号bit位</p>
+<ul>
+<li>若系统在将<strong>目录</strong>文件修改的结果写回磁盘时发生崩溃，则对系统的影响相对较大</li>
+</ul>
+<hr>
+<h3 id="1-7-系统性能"><a href="#1-7-系统性能" class="headerlink" title="1.7 系统性能"></a>1.7 系统性能</h3><hr>
+<h4 id="1-7-1-性能指标"><a href="#1-7-1-性能指标" class="headerlink" title="1.7.1 性能指标"></a>1.7.1 性能指标</h4><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">分类</th>
+<th align="left">指标</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center">计算机</td>
+<td align="left"><strong>时钟频率(主频)<strong>，运算速度和精度，内存的存储容量，存储器的存取周期，</strong>数据处理速度PDR</strong>，<strong>吞吐率</strong>，各种响应时间，各种利用率，RASIS特性，平均故障时间，兼容性，可扩充性，性能价格比</td>
+</tr>
+<tr>
+<td align="center">硬件</td>
+<td align="center">路由器</td>
+<td align="left">设备吞吐量、<strong>端口吞吐量</strong>，全双工线速转发能力，<strong>丢包率，时延，时延抖动</strong>，VPN支持能力，端口硬件队列数，基于Web的管理，网管类型等</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">交换机</td>
+<td align="left">交换机类型，配置，支持的网络类型，最大ATM端口数，<strong>支持协议和标准</strong>等</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">网络</td>
+<td align="left">设备级性能指标，网络级性能指标，应用级性能指标，用户级性能指标，<strong>吞吐量</strong></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">操作系统</td>
+<td align="left">系统的可靠性、<strong>系统的吞吐率(量)、系统响应时间</strong>、系统资源利用率、可移植性</td>
+</tr>
+<tr>
+<td align="center">软件</td>
+<td align="center">数据块管理系统</td>
+<td align="left">衡量数据库管理系统的主要性能指标包括数据库本身和管理系统两部分，有：数据库的大小、数据库中表的数量、单个表的大小、表中允许的记录(行)数量、单个记录(行)的大小、表上允许的索引数量、数据库允许的索引数量、<strong>最大并发事物处理能力、负载均衡能力、最大连接数</strong>等</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">WEB服务器</td>
+<td align="left"><strong>最大并发连接数、响应延迟、吞吐量</strong>等</td>
+</tr>
+</tbody></table>
+<img src="https://tonkyshan.cn/img/20250207205726.png" alt="性能指标" style="zoom:43%;" />
+
+<h4 id="1-7-2-性能设计"><a href="#1-7-2-性能设计" class="headerlink" title="1.7.2 性能设计"></a>1.7.2 性能设计</h4><p>当系统性能降到最基本的水平时，性能调整由<strong>查找和消除瓶颈组成</strong></p>
+<ul>
+<li>对于数据库系统：性能调整主要包括CPU&#x2F;内存使用状况、优化数据库设计、优化数据库管理以及进程&#x2F;线程状态、硬盘剩余空间、日志文件大小等</li>
+<li>对于应用系统：性能调整主要包括应用系统等可用性、响应时间、并发用户数以及特定应用的系统资源占用等</li>
+</ul>
+<p>Amdahl(阿姆达尔)定律</p>
+<img src="https://tonkyshan.cn/img/20250208110615.png" alt="Amdahl" style="zoom:39%;" />
+
+<img src="https://tonkyshan.cn/img/20250208105937.png" alt="Amdahl" style="zoom:39%;" />
+
+<p>B</p>
+<h4 id="1-7-3-性能评估"><a href="#1-7-3-性能评估" class="headerlink" title="1.7.3 性能评估"></a>1.7.3 性能评估</h4><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">描述</th>
+<th align="center">特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">时钟频率法</td>
+<td align="center">以时钟频率高低衡量速度</td>
+<td align="center">仅考虑CPU</td>
+</tr>
+<tr>
+<td align="center">指令执行速度法</td>
+<td align="center">表示机器运算速度的单位是MIPS</td>
+<td align="center">仅考虑CPU</td>
+</tr>
+<tr>
+<td align="center">等效指令速度法(吉普森混合法)</td>
+<td align="center">通过各类指令在程序中所占的比例(Wi)进行计算得到的</td>
+<td align="center">仅考虑CPU，综合<strong>考虑指令比例不同的问题</strong></td>
+</tr>
+<tr>
+<td align="center">数据处理速率法(PDR)</td>
+<td align="center">PDR值的方法来衡量机器性能，PDR值越大，机器性能越好</td>
+<td align="center">PDR &#x3D; L &#x2F; R<br /><strong>仅考虑CPU + 内存</strong></td>
+</tr>
+<tr>
+<td align="center">综合理论性能法(CTP)</td>
+<td align="center">CTP用MTOPS表示，CTP的估算方法是：首先<br />算出处部件每个计算单元的有效计算率，<br />再按不同字长加以调整，得出该计算单元<br />的理论性能，所有组成该处理部件的计算单元<br />的理论性能之和即为CTP</td>
+<td align="center"><strong>仅考虑CPU + 内存</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>基准程序法</strong></td>
+<td align="center">把应用程序中<strong>用的最多、最频繁的那部分核心程序</strong><br />作为评估计算机系统性能的<strong>标准程序</strong>，<br />称为<strong>基准测试程序(benchmark)</strong></td>
+<td align="center"><strong>综合考虑多部分</strong>，基准程序法<br />是目前一致承认的测试系统性能的较好方法</td>
+</tr>
+</tbody></table>
+<p><strong>【测试精确度】真实的程序 &gt; 核心程序 &gt; 小型基准程序 &gt; 合成基准程序</strong></p>
+<ul>
+<li><strong>Dhrystone基准程序</strong>：一个综合性的<strong>整数基准测试程序</strong>，是为了测试编译器和CPU处理整数指令和控制功能的有效性，人为地选择一些典型指令综合起来形成的测试程序</li>
+<li><strong>Linpack基准程序</strong>：国际上最流行的用于测试高性能计算机系统<strong>浮点性能</strong>的测试</li>
+<li><strong>Whetstone基准程序</strong>：用Fortran语言编写的<strong>综合性测试程序</strong>，主要由执行浮点运算、功能调用、数组变址、条件转移和超越函数的程序组成</li>
+<li><strong>SPEC基准程序</strong>：一种是测试计算机完成单向任务有多快，称为<strong>速度测试</strong>，另一种是测试计算机在一定时间内能完成多少项任务，称为<strong>吞吐率测试</strong></li>
+<li><strong>TPC基础程序</strong>：TPC基准程序用以测评计算机在事务处理、数据库处理、企业管理与决策支持系统等方面的性能，该基准程序的测评结果用每秒完成的事物处理数TPC来表示<ul>
+<li>TPC-A基准程序规范用于评价在OLTP环境下的数据库和硬件的性能</li>
+<li>TPC-B测试的是不包括网络的纯事务处理量，用于模拟企业计算环境</li>
+<li><strong>TPC-C测试的是联机订货系统(在线事务处理)</strong></li>
+<li>TPC-D、TCP-H和TPC-R测试的都是决策支持系统，其中TCP-R允许有附加的优化选项</li>
+<li>TPC-E测试的是大型企业信息服务系统</li>
+<li>TPC-W是基于Web应用的基准程序，用来测试一些通过Internet进行市场服务和销售的商业行为，所以TPC-W可以看作是一个服务器的测试标准</li>
+</ul>
+</li>
+</ul>
+<p>Web服务器的性能评估</p>
+<ul>
+<li>在Web服务器的测试中，反映其性能的指标主要有：<strong>最大并发连接数、响应延迟和吞吐量等</strong></li>
+<li>常见的Web服务器性能评测方法有<strong>基准性能测试、压力测试和可靠性测试</strong></li>
+</ul>
+<p>系统监视</p>
+<p>进行系统监视通常有3种方式：一是通过<strong>系统本身提供的命令</strong>，如UNIX&#x2F;Linux系统中的W、ps、last、Windows中的netstart等，二是通过<strong>系统记录文件</strong>查阅系统在特定时间内的运行状态，三是集成命令、文件记录和可视化技术的监控工具、如<strong>Windows的Perfmon程序</strong></p>
+<hr>
+<h2 id="第二章-嵌入式系统-2-5"><a href="#第二章-嵌入式系统-2-5" class="headerlink" title="第二章 嵌入式系统 2-5"></a>第二章 嵌入式系统 2-5</h2><hr>
+<p>考点：</p>
+<ul>
+<li>嵌入式硬件、总线、嵌入式系统、嵌入式操作系统、微内核、多核CPU、嵌入式系统开发设计</li>
+</ul>
+<hr>
+<h3 id="2-1-嵌入式系统概述"><a href="#2-1-嵌入式系统概述" class="headerlink" title="2.1 嵌入式系统概述"></a>2.1 嵌入式系统概述</h3><hr>
+<ul>
+<li>嵌入式系统是以应用为中心，以计算机技术为基础，并将可配置与可裁剪的软、硬件集成于一体的专用计算机系统，需要满足应用对功能、可靠性、成本、体积和功耗等方面的严格要求</li>
+<li>从计算机角度看，嵌入式系统是指嵌入各种设备及应用产品内部的计算机系统，它主要完成信号控制的功能，体积小、结构紧凑，可作为一个部件埋藏于所控制的装置中</li>
+<li>一般嵌入式系统由嵌入式处理器、相关支撑硬件、嵌入式操作系统、支撑软件以及应用软件组成</li>
+</ul>
+<p>从传统意义上讲，嵌入式系统主要由以下部件组成</p>
+<ul>
+<li>嵌入式微处理器(控制器(MCU))</li>
+<li>存储器(RAM&#x2F;ROM)</li>
+<li>内(外)总线逻辑</li>
+<li>定时&#x2F;计数器</li>
+<li>看门狗电路：<strong>定时器溢出则中断，系统复位处理</strong></li>
+<li>I&#x2F;O接口(串口、网络、USB、<strong>JTAG接口–用来进行CPU调试的常用接口</strong>)</li>
+<li>外部设备(UART、LED等)</li>
+<li>其他部件</li>
+</ul>
+<hr>
+<h3 id="2-2-嵌入式系统设计"><a href="#2-2-嵌入式系统设计" class="headerlink" title="2.2 嵌入式系统设计"></a>2.2 嵌入式系统设计</h3><hr>
+<h4 id="2-2-1-交叉开发环境"><a href="#2-2-1-交叉开发环境" class="headerlink" title="2.2.1 交叉开发环境"></a>2.2.1 交叉开发环境</h4><p>嵌入式软件等开发与传统的软件开发方法存在比较大的差异，主要表现在以下方面：</p>
+<ul>
+<li>嵌入式软件开发是在宿主机(PC机或工作站)上使用专门的嵌入式工具开发，生成二进制代码后，需要使用工具卸载到目标机或固化在目标机存储器上运行</li>
+<li>嵌入式软件开发时更强调软&#x2F;硬件协同工作的效率和稳定性</li>
+<li><strong>嵌入式软件开发的结果通常需要固化在目标系统的储存器或处理器内部储存器资源中</strong></li>
+<li><strong>嵌入式软件的开发一般需要专门的开发工具、目标系统和测试设备</strong></li>
+<li>嵌入式软件对实时性的要求更高</li>
+<li><strong>嵌入式软件对安全性和可靠性的要求较高</strong></li>
+<li><strong>嵌入式软件开发是要充分考虑代码规模</strong></li>
+<li>在安全攸关系统中的嵌入式软件，其开发还应满足某些领域对设计和代码审定</li>
+<li>模块化设计即将一个较大的程序按功能划分成若干程序模块，每个模块实现特定的功能</li>
+</ul>
+<p>嵌入式软件设计层面的功耗控制主要可以从以下方面展开：</p>
+<ul>
+<li>软硬件协同设计，即软件的设计要与硬件的匹配，考虑硬件因素</li>
+<li>编译优化，采用低功耗优化的编译技术</li>
+<li>减少系统的持续运行时间，可从算法角度进行优化</li>
+<li>用”中断”代替”查询”</li>
+<li>进行电源的有效管理</li>
+</ul>
+<hr>
+<h3 id="2-3-嵌入式硬件"><a href="#2-3-嵌入式硬件" class="headerlink" title="2.3 嵌入式硬件"></a>2.3 嵌入式硬件</h3><hr>
+<p>嵌入式系统的发展大致经历了五个阶段：</p>
+<ul>
+<li>第一阶段：单片微型计算机(SCM)阶段，即单片机时代</li>
+<li>第二阶段：微控制器(MCU)阶段</li>
+<li>第三阶段：片上系统(SoC)</li>
+<li>第四阶段：以Internet为基础的嵌入式系统</li>
+<li>第五阶段：在智能化、云技术推动下的嵌入式系统</li>
+</ul>
+<h4 id="2-3-1-嵌入式微处理器分类"><a href="#2-3-1-嵌入式微处理器分类" class="headerlink" title="2.3.1 嵌入式微处理器分类"></a>2.3.1 嵌入式微处理器分类</h4><p>通常嵌入式处理器需要根据不同的使用场景选择不同类型的处理器，从处理器分类看，大致可分为MPU、MCU、DSP、GPU、SoC</p>
+<ul>
+<li>微处理器(MPU)：将微处理器装配在专门设计的电路板上，只保留与嵌入式应用有关的母板功能。微处理器一般以某一种微处理内核为核心，每一种衍生产品的处理器内核都是一样的，不同的是存储器和外设的配置及封装</li>
+<li>微控制器(MCU)：又称单片机。与MPU相比MCU的最大优点在于单片化，体积大大减小，从而使功耗和成本下降，可靠性提高</li>
+<li>**信号处理器(DSP)**：DSP处理器对系统结构和指令进行了特殊设计(通常，DSP采用一种哈佛结构)，使其适合于执行DSP算法，编译效率较高，指令执行速度也较高</li>
+<li>**图形处理器(GPU)**：<ul>
+<li>GPU是图形处理单元的缩写，是一种可执行3D图形渲染等图像等半导体芯片(处理器)</li>
+<li>GPU可用于个人电脑、工作站、游戏机和一些移动设备上做图像和图形相关运算工作的微处理器</li>
+<li>它可以减少对CPU的依赖，并执行部分原本属于CPU的工作，尤其是在3D图形处理中，GPU采用了核心技术(如：硬件T&amp;L、纹理压缩等)保证了3D快速渲染的能力</li>
+<li>GPU目前已广泛应用于各行各业，GPU中集成了同时运行在GHz的频率上的成千上万个core，可以高速处理图像数据。<strong>最新的GPU峰值性能可高达100TFlops以上</strong></li>
+</ul>
+</li>
+<li>**片上系统(SoC)**：<ul>
+<li>追求产品系统最大包容的集成器件</li>
+<li>它是一个产品，是一个<strong>有专用目标的集成电路</strong>，其中包含完整系统并有嵌入软件的全部内容</li>
+<li>同时它又是<strong>一种技术</strong>，用以实现从确定系统功能开始，到软&#x2F;硬件划分，并完成设计的整个过程</li>
+<li>成功实现了<strong>软硬件的无缝结合</strong>，直接在微处理器片内嵌入<strong>操作系统的代码模块</strong></li>
+<li>减小了系统的体积和功耗、提高了可靠性和设计生产效率</li>
+<li>狭义角度：信息系统核心的芯片集成，是将系统关键部件集成在一块芯片上</li>
+<li>广义角度：SoC是一个微小型系统，如果说中央处理器(CPU)是大脑，那么SoC就是包括大脑、心脏、眼睛和手的系统</li>
+<li>国内外学术界一般倾向将SoC定义为将微处理器、模拟IP内核、数字IP核核存储器(或片外存储控制接口)集成在单一芯片上，它通常是客户定制的，或是面向特定用途的标准产品</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-3-2-AI芯片"><a href="#2-3-2-AI芯片" class="headerlink" title="2.3.2 AI芯片"></a>2.3.2 AI芯片</h4><p>人工智能芯片的定义：从广义上讲只要能够运行人工智能算法的芯片都叫作AI芯片。但是通常意义上的AI芯片指的是针对人工智能算法做了特殊加速设计的芯片，现阶段，这些人工智能算法一般以深度学习算法为主，也可以包括其他机器学习算法</p>
+<p>人工智能芯片四大类(按技术架构<strong>分类</strong>)</p>
+<ul>
+<li>GPU</li>
+<li>FPGA(现场可编程门阵列)</li>
+<li>ASIC(专用集成电路)</li>
+<li>类脑芯片</li>
+</ul>
+<p>AI芯片的关键<strong>特征</strong>：</p>
+<ul>
+<li>新型的计算范式：AI计算既不脱离传统计算，也具有<strong>新的计算特质</strong></li>
+<li>训练和推断：AI系统通常涉及训练和推断过程</li>
+<li>大数据处理能力：满足高效能机器学习的数据处理要求</li>
+<li>数据精度：<strong>降低精度</strong>的设计</li>
+<li>可重构的能力：<strong>针对特定领域而不针对特定应用的设计</strong>，可以通过重新配置，适应新的AI算法、架构和任务</li>
+<li>开发工具：AI芯片需要<strong>软件工具链的支持</strong></li>
+</ul>
+<h4 id="2-3-3-嵌入式微处理器体系结构"><a href="#2-3-3-嵌入式微处理器体系结构" class="headerlink" title="2.3.3 嵌入式微处理器体系结构"></a>2.3.3 嵌入式微处理器体系结构</h4><table>
+<thead>
+<tr>
+<th align="center">体系结构分类</th>
+<th align="center">定义</th>
+<th align="center">特点</th>
+<th align="center">典型应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">冯·诺伊曼结构</td>
+<td align="center">冯·诺伊曼结构也称<br />普林斯顿结构，是一种将<br />程序指令存储器和数据<br />存储器合并在一起的存储器结构</td>
+<td align="center">指令与数据存储器合并在一起<br />指令与数据都通过相同的数据总线传输</td>
+<td align="center">一般用于PC处理器，<br />如I3，I5，I7处理器<br /><strong>注：常规计算机<br />属于冯·诺伊曼结构</strong></td>
+</tr>
+<tr>
+<td align="center">哈佛结构</td>
+<td align="center">哈佛结构是一种并行体系结构，<br />它的主要特点是将程序和<br />数据存储在不同的存储空间中，<br />即程序存储器和数据存储器<br />是两个独立的存储器，<br />每个存储器独立编址、独立访问</td>
+<td align="center">指令与数据分开存储，<br />可以并行读取，有较高的数据吞吐率<br />有4条总线：指令和数据<br />的数据总线与地址总线</td>
+<td align="center">一般用于嵌入式系统处理器<br /><strong>注：DSP属于哈佛结构</strong></td>
+</tr>
+</tbody></table>
+<h4 id="2-3-4-总线"><a href="#2-3-4-总线" class="headerlink" title="2.3.4 总线"></a>2.3.4 总线</h4><p>基本概念：</p>
+<p>总线是一组能为多个部件<strong>实时共享</strong>的信息传送线，用来连接多个部件并为之提供信息交换通路【总线通常是半双工的】</p>
+<p>半双工：同一时刻，只允许1个设备发送，但是允许多个设备接收</p>
+<p>特点：</p>
+<ul>
+<li>挂接在总线上的多个部件只能分时向总线发送数据，但可同时从总线接收数据</li>
+<li>通过总线复用方式可以减少总线中信号线的数量，以较少的信号线传输更多的信息</li>
+</ul>
+<p>总线通常分为以下几类：</p>
+<ul>
+<li><p><strong>芯片内总线</strong>：用于集成电路芯片内部各部分的连接元件级总线，用于一块电路板内各元器件的连接</p>
+</li>
+<li><p><strong>系统总线，又称内总线</strong>：用于计算机各组成部分(CPU、内存和接口等)等连接</p>
+</li>
+<li><p><strong>外总线</strong>：又称通信总线，用于计算机与外设或计算机与计算机之间的连接或通信</p>
+</li>
+<li><p><strong>从功能上将总线划分为数据总线、地址总线和控制总线</strong></p>
+</li>
+<li><p><strong>从数据传输的方式将总线划分为并行总线和串行总线</strong></p>
+</li>
+</ul>
+<p>并行总线：将数据字节的各位用多条数据线同时进行传送【<strong>短</strong>距离】</p>
+<p>串行总线：数据是一位一位地进行传输的，在传输中每一位数据都占据一个固定的时间长度【<strong>长</strong>距离，传输波特率<strong>可调</strong>整，正确性依赖于<strong>校验码</strong>，数据<strong>传输方式</strong>可以使用多种】</p>
+<p>海明码可以纠正1个比特位的错误，90%以上只有1个bit错误</p>
+<hr>
+<h3 id="2-4-嵌入式操作系统"><a href="#2-4-嵌入式操作系统" class="headerlink" title="2.4 嵌入式操作系统"></a>2.4 嵌入式操作系统</h3><hr>
+<p>嵌入式操作系统(EOS)是指用于嵌入式系统的操作系统。嵌入式操作系统是一种用途广泛的系统软件，负责嵌入式系统的全部软、硬件资源分配、任务调度、控制、协调并行活动等工作，通常包括与硬件相关的底层驱动软件、系统内核、设备驱动接口、通信协议、图形界面、标准化浏览器等</p>
+<p>根据系统对时间的敏感程度可以将嵌入式系统划分为：</p>
+<ul>
+<li>嵌入式非实时系统</li>
+<li><strong>嵌入式实时系统</strong>：能够在<strong>指定或确定的时间内</strong>完成系统功能和外部或内部、同步或异步时间做出响应的系统</li>
+</ul>
+<h4 id="2-4-1-嵌入式实时操作系统"><a href="#2-4-1-嵌入式实时操作系统" class="headerlink" title="2.4.1 嵌入式实时操作系统"></a>2.4.1 嵌入式实时操作系统</h4><p>嵌入式实时操作系统兼具嵌入式操作系统的特点和实时操作系统的特点</p>
+<p>嵌入式操作系统主要有以下特点：</p>
+<ul>
+<li>微型化</li>
+<li>代码质量高</li>
+<li>专业化</li>
+<li>实时性强</li>
+<li>可裁剪、可配置</li>
+</ul>
+<p>实时操作系统的最核心特点是实时性强</p>
+<p><strong>嵌入式实时操作系统实时性的评价指标</strong></p>
+<ul>
+<li>中断响应和延迟时间</li>
+<li>任务切换时间</li>
+<li>信号量混洗时间</li>
+</ul>
+<p><strong>嵌入式实时操作系统调度算法</strong></p>
+<ul>
+<li>优先级调度算法：系统为每个任务分配一个<strong>相对固定</strong>的优先顺序</li>
+<li>抢占式优先级调度算法：根据任务的<strong>紧急程度确认</strong>该任务的优先级，大多数RTOS调度算法都是抢占方式(可剥夺方式)</li>
+<li>最早截止期调度算法(EDF算法)：根据任务的截止时间<strong>头端</strong>来确定其优先级，对于<strong>时间期限最近的任务</strong>。分配最高的优先级</li>
+<li>最晚截止期调度算法：根据任务的截止时间末端来确定其优先级，对于<strong>时间期限最近的任务</strong>，分配最高的优先级</li>
+</ul>
+<h4 id="2-4-2-操作系统内核架构"><a href="#2-4-2-操作系统内核架构" class="headerlink" title="2.4.2 操作系统内核架构"></a>2.4.2 操作系统内核架构</h4><p>内核是操作系统的核心部分，它管理着系统的各种资源，内核可以看成连接应用程序和硬件的一座桥梁，是直接运行在硬件上的最基础的软件实体</p>
+<p>目前从内核架构来划分，可以分为宏内核(Monolithic Kernel)和微内核(Micro Kernel)</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">实质</th>
+<th align="center">优点</th>
+<th align="center">缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">单体内核</td>
+<td align="center">将图形、设备驱动及文件<br>系统等功能全部在内核<br/>中实现，运行在内核状态<br/>和同一地址空间</td>
+<td align="center">减少进程间通信和状态切换<br/>的系统开销，获得较高的运行效率</td>
+<td align="center">内核庞大，占用资源较多<br/>且不易剪裁<br/>系统稳定性和安全性不好</td>
+</tr>
+<tr>
+<td align="center">微内核【鸿蒙操作系统】</td>
+<td align="center">只实现基本功能，将图形系统<br/>文件系统、设备驱动及<br/>通信功能放在内核之外</td>
+<td align="center">微内核系统<strong>结构相当清晰，</strong><br/><strong>有利于协作开发</strong>。内核精炼，<br/>便于<strong>剪裁和移植(灵活性<br/>可扩展性)<strong>，系统服务程序<br/>运行在用户地址空间，</strong>系统<br/>的可靠性、稳定性和安全性</strong><br/>较高，可用于<strong>分布式系统</strong></td>
+<td align="center">用户状态和内核状态需要<br/>频繁切换，从而导致系统频率<br/>不如单体内核，<strong>性能偏低</strong></td>
+</tr>
+</tbody></table>
+<p>鸿蒙(Harmony OS)整体采用分层的层次化设计，从下向上依次为：内核层、系统服务层、框架层和应用层</p>
+<p>系统功能按照”系统” - “子系统” - “功能&#x2F;模块”逐级展开，在多设备部署场景下、支持根据实际需求裁剪某些非必要的子系统或功能&#x2F;模块</p>
+<p>鸿蒙操作系统架构具有<strong>4个技术特性</strong>：</p>
+<ul>
+<li><p><strong>分布式架构首次用于终端OS，实现跨终端无缝协同体验</strong></p>
+<p>Harmony OS的”分布式OS 架构”具有分布式软总线、分布式数据管理、分布式任务调度和虚拟外设等4大能力，将相应分布式应用的底层技术实现难点对应用开发者屏蔽，使开发者能够聚焦自身业务逻辑，像开发同一终端一样开发跨终端分布式应用，也使最终消费者享受到强大的跨终端业务协同能力为各使用场景带来的无缝体验</p>
+</li>
+<li><p>确定时延引擎和高性能IPC技术实现系统天生流畅</p>
+<p>确定时延引擎可在任务执行前分配系统中任务执行优先级及时限进行调度处理，优先级高的任务资源将优先保障调度，应用响应时延降低25.7%，鸿蒙微内核结构小巧的特性使IPC(进程间通信)性能大大提高，进程通信效率较现有系统提升5倍</p>
+</li>
+<li><p><strong>基于微内核架构重塑终端设备可信安全</strong></p>
+<p>Harmony OS采用全新的微内核设计，拥有更强的安全特性和低时延等特点</p>
+<p>Harmony OS架构的系统安全性主要体现在搭载Harmony OS的分布式终端上，可以保证”正确的人，通过正确的设备，正确地使用数据”。这里通过”分布式多端协同身份认证”来保证”正确的人”，通过”在分布式终端上构筑可信运行环境”来保证”正确的设备”，通过”分布式数据在跨终端流动的过程中，对数据进行分类分级管理”来保证”正确的使用数据”</p>
+</li>
+<li><p>通过统一IDE支撑一次开发，多端部署，实现跨终端生态共享</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-5-嵌入式数据库"><a href="#2-5-嵌入式数据库" class="headerlink" title="2.5 嵌入式数据库"></a>2.5 嵌入式数据库</h3><hr>
+<p>与传统数据库相比，嵌入式数据库系统有以下几个主要特点：</p>
+<ul>
+<li>嵌入式</li>
+<li>实时性</li>
+<li>移动性</li>
+<li>伸缩性</li>
+</ul>
+<p>按照数据库存储位置的不同而进行分类是目前广泛采用的分类方法，它可以分为三类</p>
+<ul>
+<li>基于内存方式(Main Memory Database System，MMDB)</li>
+<li>基于文件方式(File Database，FDB)</li>
+<li>基于网络方式(Netware Database，NDB)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">定义</th>
+<th align="center">特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">基于内存的数据库MMDB</td>
+<td align="center">基于内存的数据库系统是<br><strong>实时系统和数据库系统的有机结合</strong></td>
+<td align="center">内存数据库是支持实时事务的最佳技术，其本质<br/>特征是<strong>以其”主拷贝”或”工作版本”常驻内存</strong>，即<br/><strong>活动事务只与实时内存数据库的内存拷贝打交道</strong></td>
+</tr>
+<tr>
+<td align="center">基于文件的数据库FDB</td>
+<td align="center">基于文件的数据库系统就是以文件<br/>方式存储数据库数据，即<strong>数据按照<br/>一定格式存储在磁盘中</strong>，使用时由<br/>应用程序<strong>通过相应的驱动程序<br/>甚至直接对数据文件进行读写</strong></td>
+<td align="center">这种数据库的访问方式是被动式的，只要<br/>了解其文件格式，任何程序都可以直接读取，<br/>因此它的<strong>安全性很低</strong>，虽然文件数据库存在<br/>诸多弊端，但是，<strong>可以满足嵌入式系统在<br/>空间、时间等方面的特殊要求</strong></td>
+</tr>
+<tr>
+<td align="center">基于网络的数据库NDB</td>
+<td align="center">基于网络的数据库系统是<strong>基于手机<br/>4G&#x2F;5G的移动通信基础之上</strong>的数据库<br/>系统，在<strong>逻辑上可以把嵌入式设备<br/>看作远程服务器的一个客户端</strong></td>
+<td align="center">嵌入式网络数据库系统的特点是：<br/><strong>无需解析SQL语句，支持更多的SQL操作，<br/>客户端小、无需支持可剪裁性，有利于代码重用</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="第三章-计算机网络-2-5"><a href="#第三章-计算机网络-2-5" class="headerlink" title="第三章 计算机网络 2-5"></a>第三章 计算机网络 2-5</h2><hr>
+<p>考点：</p>
+<ul>
+<li><strong>网络技术</strong>、<strong>TCP&#x2F;IP协议簇</strong>、网络规划与设计</li>
+</ul>
+<hr>
+<h3 id="3-1-计算机网络技术概述"><a href="#3-1-计算机网络技术概述" class="headerlink" title="3.1 计算机网络技术概述"></a>3.1 计算机网络技术概述</h3><hr>
+<h4 id="3-1-1-网络指标"><a href="#3-1-1-网络指标" class="headerlink" title="3.1.1 网络指标"></a>3.1.1 网络指标</h4><p>计算机网络性能指标可以从速率、带宽、吞吐量和时延等不同方面来度量计算机网络的性能</p>
+<p><strong>【时延】</strong></p>
+<p>时延是指数据(一个报文、分组甚至比特)从网络(或链路)的一端传送到另一端所需的时间，时延是个很重要的性能指标，它有时也称为延迟或迟延。网络中的时延由以下几个不同部分组成：发送时延、传播时延、处理时延、排队时延等</p>
+<p><strong>网络延迟 &#x3D; 处理延迟 + 排队延迟 + 发送延迟 + 传播延迟</strong>。如果不考虑网络环境，服务器等延迟等主要因素是队列延迟和磁盘I&#x2F;O延迟</p>
+<p><strong>网络分类</strong></p>
+<ul>
+<li>局域网(LAN) 也称 园区网，是封闭的</li>
+<li>城域网(MAN)</li>
+<li>广域网(WAN)</li>
+<li>因特网(Internet)</li>
+<li>无线个人网(WPAN, 802.5, Bluetooth)</li>
+<li>无线局域网(WLAN, 802.11, Wi-Fi)</li>
+<li>无线城域网(WMAN, 802.16, WiMax)</li>
+<li>无线广域网(WWAN, 3G&#x2F;4G&#x2F;5G) 移动通信网络</li>
+</ul>
+<p>局域网是指在有限地理范围内将若干计算机通过传输介质互联成的计算机组(即通信网络)，通过网络软件实现计算机之间的文件管理、应用软件共享、打印机共享、工作组内的日程安排、电子邮件和传真通信服务等功能。局域网是<strong>封闭型</strong>的</p>
+<p>局域网专用性非常强，具有比较稳定和规范的拓扑结构。常见的局域网拓扑结构有<strong>星状结构、树状结构、总线结构和环形结构</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">特点</th>
+<th align="center">缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">星状结构</td>
+<td align="center">网络中的每个结点设备都以中心结点为中心<br>通过连接线与中心结点相连，如果一个结点设备<br/>需要传输数据，它首先必须通过中心结点<br/>中心结点是控制中心，<strong>任意两个结点间的通信<br/>最多只需两步；传输速度快、网络结构简单、<br/>建网容易、便于控制和管理</strong></td>
+<td align="center"><strong>可靠性低</strong>，网络<strong>共享能力差</strong>，并且<br/>一旦中心结点出现故障则导致全网瘫痪</td>
+</tr>
+<tr>
+<td align="center">树状结构</td>
+<td align="center">被称为分级的集中式网络；网络成本低，<br/>结构简单；在网络中，<strong>任意两结点之间<br/>不产生回路，每个链路都支持双向传输<br/>结点扩充方便、灵活、方便寻查链路路径</strong></td>
+<td align="center">除叶结点及其相连的链路外，任何一个<br/>工作站或链路产生故障都会<strong>影响<br/>整个网络系统的正常运行</strong></td>
+</tr>
+<tr>
+<td align="center">总线结构</td>
+<td align="center">网络是将各个结点设备和<strong>一根总线相连<br/><strong>网络中所有的结点设备都是</strong>通过<br/>总线进行信息传输</strong>的</td>
+<td align="center">作为数据通信必经的总线的<strong>负载<br/>能力是有限度的</strong>，这是由通信媒体本身的<br/>物理性能决定的，它的<strong>故障<br/>将影响总线上每个结点的通信</strong></td>
+</tr>
+<tr>
+<td align="center">环形结构</td>
+<td align="center">网络中各结点<strong>通过一条首尾相连的<br/>通信链路连接起来，形成一个闭合环形<br/>结构网</strong>；网络中各结点设备的地位<br/>相同，信息按照<strong>固定方向单向流动，<br/>两个结点之间仅有一条通路</strong>，系统中<br/>无信道选择问题</td>
+<td align="center">网络<strong>不便于扩充</strong>，系统响应延时长，<br/>且信息传输<strong>效率相对较低，<br/>任一结点的故障将导致物理瘫痪</strong></td>
+</tr>
+<tr>
+<td align="center">网状结构</td>
+<td align="center">任何结点彼此之间均<strong>存在一条通信<br/>链路</strong>，任何结点**故障不会影响其他结点<br/>**之间的通信(可靠性高)</td>
+<td align="center">网络布线较为<strong>繁琐</strong>，且建设成本高，<br/>控制方法复杂</td>
+</tr>
+</tbody></table>
+<h4 id="3-1-2-5G技术"><a href="#3-1-2-5G技术" class="headerlink" title="3.1.2 5G技术"></a>3.1.2 5G技术</h4><p>5G网络的主要特征</p>
+<ul>
+<li><strong>服务化架构：</strong>5G核心网中引入了SBA服务化架构，实现网络功能的灵活定制和按需组合</li>
+<li><strong>网络切片：</strong>通过网络切片技术在单个独立的物理网络上切分出多个逻辑网络，从而避免了为每一个服务建设一个专用的物理网络，极大低降低了网络和运维成本</li>
+</ul>
+<hr>
+<h3 id="3-2-组网技术"><a href="#3-2-组网技术" class="headerlink" title="3.2 组网技术"></a>3.2 组网技术</h3><hr>
+<p>OSI七层模型：</p>
+<table style="text-align: center;">
+  <thead>
+    <tr>
+      <th>层次</th>
+      <th>名称</th>
+      <th>主要功能</th>
+      <th>主要设备及协议</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>7</td>
+      <td>应用层</td>
+      <td>实现具体的应用功能</td>
+      <td rowspan="3">POP3、FTP、HTTP、Telnet、SMTP、DHCP、TFTP、SNMP、DNS</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>表示层</td>
+      <td>数据的格式与表达、加密、压缩</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>会话层</td>
+      <td>建立、管理和终止会话</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>传输层</td>
+      <td>端到端的连接</td>
+      <td>TCP、UDP</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>网络层</td>
+      <td>分组传输和路由选择</td>
+      <td>三层交换机、路由器、ARP、RARP、IP、ICMP、IGMP</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>数据链路层</td>
+      <td>传送以帧为单位的信息，以太网帧最小长度为64字节</td>
+      <td>网桥、交换机(多端口网桥)、网卡、PPTP、L2TP、SLIP、PPP</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>物理层</td>
+      <td>二进制传输</td>
+      <td>中继器、集线器(多端口中继器)</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<h4 id="3-2-1-交换技术"><a href="#3-2-1-交换技术" class="headerlink" title="3.2.1 交换技术"></a>3.2.1 交换技术</h4><p>数据在网络中转发通常离不开交换机，交换机的功能包括：集线功能、中继功能、桥接功能、隔离冲突域功能等</p>
+<p><strong>基本交换原理</strong></p>
+<p>交换机是一种基于MAC地址识别，能完成封装转发数据包功能的网络设备，交换机可以”学习”MAC地址，并把其存放在内部地址表中，通过在数据的始发者和目标接收者之间建立临时的交换路径，使数据直接由源地址到达目的地址</p>
+<p>交换机的所有端口属于同一个广播域，不同端口属于不同的冲突域</p>
+<p>集线器所有端口属于同一个冲突域</p>
+<p>交换机需要实现的功能如下所述：</p>
+<ul>
+<li><strong>转发路径学习</strong>：根据收到数据中的源MAC地址建立该地址同交换机端口的映射写入MAC地址表中</li>
+<li><strong>数据转发</strong>：如果交换机根据数据中的目的MAC地址在建立好的MAC地址表中查询到了，就向对应端口进行转发</li>
+<li><strong>数据泛洪</strong>：如果数据中的目的MAC地址不在MAC地址表中，则向所有端口转发也就是泛洪，广播帧和组播帧向所有端口(不包括源端口)进行转发</li>
+<li><strong>链路地址更新</strong>：MAC地址表会每隔一定时间(如300s)更新一次</li>
+</ul>
+<hr>
+<h3 id="3-3-TCP-x2F-IP协议族"><a href="#3-3-TCP-x2F-IP协议族" class="headerlink" title="3.3 TCP&#x2F;IP协议族"></a>3.3 TCP&#x2F;IP协议族</h3><hr>
+<h4 id="3-3-1-常规TCP-x2F-IP协议"><a href="#3-3-1-常规TCP-x2F-IP协议" class="headerlink" title="3.3.1 常规TCP&#x2F;IP协议"></a>3.3.1 常规TCP&#x2F;IP协议</h4><table style="text-align: center;">
+  <thead>
+    <tr>
+      <th>TCP/IP模型</th>
+      <th>OSI七层模型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="3">应用层</td>
+      <td>应用层</td>
+    </tr>
+    <tr>
+      <td>表示层</td>
+    </tr>
+    <tr>
+      <td>会话层</td>
+    </tr>
+    <tr>
+      <td>传输层</td>
+      <td>传输层</td>
+    </tr>
+    <tr>
+      <td>网际层</td>
+      <td>网络层</td>
+    </tr>
+    <tr>
+      <td rowspan="2">网络接口层</td>
+      <td>数据链路层</td>
+    </tr>
+    <tr>
+      <td>物理层</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>网际层是整个TCP&#x2F;IP体系结构的关键部分，其功能是使主机可以把<strong>分组</strong>发往任何网络并使分组独立地传向目标</p>
+<p>TCP和UDP</p>
+<ul>
+<li><p>TCP：可靠的传输层协议</p>
+<p>3次握手 4次挥手， 差错校验 错误重传 顺序检查 可靠性高，性能差</p>
+</li>
+<li><p>UDP：不可靠的传输层协议</p>
+<p>可靠性差，性能较好(直播)</p>
+</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250213153723.png" alt="网络" style="zoom:39%;" />
+
+<ul>
+<li>POP3：110端口，邮件收取</li>
+<li>SMTP：25端口，邮件发送</li>
+<li>FTP：20数据端口&#x2F;21控制端口，文件传输协议</li>
+<li>HTTP：80端口，超文本传输协议，网页传输</li>
+<li>DHCP：67端口，IP地址自动分配</li>
+<li>SNMP：161端口，简单网络管理协议</li>
+<li>DNS：53端口，域名解析协议，记录域名与IP的映射关系</li>
+<li>TCP：可靠的传输层协议</li>
+<li>UDP：不可靠的传输层协议</li>
+<li>ICMP：因特网控制协议，PING命令来自该协议</li>
+<li>IGMP：组播协议</li>
+<li>ARP：地址解析协议，IP地址转换为MAC地址</li>
+<li>RARP：反向地址解析协议，MAC地址转IP地址</li>
+</ul>
+<p>TCP协议可以依据端口号将报文交付给上层的某一进程，可以对应用层进程进行寻址</p>
+<h4 id="3-3-2-DHCP"><a href="#3-3-2-DHCP" class="headerlink" title="3.3.2 DHCP"></a>3.3.2 DHCP</h4><p>动态主机配置协议</p>
+<p>客户机&#x2F;服务器模型(C&#x2F;S)</p>
+<p>分配方式</p>
+<ul>
+<li>固定分配【管理员分配】</li>
+<li>动态分配【有效期限的IP地址】</li>
+<li>自动分配【无限长的IP地址】</li>
+</ul>
+<p>无效地址：169.254.X.X 和 0.0.0.0</p>
+<img src="https://tonkyshan.cn/img/20250213161044.png" alt="DHCP" style="zoom:39%;" />
+
+<ul>
+<li>DHCP发现：DISCOVER</li>
+<li>DHCP提供：OFFER</li>
+<li>DHCP请求：REQUEST</li>
+<li>DHCP确认：Acknowledge, ACK</li>
+<li>DHCP拒绝：NACK</li>
+<li>客户端释放：RELEASE</li>
+<li>客户端拒绝分配IP：Decline</li>
+</ul>
+<p>租约默认为8天</p>
+<p>当租约过半时，客户机需要向DHCP服务器申请续租</p>
+<p>当租约超过87.5%时，如果仍然没有和当初提供IP的DHCP服务器联系上，则开始联系其他的DHCP服务器</p>
+<h4 id="3-3-3-DNS"><a href="#3-3-3-DNS" class="headerlink" title="3.3.3 DNS"></a>3.3.3 DNS</h4><p>域名系统</p>
+<ul>
+<li><p>主机向本地域名服务器的查询采用递归查询</p>
+</li>
+<li><p>本地域名服务器向根域名服务器的查询通常采用迭代查询</p>
+</li>
+<li><p>递归查询：服务器必须回答目标IP与域名的映射关系</p>
+</li>
+<li><p>迭代查询：服务器收到一次迭代查询回复一次结果，这个结果不一定是目标IP与域名的映射关系，也可以是其他DNS服务器的地址</p>
+</li>
+</ul>
+<p>Linux系统中，DNS配置文件resolv.conf的关键字主要有四个，分别是：</p>
+<ul>
+<li><strong>nameserver：定义DNS服务器的IP地址</strong></li>
+<li>domain：定义本地域名</li>
+<li>search：定义域名的搜索列表</li>
+<li>sortlist：对返回的域名进行排序</li>
+</ul>
+<hr>
+<h3 id="3-4-网络规划与设计"><a href="#3-4-网络规划与设计" class="headerlink" title="3.4 网络规划与设计"></a>3.4 网络规划与设计</h3><hr>
+<h4 id="3-4-1-网络冗余设计"><a href="#3-4-1-网络冗余设计" class="headerlink" title="3.4.1 网络冗余设计"></a>3.4.1 网络冗余设计</h4><p>在网络冗余设计中，对于通信线路常见的设计目标主要有两个：一个是备用路径，另一个是负载分担</p>
+<p><strong>备用路径</strong></p>
+<p>提高可用性，由路由器、交换机等设备之间的独立备用链路构成，<strong>一般情况下备用路径仅仅在主路径失效时投入使用</strong>，设计时主要考虑：</p>
+<ul>
+<li>备用路径的带宽</li>
+<li>切换时间</li>
+<li>非对称</li>
+<li>自动切换</li>
+<li>测试</li>
+</ul>
+<p><strong>负载分担</strong></p>
+<p>是对备用路径方式的扩充，通过并行链路提供流量分担(冗余的形式)来提高性能，主要的实现方法是利用两个或多个网络接口和路径来同时传递流量，设计时注意考虑：</p>
+<ul>
+<li><strong>网络中存在备用路径、备用链路时，可以考虑加入负载分担设计</strong></li>
+<li><strong>对于主路径、备用路径都相同的情况，可以实施负载分担的特例——负载均衡</strong></li>
+<li>对于主路径、备用路径不相同的情况，可以采用策略路由机制，让一部分应用的流量分摊到备用路径上</li>
+</ul>
+<hr>
+<h2 id="第四章-数据库系统-2-4"><a href="#第四章-数据库系统-2-4" class="headerlink" title="第四章 数据库系统 2-4"></a>第四章 数据库系统 2-4</h2><hr>
+<p>考点：</p>
+<ul>
+<li><strong>数据库设计</strong>、<strong>规范化理论</strong>、分布式数据库、<strong>关系代数</strong>、数据仓库、事务处理</li>
+</ul>
+<hr>
+<h3 id="4-1-数据库概述"><a href="#4-1-数据库概述" class="headerlink" title="4.1 数据库概述"></a>4.1 数据库概述</h3><hr>
+<h4 id="4-1-1-数据库模式"><a href="#4-1-1-数据库模式" class="headerlink" title="4.1.1 数据库模式"></a>4.1.1 数据库模式</h4><img src="https://tonkyshan.cn/img/20250217192524.png" alt="数据库模式" style="zoom:39%;" />
+
+<p>1、三级模式</p>
+<ul>
+<li>视图</li>
+<li>表</li>
+<li>文件</li>
+</ul>
+<p>2、两级映射关系分别保障了数据的独立性</p>
+<ul>
+<li>逻辑独立性</li>
+<li>物理独立性</li>
+</ul>
+<p>3、聚簇索引</p>
+<ul>
+<li>影响内模式</li>
+</ul>
+<h4 id="4-1-2-分布式数据库"><a href="#4-1-2-分布式数据库" class="headerlink" title="4.1.2 分布式数据库"></a>4.1.2 分布式数据库</h4><img src="https://tonkyshan.cn/img/20250217193755.png" alt="数据库模式" style="zoom:45%;" />
+
+<p>分布性：数据在多个物理节点存放</p>
+<p>副本：冗余提高，可用性、数据持久性</p>
+<p>1、可用性</p>
+<p>当某个结点故障 其他结点可用 系统整体仍然可以用</p>
+<p>2、性能</p>
+<p>多副本可以读，就近</p>
+<p>3、自治性</p>
+<p>4、共享性</p>
+<ul>
+<li><strong>数据独立性</strong>：除了数据的逻辑独立性与物理独立性外，还有数据分布独立性(分布透明性)</li>
+<li><strong>集中与自治共享结合的控制结构</strong>：各局部的DBMS可以独立地管理局部数据库，具有自治的功能，同时，系统由设有集中控制机制，协调各局部DBMS的工作，执行全局应用</li>
+<li><strong>适当增加数据冗余度</strong>：在不同的场地存储同一数据的多个副本，可以提高系统的可靠性和应用性，同时也能提高系统性能(提高系统的可用性，即当系统中某个结点发生故障时，因为数据有其他副本在非故障场地上，对其他所有场地来说，数据仍然是可用的，从而保证数据的完备性)</li>
+<li><strong>全局的一致性、可串行性和可恢复性</strong></li>
+</ul>
+<p>透明性分类</p>
+<ul>
+<li>分片透明：用户不必关心<strong>数据分片不分片，怎么分片</strong></li>
+<li>位置透明：用户不必关心<strong>数据存放在何处</strong></li>
+<li>复制透明：用户不必关心各个结点<strong>数据的复制与同步更新</strong></li>
+<li>逻辑透明(局部映像透明)：用户不必关心<strong>局部DBMS支持哪种数据模型、使用哪种语言</strong></li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250217200250.png" alt="分片" style="zoom:39%;" />
+
+
+
+<p><strong>两阶段提交协议2PC</strong></p>
+<ul>
+<li><strong>2PC事务提交的两个阶段</strong><ul>
+<li>表决阶段，目的是形成一个共同的决定</li>
+<li>执行阶段，目的是实现这个协调者的决定</li>
+</ul>
+</li>
+<li><strong>两条全局提交规则</strong><ul>
+<li>只要有一个参与者撤销事务，协调者就必须作出全局撤销决定</li>
+<li>只要所有参与者都同意提交事务，协调者才能作出全局提交决定</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="4-2-数据库设计阶段"><a href="#4-2-数据库设计阶段" class="headerlink" title="4.2 数据库设计阶段"></a>4.2 数据库设计阶段</h3><hr>
+<h4 id="4-2-1-E-R模型"><a href="#4-2-1-E-R模型" class="headerlink" title="4.2.1 E-R模型"></a>4.2.1 E-R模型</h4><img src="https://tonkyshan.cn/img/20250217202936.png" alt="E-R模型" style="zoom:39%;" />
+
+<p>2个实体集 之间的关系</p>
+<p>1:1    班级，班长</p>
+<p>1:*     班级，学生</p>
+<p>*: *     学生，课程</p>
+<h4 id="4-2-2-概念结构设计"><a href="#4-2-2-概念结构设计" class="headerlink" title="4.2.2 概念结构设计"></a>4.2.2 概念结构设计</h4><img src="https://tonkyshan.cn/img/20250217203356.png" alt="概念结构设计" style="zoom:39%;" />
+
+<ul>
+<li>集成的方法：<ul>
+<li>多个局部E-R图一次集成</li>
+<li>逐步集成，用累加的方式一次集成两个局部E-R</li>
+</ul>
+</li>
+<li>集成产生的冲突及解决办法：<ul>
+<li>属性冲突：包括属性域冲突和属性取值冲突【<strong>同一对象</strong>】</li>
+<li>命名冲突：包括同名异义和异名同义【<strong>同一对象</strong>】</li>
+<li>结构冲突：包括<strong>同一对象</strong>在不同应用中具有不同的抽象，以及同一实体在不同局部E-R图中所包含的属性个数和属性排列次序不完全相同</li>
+</ul>
+</li>
+</ul>
+<p>​    </p>
+<h4 id="4-2-3-逻辑结构设计"><a href="#4-2-3-逻辑结构设计" class="headerlink" title="4.2.3 逻辑结构设计"></a>4.2.3 逻辑结构设计</h4><img src="https://tonkyshan.cn/img/20250217205642.png" alt="逻辑结构设计" style="zoom:39%;" />
+
+<ul>
+<li><p>E-R图向关系模式的转换</p>
+<ul>
+<li>实体向关系模式的转换</li>
+<li>联系向关系模式的转换</li>
+</ul>
+</li>
+<li><p>关系模式的规范化</p>
+</li>
+<li><p>确定完整性约束(确保数据的正确性)</p>
+<ul>
+<li>实体完整性约束</li>
+<li>参照完整性约束</li>
+<li>用户自定义完整性约束</li>
+<li>触发器</li>
+</ul>
+</li>
+<li><p>用户视图的确定(提高数据的安全性和独立性)</p>
+<ul>
+<li>根据数据流图确定处理过程使用的视图</li>
+<li>根据用户类别确定不同用户使用的视图</li>
+</ul>
+</li>
+<li><p>应用程序设计</p>
+</li>
+<li><p>目或度：关系模式中属性的个数</p>
+</li>
+<li><p>候选码(候选键)</p>
+</li>
+<li><p>主码(主键)</p>
+</li>
+<li><p>主属性与非主属性：组成候选码的属性就是主属性，其他的就是非主属性</p>
+</li>
+<li><p>外码(外键)</p>
+</li>
+<li><p>全码(ALL-KEY)：关系模式的所有属性组是这个关系的候选码</p>
+</li>
+<li><p>简单属性与复合属性、派生属性、多值属性</p>
+</li>
+</ul>
+<p>候选键：唯一标识元组，且无冗余</p>
+<ul>
+<li>是属性集合、可以有多个属性，可以只有一个属性</li>
+<li>可以有一个，可以有多个</li>
+</ul>
+<p>主键：任选一个</p>
+<p>外键：其他关系的主键</p>
+<hr>
+<h3 id="4-3-关系代数"><a href="#4-3-关系代数" class="headerlink" title="4.3 关系代数"></a>4.3 关系代数</h3><hr>
+<img src="https://tonkyshan.cn/img/20250219194741.png" alt="并交差" style="zoom:39%;" />
+
+<p>1、关系代数的运算结果</p>
+<ul>
+<li>并交差</li>
+<li>笛卡尔积</li>
+<li>自然连接</li>
+</ul>
+<p>2、笛卡尔积和自然连接的等价判断</p>
+<p>3、关系代数与查询语句的关系</p>
+<p>4、查询性能</p>
+<p>关系模式的运算</p>
+<p>水平：元组行&#x2F;记录&#x2F;实例</p>
+<p>垂直：属性列</p>
+<p>二元运算符</p>
+<ul>
+<li>运算对象和运算结构是同构</li>
+</ul>
+<h4 id="4-3-1-投影和选择-一元运算符"><a href="#4-3-1-投影和选择-一元运算符" class="headerlink" title="4.3.1 投影和选择[一元运算符]"></a>4.3.1 投影和选择[一元运算符]</h4><img src="https://tonkyshan.cn/img/20250220165305.png" alt="投影和选择" style="zoom:39%;" />
+
+<p>投影[SELECT]：选择列</p>
+<ul>
+<li>运算结果：表结构发生变化</li>
+</ul>
+<p>选择[WHERE]：选择行</p>
+<ul>
+<li>运算结果：表结构不变</li>
+</ul>
+<p><code>SELECT ... </code>投影</p>
+<p><code>FROM 表名 </code></p>
+<p><code>WHERE ...</code>选择</p>
+<h4 id="4-3-2-笛卡尔积-二元运算符"><a href="#4-3-2-笛卡尔积-二元运算符" class="headerlink" title="4.3.2 笛卡尔积[二元运算符]"></a>4.3.2 笛卡尔积[二元运算符]</h4><p>所有列保留，所有行全映射</p>
+<img src="https://tonkyshan.cn/img/20250220165928.png" alt="笛卡尔积" style="zoom:39%;" />
+
+<p>运算对象、运算结果不要求同构</p>
+<p>结果：列数是二者之和</p>
+<p>同名属性列：表名.列名表示</p>
+<p>用列序号表示属性名</p>
+<h4 id="4-3-3-自然连接-二元运算符"><a href="#4-3-3-自然连接-二元运算符" class="headerlink" title="4.3.3 自然连接[二元运算符]"></a>4.3.3 自然连接[二元运算符]</h4><img src="https://tonkyshan.cn/img/20250220172122.png" alt="自然连接" style="zoom:39%;" />
+
+<p>不要求同构</p>
+<p>结果：</p>
+<ul>
+<li>列数：是二者之和减去重复列数</li>
+<li>行值：同名属性列取值相等</li>
+</ul>
+<p>运算对象尽可能先压缩</p>
+<p>理论上自然连接的性能优于笛卡尔积</p>
+<hr>
+<h3 id="4-4-规范化理论"><a href="#4-4-规范化理论" class="headerlink" title="4.4 规范化理论"></a>4.4 规范化理论</h3><hr>
+<p>1、 属性集合、函数依赖</p>
+<p>2、公理体系</p>
+<p>3、候选键的判断、主属性、非主属性的判断</p>
+<p>4、规范化程度    范式</p>
+<p>5、模式分解的判断</p>
+<h4 id="4-4-1-规范化理论基本概念"><a href="#4-4-1-规范化理论基本概念" class="headerlink" title="4.4.1 规范化理论基本概念"></a>4.4.1 规范化理论基本概念</h4><ul>
+<li><p>非规范化的关系模式，可能存在的问题包括：数据冗余、更新异常、插入异常、删除异常</p>
+</li>
+<li><p>数据冗余</p>
+</li>
+<li><p>存储空间浪费</p>
+</li>
+<li><p>一致性问题，更新不完全</p>
+</li>
+<li><p>主键为空，插入异常</p>
+</li>
+<li><p>删除异常：删前面丢后面，删后面丢前面</p>
+</li>
+</ul>
+<p>设R(U, F)是属性U上的一个关系模式，X和Y是U的子集，r为R的任一关系，如果对于r中的任意两个元组u、v，只要有u[X] &#x3D; v[X]，就有u[Y] &#x3D; V[Y]，则称X函数决定Y，或称Y函数依赖于X，记为X –&gt; Y</p>
+<p>学号 –&gt; 系号            系号 –&gt; 系名</p>
+<p>函数依赖存在于属性之间</p>
+<img src="https://tonkyshan.cn/img/20250220203411.png" alt="依赖" style="zoom:39%;" />
+
+<h4 id="4-4-2-Armstrong公理"><a href="#4-4-2-Armstrong公理" class="headerlink" title="4.4.2 Armstrong公理"></a>4.4.2 Armstrong公理</h4><img src="https://tonkyshan.cn/img/20250220204018.png" alt="Armstrong公理" style="zoom:39%;" />
+
+<h4 id="4-4-3-候选键"><a href="#4-4-3-候选键" class="headerlink" title="4.4.3 候选键"></a>4.4.3 候选键</h4><p>唯一标识元组，且无冗余，通过候选键可以直接或间接推出所有属性</p>
+<p>可以有多个，可以是单属性也可以是多属性的集合</p>
+<p>主属性与非主属性：组成候选码的属性就是主属性，其他的就是非主属性</p>
+<p>主键：从候选键中选择一个 — 实体完整性 主键唯一且非空</p>
+<p>外键：其他关系的主键 — 参照完整性 引用其他关系的主键</p>
+<ul>
+<li>将关系模式的函数依赖关系用”有向图”的方式表示</li>
+<li>找入度为0的属性，并以该属性集合为起点，尝试遍历有向图，若能正常遍历图中所有结点，则该属性集即为关系模式的候选键</li>
+<li>若入度为0的属性集不能遍历图中所有结点，则需要尝试性的将一些中间结点(即有入度，也有出度的结点)并入入度为0的属性集中，直至该集合能遍历所有结点，集合为候选键</li>
+</ul>
+<h4 id="4-4-4-范式"><a href="#4-4-4-范式" class="headerlink" title="4.4.4 范式"></a>4.4.4 范式</h4><img src="https://tonkyshan.cn/img/20250224162522.png" alt="范式" style="zoom:39%;" />
+
+<p>**第一范式(1NF)**：在关系模式R中，当且仅当所有域只包含原子值，即每个属性都是不可再分的数据项，则称关系模式R是第一范式</p>
+<p>**第二范式(2NF)**：当且仅当实体E是第一范式(1NF)，且每一个非主属性完全依赖主键(不存在部分依赖)时，则称实体E是第二范式</p>
+<p>**第三范式(3NF)**：当且仅当实体E是第二范式(2NF)，且E中没有非主属性传递依赖于候选码时，则称实体E是第三范式</p>
+<p>**BC范式(BCNF)**：设R是一个关系模式，F是它的依赖集，R属于BCNF当且仅当其F中每个依赖的决定因素必定包含R的某个候选码</p>
+<h4 id="4-4-5-模式分解"><a href="#4-4-5-模式分解" class="headerlink" title="4.4.5 模式分解"></a>4.4.5 模式分解</h4><ul>
+<li>保持函数依赖分解</li>
+</ul>
+<p>设数据库模式ρ&#x3D;{R1, R2, …, Rk}是关系模式R的一个分解，F是R上的函数依赖集，ρ中每个模式Ri上的FD集是Fi，如果{F1, F2, …, Fk}与F是等价的(即相互逻辑蕴含)，那么称分解ρ保持FD</p>
+<ul>
+<li>无损分解</li>
+</ul>
+<p>有损：不能还原，无损：可以还原</p>
+<p>无损连接分解：指将一个关系模式分解成若干个关系模式后，通过自然连接和投影等运算仍能还原到原来的关系模式</p>
+<p>如果没有同名属性列 一定有损</p>
+<ul>
+<li>保持函数依赖分解</li>
+</ul>
+<p>例一、有关系模式R(A,B,C), F &#x3D; {A -&gt; B, B -&gt; C}, 将其拆分为: R1(A, B), R2(B, C), 是否保持函数依赖</p>
+<p>F1 &#x3D; {A -&gt; B}        F2 &#x3D; {B -&gt; C}</p>
+<p>F1并F2与原F一致，保持了函数依赖</p>
+<p>例二、有关系模式R(A,B,C), F &#x3D; {A -&gt; B, B -&gt; C, A -&gt; C}, 将其拆分为: R1(A, B), R2(B, C), 是否保持函数依赖</p>
+<p>F1 &#x3D; {A -&gt; B}        F2 &#x3D; {B -&gt; C}</p>
+<p>F1并F2与原F不一致，但是可以推导出 A -&gt; C，保持函数依赖</p>
+<p>例三、有关系模式R(A,B,C), F &#x3D; {A -&gt; B, B -&gt; C, A -&gt; C}, 将其拆分为: R1(A, B), R2(A, C), 是否保持函数依赖</p>
+<p>F1 &#x3D; {A -&gt; B}        F2 &#x3D; {A -&gt; C}</p>
+<p>F1并F2与原F不一致，也无法推导出 B -&gt; C，没有保持函数依赖</p>
+<p>例四、有关系模式R(A,B,C,D,E), F &#x3D; {A -&gt; B, D -&gt; E}, 将其拆分为: R1(A, B, C), R2(D, E), 是否保持函数依赖</p>
+<p>保持函数依赖但是无法还原，即有损分解</p>
+<img src="https://tonkyshan.cn/img/20250225162854.png" alt="模式分解" style="zoom:39%;" />
+
+<hr>
+<h3 id="4-5-数据控制"><a href="#4-5-数据控制" class="headerlink" title="4.5 数据控制"></a>4.5 数据控制</h3><hr>
+<p>数据控制功能包括：</p>
+<ul>
+<li>安全性(security)</li>
+<li>完整性(integrality)</li>
+<li>并发控制(concurrency control)</li>
+<li>故障恢复(recovery from failure)</li>
+</ul>
+<h4 id="4-5-1-安全性"><a href="#4-5-1-安全性" class="headerlink" title="4.5.1 安全性"></a>4.5.1 安全性</h4><table>
+<thead>
+<tr>
+<th align="center">措施</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">用户标识和鉴定</td>
+<td align="center">最外层的安全保护措施，可以使用<strong>用户账户</strong>、口令及随机数检验等方式</td>
+</tr>
+<tr>
+<td align="center">存取控制</td>
+<td align="center">对用户进行授权，包括操作类型(如查找、插入、删除、修改)等动作<br>和数据对象(主要是数据范围)的权限</td>
+</tr>
+<tr>
+<td align="center">密码存储和传输</td>
+<td align="center">对远程终端信息用密码传输</td>
+</tr>
+<tr>
+<td align="center">视图的保护</td>
+<td align="center">对视图进行授权</td>
+</tr>
+<tr>
+<td align="center">审计</td>
+<td align="center">使用一个专用文件或数据库，自动将用户对数据库的所有操作记录下来</td>
+</tr>
+</tbody></table>
+<h4 id="4-5-2-完整性"><a href="#4-5-2-完整性" class="headerlink" title="4.5.2 完整性"></a>4.5.2 完整性</h4><ul>
+<li>实体完整性约束：规定基本关系的主属性不能取空值</li>
+<li>参照完整性约束：关系与关系间的引用，其他关系的主键或空值</li>
+<li>用户自定义完整性约束：应用环境决定</li>
+</ul>
+<p>✅触发器</p>
+<p>在某个数据对象上添加监听 出现变化 联动修改其他数据对象</p>
+<h4 id="4-5-3-并发控制"><a href="#4-5-3-并发控制" class="headerlink" title="4.5.3 并发控制"></a>4.5.3 并发控制</h4><img src="https://tonkyshan.cn/img/20250226204529.png" alt="并发控制" style="zoom:39%;" />
+
+
+
+<h4 id="4-5-4-故障恢复"><a href="#4-5-4-故障恢复" class="headerlink" title="4.5.4 故障恢复"></a>4.5.4 故障恢复</h4><ul>
+<li>冷备份也称为静态备份，是将数据库正常关闭，在停止状态下，将数据库的文件全部备份(复制)下来</li>
+<li>热备份也称为动态备份，是利用备份软件，在数据库正常运行的状态下，将数据库中的数据文件备份出来</li>
+</ul>
+<p>冷备份：</p>
+<ul>
+<li>优点：非常快速的备份方法(只需复制文件)，容易归档(简单复制即可)，容易恢复到某个时间点上(只需将文件再复制回去)，能与归档方法相结合，做数据库”最佳状态”的恢复，低度维护，高度安全</li>
+<li>缺点：单独使用时，只能提供到某一时间点上的恢复，在实施备份的全过程中，数据库必须要作备份而不能做其他工作，若磁盘空间有限，只能复制到磁带等其他外部存储设备上，速度会很慢，不能按表或按用户恢复</li>
+</ul>
+<p>热备份：</p>
+<ul>
+<li>优点：可在表空间或数据库文件级备份，备份到时间短，备份时数据库仍可使用，可达到秒级恢复(恢复到某一时间点上)，可对几乎所有数据库实体作恢复，恢复是快速的</li>
+<li>缺点：不能出错，否则后果严重，若热备份不成功，所得结果不可用于时间点的恢复，因难于维护，所以要特别小心，不允许”以失败告终”</li>
+</ul>
+<p>完全备份：备份所有数据</p>
+<p>差量备份：仅备份上一次完全备份之后变化的数据</p>
+<p>增量备份：备份上一次备份之后变化的数据</p>
+<p>增量备份恢复速度慢，差量备份，文件会越来越大</p>
+<p>如果全用增量，周一全备份，周五恢复，需要周2到周5四天的备份数据，链太长，任意一个丢失都会影响</p>
+<p>如果只用差量备份，每天备份都要和周一全备份进行对比，到周五，差量几乎是一次完整备份了，空间开销太大</p>
+<p>日志文件：事务日志是针对数据库改变所作的记录，它可以记录针对数据库的任何操作，并将记录结果保存在独立的文件中</p>
+<table>
+<thead>
+<tr>
+<th align="center">周日</th>
+<th align="center">周一</th>
+<th align="center">周二</th>
+<th align="center">周三</th>
+<th align="center">周四</th>
+<th align="center">周五</th>
+<th align="center">周六</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">全备</td>
+<td align="center">增备</td>
+<td align="center">增备</td>
+<td align="center">差备</td>
+<td align="center">增备</td>
+<td align="center">差备</td>
+<td align="center">增备</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">故障关系</th>
+<th align="center">故障原因</th>
+<th align="center">解决方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">事务本身的可预期故障</td>
+<td align="center">本身逻辑</td>
+<td align="center">在程序中预先设置Rollback语句</td>
+</tr>
+<tr>
+<td align="center">事务本身的不可预期故障</td>
+<td align="center">算术溢出、违反存储保护</td>
+<td align="center">由DBMS的恢复子系统通过日志,<br>撤销事务对数据库的修改,<br/>回退到事务初始状态</td>
+</tr>
+<tr>
+<td align="center">系统故障</td>
+<td align="center">系统停止运转</td>
+<td align="center">通常使用检查点法</td>
+</tr>
+<tr>
+<td align="center">介质故障</td>
+<td align="center">外存被破坏</td>
+<td align="center">一般使用日志重做业务</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="第五章-法律法规与标准化-3"><a href="#第五章-法律法规与标准化-3" class="headerlink" title="第五章 法律法规与标准化 3"></a>第五章 法律法规与标准化 3</h2><hr>
+<p>考点：</p>
+<ul>
+<li>著作权保护期限、<strong>侵权判定</strong>、商标法、商业秘密、专利法</li>
+</ul>
+<hr>
+<h2 id="第六章-数学与经济管理-0-1"><a href="#第六章-数学与经济管理-0-1" class="headerlink" title="第六章 数学与经济管理 0-1"></a>第六章 数学与经济管理 0-1</h2><hr>
+<p>考点：</p>
+<ul>
+<li>数学建模、线性规划、随机模拟函数</li>
+</ul>
+<hr>
+<h2 id="第七章-专业英语-5"><a href="#第七章-专业英语-5" class="headerlink" title="第七章 专业英语 5"></a>第七章 专业英语 5</h2><hr>
+<ul>
+<li>软件架构风格、软件架构、信息系统设计、DFD</li>
+</ul>
+<hr>
+<h2 id="第八章-系统工程与信息系统基础-3-7"><a href="#第八章-系统工程与信息系统基础-3-7" class="headerlink" title="第八章 系统工程与信息系统基础 3-7"></a>第八章 系统工程与信息系统基础 3-7</h2><hr>
+<p>考点：</p>
+<ul>
+<li>信息工程概念及方法、信息系统分类、信息系统战略规划、电子政务、<strong>企业信息化方法</strong>、电子商务、<strong>企业应用集成</strong></li>
+</ul>
+<hr>
+<h3 id="8-1-系统工程概念"><a href="#8-1-系统工程概念" class="headerlink" title="8.1 系统工程概念"></a>8.1 系统工程概念</h3><hr>
+<p>系统工程是一种组织管理技术</p>
+<p>系统工程是为了最好的实现系统的目的，对系统的组成要素、组织结构、信息流、控制机构进行分析研究的科学方法</p>
+<p>系统工程从整体出发、从系统观念出发，以求<strong>【整体最优】</strong></p>
+<p>系统工程利用计算机作为工具，对系统结构、元素、信息和反馈等进行分析，以达到最优规划、最优设计、最优管理和最优控制的目的</p>
+<p>系统工程方法是一种现代的科学决策方法</p>
+<table>
+<thead>
+<tr>
+<th align="center">系统工程方法</th>
+<th align="left">关键点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">霍尔三维结构<br>“硬科学”方法论</td>
+<td align="left">逻辑维：逻辑维即解决问题的逻辑过程<br>时间维：时间维即是工程进程<br>知识维：知识维即是专业科学知识<br>应用场景：组织和管理大型工程建设项目</td>
+</tr>
+<tr>
+<td align="center">切克兰方法<br/>“软科学”方法论</td>
+<td align="left">核心不是”最优化”，而是”比较”和”探寻”<br>7步骤：认识问题、根底定义、建立概念模型、比较及探寻、<br>选择、设计与实施、评估与反馈</td>
+</tr>
+<tr>
+<td align="center">并行工程方法</td>
+<td align="left">“制造过程”与”支持过程”并行<br>强调三个方面：产品设计开发期间，最快速度按质完成<br>各项工作问题协调解决，适当的信息系统工具</td>
+</tr>
+<tr>
+<td align="center">综合集成法</td>
+<td align="left">钱学森命名，【简单系统】和【巨系统】<br>四原则：整体论原则、相互联系原则、有序性原则、动态原则</td>
+</tr>
+<tr>
+<td align="center">WSR系统方法</td>
+<td align="left">实践准则：【懂物理】-【明事理】-【通人理】</td>
+</tr>
+</tbody></table>
+<p><strong>系统工程生命周期阶段</strong></p>
+<p>探索性研究 - 概念阶段 - 开发阶段 - 生产阶段 - 使用阶段 - 保障阶段 - 退役阶段</p>
+<p><strong>系统工程生命周期方法</strong></p>
+<p>计划驱动方法：需求 -&gt; 设计 -&gt; 构建 -&gt; 测试 -&gt; 部署</p>
+<p>渐进迭代式开发：提供连续交付以达到期望的系统</p>
+<p>精益开发：起源于丰田，是一个动态的、知识驱动的，以客户为中心的过程·</p>
+<p>敏捷开发：更好的灵活性</p>
+<hr>
+<h3 id="8-2-信息系统"><a href="#8-2-信息系统" class="headerlink" title="8.2 信息系统"></a>8.2 信息系统</h3><hr>
+<h4 id="8-2-1-信息系统生命周期"><a href="#8-2-1-信息系统生命周期" class="headerlink" title="8.2.1 信息系统生命周期"></a>8.2.1 信息系统生命周期</h4><p>产生阶段(立项阶段)：提出建设信息的初步想法、对需求进行调研和分析</p>
+<p>开发阶段：单个系统开发</p>
+<ul>
+<li>总体规划</li>
+<li>系统分析</li>
+<li>系统设计</li>
+<li>系统实施</li>
+<li>系统验收</li>
+</ul>
+<p>运行阶段：通过验收、移交之后</p>
+<p>消亡阶段：更新改造、功能扩展、报废重建</p>
+<h4 id="8-2-2-信息系统建设原则"><a href="#8-2-2-信息系统建设原则" class="headerlink" title="8.2.2 信息系统建设原则"></a>8.2.2 信息系统建设原则</h4><ul>
+<li>高层管理人员介入原则</li>
+<li>用户参与开发原则</li>
+<li>自顶向下规划原则</li>
+<li>工程化原则</li>
+<li>其他原则</li>
+</ul>
+<h4 id="8-2-3-信息系统开发方法"><a href="#8-2-3-信息系统开发方法" class="headerlink" title="8.2.3 信息系统开发方法"></a>8.2.3 信息系统开发方法</h4><p>原型法【需求阶段】</p>
+<ul>
+<li>结构化法 -&gt; 面向对象方法 -&gt; 面向服务的方法</li>
+</ul>
+<p>其他信息系统开发方法</p>
+<ul>
+<li>形式化方法：数学模型</li>
+<li>统一过程方法【UP】</li>
+<li>敏捷方法</li>
+<li>基于架构的开发方法【ABSD】</li>
+</ul>
+<h4 id="8-2-4-信息系统的分类"><a href="#8-2-4-信息系统的分类" class="headerlink" title="8.2.4 信息系统的分类"></a>8.2.4 信息系统的分类</h4><table>
+<thead>
+<tr>
+<th align="center">信息系统的分类</th>
+<th>关键点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">业务处理系统【TPS】</td>
+<td>早期最初级的信息系统【20世纪50-60年代】<br>功能：数据输入、<strong>数据处理【批处理、OLTP】</strong>、数据库维护、文件报表产生</td>
+</tr>
+<tr>
+<td align="center">管理信息系统【MIS】</td>
+<td>高度集成化的人机信息系统<br>金字塔结构：分多个层级</td>
+</tr>
+<tr>
+<td align="center">决策支持系统【DSS】</td>
+<td>由<strong>语言系统、知识系统和问题处理系统</strong>组成<br>用于辅助决策、支持决策</td>
+</tr>
+<tr>
+<td align="center">专家系统【ES】</td>
+<td>知识 + 推理 &#x3D; 专家系统，人工智能的一个重要分支</td>
+</tr>
+<tr>
+<td align="center">办公自动化系统【OAS】</td>
+<td>由计算机设备、办公设备、数据通信及网络设备、软件系统组成</td>
+</tr>
+<tr>
+<td align="center"><strong>企业资源计划【ERP】</strong></td>
+<td>打通供应链，集成，整合</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="8-3-电子政务类型"><a href="#8-3-电子政务类型" class="headerlink" title="8.3 电子政务类型"></a>8.3 电子政务类型</h3><hr>
+<p>电子政务主要有3类角色：<strong>政府(Government)、企事业单位(Business)及公民(Citizen)</strong></p>
+<p>如果有第四类 就是公务员(Employee)</p>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th>应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">G2G</td>
+<td>基础信息的采集、处理和应用，如：人口信息、地理信息<br>及政府间：计划管理、财务管理、通信系统、各级政府决策支持</td>
+</tr>
+<tr>
+<td align="center">G2B</td>
+<td><strong>政府给企业单位颁发</strong>【各种营业执照、许可证、合格证、质量认证】</td>
+</tr>
+<tr>
+<td align="center">B2G</td>
+<td>企业向政府<strong>缴税</strong><br>企业向政府供应各种商品和服务【含竟&#x2F;投标】<br>企业向政府<strong>提建议、申诉</strong></td>
+</tr>
+<tr>
+<td align="center">G2C</td>
+<td>社区公安和水、火、天灾等与公共安全有关的信息<br> <strong>户口、各种证件和牌照的管理</strong></td>
+</tr>
+<tr>
+<td align="center">C2G</td>
+<td>个人应向政府缴纳的各种税款和费用<br>个人向政府反馈民意<strong>【征求群众意见】</strong><br>报警服务(盗贼、医疗、急救、火警等)</td>
+</tr>
+<tr>
+<td align="center">G2E</td>
+<td>政府内部管理系统</td>
+</tr>
+</tbody></table>
+<h4 id="8-3-1-企业信息化与电子商务"><a href="#8-3-1-企业信息化与电子商务" class="headerlink" title="8.3.1 企业信息化与电子商务"></a>8.3.1 企业信息化与电子商务</h4><p><strong>信息化的概念</strong></p>
+<ul>
+<li>信息化是指在国家宏观信息政策指导下， 通过<strong>信息技术开发</strong>、信息产业的发展、信息人才的配置，最大限度地利用信息资源以满足全社会的信息需求，从而加速社会各个领域的共同发展以<strong>推进信息社会的过程</strong></li>
+<li>信息化的主体是全体社会成员(<strong>政府、企业、团体和个人</strong>)，时域是一个<strong>长期过程</strong>，空域是经济和社会的一切领域、手段是<strong>先进社会生产工具</strong></li>
+</ul>
+<p><strong>信息化的目的及涉及的三项创新</strong></p>
+<ul>
+<li><p>企业信息化的具体目标是优化企业业务活动使之更加有效，它的<strong>根本目的在于提高企业竞争能力</strong>，使得企业具有平稳和有效的运作能力，对紧急情况和机会做出快速反应，为企业内外部用户提供有价值的信息</p>
+</li>
+<li><p>【技术创新】在生产工艺设计、产品设计中使用计算机辅助设计系统，并<strong>通过互联网及时了解和掌握创新的技术信息，加快技术向生产的转化</strong>，还有，生产技术与信息技术相结合，能够大幅度地提高技术水平和产品的竞争力</p>
+</li>
+<li><p>【管理创新】按照市场发展的要求，要对企业现有的管理流程重新整合，从作为<strong>核心的财务、资金管理、转向技术、物资、人力资源的管理</strong>，并<strong>延伸到企业技术创新</strong>、工艺设计、产品设计、生产制造过程的管理，进而还要扩展到客户关系管理、供应链的管理乃至发展到电子商务</p>
+</li>
+<li><p>【制度创新】那些不适应企业信息化的管理体制、管理机制和管理制度必须得到创新</p>
+</li>
+</ul>
+<p><strong>信息化需求的3个层次</strong></p>
+<p>组织对信息化的需求是<strong>【组织信息化的原动力】</strong></p>
+<ul>
+<li>战略需求：目标【提升组织的竞争能力】</li>
+<li>运作需求：【实现信息化战略目标】的需要、【运作策略】的需要、【人才培养】的需要</li>
+<li>技术需求：信息技术层面上对【系统的完善、升级、集成】</li>
+</ul>
+<p><strong>企业信息化方法</strong></p>
+<ul>
+<li>业务流程重构方法：”彻底的、根本性的”<strong>重新设计流程</strong></li>
+<li>核心业务应用方法：围绕<strong>核心业务</strong>推动信息化</li>
+<li>信息系统建设方法：<strong>建设信息系统</strong>作为企业信息化的重点和关键</li>
+<li>主题数据库方法：建立<strong>面向企业的核心业务的数据库</strong>，消除”信息孤岛”</li>
+<li>资源管理方法：切入点是为<strong>企业资源管理</strong>提供强大的能力。如: ERP、SCM</li>
+<li>人力资源投资方法：人力资本理论【注意不是人力资源管理】<strong>把一部分企业的优秀员工看作是一种资本</strong>，能够取得投资收益</li>
+</ul>
+<p><strong>信息系统战略规划方法</strong></p>
+<ul>
+<li>第一阶段：以数据处理为核心 围绕职能部门需求</li>
+<li>第二阶段：以企业内部MIS为核心 围绕企业整体需求</li>
+<li>第三阶段：综合考虑企业内外环境 以集成为核心 围绕企业战略需求</li>
+</ul>
+<p><strong>企业信息化与电子商务</strong></p>
+<p>企业信息化工程核心技术：【信息技术】【自动化技术】【现代管理技术】【制造技术】</p>
+<ul>
+<li><p>ERP：企业资源计划</p>
+</li>
+<li><p>CRM：客户关系管理-核心思想就是以客户为中心，目的是提高收入</p>
+</li>
+<li><p>SCM：供应链管理：理念是强强联合，整合和优化”三流”，打通企业间”信息孤岛”，严格的数据交换标准</p>
+<ul>
+<li>信息流【核心】<ul>
+<li>需求信息流(需方到供方)</li>
+<li>供应信息流(供方到需方)</li>
+</ul>
+</li>
+<li>资金流【辅助】</li>
+<li>物理【辅助】</li>
+</ul>
+</li>
+<li><p>BI：商业智能</p>
+<img src="https://tonkyshan.cn/img/20250305115519.png" alt="BI" style="zoom:39%;" />
+
+<table>
+<thead>
+<tr>
+<th>数据库</th>
+<th>数据仓库【特点】</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>面向应用的：按应用组织数据</td>
+<td><strong>面向主题：</strong>按主题组织数据</td>
+</tr>
+<tr>
+<td>零散的：一个应用对应一个数据库</td>
+<td><strong>集成的：</strong>整个企业对应一个数据仓库</td>
+</tr>
+<tr>
+<td>CRUD：增删改查是常态</td>
+<td><strong>相对稳定的(非易失的)：</strong>查询为主、基本无修改与删除</td>
+</tr>
+<tr>
+<td>解决当下应用问题</td>
+<td><strong>反映历史变化(时变的)：</strong>各个阶段信息都有，并可预测未来趋势</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p><strong>数据挖掘</strong></p>
+<ul>
+<li>关联分析：挖掘出隐藏在数据间的相互关系</li>
+<li>序列模式分析：侧重点是分析数据间的前后关系(因果关系)</li>
+<li>分类分析：为每一个记录赋予一个标记再按标记分类</li>
+<li>聚类分析：分类分析法的逆过程</li>
+</ul>
+<p><strong>数据湖</strong></p>
+<p>数据湖是一个存储企业的各种各样原始数据的大型仓库，其中的数据可供存取、处理、分析和传输、</p>
+<p>原始数据 -&gt; 数据湖：【结构化数据】表哥数据 【非结构化数据】图片、视频、音频、文档等 -&gt; 业务数据处理&#x2F;数据分析处理</p>
+<p>数据仓库仅支持数据分析处理，数据湖既支持数据分析处理，也支持事务处理</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>数据仓库</th>
+<th>数据湖</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据</td>
+<td>清洗过的数据<br>结构化的数据</td>
+<td>原始数据<br/>结构化、半结构化数据</td>
+</tr>
+<tr>
+<td>模式</td>
+<td>数据存储之前定义数据模式<br/>数据集成之前完成大量工作<br/>数据的价值提取明确</td>
+<td>数据存储之后定义数据模式<br/>提供敏捷、简单的数据集成<br/>数据的价值尚未明确</td>
+</tr>
+<tr>
+<td>存取方法</td>
+<td>标准SQL接口</td>
+<td>应用程序、类SQL的程序</td>
+</tr>
+<tr>
+<td>优势</td>
+<td>多数据源集成<br/>干净、安全的数据<br/>转换一次，多次使用</td>
+<td>无限扩展性<br/>并行执行<br/>支持编程框架<br/>数据经济</td>
+</tr>
+</tbody></table>
+<ul>
+<li>BPR【业务流程重组】：颠覆原有流程、彻底性的再设计</li>
+<li>BPM【业务流程管理】：使用PDCA循环，持续改进 plan、do、check、act</li>
+</ul>
+<hr>
+<h3 id="8-4-企业应用集成"><a href="#8-4-企业应用集成" class="headerlink" title="8.4 企业应用集成"></a>8.4 企业应用集成</h3><hr>
+<p>EAI</p>
+<p>系统未互联互通，存在【信息孤岛】，这种架构也被称为【烟囱架构】</p>
+<p>对于如何划分和规范EAI层次的定义，业界并没有一个统一的标准</p>
+<img src="https://tonkyshan.cn/img/20250305154352.png" alt="集成" style="zoom:39%;" />
+
+<p><strong>企业门户</strong></p>
+<ul>
+<li>企业信息门户：使员工&#x2F;合作伙伴&#x2F;客户&#x2F;供应商都能够访问企业内部网络和因特网存储的各种自己所需的信息【统一访问入口】</li>
+<li>企业知识门户：企业网站的基础上增加知识性内容【企业知识库】</li>
+<li>企业应用门户：以商业流程和企业应用为核心，把商业流程中功能不同的应用模块通过门户技术集成在一起【企业信息系统的网上集成界面】</li>
+<li>垂直门户：为某一特定的行业服务的，传送的信息只属于人们感兴趣的领域</li>
+</ul>
+<p>消息集成：数据量小，交互频繁，立即地，异步</p>
+<p>共享数据库：交互频繁，立即地，同步</p>
+<p>文件传输：数据量大，交互频度低，即时性要求低(月末、年末)</p>
+<p><strong>电子商务类型</strong></p>
+<p>电子商务主要有2类角色：企业及个人</p>
+<p>B2B: 1688    C2C: 咸鱼    B2C: 京东、天猫    C2B: 个人给企业提供咨询服务    O2O(Online To Offline 线上对线下): 团购</p>
+<p><strong>数字化转型</strong></p>
+<p>【数字化】是新一代信息技术真正的实现推动整个【商业模式的变革】，推动产业链的重构，推动改进企业与消费者之间的关系，以及企业与合作伙伴之间的关系</p>
+<ul>
+<li>初始级发展阶段     数码化：信息的数字化，记录、存储、传输数码化</li>
+<li>单元级发展阶段     数量化：提升单项业务的运行规范性和效率</li>
+<li>流程级发展阶段     数字化：关键业务流程及关键业务与设备设施、软硬件、行为活动等要素间的集成优化</li>
+<li>网络级发展阶段     数模化：组织(企业)级数字化和产业互联网网格化，实现以数据为驱动的业务模式创新</li>
+<li>生态级发展阶段     数用化：生态级数字化和泛在物联网级网络化，推动与生态合作伙伴间资源、业务、能力等要素的开发共享和协同合作</li>
+</ul>
+<p><strong>智能制造体系</strong></p>
+<p>工业化和信息化融合</p>
+<hr>
+<h2 id="第九章-软件工程-17-22"><a href="#第九章-软件工程-17-22" class="headerlink" title="第九章 软件工程 17-22"></a>第九章 软件工程 17-22</h2><hr>
+<p>考点：</p>
+<ul>
+<li>软件生命周期、<strong>信息系统开发方法</strong>、<strong>开发模型</strong>、逆向工程、需求工程、<strong>面向对象基础</strong>、UML、SysML、软件设计、业务流程设计、软件维护、<strong>软件测试</strong>、软件过程改进、遗留系统、软件开发环境、范围管理、配置管理、<strong>进度管理</strong></li>
+</ul>
+<hr>
+<h3 id="9-1-软件过程模型"><a href="#9-1-软件过程模型" class="headerlink" title="9.1 软件过程模型"></a>9.1 软件过程模型</h3><hr>
+<ul>
+<li><strong>瀑布模型</strong></li>
+<li>V模型【瀑布变种】</li>
+<li><strong>原型模型</strong></li>
+<li><strong>螺旋模型【原型 + 瀑布】</strong></li>
+<li>构件组装模型&#x2F;基于构件的开发方法</li>
+<li>快速应用开发RAD【瀑布 + 构件组装】</li>
+<li><strong>统一过程&#x2F;统一开发方法</strong></li>
+<li><strong>敏捷开发方法</strong></li>
+</ul>
+<h4 id="9-1-1-瀑布模型"><a href="#9-1-1-瀑布模型" class="headerlink" title="9.1.1 瀑布模型"></a>9.1.1 瀑布模型</h4><img src="https://tonkyshan.cn/img/20250305173419.png" alt="瀑布模型" style="zoom:39%;" />
+
+<p>【特点】</p>
+<ul>
+<li>严格区分阶段，每个阶段因果关系紧密相连</li>
+<li>只适合需求明确的项目</li>
+</ul>
+<p>【缺点】</p>
+<ul>
+<li>软件需求完整性、正确性难确定</li>
+<li>严格串行化，很长时间才能看到结果</li>
+<li>瀑布模型要求每个阶段一次性完成解决该阶段工作，这不现实</li>
+</ul>
+<h4 id="9-1-2-原型模型"><a href="#9-1-2-原型模型" class="headerlink" title="9.1.2 原型模型"></a>9.1.2 原型模型</h4><img src="https://tonkyshan.cn/img/20250305173506.png" alt="原型模型" style="zoom:39%;" />
+
+<p>原型模型两个阶段：</p>
+<ul>
+<li>原型开发阶段</li>
+<li>目标软件开发阶段</li>
+</ul>
+<h4 id="9-1-3-V模型"><a href="#9-1-3-V模型" class="headerlink" title="9.1.3 V模型"></a>9.1.3 V模型</h4><img src="https://tonkyshan.cn/img/20250305175319.png" alt="V模型" style="zoom:39%;" />
+
+
+
+<h4 id="9-1-4-W模型"><a href="#9-1-4-W模型" class="headerlink" title="9.1.4 W模型"></a>9.1.4 W模型</h4><img src="https://tonkyshan.cn/img/20250305203503.png" alt="W模型" style="zoom:39%;" />
+
+
+
+<h4 id="9-1-5-螺旋模型"><a href="#9-1-5-螺旋模型" class="headerlink" title="9.1.5 螺旋模型"></a>9.1.5 螺旋模型</h4><img src="https://tonkyshan.cn/img/20250305204847.png" alt="螺旋模型" style="zoom:39%;" />
+
+
+
+<h4 id="9-1-6-构件组装模型"><a href="#9-1-6-构件组装模型" class="headerlink" title="9.1.6 构件组装模型"></a>9.1.6 构件组装模型</h4><img src="https://tonkyshan.cn/img/20250305205442.png" alt="构件组装模型" style="zoom:39%;" />
+
+<p>【优点】易扩展、易重用、降低成本、安排任务更灵活</p>
+<p>【缺点】构件设计要求经验丰富的架构师、设计不好的构件难重用、强调重用可能牺牲其他指标(如性能)、第三方构件质量难控制</p>
+<hr>
+<h3 id="9-2-基于构件的软件工程【CBSE】"><a href="#9-2-基于构件的软件工程【CBSE】" class="headerlink" title="9.2 基于构件的软件工程【CBSE】"></a>9.2 基于构件的软件工程【CBSE】</h3><hr>
+<p>应该具备的特征</p>
+<ul>
+<li>可组装性：所有<strong>外部交互</strong>必须通过<strong>公开定义的接口</strong>进行</li>
+<li>可部署性：构件总是二进制形式的，能作为一个<strong>独立实体在平台上运行</strong></li>
+<li>文档性：用户根据文档来判断是否满足需求</li>
+<li>独立性：可以在无其他特殊构件的情况下进行组装和部署</li>
+<li>标准化：<strong>符合某种标准化的构件模型</strong></li>
+</ul>
+<h4 id="9-2-1-构件的组装"><a href="#9-2-1-构件的组装" class="headerlink" title="9.2.1 构件的组装"></a>9.2.1 构件的组装</h4><p> (一般都要借助胶水代码)</p>
+<p>1、顺序组装：按顺序调用已经存在的构件，可以用两个已经存在的构件来创造一个新的构件</p>
+<p>2、层次组装：被调用构件的”提供”接口必须和调用构件的”请求”<strong>接口兼容</strong></p>
+<p>3、叠加组装：<strong>多个构件合并形成新构件</strong>，新构件整合原构件的功能，<strong>对外提供新的接口</strong></p>
+<p>组装可能出现3种不兼容：<strong>参数不兼容、操作不兼容、操作不完备</strong></p>
+<h4 id="9-2-2-快速应用开发模型-RAD"><a href="#9-2-2-快速应用开发模型-RAD" class="headerlink" title="9.2.2 快速应用开发模型(RAD)"></a>9.2.2 快速应用开发模型(RAD)</h4><p>SDLC(瀑布) + CBSD(基于构件) -&gt; RAD</p>
+<p>能够快速的原因：基于构件</p>
+<h4 id="9-2-3-统一过程-up"><a href="#9-2-3-统一过程-up" class="headerlink" title="9.2.3 统一过程(up)"></a>9.2.3 统一过程(up)</h4><ul>
+<li>用例驱动</li>
+<li>以架构为中心</li>
+<li>迭代和增量</li>
+</ul>
+<p>初始：定义最终产品视图和业务模型，确定系统范围</p>
+<p>细化：设计及确定系统架构，制定工作计划及资源要求</p>
+<p>构造：开发剩余构件和应用程序功能，把这些构件集成为产品，并进行详细测试</p>
+<p>移交：确保软件对最终用户是可用的，进行β测试，制作产品发布版本</p>
+<img src="https://tonkyshan.cn/img/20250306153821.png" alt="统一过程" style="zoom:39%;" />
+
+
+
+<h4 id="9-2-4-敏捷方法"><a href="#9-2-4-敏捷方法" class="headerlink" title="9.2.4 敏捷方法"></a>9.2.4 敏捷方法</h4><img src="https://tonkyshan.cn/img/20250306164447.png" alt="敏捷方法" style="zoom:39%;" />
+
+<img src="https://tonkyshan.cn/img/20250306165018.png" alt="敏捷方法" style="zoom:39%;" />
+
+<hr>
+<h3 id="9-3-逆向工程"><a href="#9-3-逆向工程" class="headerlink" title="9.3 逆向工程"></a>9.3 逆向工程</h3><hr>
+<img src="https://tonkyshan.cn/img/20250306165430.png" alt="逆向工程" style="zoom:39%;" />
+
+<p>与逆向工程相关的概念有重构、设计恢复、再工程和正向工程</p>
+<ul>
+<li>重构&#x2F;重组：重构是指在<strong>【同一抽象级别】</strong>上【转换系统描述形式】</li>
+<li>设计恢复：设计恢复是指借助工具从<strong>已有程序中抽象出有关数据设计</strong>、总体结构设计和过程设计等方面的信息</li>
+<li>逆向工程：是分析工程，力图在比源代码更高抽象层次上建立程序的表示过程，<strong>逆向工程是设计的恢复工程</strong></li>
+<li>正向工程：是指不仅从现有系统中恢复设计信息，<strong>而且使用该信息去改变或重构现有系统，以改善其整体质量</strong></li>
+<li>再工程&#x2F;重构工程：是对现有系统的重新开发过程，<strong>包括逆向工程、新需求的考虑过程和正向过程</strong>三个步骤</li>
+</ul>
+<hr>
+<h3 id="9-4-净室软件工程"><a href="#9-4-净室软件工程" class="headerlink" title="9.4 净室软件工程"></a>9.4 净室软件工程</h3><hr>
+<ul>
+<li>净室即无尘室、洁净室，也就是一个<strong>受控污染级别的环境</strong></li>
+<li>使用盒结构规约(或形式化方法)进行分析和设计建模，并且<strong>强调将正确性验证，而不是测试</strong>，作为发现和消除错误的主要机制</li>
+<li>使用统计的测试来获取认证被交付的软件等可靠性所必需的出错率信息</li>
+</ul>
+<p>【缺点】</p>
+<ul>
+<li>太理论化，正确性验证的步骤比较困难且耗时</li>
+<li>开发小组不进行传统的模块开发，这是不现实的</li>
+<li>脱胎于传统软件工程，不可避免带有传统软件工程的一些弊端</li>
+</ul>
+<hr>
+<h3 id="9-5-需求工程"><a href="#9-5-需求工程" class="headerlink" title="9.5 需求工程"></a>9.5 需求工程</h3><hr>
+<h4 id="9-5-1-需求开发"><a href="#9-5-1-需求开发" class="headerlink" title="9.5.1 需求开发"></a>9.5.1 需求开发</h4><p>需求工程阶段划分</p>
+<p>软件需求是指<strong>用户对系统</strong>在功能、行为、性能、设计约束等方面的<strong>期望</strong></p>
+<ul>
+<li>需求开发：<ul>
+<li>需求获取</li>
+<li>需求分析</li>
+<li>形成需求规格【形成SRS】</li>
+<li>需求确认与验证【形成<strong>需求基线</strong>(经过评审的SRS)】</li>
+</ul>
+</li>
+<li>需求管理：【变更控制、版本控制、需求跟踪、需求状态跟踪】<ul>
+<li>需求管理是对<strong>【需求基线】</strong>进行管理</li>
+</ul>
+</li>
+</ul>
+<p><strong>需求获取</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户面谈</td>
+<td>1对1-3，有代表性的用户，了解主观想法，交互好<br><strong>成本高，要有领域知识支撑</strong></td>
+</tr>
+<tr>
+<td>联合需求计划(JRP)</td>
+<td><strong>高度组织的群体会议，各方参加，了解想法，消除分歧，交互好，成本高</strong></td>
+</tr>
+<tr>
+<td>问卷调查</td>
+<td><strong>用户多</strong>，无法一一访谈，<strong>成本低</strong></td>
+</tr>
+<tr>
+<td>现场观察</td>
+<td>针对较为<strong>复杂的流程</strong>和操作</td>
+</tr>
+<tr>
+<td>原型化方法</td>
+<td>通过简易系统方式<strong>解决早期需求不确定问题</strong></td>
+</tr>
+<tr>
+<td>头脑风暴法</td>
+<td>一群人围绕新业务，<strong>发散思维</strong>，不断产生新观点</td>
+</tr>
+</tbody></table>
+<p><strong>需求分析</strong></p>
+<img src="https://tonkyshan.cn/img/20250310102918.png" alt="需求分析" style="zoom:39%;" />
+
+<p>UML</p>
+<img src="https://tonkyshan.cn/img/20250310105435.png" alt="需求分析-UML" style="zoom:39%;" />
+
+<img src="https://tonkyshan.cn/img/20250310110355.png" alt="需求分析-UML" style="zoom:39%;" />
+
+
+
+<p><strong>需求定义(形成需求规格)</strong></p>
+<p>严格定义法</p>
+<ul>
+<li><strong>所有需求都能够部位预先定义</strong></li>
+<li>开发人员与用户之间<strong>能够准确而清晰地交流</strong></li>
+<li>采用图形&#x2F;文字可以<strong>充分体现最终系统</strong></li>
+</ul>
+<p>原型法</p>
+<ul>
+<li><strong>并非所有的需求都能在开发前被准确的说明</strong></li>
+<li>项目参与者之间通常都存在交流上的困难</li>
+<li>需要实际的、可供用户参与的系统模型</li>
+<li>有合适的系统开发环境</li>
+<li>反复时完全需要和值得提倡的，需求一旦确定，就应遵从严格的方法</li>
+</ul>
+<p><strong>需求确认与验证</strong></p>
+<p>需求验证 -&gt; 需求评审&amp; 需求测试 -&gt; 正式评审 &amp; 非正式评审</p>
+<ul>
+<li>用户签字确认</li>
+<li>验收标准之一</li>
+</ul>
+<h4 id="9-5-2-需求管理"><a href="#9-5-2-需求管理" class="headerlink" title="9.5.2 需求管理"></a>9.5.2 需求管理</h4><p><strong>需求跟踪</strong></p>
+<img src="https://tonkyshan.cn/img/20250310141951.png" alt="需求跟踪" style="zoom:39%;" />
+
+<ul>
+<li>说明FR-M没有用例对应，它不会被开发出来，这个需求被遗漏了</li>
+<li>说明UC-2是多余的，是兴奋需求</li>
+</ul>
+<p><strong>需求变更管理过程</strong></p>
+<img src="https://tonkyshan.cn/img/20250310142919.png" alt="需求变更管理过程" style="zoom:39%;" />
+
+<ul>
+<li>明确问题</li>
+<li>书面<strong>申请</strong></li>
+<li>判断变更需求类别</li>
+<li><strong>评估</strong>变更影响</li>
+<li>判断变更的紧急级别</li>
+<li>沟通确认</li>
+<li>明确解决方案</li>
+<li><strong>审批</strong>管理</li>
+<li><strong>执行</strong>变更</li>
+<li><strong>版本控制</strong></li>
+</ul>
+<p><strong>软件系统建模</strong></p>
+<img src="https://tonkyshan.cn/img/20250310143655.png" alt="系统建模" style="zoom:39%;" />
+
+<hr>
+<h3 id="9-6-系统分析与设计"><a href="#9-6-系统分析与设计" class="headerlink" title="9.6 系统分析与设计"></a>9.6 系统分析与设计</h3><hr>
+<h4 id="9-6-1-界面设计"><a href="#9-6-1-界面设计" class="headerlink" title="9.6.1 界面设计"></a>9.6.1 界面设计</h4><p>界面设计(黄金三法则)</p>
+<p>1、置于用户控制之下</p>
+<ul>
+<li>以不强迫用户进入不必要的或不希望的动作的方式来定义交互方式</li>
+<li>提供灵活的交互</li>
+<li>允许用户交互可以被中断和撤销</li>
+<li>当技能级别增加时可以使交互流水化并允许定制交互</li>
+<li>使用户隔离内部技术细节</li>
+<li>设计应允许用户和出现在屏幕上的对象直接交互</li>
+</ul>
+<p>2、减少用户的记忆负担</p>
+<ul>
+<li>减少对短期记忆的要求</li>
+<li>建立有意义的缺省</li>
+<li>定义直觉性的捷径</li>
+<li>界面的视觉布局应该基于真实世界的隐喻</li>
+<li>以不断进展的方式揭示信息</li>
+</ul>
+<p>3、保持界面的一致性</p>
+<ul>
+<li>允许用户将当前任务放入有意义的语境</li>
+<li>在应用系列内保持一致性</li>
+<li>如过去的交互模型已建立起了用户期望，除非有迫不得已的理由，不要改变它</li>
+</ul>
+<p>​    </p>
+<h4 id="9-6-2-结构化设计"><a href="#9-6-2-结构化设计" class="headerlink" title="9.6.2 结构化设计"></a>9.6.2 结构化设计</h4><p>概要设计【外部设计】：功能需求分配给软件模块，确定每个模块的功能和<strong>调用关系</strong>，形成<strong>模块结构图</strong></p>
+<p>详细设计【内部设计】：为每个<strong>具体任务</strong>选择适当的技术手段和<strong>处理方法</strong></p>
+<p>结构化设计原则：</p>
+<ul>
+<li><strong>模块独立性原则(高内聚、低耦合)</strong></li>
+<li>保持模块的大小适中</li>
+<li>多扇入，少扇出</li>
+<li>深度和宽度均不宜过高</li>
+</ul>
+<p>内聚</p>
+<table>
+<thead>
+<tr>
+<th>高内聚</th>
+<th>内聚类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td><strong>功能内聚</strong></td>
+<td>完成一个<strong>单一功能</strong>，各个部分协同工作，缺一不可</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>顺序内聚</strong></td>
+<td>处理元素相关，而且<strong>必须顺序执行</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>通信内聚</td>
+<td>所有处理元素集中在一个数据结构的区域上</td>
+</tr>
+<tr>
+<td></td>
+<td>过程内聚</td>
+<td>处理元素相关，而且必须按特定的次序执行</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>时间内聚(瞬时内聚)</strong></td>
+<td>所包含的任务必须在<strong>同一时间间隔</strong>内执行</td>
+</tr>
+<tr>
+<td></td>
+<td>逻辑内聚</td>
+<td>完成逻辑上相关的一组任务</td>
+</tr>
+<tr>
+<td>低内聚</td>
+<td><strong>偶然内聚(巧合内聚)</strong></td>
+<td>完成一组没有关系或关系松散的任务</td>
+</tr>
+</tbody></table>
+<p>耦合</p>
+<table>
+<thead>
+<tr>
+<th>低耦合</th>
+<th>耦合类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td><strong>非直接耦合</strong></td>
+<td>两个模块之间没有直接关系，他们之间的联系完全<br>是通过主模块的控制和调用来实现的</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>数据耦合</strong></td>
+<td>一组模块借助参数表传递<strong>简单数据</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>标记耦合</strong></td>
+<td>一组模块通过参数表传递记录信息(<strong>数据结构</strong>)</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>控制耦合</strong></td>
+<td>模块之间传递的信息中包含用于<strong>控制模块内部逻辑的信息</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>外部耦合</td>
+<td>一组模块都访问同一<strong>全局简单变量</strong>，而且不是通过参数表传递该全局变量的信息</td>
+</tr>
+<tr>
+<td></td>
+<td>公共耦合</td>
+<td>多个模块都访问同一个公共数据环境</td>
+</tr>
+<tr>
+<td>高耦合</td>
+<td><strong>内容耦合</strong></td>
+<td>一个模块直接访问另一个模块的内部数据<br>一个模块不通过正常入口转到另一个模块的内部<br>两个模块有一部分程序代码重叠，一个模块有多个入口</td>
+</tr>
+</tbody></table>
+<p><strong>模块四要素</strong></p>
+<ul>
+<li>输入和输出：模块的输入来源和输出去向都是同一个调用者，即一个模块</li>
+<li>处理功能：</li>
+<li>内部数据</li>
+<li>程序代码</li>
+</ul>
+<h4 id="9-6-3-面向对象设计"><a href="#9-6-3-面向对象设计" class="headerlink" title="9.6.3 面向对象设计"></a>9.6.3 面向对象设计</h4><p>类的分类：</p>
+<ul>
+<li>边界类：API接口&#x2F;用户界面</li>
+<li>控制类：应用逻辑&#x2F;业务逻辑&#x2F;数据访问逻辑</li>
+<li>实体类：数据</li>
+</ul>
+<p><strong>面向对象设计原则</strong></p>
+<ul>
+<li>单一职责原则：设计<strong>目的单一</strong>的类</li>
+<li>开放-封闭原则：对扩展开放，对<strong>修改封闭</strong></li>
+<li>李氏(Liskov)替换原则：<strong>子类可以替换父类</strong></li>
+<li>依赖倒置原则：要依赖于抽象，而不是具体实现，<strong>针对接口编程</strong>，不要针对实现编程</li>
+<li>接口隔离原则：使用多个专门的接口比使用单一的总接口要好</li>
+<li>组合重用原则：要<strong>尽量使用组合</strong>，而不是集成关系到达重用目的</li>
+<li>迪米特(Demeter)原则(最少知识原则)：一个对象应当对其他对象有<strong>尽可能少的了解</strong></li>
+</ul>
+<hr>
+<h3 id="9-7-软件测试"><a href="#9-7-软件测试" class="headerlink" title="9.7 软件测试"></a>9.7 软件测试</h3><hr>
+<img src="https://tonkyshan.cn/img/20250310192840.png" alt="软件测试类型" style="zoom:39%;" />
+
+
+
+<p><strong>白盒测试与黑盒测试</strong></p>
+<p>白盒测试【结构测试】：主要用于单元测试阶段</p>
+<p>控制流测试【逻辑覆盖测试(语句覆盖最弱，路径测试覆盖最强)】</p>
+<p>数据流测试</p>
+<p>程序变异测试【错误驱动测试】</p>
+<p>黑盒测试【功能测试】：主要用于集成测试、确认测试盒系统测试阶段</p>
+<p>等价类划分：不同等价类，揭示不同问题，有效等价类&#x2F;无效等价类</p>
+<p>边界值分析：1 &lt;&#x3D; x &lt;&#x3D; 10，可取x的值为0、1、10和11作为测试数据</p>
+<p>错误推测：依靠测试人员的<strong>经验和直觉</strong></p>
+<p>判定表：最适合描述在<strong>多个逻辑条件取值的组合所构成的复杂情况下</strong>，分别要执行哪些不同的动作</p>
+<p>因果图：根据<strong>输入条件与输出结果之间的因果关系</strong>来设计测试用例</p>
+<p><strong>软件测试阶段</strong></p>
+<p>单元测试：依据【详细设计】，模块测试，模块功能、性能、接口等</p>
+<p>集成测试：依据【概要设计】，模块间的接口</p>
+<p>系统测试：依据【需求文档】，包括功能测试、性能测试、<strong>验收测试</strong>、压力测试等</p>
+<ul>
+<li>确认测试：依据【需求文档】，验证软件与需求的一致性，内部确认测试、Alpha测试、Beta测试、验收测试</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>其他测试</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AB测试</td>
+<td><strong>多版本同时使用</strong>，利于收集各版本的用户反馈，评估出最好版本<br>故也算是一种【网页优化方法】</td>
+</tr>
+<tr>
+<td>Web测试</td>
+<td>Web系统测试与其他系统测试<strong>测试内容基本相同</strong>，只是<strong>测试重点不同</strong><br>Web代码测试包括：源代码规则分析、链接测试、框架测试、表格测试、图形测试等方面</td>
+</tr>
+<tr>
+<td>链接测试</td>
+<td>链接测试可分为3个方面：<br>1、测试所有链接是否按指示的那样<strong>确实链接到了该链接的页面</strong><br>2、测试所链接的<strong>页面是否存在</strong><br>3、保证Web应用系统上没有<strong>孤立的页面</strong></td>
+</tr>
+<tr>
+<td>表单测试</td>
+<td>验证服务器是否能<strong>正确保存这些数据</strong>，后台运行的程序能否正确解释和使用这些信息<br>测试提交操作的<strong>完整性</strong></td>
+</tr>
+<tr>
+<td>回归测试</td>
+<td>测试软件变更之后，变更部分的正确性和对变更需求的符合性</td>
+</tr>
+</tbody></table>
+<p><strong>集成测试策略</strong></p>
+<img src="https://tonkyshan.cn/img/20250311161022.png" alt="集成测试策略" style="zoom:39%;" />
+
+
+
+<p><strong>软件系统测试</strong></p>
+<p>1、功能测试</p>
+<p>2、性能测试</p>
+<ul>
+<li>负载测试：<strong>各种工作负载</strong>下系统的性能</li>
+<li>压力测试【测上限】：系统的<strong>瓶颈</strong>或不能接受的性能点</li>
+<li>强度测试【测下限】：系统<strong>资源特别低</strong>的情况下运行</li>
+<li>容量测试【并发测试】：<strong>同时在线</strong>的最大用户数</li>
+<li>可靠性测试：MTTF之类的参数</li>
+</ul>
+<p>3、健壮性测试</p>
+<p>4、用户界面测试</p>
+<p>5、安全性测试</p>
+<p>6、安装与反安装测试</p>
+<hr>
+<h3 id="9-8-系统运行与软件维护"><a href="#9-8-系统运行与软件维护" class="headerlink" title="9.8 系统运行与软件维护"></a>9.8 系统运行与软件维护</h3><hr>
+<h4 id="9-8-1-遗留系统与系统转换计划"><a href="#9-8-1-遗留系统与系统转换计划" class="headerlink" title="9.8.1 遗留系统与系统转换计划"></a>9.8.1 遗留系统与系统转换计划</h4><p>遗留系统演化策略</p>
+<img src="https://tonkyshan.cn/img/20250311165208.png" alt="遗留系统演化策略" style="zoom:39%;" />
+
+<p>新旧系统的转换策略</p>
+<img src="https://tonkyshan.cn/img/20250311170039.png" alt="新旧系统的转换策略" style="zoom:39%;" />
+
+<p>数据转换与迁移</p>
+<img src="https://tonkyshan.cn/img/20250311172259.png" alt="数据转换与迁移" style="zoom:39%;" />
+
+<h4 id="9-8-2-软件维护"><a href="#9-8-2-软件维护" class="headerlink" title="9.8.2 软件维护"></a>9.8.2 软件维护</h4><p><strong>影响软件可维护的因素</strong></p>
+<p>【可理解性】是指通过阅读源代码和相关文档，了解软件的功能和如何运行的容易程度</p>
+<p>【可修改性】是指修改软件的难易程度</p>
+<p>【可测试性】是指验证软件程序正确的难易程度，可测试性好的软件，通常意味着软件设计简单、复杂性低，因为软件的复杂性越大，测试的难度也就越大</p>
+<p>【可靠性】一个软件的可靠性越高，需要维护的概率就会越低</p>
+<p>【可移植性】是指将软件从一个环境移植到新的环境下正确运行的难易程度，软件运行环境的变化是软件维护的一种常见情形，可移植性好的软件会降低维护的概率</p>
+<p><strong>软件维护类型</strong></p>
+<ul>
+<li>正确性维护【修bug】<strong>识别和纠正软件错误&#x2F;缺陷</strong>，测试不可能发现所有错误</li>
+<li>适应性维护【应变】指使用应用软件<strong>适应环境变化</strong>【外部环境、数据环境】而进行的修改</li>
+<li>完善性维护【新需求】<strong>扩充功能和改善性能</strong>而进行的修改</li>
+<li>预防性维护【针对未来】为了<strong>适应未来</strong>的软硬件环境的变化，应主动增加预防性的新的功能，以使系统适应各类变化而不被淘汰。经典实例：【专用】转【通用】</li>
+</ul>
+<hr>
+<h2 id="第十章-软件架构设计-17-25"><a href="#第十章-软件架构设计-17-25" class="headerlink" title="第十章 软件架构设计 17-25"></a>第十章 软件架构设计 17-25</h2><hr>
+<p>考点：</p>
+<ul>
+<li><strong>架构4+1视图</strong>、构件技术、MVC模式、架构设计阶段、<strong>架构设计基本概念</strong>、软件架构需求、<strong>ABSD</strong>、软件架构文档、<strong>软件架构风格选择</strong>、架构模式、<strong>架构评估方法</strong>、<strong>架构与质量属性</strong>、敏感点与风险点、ADL、中间件、大数据架构、安全架构</li>
+</ul>
+<hr>
+<h3 id="10-1-软件架构的概念"><a href="#10-1-软件架构的概念" class="headerlink" title="10.1 软件架构的概念"></a>10.1 软件架构的概念</h3><hr>
+<p><strong>架构的本质</strong></p>
+<p>1、软件架构为软件系统提供了一个<strong>结构、行为和属性的高级抽象</strong></p>
+<p>2、软件架构风格是特定领域的<strong>惯用模式</strong>，架构定义<strong>一个词汇表和一组约束</strong></p>
+<p><strong>架构的作用</strong></p>
+<p>1、软件架构是<strong>项目干系人进行交流的手段</strong></p>
+<p>2、软件架构是<strong>可传递和可复用的模型</strong>，通过研究软件架构可能预测软件的质量</p>
+<p>3、软件架构使推理和控制的更改更加简单，<strong>有助于循环渐进的原型设计</strong>，可以作为培训的基础</p>
+<p>软件架构 &#x3D; 软件体系结构</p>
+<p>架构设计就是需求分配，即将<strong>满足需求的职责分配到组件上</strong></p>
+<h4 id="10-1-1-软件架构设计与生命周期"><a href="#10-1-1-软件架构设计与生命周期" class="headerlink" title="10.1.1 软件架构设计与生命周期"></a>10.1.1 软件架构设计与生命周期</h4><ul>
+<li>需求分析阶段：模型转换<strong>关注两个问题</strong>：如何根据需求模型<strong>构建SA模型</strong> + 模型转换<strong>可追溯</strong></li>
+<li>设计阶段：SA研究关注得最早和最多的阶段，<strong>ADL和4 + 1视图</strong></li>
+<li>实现阶段</li>
+<li>构件组装阶段：在较高层次上实现系统，<strong>高效</strong></li>
+<li>部署阶段：SA为部署提供高层视图指导</li>
+<li>后开发阶段：动态软件体系结构(内部执行和外部请求导致变化)、体系结构恢复与重建</li>
+</ul>
+<p><strong>架构描述语言ADL</strong></p>
+<p>ADL是这样一种形式化语言，它在底层语义模型的支持下，为软件系统的概念体系结构建模提供了具体语法和概念框架</p>
+<p>如Aesop、MetaH、C2、Rapide、SADL、Unicon等</p>
+<p>ADL的三个基本元素</p>
+<ul>
+<li>构件：计算或数据存储单元</li>
+<li>连接件：用于构件之间交互建模的体系结构构造块及其支配这些交互的规则</li>
+<li>架构配置：描述体系结构的构件与连接件的连接图</li>
+</ul>
+<h4 id="10-1-2-4-1-视图"><a href="#10-1-2-4-1-视图" class="headerlink" title="10.1.2 4 +1 视图"></a>10.1.2 4 +1 视图</h4><img src="https://tonkyshan.cn/img/20250312171544.png" alt="视角与视图" style="zoom:39%;" />
+
+
+
+<hr>
+<h3 id="10-2-基于架构的软件开发"><a href="#10-2-基于架构的软件开发" class="headerlink" title="10.2 基于架构的软件开发"></a>10.2 基于架构的软件开发</h3><hr>
+<h4 id="10-2-1-概念"><a href="#10-2-1-概念" class="headerlink" title="10.2.1 概念"></a>10.2.1 概念</h4><ul>
+<li>ABSD方法是架构驱动，即强调由<strong>业务【商业】、质量和功能需求</strong>的组合驱动架构设计</li>
+<li>ABSD方法有三个基础。第一个基础是<strong>功能的分解</strong>。在功能分解中，ABSD方法使用已有的基于模块的内聚和耦合技术，第二个基础是<strong>通过选择架构风格来实现质量和业务需求</strong>，第三个基础是<strong>软件模版的使用</strong></li>
+<li>视角与视图，从<strong>不同的视角来检查</strong>，所以会有<strong>不同的视图</strong></li>
+<li>用例用来<strong>捕获功能需求</strong>、特定场景【刺激、环境、响应】用来<strong>捕获质量需求</strong></li>
+</ul>
+<h4 id="10-2-2-开发过程"><a href="#10-2-2-开发过程" class="headerlink" title="10.2.2 开发过程"></a>10.2.2 开发过程</h4><p>ABSD能很好的<strong>【支持软件重用】</strong></p>
+<p>ABSD方法是一个<strong>自顶向下，递归细化</strong>的方法</p>
+<p>软件系统的体系结构通过该方法得到细化，直到能产生<strong>软件构件和类</strong></p>
+<pre class="mermaid">flowchart TD
+    InputData[架构需求] --> Input1Data[架构设计]
+    Input1Data[架构设计] --> Input2Data[架构文档化]
+    Input2Data[架构文档化] --> Input3Data[架构复审]
+    Input3Data[架构复审] --> Input4Data[架构实现]
+    Input4Data[架构实现] --> Input5Data[架构演化]
+    Input5Data[架构演化] --> |0:M| InputData[架构需求]
+    Input3Data[架构复审] --> |0:N| Input1Data[架构设计]</pre>
+
+<img src="https://tonkyshan.cn/img/20250312194511.png" alt="开发过程" style="zoom:45%;" />
+
+<p>架构文档化过程的主要输出结果是<strong>架构规格说明</strong>和<strong>测试架构需求的质量设计说明书</strong>这两个文档</p>
+<p>文档的<strong>完整性和质量</strong>是软件架构成功的关键因素</p>
+<p>关于文档的三大注意事项</p>
+<ul>
+<li>文档要从使用者的角度进行编写</li>
+<li>必须分发给所有与系统有关的开发人员</li>
+<li>且必须保证开发者手上的文档是最新的</li>
+</ul>
+<p>架构复审【架构评估】的目的是<strong>标识潜在的风险</strong>，及早发现架构设计中的缺陷和错误</p>
+<img src="https://tonkyshan.cn/img/20250312200330.png" alt="开发过程" style="zoom:39%;" />
+
+<hr>
+<h3 id="10-3-软件架构风格"><a href="#10-3-软件架构风格" class="headerlink" title="10.3 软件架构风格"></a>10.3 软件架构风格</h3><hr>
+<p>架构风格定义了用于描述系统的术语表和一组指导构建系统的规则</p>
+<table>
+<thead>
+<tr>
+<th>五大架构风格</th>
+<th>子风格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据流风格【Data Flow】</td>
+<td>批处理【Batch Sequential】、管道-过滤器【Pipes and Filters】</td>
+</tr>
+<tr>
+<td>调用&#x2F;返回风格【Call&#x2F;Return】</td>
+<td>主程序&#x2F;子程序【Main Program and Subroutine】<br>面向对象【Object-oriented】、分层结构【Layered System】</td>
+</tr>
+<tr>
+<td>独立构件风格【Independent Components】</td>
+<td>进程通信【Communicating Processes】<br>事件驱动系统(隐式调用)【Event system】</td>
+</tr>
+<tr>
+<td>虚拟机风格【Virtual Machine】</td>
+<td>解释器【Interpreter】、规则系统【Rule-based System】</td>
+</tr>
+<tr>
+<td>以数据为中心【Data-centered】</td>
+<td>数据库系统【Database System】、黑板系统【Blackboard System】<br>超文本系统【Hypertext System】</td>
+</tr>
+</tbody></table>
+<p><strong>1、数据流风格</strong></p>
+<p>数据 —&gt; 第一步处理 —&gt; 数据 —&gt; 第二步处理  —&gt; 数据 —&gt; 第N步处理  —&gt; 数据</p>
+<p>分步处理</p>
+<p>前一步的处理结果是后一步的输入内容【数据驱动】</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>松耦合【高内聚-低耦合】</li>
+<li>良好的重用性&#x2F;可维护性</li>
+<li>可扩展性【标准接口适配】</li>
+<li>良好的隐蔽性</li>
+<li>支持并行</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>交互性较差</li>
+<li>复杂性较高</li>
+<li>性能较差(每个过滤器都需要解析与合成数据)</li>
+</ul>
+<p><strong>典型实例：</strong></p>
+<ul>
+<li>传统编译器</li>
+<li>网络报文处理</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250313101915.png" alt="数据流风格" style="zoom:39%;" />
+
+<p><strong>2、调用&#x2F;返回风格</strong></p>
+<p>主函数调用子函数，子函数返回执行结果给主函数</p>
+<ul>
+<li>主程序&#x2F;子程序：面向过程</li>
+<li>面向对象：对象的方法调用</li>
+<li>分层：层与层之间的方法调用</li>
+</ul>
+<p><strong>3、独立构件风格</strong></p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>松耦合</li>
+<li>良好的重用性&#x2F;可修改性&#x2F;可扩展性</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>构件放弃了对系统计算的控制，一个构件触发一个事件时，不能确定其他构件是否会响应它，而且即是它指导事件注册了哪些构件的过程，它也不能保证这些过程被调用的顺序</li>
+<li>数据交换的问题</li>
+<li>既然过程的语义必须依赖于被触发事件的上下文约束，关于正确性的推理就存在问题</li>
+</ul>
+<p><strong>特点：</strong></p>
+<ul>
+<li>系统由若干子系统构成且成为一个整体，系统有统一的目标，子系统有主从之分，每一子系统有自己的事件收集和处理机制</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250313111852.png" alt="独立构件风格" style="zoom:39%;" />
+
+
+
+<p><strong>4、虚拟机风格</strong></p>
+<img src="https://tonkyshan.cn/img/20250313112043.png" alt="虚拟机风格" style="zoom:39%;" />
+
+<p>解释器 和 规则为中心</p>
+<p>优点：可以灵活应对自定义场景</p>
+<p>缺点：复杂度较高</p>
+<p>特点：在解释器的基础上增加经验规则(规则为中心)</p>
+<p>适合领域：</p>
+<ul>
+<li>适用于需要”自定义规则”的场合(解释器)</li>
+<li>适用于专家系统(规则为中心)</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250313141147.png" alt="虚拟机风格" style="zoom:39%;" />
+
+<p>基于规则的系统构成：<strong>规则集、规则解释器、规则&#x2F;数据选择及工作内存</strong>，一般用在人工智能领域和DSS(决策支持系统)中</p>
+<img src="https://tonkyshan.cn/img/20250313142558.png" alt="虚拟机风格" style="zoom:39%;" />
+
+
+
+<p><strong>5、以数据为中心</strong></p>
+<ul>
+<li>数据库系统</li>
+<li>黑板系统：语音识别、知识推理</li>
+<li>超文本系统</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250313143111.png" alt="以数据为中心" style="zoom:39%;" />
+
+<p>数据库系统</p>
+<p>特点：<strong>以数据为中心</strong></p>
+<p>黑板系统</p>
+<p>优点：可更改性和可维护性，可重用的知识源，容错性和健壮性</p>
+<p>缺点：测试困难，不能保证有好的解决方案，难以建立好的控制策略，低效，开发困难，缺少并行机制</p>
+<p>特点：在以数据为中心的基础上，使用中心数据触发业务逻辑部件</p>
+<p>典型案例：语音识别，模式识别，图像处理，知识推理</p>
+<p><strong>6、闭环控制架构(过程控制)</strong></p>
+<img src="https://tonkyshan.cn/img/20250313144729.png" alt="闭环控制架构(过程控制)" style="zoom:39%;" />
+
+<ul>
+<li>适合于嵌入式系统，用于解决简单闭环控制问题</li>
+<li>经典应用：空调温控，定速巡航</li>
+</ul>
+<p><strong>7、C2风格</strong></p>
+<img src="https://tonkyshan.cn/img/20250313150041.png" alt="C2风格" style="zoom:39%;" />
+
+<p>C2架构的基本规则：</p>
+<ul>
+<li><strong>构件和连接件都有一个顶部和一个底部</strong></li>
+<li>构件的顶部要连接到连接件的底部，构件的底部要连接到连接件的顶部，构件之间不允许直连</li>
+<li>一个连接件可以和任意数目的其他构件和连接件连接</li>
+<li>当两个连接件进行直接连接时，必须由其中一个的底部到另一个的顶部</li>
+</ul>
+<p><strong>8、MDA</strong></p>
+<p>Model Driven Architecture </p>
+<ul>
+<li>Model?<ul>
+<li>客观事物的抽象表示</li>
+</ul>
+</li>
+<li>Architecture？<ul>
+<li>构成系统的部件、连接件极其约束的规则</li>
+</ul>
+</li>
+<li>Model Driven？<ul>
+<li>使用模型完成软件的分析、设计、构建、部署、维护等各开发活动</li>
+</ul>
+</li>
+<li>MDA起源于分离系统规约和平台实现的思想</li>
+</ul>
+<p>MDA的主要目标：</p>
+<p>Portability(可移植性)，Interoperability(互通性)，Reusability(可重用性)</p>
+<p>MDA的核心模型</p>
+<ul>
+<li>计算无关模型(CIM)：对某具体行业内一个项目的业务需求及其系统功能需求进行分析</li>
+<li>平台独立模型(PIM)：具有高抽象层次、独立于任何实现技术的模型</li>
+<li>平台相关模型(PSM)：为某种特定实现技术量身定做，让你用这种技术中可用的实现构造来描述系统的模型，PIM会被变成一个或多个PSM</li>
+<li>代码Code：用源代码对系统的描述(规约)，每个PSM都将被变换成代码</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20250313163303.png" alt="MDA" style="zoom:39%;" />
+
+
+
+<p><strong>软件架构复用</strong></p>
+<p>【软件复用】是一种系统化的软件开发过程，通过识别、分析、分类、获取和修改软件实体，以便在不同软件开发过程中重复使用它们</p>
+<p>软件开发过程中重复使用相同或相似【软件元素】的过程</p>
+<img src="https://tonkyshan.cn/img/20250313170113.png" alt="软件架构复用" style="zoom:39%;" />
+
+<p>软件架构复用类型</p>
+<ul>
+<li>机会复用：开发过程中，只要发现有可复用资产，就对其进行复用</li>
+<li>系统复用：开发之前，要进行规划，以决定哪些需要复用</li>
+</ul>
+<hr>
+<h3 id="10-4-特定领域软件架构"><a href="#10-4-特定领域软件架构" class="headerlink" title="10.4 特定领域软件架构"></a>10.4 特定领域软件架构</h3><hr>
+<h4 id="10-4-1-基本概念"><a href="#10-4-1-基本概念" class="headerlink" title="10.4.1 基本概念"></a>10.4.1 基本概念</h4><p>特定领域软件架构以一个<strong>特定问题领域</strong>为对象，形成由<strong>领域参考、参考需求、参考架构</strong>等组成的开发基础架构，支持一个特定领域中<strong>多个应用的生成</strong></p>
+<p><strong>DSSA基本活动及产出物</strong></p>
+<img src="https://tonkyshan.cn/img/20250313195245.png" alt="DSSA" style="zoom:39%;" />
+
+<p>DSSA类型</p>
+<ul>
+<li>垂直域：相同领域，深入</li>
+<li>水平域：不同领域，平移</li>
+</ul>
+<p><strong>参与人员</strong></p>
+<ul>
+<li>领域专家：有经验的用户、从事该领域中系统的需求分析、设计、实现以及项目管理的有经验的软件工程师等，领域专家的主要任务包括提供关于领域中系统的需求规约和实现的知识</li>
+<li>领域分析人员：领域分析人员应由具有知识工程背景的有经验的系统分析员来担任</li>
+<li>领域设计人员：领域设计人员应由有经验的软件设计人员来担任</li>
+<li>领域实现人员：领域实现人员应由有经验的程序设计人员来担任</li>
+</ul>
+<p><strong>建立过程</strong></p>
+<img src="https://tonkyshan.cn/img/20250313201418.png" alt="建立过程" style="zoom:39%;" />
+
+
+
+<p><strong>三层次模型</strong></p>
+<img src="https://tonkyshan.cn/img/20250313200721.png" alt="三层次模型" style="zoom:39%;" />
+
+<hr>
+<h3 id="10-5-软件架构评估"><a href="#10-5-软件架构评估" class="headerlink" title="10.5 软件架构评估"></a>10.5 软件架构评估</h3><hr>
+<h4 id="10-6-1-质量属性"><a href="#10-6-1-质量属性" class="headerlink" title="10.6.1 质量属性"></a>10.6.1 质量属性</h4><ul>
+<li>性能</li>
+<li>可靠性<ul>
+<li>容错</li>
+<li>健壮性</li>
+</ul>
+</li>
+<li>可用性</li>
+<li>安全性</li>
+<li>可修改性<ul>
+<li>可维护性</li>
+<li>可扩展性</li>
+<li>结构重组</li>
+<li>可移植性</li>
+</ul>
+</li>
+<li>功能性</li>
+<li>可变性</li>
+<li>互操作性</li>
+</ul>
+<p><strong>1、性能</strong></p>
+<p>性能是指<strong>系统的响应能力</strong>，即要经过多长时间才能对某个事件做出响应，或者在某段时间内系统所能处理的事件的个数</p>
+<p>例如：</p>
+<ul>
+<li>同时支持1000并发</li>
+<li>响应时间小于1s</li>
+<li>显示分辨率达到4k</li>
+</ul>
+<p>性能战术</p>
+<ul>
+<li>资源需求<ul>
+<li>提高计算效率</li>
+<li>减少计算开销</li>
+<li>管理事件率</li>
+<li>控制采样频率</li>
+</ul>
+</li>
+<li>资源管理<ul>
+<li>引入并发</li>
+<li>维持多个副本</li>
+<li>增加可用资源</li>
+</ul>
+</li>
+<li>资源仲裁<ul>
+<li>资源调度策略<ul>
+<li>先进&#x2F;先出</li>
+<li>固定优先级</li>
+<li>动态优先级</li>
+<li>静态调用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>2、可用性</strong></p>
+<p>可用性是系统能够<strong>正常运行的时间比例</strong>，经常用两次故障之间的时间长度或在出现故障时系统能够恢复正常的速度来表示</p>
+<p>例如：</p>
+<ul>
+<li>主服务器故障，1分钟内切换至备用服务器</li>
+<li>系统故障，1小时内修复</li>
+<li>系统支持7 x 24小时工作</li>
+</ul>
+<p>可用性战术</p>
+<ul>
+<li>错误检测<ul>
+<li>命令&#x2F;响应</li>
+<li>【Ping&#x2F;Echo】</li>
+<li>心跳</li>
+<li>异常</li>
+</ul>
+</li>
+<li>错误恢复<ul>
+<li>表决</li>
+<li>冗余【主动&#x2F;被动】</li>
+<li>备件</li>
+</ul>
+</li>
+<li>错误预防<ul>
+<li>进程监视器</li>
+<li>事务</li>
+<li>从服务器删除</li>
+</ul>
+</li>
+</ul>
+<p><strong>3、安全性</strong></p>
+<p>安全性是指系统在向合法用户提供服务的同时能够<strong>阻止非授权用户使用</strong>的企图或拒绝服务的能力。安全性又可划分为<strong>机密性【信息不泄露给未授权的用户】、完整性【防止信息被篡改】、不可否认性【不可抵赖】及可控性【对信息的传播及内容具有控制的能力】</strong>等特性</p>
+<p>例如：</p>
+<ul>
+<li>可抵御SQL注入攻击</li>
+<li>对计算机对操作都有完整记录</li>
+<li>用户信息数据库授权必须保证99.9可用</li>
+</ul>
+<p>安全性战术</p>
+<ul>
+<li>抵抗攻击<ul>
+<li>身份验证</li>
+<li>用户授权</li>
+<li>数据加密</li>
+<li>数据完整性</li>
+<li>限制暴露</li>
+<li>限制访问</li>
+</ul>
+</li>
+<li>检测攻击<ul>
+<li>入侵检测</li>
+</ul>
+</li>
+<li>从攻击中恢复<ul>
+<li>识别：审计追踪</li>
+<li>恢复：冗余【与可用性重叠】</li>
+</ul>
+</li>
+</ul>
+<p><strong>4、可修改性</strong></p>
+<p>可修改性是指能够快速地以较高的性能价格比<strong>对系统进行变更的能力</strong>。通常以某些具体的变更为基准，通过考察这些变更的代价衡量可修改性</p>
+<p>可修改性包含4个方面：可维护性、可扩展性、结构重组、可移植性</p>
+<p>例如：</p>
+<ul>
+<li>更改系统报表模块，必须在2人周内完成</li>
+<li>对Web界面风格进行修改，修改必须在4人月内完成</li>
+</ul>
+<p>可修改性战术</p>
+<ul>
+<li>局部化修改<ul>
+<li>维持语文一致性</li>
+<li>预期期望的变更</li>
+<li>泛化模块</li>
+<li>限制可能的选择</li>
+<li>抽象通用服务</li>
+</ul>
+</li>
+<li>防止连锁反应<ul>
+<li>隐藏信息</li>
+<li>维持现有接口</li>
+<li>限制通信路径</li>
+<li>使用仲裁者</li>
+</ul>
+</li>
+<li>推迟绑定时间<ul>
+<li>运行时注册</li>
+<li>配置文件</li>
+<li>多态</li>
+<li>组件更换</li>
+<li>遵守已定义的协议</li>
+</ul>
+</li>
+</ul>
+<p><strong>5、易用性</strong></p>
+<p>易用性关注的是对用户来说<strong>完成某个期望任务的容易程度</strong>和系统所提供的用户支持的种类</p>
+<p>例如：</p>
+<ul>
+<li>界面友好</li>
+<li>新用户学习使用系统时间不超过2小时</li>
+</ul>
+<p><strong>6、可测试性</strong></p>
+<p>软件可测试性是指<strong>通过测试揭示软件缺陷的容易程度</strong></p>
+<p>例如：</p>
+<ul>
+<li>提供远程调试接口，支持远程调试</li>
+</ul>
+<p>敏感点：是一个或多个构件(和&#x2F;或构件之间的关系)的特性，它能影响系统的某个质量属性</p>
+<p>权衡点：是影响多个质量属性的特性，是多个质量属性的敏感点</p>
+<p>风险点：是指架构设计中潜在的、存在问题的架构决策所带来的隐患</p>
+<p>非风险点：是指不会带来隐患，一般以”XXX要求是可以实现(或接受)的”方式表达</p>
+<h4 id="10-6-2-架构评估方法"><a href="#10-6-2-架构评估方法" class="headerlink" title="10.6.2 架构评估方法"></a>10.6.2 架构评估方法</h4><p>1、基于调查问卷(检查表)的方式</p>
+<p>2、基于度量的方式</p>
+<p>3、基于场景的方式</p>
+<img src="https://tonkyshan.cn/img/20250317145652.png" alt="架构评估方法" style="zoom:39%;" />
+
+<p>【场景】是从<strong>风险承担者</strong>的角度与系统交互的简短描述</p>
+<p>场景可从六个方面进行描述：刺激源、<strong>刺激</strong>、制品、<strong>环境</strong>、<strong>响应</strong>、响应变量</p>
+<p>质量属性场景六个构成部分</p>
+<p>【刺激源(Source)】这是某个<strong>生成该刺激的实体</strong>(人、计算机系统或者任何其他刺激器)</p>
+<p>【刺激(Stimulus)】该刺激是当<strong>刺激到达系统时需要考虑的条件</strong></p>
+<p>【环境(Environment)】该刺激在某些条件内发生。当激励发生时，系统可能处于<strong>过载、运行</strong>或者其他情况</p>
+<p>【制品(Artifact)】某个制品被激励，这可能是<strong>整个系统(或系统的一部分)</strong></p>
+<p>【响应(Response)】该响应是在激励到达后所<strong>采取的行动</strong></p>
+<p>【响应度量(Measurement)】当响应发生时，应当能够以某种方式对其进行度量，以对需求进行测试</p>
+<p><strong>【软件架构分析法(SAAM)】</strong>最初关注可修改性，后扩充到可移植性、可扩充性等。</p>
+<p><strong>【架构权衡分析法(ATAM)】</strong>由SAAM发展而来，主要针对：性能、实用性、安全性、可修改性。</p>
+<p>【成本效益分析法(CBAM)】在ATAM基础上建立的，软件的”经济”模型。</p>
+<hr>
+<h3 id="10-6-软件产品线"><a href="#10-6-软件产品线" class="headerlink" title="10.6 软件产品线"></a>10.6 软件产品线</h3><hr>
+<img src="https://tonkyshan.cn/img/20250314102051.png" alt="软件产品线" style="zoom:39%;" />
+
+<hr>
+<h3 id="10-7-构件与中间件技术"><a href="#10-7-构件与中间件技术" class="headerlink" title="10.7 构件与中间件技术"></a>10.7 构件与中间件技术</h3><hr>
+<h4 id="10-7-1-概念"><a href="#10-7-1-概念" class="headerlink" title="10.7.1 概念"></a>10.7.1 概念</h4><p>构件的定义</p>
+<p>1、软件构件是一种组装单元，它具有规范的接口规约和显式的语境依赖，软件构件可以被独立地部署并由第三方任意地组装</p>
+<p>2、构件是某系统中有价值的、几乎独立的并可替换的一个部分，它在良好定义的体系结构语境内满足某清晰的功能</p>
+<p>3、<strong>构件是一个独立发布的功能部分，可以通过其接口访问它的服务</strong></p>
+<p><strong>模块的特性</strong>：结构化开发的产物</p>
+<p><strong>对象的特性</strong>：</p>
+<ul>
+<li>一个实例单元，具有唯一的标志</li>
+<li>可能具有状态，此状态外部可见</li>
+<li>封装了自己的状态和行为</li>
+</ul>
+<p><strong>构件的特性</strong>：</p>
+<ul>
+<li>独立部署单元</li>
+<li>作为第三方的组装单元</li>
+<li>没有(外部的)可见状态</li>
+</ul>
+<h4 id="10-7-2-构件的复用"><a href="#10-7-2-构件的复用" class="headerlink" title="10.7.2 构件的复用"></a>10.7.2 构件的复用</h4><p>一、检索与提取：</p>
+<p>1、基于关键字的检索</p>
+<ul>
+<li>特点：树形或有向无回路图结构</li>
+</ul>
+<p>2、刻面检索法</p>
+<ul>
+<li>特点：利用Facet描述构件执行的功能、被操作的数据、构件应用的语境或任意其他特征</li>
+</ul>
+<p>3、超文本检索法</p>
+<ul>
+<li>特点：按照人类的联想思维方式任意跳转到包含相关概念或构件的文档</li>
+</ul>
+<p>二、理解与评价构件：</p>
+<ul>
+<li>要复用构件，准确地理解构件至关重要，特别是对构件修改使用时</li>
+<li>为达到目的，<strong>必须要求构件的开发过程遵循公共标准</strong></li>
+<li>一般构件库的文档中全面而准确地说明以下内容：<ul>
+<li>构件的功能与行为、相关的领域知识、可适应性约束条件与例外情形、可以预见的修改部分及修改方法</li>
+</ul>
+</li>
+</ul>
+<p>三、修改构件</p>
+<ul>
+<li><strong>理想状态是直接复用构件库中现成的构件</strong>，但大多数情况下，必须对构件进行或多或少的修改，以应对新需求</li>
+<li>为了减少构件修改的工作量，要求开发人员尽量使构件的功能、行为和接口设计更为抽象化、通用化和参数化，这样，复用者即可通过对实参的选取来调整构件的功能或行为，如果这种调整仍不足以使构件适用于新系统，复用者就必须借助设计信息和文档来修改构件</li>
+<li>构件库中若无可修改使用的构件，则按新需求开发构件，并存入构件库</li>
+</ul>
+<p>四、组装构件</p>
+<p>1、组装的三种方式</p>
+<ul>
+<li>基于功能的组装：采用子程序调用和参数传递的方式将构件组装起来</li>
+<li>基于数据的组装：仍然是传统的子程序调用与参数传递，但它所依赖的软件设计方法不再是功能分解，而是面向数据的设计方法，例如，Jackson系统开发方法</li>
+<li>面向对象的组装：如果从类库中检索出来的基类能够完全满足新系统的需求，则可以直接应用，否则，必须以基类为父类，生成相应的子类，以满足新系统的需求</li>
+</ul>
+<p>2、构件组装失配问题</p>
+<ul>
+<li>由构件引起的失配，包括由于系统对构件基础设施、构件控制模块和构件数据模型的假设存在冲突引起的失配</li>
+<li>由连接子引起的失配，包括由于系统对构件交互协议、连接子数据模型的假设存在冲突引起的失配</li>
+<li>由于系统成分对全局体系结构的假设存在冲突引起的失配等，要解决失配问题，首先需要检测出失配问题，并在此基础上通过适当的手段消除检测出的失配问题</li>
+</ul>
+<h4 id="10-7-3-构件的分类"><a href="#10-7-3-构件的分类" class="headerlink" title="10.7.3 构件的分类"></a>10.7.3 构件的分类</h4><p>从构件的外部形态看，构件可分为5类</p>
+<ul>
+<li><strong>独立而成熟的构件</strong>：已在实际运行环境多次检验，该类构件隐藏了所有接口，用户只需用规定好的命令进行使用，例如，数据库管理系统和操作系统等</li>
+<li><strong>有限制的构件</strong>：有限制的构件提供了接口，指出了使用的条件和前提，这种构件在装配时，会产生资源冲突、覆盖等影响，在使用时需要加以测试，例如，各种面向对象程序设计语言中的基础类库等</li>
+<li><strong>适应性构件</strong>：适应性构件进行了包装或使用了接口技术，把不兼容、资源冲突等进行了处理，可以直接使用，这种构件可以不加修改地使用在各种环境中，例如ActiveX等</li>
+<li><strong>装配的构件</strong>：装配的构件在安装时，已经装配在操作系统、数据库管理系统或信息系统不同层次上，使用胶水代码(glue code)就可以进行连接使用，目前一些软件商提供的大多数软件产品都属于这一类</li>
+<li><strong>可修改的构件</strong>： 对原构件修改错误、增加新功能，可以利用重新”包装”或写接口来实现构件的版本替换，这种构件在应用系统开发中使用得比较多</li>
+</ul>
+<h4 id="10-7-4-中间件"><a href="#10-7-4-中间件" class="headerlink" title="10.7.4 中间件"></a>10.7.4 中间件</h4><p>中间件是一类构件</p>
+<p>中间件是一类系统构件</p>
+<p>简化结构、屏蔽差异、利于复用</p>
+<p>采用中间件技术的优点</p>
+<ul>
+<li><strong>面向需求</strong>：即设计师集中精力于业务逻辑本身</li>
+<li><strong>业务的分隔和包容性</strong>：应用开发人员可以按照不同的业务进行功能的划分，体现为不同的接口或交互模式</li>
+<li><strong>设计与实现隔离</strong>：构件对外发生作用或构件间的交互，都是通过接口进行的，构件使用者只需要知道构件的接口，而不必关心其内部实现，这是设计与实现分离的关键</li>
+<li><strong>隔离复杂的系统资源</strong>：架构很重要的一个功能就是将系统资源与应用构件隔离，这是保证构件可复用甚至”即插即用”的基础，与中间件的意图也是一致的</li>
+<li><strong>符合标准的交互模型</strong>：中间件则实现了架构的模型，实现了标准的协议</li>
+<li><strong>软件复用</strong>：中间件提供了构件封装、交互规则、与环境的隔离等机制，这些都为软件复用提供了方便的解决方案</li>
+<li><strong>提供对应用构件的管理</strong>：基于中间件的软件可以方便地进行管理，因为构件总可以通过标识机制进行划分</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>中间件分类</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通信处理消息中间件</td>
+<td>可靠、高效、实时跨平台通信、eLink、MQSeries</td>
+</tr>
+<tr>
+<td>事务处理交易中间件</td>
+<td>事务分发，负载均衡，Tuxedo</td>
+</tr>
+<tr>
+<td>数据存储管理中间件</td>
+<td>为虚拟缓冲存取、格式转换、解压等带来方便</td>
+</tr>
+<tr>
+<td>Web服务器中间件</td>
+<td>有负载均衡、缓存、安全性等功能</td>
+</tr>
+<tr>
+<td>安全中间件</td>
+<td>如：加密、认证</td>
+</tr>
+<tr>
+<td>跨平台和架构的中间件</td>
+<td>解决跨平台问题，如：CORBA</td>
+</tr>
+<tr>
+<td>专用平台中间件</td>
+<td>为特定应用领域设计领域参考模式，建立相应架构</td>
+</tr>
+<tr>
+<td>网络中间件</td>
+<td>功能包括网管、接入、网络测试、虚拟社区和虚拟缓冲等</td>
+</tr>
+</tbody></table>
+<h4 id="10-7-5-构件标准"><a href="#10-7-5-构件标准" class="headerlink" title="10.7.5 构件标准"></a>10.7.5 构件标准</h4><p>三大构件标准</p>
+<p><strong>一、CORBA</strong></p>
+<img src="https://tonkyshan.cn/img/20250321163029.png" alt="CORBA" style="zoom:50%;" />
+
+<p>伺服对象(Servant)：CORBA对象的真正实现，负责完成客户端请求</p>
+<p>对象适配器(Object Adapter)：用于屏蔽ORB内核的实现细节，为服务器对象的实现者提供抽象接口，以便他们使用ORB内部的某些功能</p>
+<p>对象请求处理(Object Request Broker)：解释调用并负责查找实现该请求的对象，将参数传给找到的对象，并调用方法返回结果。客户方不需要了解服务对象的位置、通信方式、实现、激活或存储机制</p>
+<p><strong>二、J2EE(EJB)</strong></p>
+<ul>
+<li>会话Bean：<strong>实现业务逻辑</strong>，负责完成服务端与客户端的交互</li>
+<li>实体Bean：<strong>实现O&#x2F;R映射</strong>，简化数据库开发工作</li>
+<li>消息驱动Bean：<strong>处理并发与异步访问</strong></li>
+</ul>
+<p><strong>三、DNA 2000</strong></p>
+<hr>
+<h2 id="第十一章-系统可靠性分析与设计-0-3"><a href="#第十一章-系统可靠性分析与设计-0-3" class="headerlink" title="第十一章 系统可靠性分析与设计 0-3"></a>第十一章 系统可靠性分析与设计 0-3</h2><hr>
+<p>考点：</p>
+<ul>
+<li>可靠性计算、<strong>可靠性分析与设计</strong>、可靠性模型</li>
+</ul>
+<hr>
+<h3 id="11-1-可靠性相关基本概念"><a href="#11-1-可靠性相关基本概念" class="headerlink" title="11.1 可靠性相关基本概念"></a>11.1 可靠性相关基本概念</h3><hr>
+<ul>
+<li><strong>可靠性</strong>是软件系统在应用或系统错误面前，在意外或错误使用的情况下维持软件系统的功能性的基本能力</li>
+<li><strong>可用性</strong>是系统<strong>能够正常运行的时间比例</strong></li>
+</ul>
+<p><strong>软件可靠性 ≠ 硬件可靠性</strong></p>
+<ul>
+<li><strong>复杂性</strong>：软件复杂性比硬件高，<strong>大部分实效来自于软件失效</strong></li>
+<li><strong>物理退化</strong>：硬件失效主要是物理退化所致，软件不存在物理退化</li>
+<li><strong>唯一性</strong>：软件是唯一的，每个COPY版本都一样，而两个硬件不可能完全一样</li>
+<li><strong>版本更新周期</strong>：硬件较慢，软件较快</li>
+</ul>
+<hr>
+<h3 id="11-2-可靠性分析与设计"><a href="#11-2-可靠性分析与设计" class="headerlink" title="11.2 可靠性分析与设计"></a>11.2 可靠性分析与设计</h3><hr>
+<h4 id="11-2-1-可靠性指标"><a href="#11-2-1-可靠性指标" class="headerlink" title="11.2.1 可靠性指标"></a>11.2.1 可靠性指标</h4><img src="https://tonkyshan.cn/img/20250324104735.png" alt="可靠性指标" style="zoom:50%;" />
+
+
+
+<h4 id="11-2-2-串联系统与并联系统"><a href="#11-2-2-串联系统与并联系统" class="headerlink" title="11.2.2 串联系统与并联系统"></a>11.2.2 串联系统与并联系统</h4><img src="https://tonkyshan.cn/img/20250324105521.png" alt="串联系统与并联系统" style="zoom:40%;" />
+
+<p><strong>混合系统</strong></p>
+<img src="https://tonkyshan.cn/img/20250324110032.png" alt="混合系统" style="zoom:40%;" />
+
+<h4 id="11-2-3-可靠性设计"><a href="#11-2-3-可靠性设计" class="headerlink" title="11.2.3 可靠性设计"></a>11.2.3 可靠性设计</h4><p>影响软件可靠性的主要因素</p>
+<img src="https://tonkyshan.cn/img/20250324111837.png" alt="可靠性设计" style="zoom:40%;" />
+
+<ul>
+<li><p>避错技术</p>
+</li>
+<li><p>降低复杂度设计</p>
+</li>
+<li><p>检错技术</p>
+<ul>
+<li>出错后报警，人工处理，成本较低</li>
+</ul>
+</li>
+<li><p>容错技术</p>
+<ul>
+<li>N版本程序设计(静态冗余)</li>
+<li>恢复块设计(动态冗余)</li>
+<li>防卫式程序设计</li>
+</ul>
+<p>冗余</p>
+<ul>
+<li>结构冗余(硬件冗余、软件冗余)</li>
+<li>信息冗余(校验码)</li>
+<li>时间冗余(重复多次进行相同的计算)</li>
+</ul>
+</li>
+</ul>
+<p><strong>N版本程序设计</strong></p>
+<img src="https://tonkyshan.cn/img/20250324115317.png" alt="N版本程序设计" style="zoom:40%;" />
+
+<ul>
+<li>与通常软件开发过程不同的是，N版本程序设计增加了三个新的阶段：相异成分规范与评审、相异性确认、背对背测试</li>
+<li>N版本程序的同步、N版本程序之间的通信、表决算法(全等表决、非精确表决、Cosmetie表决)、一致比较问题、数据相异性</li>
+</ul>
+<p><strong>恢复块方法</strong></p>
+<img src="https://tonkyshan.cn/img/20250324201942.png" alt="恢复块方法" style="zoom:49%;" />
+
+<ul>
+<li>设计时应保证实现主块和后备块之间的独立性，避免相关错误的产生，使主块和备份块之间的共性错误降到最低程度</li>
+<li>必须保证验证测试程序的正确性</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>恢复块方法</th>
+<th>N版本程序设计</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>硬件运行环境</td>
+<td>单机</td>
+<td>多机</td>
+</tr>
+<tr>
+<td>错误检测方法</td>
+<td>验证测试程序</td>
+<td>表决</td>
+</tr>
+<tr>
+<td>恢复策略</td>
+<td><strong>后向</strong>恢复</td>
+<td><strong>前向</strong>恢复</td>
+</tr>
+<tr>
+<td>实时性</td>
+<td>差</td>
+<td>好</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>前向</strong>恢复：使当前的计算继续下去，把系统恢复成连贯的正确状态，弥补当前状态的不连贯情况</li>
+<li><strong>后向</strong>恢复：系统恢复到前一个正确状态，继续执行</li>
+</ul>
+<p><strong>防卫式程序设计</strong></p>
+<ul>
+<li>对于程序中存在的错误和不一致性，通过在程序中包含错误检测代码和错误恢复代码，使得一旦错误发生，程序能撤销错误状态，恢复到一个已知的正确状态中去</li>
+<li>实现策略：错误检测、破坏估计、错误恢复</li>
+</ul>
+<p><strong>双机容错</strong></p>
+<img src="https://tonkyshan.cn/img/20250324204105.png" alt="双机容错" style="zoom:42%;" />
+
+<p><strong>双机模式是集群的前身</strong></p>
+<ul>
+<li>双机热备份 (主系统、备用系统) 50%的资源被利用</li>
+<li>双机互备模式 (同时提供不同的服务，心不跳则接管)</li>
+<li>双机双工模式 (同时提供相同的服务，集群的一种)</li>
+</ul>
+<hr>
+<h2 id="第十二章-系统安全性与保密性设计-5-7"><a href="#第十二章-系统安全性与保密性设计-5-7" class="headerlink" title="第十二章 系统安全性与保密性设计 5-7"></a>第十二章 系统安全性与保密性设计 5-7</h2><hr>
+<p>考点：</p>
+<ul>
+<li>安全政策与法律、<strong>加密算法</strong>、信息摘要与数字签名、<strong>数字证书</strong>、网络攻击、<strong>网络安全协议</strong>、安全攸关</li>
+</ul>
+<hr>
+<h3 id="12-1-信息安全基础"><a href="#12-1-信息安全基础" class="headerlink" title="12.1 信息安全基础"></a>12.1 信息安全基础</h3><hr>
+<ul>
+<li>信息安全包括5个基本要素：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">机密性</td>
+<td align="center">机密性是指网络信息不泄露给非授权的用户、实体或程序，能够防止非授权者获取信息</td>
+</tr>
+<tr>
+<td align="center">完整性</td>
+<td align="center">完整性是指网络信息或系统未经授权不能进行更改的特性</td>
+</tr>
+<tr>
+<td align="center">可用性</td>
+<td align="center">可用性是指合法许可的用户能够及时获取网络信息或服务的特性</td>
+</tr>
+<tr>
+<td align="center">可控性</td>
+<td align="center">可控性是指可以控制授权范围内的信息流向及行为方式</td>
+</tr>
+<tr>
+<td align="center">可审查性</td>
+<td align="center">可审查性是指对出现的信息安全问题提供调查的依据和手段</td>
+</tr>
+</tbody></table>
+<p>信息安全的范围包括<strong>信息安全、数据安全、内容安全</strong>和<strong>行为安全</strong></p>
+<ul>
+<li>网络安全漏洞</li>
+</ul>
+<p>网络安全隐患主要表现形式如下：</p>
+<p>1、物理安全性</p>
+<p>2、软件安全漏洞</p>
+<p>3、不兼容使用安全漏洞</p>
+<p>4、选择合适的安全哲理</p>
+<ul>
+<li>网络安全威胁</li>
+</ul>
+<p>网络安全威胁主要表现形式如下：</p>
+<p>1、非授权访问</p>
+<p>2、信息泄露或丢失</p>
+<p>3、破坏数据完整性</p>
+<p>4、拒绝服务攻击</p>
+<p>5、利用网络传播病毒</p>
+<ul>
+<li>安全措施的目标</li>
+</ul>
+<p>安全措施的目标如下：</p>
+<p>1、访问控制</p>
+<p>2、认证</p>
+<p>3、完整性</p>
+<p>4、审计</p>
+<p>5、保密</p>
+<hr>
+<h3 id="12-2-信息加解密技术"><a href="#12-2-信息加解密技术" class="headerlink" title="12.2 信息加解密技术"></a>12.2 信息加解密技术</h3><hr>
+<p><strong>【对称加密】</strong></p>
+<p>加密解密用同一个密钥</p>
+<ul>
+<li>加密强度不高，但效率高，易破解</li>
+<li>密钥分发困难</li>
+</ul>
+<p><strong>【非对称加密】</strong></p>
+<p>加密用公钥，解密用私钥</p>
+<ul>
+<li>加密强度高，但效率低，极难破解</li>
+<li>密钥分发容易</li>
+</ul>
+<p>任何人的【私钥】只有自己拥有</p>
+<p>任何人的【公钥】可以明文公开发送</p>
+<table>
+<thead>
+<tr>
+<th>对称加密算法【共享密钥】</th>
+<th>非对称加密算法【公开密钥】</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>【用途】对消息明文进行加密传送</td>
+<td>【用途】对密钥加密，做数字签名</td>
+</tr>
+<tr>
+<td>1、DES：替换 + 移位、56位密钥、64位数据块、速度块、密钥易产生<br>2、3DES(三重DES)<br>     密钥长度112【两个56位的密钥K1、K2】<br>     加密：K1加密 -&gt; K2解密 -&gt; K1加密<br>     解密：K1解密 -&gt; K2加密 -&gt; K1解密<br/>3、IDEA：128位密钥、64位明文&#x2F;密文、PGP<br>4、其他对称加密算法：RC-5、AES</td>
+<td>1、RSA：2048位(或1024位)密钥<br>2、Elgamal：安全性依赖于计算在有限域上离散对数这一难题<br>3、ECC：椭圆曲线算法<br>4、Diffie-Hellman</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="12-3-密钥管理技术"><a href="#12-3-密钥管理技术" class="headerlink" title="12.3 密钥管理技术"></a>12.3 密钥管理技术</h3><hr>
+<p>数字证书内容</p>
+<ul>
+<li>证书的<strong>版本信息</strong></li>
+<li>证书的<strong>序列号</strong>，每个证书都有一个唯一的证书序列号</li>
+<li>证书所使用的签名算法</li>
+<li>证书的发行机构名称，命名规则一般采用X.500格式</li>
+<li>证书的<strong>有效期</strong>，现在通用的证书一般采用UTC时间格式，它的计时范围1950-2049</li>
+<li>证书所有人的名称，命名规则一般采用X.500格式</li>
+<li>证书所有人的<strong>公开密钥</strong></li>
+<li><strong>证书发行者对证书的签名</strong></li>
+</ul>
+<p>PKI公钥体系</p>
+<ul>
+<li>CA(Certificate Authority)：认证中心</li>
+<li>RA(Registration Authority)：注册审批机构</li>
+<li>证书受理点</li>
+<li>密钥管理中心-KMC</li>
+</ul>
+<pre class="mermaid">flowchart TD
+    InputData[密钥管理中心] --> Input1Data[CA]
+    Input1Data[CA] --> Input2Data[RA]
+    Input1Data[CA] --> Input3Data[RA]
+    Input2Data[RA] --> Input4Data[受理点]
+    Input2Data[RA] --> Input5Data[受理点]
+    Input3Data[RA] --> Input6Data[受理点]
+    Input3Data[RA] --> Input7Data[受理点]</pre>
+
+
+
+<img src="https://tonkyshan.cn/img/20250401113703.png" alt="密钥管理" style="zoom:42%;" />
+
+
+
+<hr>
+<h3 id="12-4-数字签名技术"><a href="#12-4-数字签名技术" class="headerlink" title="12.4 数字签名技术"></a>12.4 数字签名技术</h3><hr>
+<p>信息摘要：<strong>单向</strong>散列函数【不可逆】、固定长度的散列值</p>
+<p>摘要用途：确保信息<strong>【完整性】防篡改</strong></p>
+<p>常用的信息摘要算法有MD5、SHA等，市场上广泛使用的MD5、SHA算法的散列值分别为128和160位，由于SHA通常采用的密钥长度较长，因此安全性高于MD5</p>
+<p>抗弱碰撞性</p>
+<img src="https://tonkyshan.cn/img/20250401144316.png" alt="数字签名技术" />
+
+<p>生成消息摘要的目的是防止篡改，对摘要进行加密的目的是防止抵赖</p>
+<hr>
+<h3 id="12-5-访问控制技术"><a href="#12-5-访问控制技术" class="headerlink" title="12.5 访问控制技术"></a>12.5 访问控制技术</h3><hr>
+<p><strong>访问控制的基本模型</strong></p>
+<p>访问控制的目标有两个：</p>
+<ul>
+<li>防止非法用户进入系统</li>
+<li>阻止合法用户对系统资源的非法使用，即禁止合法用户的越权访问</li>
+</ul>
+<p>访问控制的三要素：</p>
+<ul>
+<li>主体：可以对其他实体施加动作的主动实体，记为S</li>
+<li>客体：是接受其他实体访问的被动实体，记为O</li>
+<li>控制策略：是主体对客体的操作行为集和约束条件集，记为KS</li>
+</ul>
+<p><strong>访问控制的实现技术</strong></p>
+<p>访问控制矩阵(ACM)：矩阵中的每一格表示所在行的主体对所在列的客体的访问授权</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">file1</th>
+<th align="center">file2</th>
+<th align="center">file3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">User1</td>
+<td align="center">rw</td>
+<td align="center"></td>
+<td align="center">rw</td>
+</tr>
+<tr>
+<td align="center">User2</td>
+<td align="center">r</td>
+<td align="center">rwx</td>
+<td align="center">x</td>
+</tr>
+<tr>
+<td align="center">User3</td>
+<td align="center">x</td>
+<td align="center">r</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>访问控制列表：访问控制矩阵按列分解，具体如下</p>
+<pre class="mermaid">flowchart LR
+    InputData[file1] --> InputData1[User1 <br> r,w]
+    InputData1[User1 <br> r,w] --> InputData2[User2 <br> r]
+    InputData2[User2 <br> r] --> InputData3[User3 <br> x]</pre>
+
+<p>能力表：访问控制矩阵按行分解，具体如下</p>
+<pre class="mermaid">flowchart LR
+    InputData[User1] --> InputData1[file <br> r,w]
+    InputData1[file <br> r,w] --> InputData2[file3 <br> r,w]</pre>
+
+<p>授权关系表：对应访问矩阵中每一个非空元素的实现技术，像安全数据库系统通常用授权关系表来实现其访问控制安全机制</p>
+<hr>
+<h3 id="12-6-国产密码算法"><a href="#12-6-国产密码算法" class="headerlink" title="12.6 国产密码算法"></a>12.6 国产密码算法</h3><hr>
+<table>
+<thead>
+<tr>
+<th>算法名称</th>
+<th>算法特性描述</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SM1</td>
+<td>对称加密，分组长度和密钥长度都为128bt</td>
+<td>广泛应用于电子政务、电子商务及国民经济的各个应用领域</td>
+</tr>
+<tr>
+<td>SM2</td>
+<td>非对称加密，用于公钥加密算法、密钥交换协议、数字签名算法</td>
+<td>国家标准推荐使用素数域256位椭圆曲线</td>
+</tr>
+<tr>
+<td>SM3</td>
+<td>杂凑算法，杂凑值长度为256bt</td>
+<td>适用于商用密码应用中的数字签名和验证</td>
+</tr>
+<tr>
+<td>SM4</td>
+<td>对称加密，分组长度和密钥长度都为128bt</td>
+<td>适用于无线局域网产品</td>
+</tr>
+<tr>
+<td>SM9</td>
+<td>标识密码算法</td>
+<td>不需要申请数字证书，适用于互联网应用的各种新兴应用的安全保障</td>
+</tr>
+</tbody></table>
+<img src="https://tonkyshan.cn/img/20250401154926.png" alt="练习题" style="zoom:40%;" />
+
+<hr>
+<h3 id="12-7-信息安全的保障体系"><a href="#12-7-信息安全的保障体系" class="headerlink" title="12.7 信息安全的保障体系"></a>12.7 信息安全的保障体系</h3><hr>
+<p>计算机信息系统安全保护等级</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">公民、法人和其他组织权益</th>
+<th align="center">社会秩序和公共利益</th>
+<th align="center">国家安全</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">用户自主保护级</td>
+<td align="center">损害</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">系统审计保护级</td>
+<td align="center">严重损害</td>
+<td align="center">损害</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">安全标记保护级</td>
+<td align="center"></td>
+<td align="center">严重损害</td>
+<td align="center">损害</td>
+</tr>
+<tr>
+<td align="center">结构化保护级</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">严重损害</td>
+</tr>
+<tr>
+<td align="center">访问验证保护级</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">特别严重损害</td>
+</tr>
+</tbody></table>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2025/02/05/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%B8%88%E5%A4%87%E8%80%83%E7%AC%94%E8%AE%B0/">https://tonkyshan.cn/2025/02/05/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%B8%88%E5%A4%87%E8%80%83%E7%AC%94%E8%AE%B0/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E7%AC%94%E8%AE%B0/"># 笔记</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../03/17/OpenShift/">OpenShift</a>
+            
+            
+            <a class="next" rel="next" href="../../../01/21/%E8%BF%B0%E8%81%8C/">述职</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>Quartz | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Quartz</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 8, 2024&nbsp;&nbsp;22:07:08</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/Quartz/">Quartz</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h2><hr>
+<h3 id="小顶堆和时间轮算法"><a href="#小顶堆和时间轮算法" class="headerlink" title="小顶堆和时间轮算法"></a>小顶堆和时间轮算法</h3><hr>
+<p><strong>小顶堆</strong></p>
+<p>完全二叉树：除了最后一层外，其他层节点数必须达到最大，最后一层靠左排列</p>
+<p>堆也是一颗完全二叉树，但是它的元素必须满足每个节点的值都不大于（或不小于）其父节点的值</p>
+<p>定时任务用小顶堆进行：各个节点的值对应job的dilay</p>
+<p><strong>时间轮算法</strong></p>
+<ul>
+<li>链表或者数组实现时间轮：while-true-sleep 遍历数组，每个下标放置一个链表，链表节点放置任务，遍历到了就取出执行<ul>
+<li>缺陷：范围小，无法实现复杂的定时任务</li>
+</ul>
+</li>
+<li>round型时间轮：任务上记录一个round，遍历到了就将round减1，为0时取出执行<ul>
+<li>缺陷：需要遍历所有的任务，效率较低</li>
+</ul>
+</li>
+<li>分层时间轮：使用多个不同时间维度的轮<ul>
+<li>天轮：记录几点执行</li>
+<li>月轮：记录几号执行</li>
+<li>月轮遍历到了，将任务取出放到天轮里面，即可实现几号几点执行</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="第一章-JDK定时器timer使用及原理分析"><a href="#第一章-JDK定时器timer使用及原理分析" class="headerlink" title="第一章 JDK定时器timer使用及原理分析"></a>第一章 JDK定时器timer使用及原理分析</h2><hr>
+<h3 id="1-1-timer的使用"><a href="#1-1-timer的使用" class="headerlink" title="1.1 timer的使用"></a>1.1 timer的使用</h3><hr>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>priv<span class="token punctuation">.</span>timer</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Date</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Timer</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">TimerTask</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TimerTest</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 任务启动</span>
+        <span class="token class-name">Timer</span> t <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Timer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">2</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">FooTimerTask</span> task <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FooTimerTask</span><span class="token punctuation">(</span><span class="token string">"foo"</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 任务添加</span>
+            t<span class="token punctuation">.</span><span class="token function">schedule</span><span class="token punctuation">(</span>task<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">FooTimerTask</span> <span class="token keyword">extends</span> <span class="token class-name">TimerTask</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">FooTimerTask</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name: "</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">"startTime: "</span> <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name: "</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">"endTime: "</span> <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="1-2-timer的数据结构和原理分析-amp-amp-存在的问题"><a href="#1-2-timer的数据结构和原理分析-amp-amp-存在的问题" class="headerlink" title="1.2 timer的数据结构和原理分析 &amp;&amp; 存在的问题"></a>1.2 timer的数据结构和原理分析 &amp;&amp; 存在的问题</h3><hr>
+<p><strong>Timer</strong></p>
+<ul>
+<li>定时（指定时间执行任务）</li>
+<li>延迟（延迟一段时间执行任务）</li>
+<li>周期性执行任务（每隔一段时间执行任务）</li>
+</ul>
+<p><strong>缺陷：</strong></p>
+<ul>
+<li>Timer在执行所有定时任务时只会创建一个线程，如果某个任务执行时间大于其周期长度，就会导致本次任务还在执行，而下一个周期任务已经需要开始执行了。一个线程内两个任务只能顺序执行，对于之前需要执行但是还没有执行的任务，有两种情况<ul>
+<li>当前任务执行完马上执行那些任务（顺序）</li>
+<li>把那些任务丢掉，不去执行</li>
+</ul>
+</li>
+<li>如果TimerTask抛出一个未检查异常，那么Timer线程就会被终止掉，之前已经被调度但尚未执行的TimerTask就不会再执行了，新的任务也不能被调度了</li>
+<li>Timer支持基于绝对时间的调度机制，不支持基于相对时间的调度机制，所以任务的执行对系统时钟变化很敏感</li>
+</ul>
+<p><strong>实现原理</strong></p>
+<p>Timer有两个内部类，TaskQueue和TimerThread，TaskQueue其实就是一个最小堆（按TimerTask下一个任务执行时间点先后排序），存放该Timer的所有TimerTask，而TimerThread就是Timer新开的检查兼执行线程，在run中用一个死循环不断检查是否有任务需要开始执行了，有就执行它（任务还是在这个线程执行）</p>
+<p>Timer实现的关键就是调度方法，也就是TimerThread的run方法：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">mainLoop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// Someone killed this Thread, behave as if Timer cancelled</span>
+        <span class="token keyword">synchronized</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            newTasksMayBeScheduled <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            queue<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Eliminate obsolete references</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>具体逻辑在mainLoop方法中实现：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">mainLoop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">TimerTask</span> task<span class="token punctuation">;</span>
+            <span class="token keyword">boolean</span> taskFired<span class="token punctuation">;</span>
+            <span class="token keyword">synchronized</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// Wait for queue to become non-empty</span>
+                <span class="token keyword">while</span> <span class="token punctuation">(</span>queue<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> newTasksMayBeScheduled<span class="token punctuation">)</span>
+                    queue<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>queue<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span> <span class="token comment">// Queue is empty and will forever remain; die</span>
+
+                <span class="token comment">// Queue nonempty; look at first evt and do the right thing</span>
+                <span class="token keyword">long</span> currentTime<span class="token punctuation">,</span> executionTime<span class="token punctuation">;</span>
+                task <span class="token operator">=</span> queue<span class="token punctuation">.</span><span class="token function">getMin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">synchronized</span><span class="token punctuation">(</span>task<span class="token punctuation">.</span>lock<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>task<span class="token punctuation">.</span>state <span class="token operator">==</span> <span class="token class-name">TimerTask</span><span class="token punctuation">.</span>CANCELLED<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                        queue<span class="token punctuation">.</span><span class="token function">removeMin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">continue</span><span class="token punctuation">;</span>  <span class="token comment">// No action required, poll queue again</span>
+                    <span class="token punctuation">&#125;</span>
+                    currentTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    executionTime <span class="token operator">=</span> task<span class="token punctuation">.</span>nextExecutionTime<span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>taskFired <span class="token operator">=</span> <span class="token punctuation">(</span>executionTime<span class="token operator">&lt;=</span>currentTime<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span>task<span class="token punctuation">.</span>period <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// Non-repeating, remove</span>
+                            queue<span class="token punctuation">.</span><span class="token function">removeMin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                            task<span class="token punctuation">.</span>state <span class="token operator">=</span> <span class="token class-name">TimerTask</span><span class="token punctuation">.</span>EXECUTED<span class="token punctuation">;</span>
+                        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span> <span class="token comment">// Repeating task, reschedule</span>
+                            queue<span class="token punctuation">.</span><span class="token function">rescheduleMin</span><span class="token punctuation">(</span>
+                              task<span class="token punctuation">.</span>period<span class="token operator">&lt;</span><span class="token number">0</span> <span class="token operator">?</span> currentTime   <span class="token operator">-</span> task<span class="token punctuation">.</span>period
+                                            <span class="token operator">:</span> executionTime <span class="token operator">+</span> task<span class="token punctuation">.</span>period<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token punctuation">&#125;</span>
+                    <span class="token punctuation">&#125;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>taskFired<span class="token punctuation">)</span> <span class="token comment">// Task hasn't yet fired; wait</span>
+                    queue<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span>executionTime <span class="token operator">-</span> currentTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>taskFired<span class="token punctuation">)</span>  <span class="token comment">// Task fired; run it, holding no locks</span>
+                task<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>task = queue.getMin();</code>：取出最先需要执行的那个TimerTask，然后判断executionTime&lt;&#x3D;currentTime，其中executionTime就是该TimerTask下一个周期任务执行的时间点，currentTime为当前时间点，如果说为true，说明该任务需要执行了（可能是一个过时任务，应该在过去某个时间点开始执行，但由于某种原因还没有执行）判断<code>task.period == 0</code>，Timer中period默认为0，表示该TimerTask只会执行一次，不会周期性地不断执行，所以为true就移除掉该TimerTask，然后待会会执行该TimerTask一次，如果<code>task.period</code>不为0，那就分小于0和大于0。</p>
+<ul>
+<li>如果调用的是schedule方法，那么<code>task.period</code>就小于0：</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">schedule</span><span class="token punctuation">(</span><span class="token class-name">TimerTask</span> task<span class="token punctuation">,</span> <span class="token keyword">long</span> delay<span class="token punctuation">,</span> <span class="token keyword">long</span> period<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>delay <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"Negative delay."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>period <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"Non-positive period."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sched</span><span class="token punctuation">(</span>task<span class="token punctuation">,</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>delay<span class="token punctuation">,</span> <span class="token operator">-</span>period<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>如果调用的是scheduleAtFixedRate方法，那么<code>task.period</code>就大于0：</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">scheduleAtFixedRate</span><span class="token punctuation">(</span><span class="token class-name">TimerTask</span> task<span class="token punctuation">,</span> <span class="token keyword">long</span> delay<span class="token punctuation">,</span> <span class="token keyword">long</span> period<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>delay <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"Negative delay."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>period <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"Non-positive period."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sched</span><span class="token punctuation">(</span>task<span class="token punctuation">,</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>delay<span class="token punctuation">,</span> period<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>当<code>period &lt; 0</code>时，当前TimerTask下一次开始执行任务的时间就会被设置为<code>currentTime - task.period</code>，可以理解为定时任务被重置，从现在开始，period周期间隔（那么之前预想在这个间隔内 存在的任务执行就没有了）后执行一次任务，这种情况就是Timer的任务可能丢失的问题。</p>
+<p>当<code>period &gt; 0</code>时，当前TimerTask下一次开始执行任务的时间就会被设置为<code>executionTime + task.period</code>，即下一次任务还是按原来的算，如果这时<code>executionTime + task.period</code>还先于currentTime，那么下一个任务就会马上执行，也就是Timer的任务快速调用问题。</p>
+<p><strong>以上是第一种缺陷发生的原因</strong></p>
+<p><strong>以下是第二种缺陷发生的原因</strong></p>
+<p>mainLoop中在死循环只catch了一个InterruptedException，也就是当前线程被中断，Timer的线程是可以执行一段时间，然后被操作系统挂在一边休息，然后又回来执行的。但如果抛出其它异常，那么整个循环就会挂掉。外层的run方法也没有catch任何异常。这时就会造成线程泄露，同时之前已经被调度但尚未执行的TimerTask就不会再执行了，新的任务也不能被调度了。</p>
+<p><strong>解决缺陷</strong></p>
+<p>对于Timer的缺陷，我们可以考虑使用ScheduledThreadPoolExecutor来替代。Timer是基于绝对时间的，对系统时间比较敏感，而ScheduledThreadPoolExecutor则是基于相对时间，Timer是内部单一线程的，而ScheduledThreadPoolExecutor内部是线程池，所以可以支持多个任务并发执行。</p>
+<p><strong>解决问题一：</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ScheduledExecutorTest</span> <span class="token punctuation">&#123;</span>  
+    <span class="token keyword">private</span>  <span class="token class-name">ScheduledExecutorService</span> scheduExec<span class="token punctuation">;</span>  
+
+    <span class="token keyword">public</span> <span class="token keyword">long</span> start<span class="token punctuation">;</span>  
+
+    <span class="token class-name">ScheduledExecutorTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>  
+        <span class="token keyword">this</span><span class="token punctuation">.</span>scheduExec <span class="token operator">=</span>  <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newScheduledThreadPool</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
+        <span class="token keyword">this</span><span class="token punctuation">.</span>start <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">&#125;</span>  
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">timerOne</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>  
+        scheduExec<span class="token punctuation">.</span><span class="token function">schedule</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"timerOne,the time:"</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+                <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>  
+                    <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">4000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+                <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  
+                    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+                <span class="token punctuation">&#125;</span>  
+            <span class="token punctuation">&#125;</span>  
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token number">1000</span><span class="token punctuation">,</span><span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">&#125;</span>  
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">timerTwo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>  
+        scheduExec<span class="token punctuation">.</span><span class="token function">schedule</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"timerTwo,the time:"</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token punctuation">&#125;</span>  
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token number">2000</span><span class="token punctuation">,</span><span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">&#125;</span>  
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  
+        <span class="token class-name">ScheduledExecutorTest</span> test <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ScheduledExecutorTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        test<span class="token punctuation">.</span><span class="token function">timerOne</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        test<span class="token punctuation">.</span><span class="token function">timerTwo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">&#125;</span>  
+<span class="token punctuation">&#125;</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>运行结果</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">timerOne,the time:1003  
+timerTwo,the time:2005  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>解决问题二：</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ScheduledThreadPoolDemo01</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+
+        <span class="token keyword">final</span> <span class="token class-name">TimerTask</span> task1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TimerTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">final</span> <span class="token class-name">TimerTask</span> task2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TimerTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"task2 invoked!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">ScheduledExecutorService</span> pool <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newScheduledThreadPool</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pool<span class="token punctuation">.</span><span class="token function">schedule</span><span class="token punctuation">(</span>task1<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pool<span class="token punctuation">.</span><span class="token function">scheduleAtFixedRate</span><span class="token punctuation">(</span>task2<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>运行结果</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">task2 invoked!  
+task2 invoked!  
+task2 invoked!  
+task2 invoked!  
+task2 invoked! <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>埋点：</strong></p>
+<p>这时都是并行执行的，当设置定时job时，假设5s执行一次缓存job，某一次job执行了6s，会在第5s产生一个相同任务与之前的任务并行执行，会不会产生脏数据？？</p>
+<hr>
+<h3 id="1-3-Leader-Follower模式"><a href="#1-3-Leader-Follower模式" class="headerlink" title="1.3 Leader-Follower模式"></a>1.3 Leader-Follower模式</h3><hr>
+<p>假设有一堆等待执行的任务（一般是存放在一个队列中排好序），而所有的工作线程只会有一个<strong>leader线程</strong>，其它线程都是<strong>follower线程</strong>，只有<strong>leader线程</strong>能执行任务，而剩下的<strong>follower线程</strong>则处于休眠状态。当<strong>leader线程</strong>拿到任务后，执行任务前，自己会变为<strong>follower线程</strong>，同时会选出一个新的<strong>leader线程</strong>，然后才去执行任务。如果此时有下一个任务，就是这个新的<strong>leader线程</strong>去执行了，并重复这个过程。当之前那个执行任务的线程执行完毕再回来时，如果此时已经没有任务或者已经有其他线程作为<strong>leader线程</strong>那么自己就休眠了，如果此时有任务但没有<strong>leader线程</strong>，那么会重新成为<strong>leader线程</strong>去执行任务。</p>
+<ul>
+<li>避免了没必要的唤醒和阻塞操作，这样会更加有效且节省资源</li>
+</ul>
+<hr>
+<h2 id="第二章-定时任务框架quartz"><a href="#第二章-定时任务框架quartz" class="headerlink" title="第二章 定时任务框架quartz"></a>第二章 定时任务框架quartz</h2><hr>
+<h3 id="2-1-使用简介"><a href="#2-1-使用简介" class="headerlink" title="2.1 使用简介"></a>2.1 使用简介</h3><hr>
+<p>Quartz是<code>OpenSymphony</code>开源组织在<code>Job scheduling</code>领域又一个开源项目，完全由Java开发，可以用来执行定时任务，类似于<code>java.util.Timer</code>。但是相较于Timer， Quartz增加了很多功能：</p>
+<ul>
+<li>持久性作业：保持调度定时的状态</li>
+<li>作业管理：对调度作业进行有效的管理</li>
+</ul>
+<hr>
+<h3 id="2-2-各组件介绍"><a href="#2-2-各组件介绍" class="headerlink" title="2.2 各组件介绍"></a>2.2 各组件介绍</h3><hr>
+<ul>
+<li><strong>任务Job：</strong>需要实现的任务类，实现execute()方法，执行后完成任务</li>
+<li><strong>触发器Tigger：</strong>包括SimpleTrigger和CronTrigger</li>
+<li><strong>调度器Scheduler：</strong>任务调度器，负责基于Trigger触发器，来执行Job任务</li>
+</ul>
+<p><strong>Demo</strong></p>
+<p>一、导包</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token comment">&lt;!-- 核心包 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.quartz-scheduler<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>quartz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.3.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token comment">&lt;!-- 工具包 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.quartz-scheduler<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>quartz-jobs<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.3.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>二、新建任务，实现Job接口</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyJob</span> <span class="token keyword">implements</span> <span class="token class-name">Job</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">JobExecutionContext</span> context<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">JobExecutionException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"任务被执行了。。。"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>三、main方法，创建调度器、jobDetail实例、trigger实例</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1.创建调度器 Scheduler</span>
+    <span class="token class-name">SchedulerFactory</span> factory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StdSchedulerFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Scheduler</span> scheduler <span class="token operator">=</span> factory<span class="token punctuation">.</span><span class="token function">getScheduler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token comment">// 2.创建JobDetail实例，并与MyJob类绑定(Job执行内容)</span>
+    <span class="token class-name">JobDetail</span> job <span class="token operator">=</span> <span class="token class-name">JobBuilder</span><span class="token punctuation">.</span><span class="token function">newJob</span><span class="token punctuation">(</span><span class="token class-name">MyJob</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span><span class="token string">"job1"</span><span class="token punctuation">,</span> <span class="token string">"group1"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token comment">// 3.构建Trigger实例,每隔30s执行一次</span>
+    <span class="token class-name">Trigger</span> trigger <span class="token operator">=</span> <span class="token class-name">TriggerBuilder</span><span class="token punctuation">.</span><span class="token function">newTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span><span class="token string">"trigger1"</span><span class="token punctuation">,</span> <span class="token string">"group1"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">startNow</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">withSchedule</span><span class="token punctuation">(</span><span class="token function">simpleSchedule</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">withIntervalInSeconds</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">repeatForever</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token comment">// 4.执行，开启调度器</span>
+    scheduler<span class="token punctuation">.</span><span class="token function">scheduleJob</span><span class="token punctuation">(</span>job<span class="token punctuation">,</span> trigger<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    scheduler<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token comment">//主线程睡眠1分钟，然后关闭调度器</span>
+    <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MINUTES<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    scheduler<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>JobDetail</strong></p>
+<p>绑定Job，是一个任务实例，为Job添加了许多扩展参数</p>
+<ul>
+<li>name：任务名称</li>
+<li>group：任务分组，默认分组DEFAULT</li>
+<li>jobClass：任务类，就是上面Demo中的MyJob的路径</li>
+<li>jobDataMap：任务参数信息，JobDetail、Trigger都可以使用JobDataMap来设置一些参数或信息</li>
+</ul>
+<p>每次Scheduler调度执行一个Job的时候，首先会拿到对应的Job，然后创建该Job实例，再去执行Job中execute()的内容，任务执行结束后，关联的Job对象实例会被释放，且会被JVM GC清除。</p>
+<p><strong>为什么设计成JobDetail + Job，不直接使用Job</strong></p>
+<p>JobDetail定义的是任务数据，而真正的执行逻辑在Job中。这是因为任务是有可能并发执行的，如果Scheduler直接使用Job，就会存在对同一个Job实例并发访问的问题，而JobDetail &amp; Job方式，Scheduler每次执行，都会根据JobDetail创建一个新的Job实例，这样就可以规避并发访问的问题</p>
+<p><strong>Job</strong></p>
+<ul>
+<li>@DisallowConcurrentExecution：禁止并发的执行同一个job定义（JobDetail定义的）的多个实例</li>
+<li>@PersistJobDataAfterExecution：持久化JobDetail中的JobDataMap（对Trigger中的datamap无效），如果一个任务不是持久化的，则当它没有触发器关联它的时候，Quartz会从schedule中删除它</li>
+<li>如果一个任务请求恢复，一般是该任务执行期间发生了系统崩溃或者其他关闭进程的操作，当服务再次启动的时候，会再次执行该任务，此时，JobExecutionContext.isRecovering()会返回true</li>
+</ul>
+<p><strong>JobExecutionContext</strong></p>
+<ul>
+<li>当Scheduler调用一个Job，就会将JobExecutionContext传递给Job的execute()方法</li>
+<li>Job能通过JobExecutionContext对象访问到Quartz运行时候到环境以及Job本身的明细数据</li>
+</ul>
+<p>任务实现的execute()方法，可以通过context参数获取</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Job</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">JobExecutionContext</span> context<span class="token punctuation">)</span>
+        <span class="token keyword">throws</span> <span class="token class-name">JobExecutionException</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在Builder建造过程中，可以使用如下方法：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token function">usingJobData</span><span class="token punctuation">(</span><span class="token string">"tiggerDataMap"</span><span class="token punctuation">,</span> <span class="token string">"测试传参"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在execute方法中获取：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">context<span class="token punctuation">.</span><span class="token function">getTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getJobDataMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"tiggerDataMap"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+context<span class="token punctuation">.</span><span class="token function">getJobDetail</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getJobDataMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"tiggerDataMap"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<p><strong>JobDataMap</strong></p>
+<p>保存任务实例的状态信息</p>
+<ul>
+<li>jobDetail：默认只在Job被添加到调度程序（任务执行计划表）scheduler的时候，存储一次关于该任务的状态信息数据，可以使用注解**@PersistJobDataAfterExecution**注解标明在一个任务执行完毕之后就存储一次</li>
+<li>trigger：任务被多个触发器引用的时候，根据不同的触发时机，可以提供不同的输入条件</li>
+</ul>
+<p>Job状态参数，有状态的job可以理解为多次job调用期间可以持有一些状态信息，这些状态信息存储在JobDataMap中</p>
+<p>而默认无状态的job，每次调用时都会创建一个新的JobDataMap</p>
+<p>示例：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//多次调用 Job 的时候，将参数保留在 JobDataMap</span>
+<span class="token annotation punctuation">@PersistJobDataAfterExecution</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JobStatus</span> <span class="token keyword">implements</span> <span class="token class-name">Job</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">JobExecutionContext</span> context<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">JobExecutionException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">long</span> count <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span> context<span class="token punctuation">.</span><span class="token function">getJobDetail</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getJobDataMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"count"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"当前执行，第"</span> <span class="token operator">+</span> count <span class="token operator">+</span> <span class="token string">"次"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        context<span class="token punctuation">.</span><span class="token function">getJobDetail</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getJobDataMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"count"</span><span class="token punctuation">,</span> <span class="token operator">++</span>count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 当前执行，第1次</span>
+<span class="token comment">// [main] INFO org.quartz.core.QuartzScheduler - Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.</span>
+<span class="token comment">// 当前执行，第2次</span>
+<span class="token comment">// 当前执行，第3次</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">JobDetail</span> job <span class="token operator">=</span> <span class="token class-name">JobBuilder</span><span class="token punctuation">.</span><span class="token function">newJob</span><span class="token punctuation">(</span><span class="token class-name">JobStatus</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span><span class="token string">"statusJob"</span><span class="token punctuation">,</span> <span class="token string">"group1"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">usingJobData</span><span class="token punctuation">(</span><span class="token string">"count"</span><span class="token punctuation">,</span> <span class="token number">1L</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p><strong>Trigger</strong></p>
+<p><strong>优先级</strong></p>
+<p>同时触发的trigger之间才会比较优先级，如果trigger是可恢复的，在恢复后再调度时，优先级不变</p>
+<p><strong>定时启动&#x2F;关闭</strong></p>
+<p>Trigger可以设置任务的开始结束时间，Scheduler会根据参数进行触发</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Calendar</span> instance <span class="token operator">=</span> <span class="token class-name">Calendar</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Date</span> startTime <span class="token operator">=</span> instance<span class="token punctuation">.</span><span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+instance<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Calendar</span><span class="token punctuation">.</span>MINUTE<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Date</span> endTime <span class="token operator">=</span> instance<span class="token punctuation">.</span><span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+<span class="token comment">// 3.构建Trigger实例</span>
+<span class="token class-name">Trigger</span> trigger <span class="token operator">=</span> <span class="token class-name">TriggerBuilder</span><span class="token punctuation">.</span><span class="token function">newTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span><span class="token string">"trigger1"</span><span class="token punctuation">,</span> <span class="token string">"group1"</span><span class="token punctuation">)</span>
+    <span class="token comment">// 开始时间</span>
+    <span class="token punctuation">.</span><span class="token function">startAt</span><span class="token punctuation">(</span>startTime<span class="token punctuation">)</span>
+    <span class="token comment">// 结束时间</span>
+    <span class="token punctuation">.</span><span class="token function">endAt</span><span class="token punctuation">(</span>endTime<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在job中也能拿到对应的时间，并进行业务判断</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">JobExecutionContext</span> context<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">JobExecutionException</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"任务执行。。。"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getStartTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">getTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getEndTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>misfire 错过触发</strong></p>
+<p>判断条件：</p>
+<ul>
+<li>Job到达触发时间时没有被执行</li>
+<li>被执行的延迟时间超过了Quartz配置的misfireThreshold阈值</li>
+</ul>
+<p>产生原因：</p>
+<ul>
+<li>当Job到达触发时间时，所有线程都被其他Job占用，没有可用的线程</li>
+<li>在Job需要触发的时间点，schedule停止了（可能是意外停止）</li>
+<li>Job使用了@DisallowConcurrentExecution注解，Job不能并发执行，当达到下一个job执行点的时候，上一个任务还没完成</li>
+<li>Job指定了过去的开始时间，例如当前时间时9点00分00秒，指定开始时间为8点00分00秒</li>
+</ul>
+<p>策略：</p>
+<ul>
+<li><p>默认：<strong>MISFIRE_INSTRUCTION_SMART_POLICY</strong></p>
+</li>
+<li><p><strong>SimpleTrigger</strong></p>
+<ul>
+<li><strong>now*相关的策略</strong>：会立即执行第一个misfire的任务，同时会修改startTime和repeatCount，因此会重新计算finalFireTime，原计划执行时间会被打乱。</li>
+<li><strong>next*相关的策略</strong>：不会立即执行misfire的任务，也不会修改startTime和repeatCount，因此finalFireTime不会被重新计算，misfire也是按照原计划进行执行。</li>
+</ul>
+</li>
+<li><p><strong>CronTrigger</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 所有的misfile任务马上执行</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+ 
+<span class="token comment">// 在Trigger中默认选择MISFIRE_INSTRUCTION_FIRE_ONCE_NOW 策略</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> MISFIRE_INSTRUCTION_SMART_POLICY <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ 
+<span class="token comment">// 合并部分misfire，正常执行下一个周期的任务。</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> MISFIRE_INSTRUCTION_FIRE_ONCE_NOW <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+ 
+<span class="token comment">// 所有的misfire都不管，执行下一个周期的任务。</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> MISFIRE_INSTRUCTION_DO_NOTHING <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<p><strong>SimpleTrigger</strong></p>
+<p>这是比较简单的一类触发器，用它能实现很多基础的应用，使用场景：</p>
+<ul>
+<li>在指定时间段内，执行一次任务</li>
+</ul>
+<p>最基础的Trigger不设置循环，设置开始时间</p>
+<ul>
+<li>在指定时间段内，循环执行任务</li>
+</ul>
+<p>在上一个场景基础上加上循环间隔，可以指定永远循环、运行指定次数</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">TriggerBuilder</span><span class="token punctuation">.</span><span class="token function">newTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">withSchedule</span><span class="token punctuation">(</span><span class="token class-name">SimpleScheduleBuilder</span>
+                  <span class="token punctuation">.</span><span class="token function">simpleSchedule</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">.</span><span class="token function">withIntervalInSeconds</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">.</span><span class="token function">repeatForever</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  
+  <span class="token comment">//withRepeatCount(count) 是重复次数，实际运行次数为 count+1</span>
+  <span class="token class-name">TriggerBuilder</span><span class="token punctuation">.</span><span class="token function">newTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">withSchedule</span><span class="token punctuation">(</span><span class="token class-name">SimpleScheduleBuilder</span>
+                  <span class="token punctuation">.</span><span class="token function">simpleSchedule</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">.</span><span class="token function">withIntervalInSeconds</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">.</span><span class="token function">withRepeatCount</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>立即开始，指定时间结束</li>
+</ul>
+<p><strong>CronTrigger</strong></p>
+<p>CronTrigger是基于日历的任务调度器，在实际应用中更加常用</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">TriggerBuilder</span><span class="token punctuation">.</span><span class="token function">newTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">withSchedule</span><span class="token punctuation">(</span><span class="token class-name">CronScheduleBuilder</span><span class="token punctuation">.</span><span class="token function">cronSchedule</span><span class="token punctuation">(</span><span class="token string">"* * * * * ?"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  
+  <span class="token comment">// Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：</span>
+
+<span class="token comment">//（1） Seconds Minutes Hours DayofMonth Month DayofWeek Year</span>
+
+<span class="token comment">//（2）Seconds Minutes Hours DayofMonth Month DayofWeek</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">说明</th>
+<th align="center">是否必填</th>
+<th align="center">允许填写的值</th>
+<th align="center">允许的通配符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">秒</td>
+<td align="center">是</td>
+<td align="center">0-59</td>
+<td align="center">, - * &#x2F;</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">分</td>
+<td align="center">是</td>
+<td align="center">0-59</td>
+<td align="center">, - * &#x2F;</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">小时</td>
+<td align="center">是</td>
+<td align="center">0-23</td>
+<td align="center">, - * &#x2F;</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">日</td>
+<td align="center">是</td>
+<td align="center">1-31</td>
+<td align="center">, - * ? &#x2F; L W</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">月</td>
+<td align="center">是</td>
+<td align="center">1-12 or JAN-DEC</td>
+<td align="center">, - * &#x2F;</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">周</td>
+<td align="center">是</td>
+<td align="center">1-7 or SUN-SAT</td>
+<td align="center">, - * ? &#x2F; L #</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">年</td>
+<td align="center">否</td>
+<td align="center">empty或1970-2099</td>
+<td align="center">, - * &#x2F;</td>
+</tr>
+</tbody></table>
+<p>（1）*：**表示匹配该域的任意值。假如在Minutes域使用, 即表示每分钟都会触发事件。</p>
+<p>（2）?：只能用在DayofMonth和DayofWeek两个域。它也匹配域的任意值，但实际不会。因为DayofMonth和DayofWeek会相互影响。例如想在每月的20日触发调度，不管20日到底是星期几，则只能使用如下写法： 13 13 15 20 * ?, 其中最后一位只能用？，而不能使用 **，如果使用 *表示不管星期几都会触发，实际上并不是这样。</p>
+<p>（3）-：表示范围。例如在Minutes域使用5-20，表示从5分到20分钟每分钟触发一次</p>
+<p>（4）&#x2F;：表示起始时间开始触发，然后每隔固定时间触发一次。例如在Minutes域使用5&#x2F;20,则意味着5分钟触发一次，而25，45等分别触发一次.</p>
+<p>（5）,：表示列出枚举值。例如：在Minutes域使用5,20，则意味着在5和20分每分钟触发一次。</p>
+<p>（6）L：表示最后，只能出现在DayofWeek和DayofMonth域。如果在DayofWeek域使用5L,意味着在最后的一个星期四触发。</p>
+<p>（7）W:表示有效工作日(周一到周五),只能出现在DayofMonth域，系统将在离指定日期的最近的有效工作日触发事件。例如：在 DayofMonth使用5W，如果5日是星期六，则将在最近的工作日：星期五，即4日触发。如果5日是星期天，则在6日(周一)触发；如果5日在星期一到星期五中的一天，则就在5日触发。另外一点，W的最近寻找不会跨过月份 。</p>
+<p>（8）LW:这两个字符可以连用，表示在某个月最后一个工作日，即最后一个星期五。</p>
+<p>（9）#:用于确定每个月第几个星期几，只能出现在DayofWeek域。例如在4#1，表示某月的第二个星期三。</p>
+<p><strong>并发执行</strong></p>
+<p>上面有并发和非并发的区别，通过 @DisallowConcurrentExecution 注解来实现阻止并发。</p>
+<p>Quartz定时任务默认都是并发执行的，不会等待上一次任务执行完毕，只要间隔时间到就会执行, 如果定时任执行太长，会长时间占用资源，导致其它任务堵塞。</p>
+<p>@DisallowConcurrentExecution 禁止并发执行多个相同定义的JobDetail, 这个注解是加在Job类上的, 但意思并不是不能同时执行多个Job, 而是不能并发执行同一个Job Definition(由JobDetail定义), 但是可以同时执行多个不同的JobDetail。</p>
+<p>举例说明，我们有一个Job类,叫做SayHelloJob, 并在这个Job上加了这个注解, 然后在这个Job上定义了很多个JobDetail, 如sayHelloToJoeJobDetail, sayHelloToMikeJobDetail, 那么当scheduler启动时, 不会并发执行多个sayHelloToJoeJobDetail或者sayHelloToMikeJobDetail, 但可以同时执行sayHelloToJoeJobDetail跟sayHelloToMikeJobDetail</p>
+<p>@PersistJobDataAfterExecution 同样, 也是加在Job上。可以将JobDataMap持久化，表示当正常执行完Job后, JobDataMap中的数据应该被改动, 以被下一次调用时用。</p>
+<p>当使用 @PersistJobDataAfterExecution 注解时, 为了避免并发时, 存储数据造成混乱, 强烈建议把 @DisallowConcurrentExecution 注解也加上。</p>
+<p>测试代码，设定的时间间隔为3秒,但job执行时间是5秒,设置 @DisallowConcurrentExecution以 后程序会等任务执行完毕以后再去执行,否则会在3秒时再启用新的线程执行。</p>
+<p><strong>Schedule</strong></p>
+<p>调度器，基于trigger的设定执行job</p>
+<p>1、SchedulerFactory</p>
+<ul>
+<li>创建Scheduler</li>
+<li>DirectSchedulerFactory：在代码里定制Scheduler参数</li>
+<li>StdSchedulerFactory：读取classpath下的quartz.properties配置来实例化Scheduler</li>
+</ul>
+<p>2、JobStore</p>
+<p>存储运行时的信息，包括Trigger、Scheduler、JobDetail、业务锁等</p>
+<ul>
+<li>RAMJobStore：内存实现，轻量级，速度快，应用重启时相关信息都将丢失</li>
+<li>JobStoreTX：JDBC，事务由Quartz管理，不参与全局事务</li>
+<li>JobStoreCMT：JDBC，使用容器（全局）事务，不会自己去管理事务，在完成数据库操作时，它不会自己提交，由全局事务管理程序，对全局事务进行统一的提交或者回滚</li>
+<li>ClusteredJobStore：集群实现</li>
+<li>TerracottaJobStore：Terracotta中间件</li>
+</ul>
+<hr>
+<h3 id="2-3-springboot整合quartz"><a href="#2-3-springboot整合quartz" class="headerlink" title="2.3 springboot整合quartz"></a>2.3 springboot整合quartz</h3><hr>
+<p><strong>引入依赖</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-quartz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>定义Job类</strong></p>
+<p>继承QuartzJobBean</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>priv<span class="token punctuation">.</span>quartz</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>quartz<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>scheduling<span class="token punctuation">.</span>quartz<span class="token punctuation">.</span></span><span class="token class-name">QuartzJobBean</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Date</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 11:24
+ * @description:
+ **/</span>
+<span class="token annotation punctuation">@PersistJobDataAfterExecution</span>
+<span class="token annotation punctuation">@DisallowConcurrentExecution</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">QuartzJob</span> <span class="token keyword">extends</span> <span class="token class-name">QuartzJobBean</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">executeInternal</span><span class="token punctuation">(</span><span class="token class-name">JobExecutionContext</span> jobExecutionContext<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">JobExecutionException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>jobExecutionContext<span class="token punctuation">.</span><span class="token function">getScheduler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSchedulerInstanceId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"taskName = "</span> <span class="token operator">+</span> jobExecutionContext<span class="token punctuation">.</span><span class="token function">getJobDetail</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行时间："</span> <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>配置调度器</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>priv<span class="token punctuation">.</span>quartz</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>quartz<span class="token punctuation">.</span></span><span class="token class-name">Scheduler</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Autowired</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>config<span class="token punctuation">.</span></span><span class="token class-name">YamlPropertiesFactoryBean</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Bean</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Configuration</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>core<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">ClassPathResource</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>scheduling<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">ThreadPoolTaskExecutor</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>scheduling<span class="token punctuation">.</span>quartz<span class="token punctuation">.</span></span><span class="token class-name">SchedulerFactoryBean</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>sql<span class="token punctuation">.</span></span><span class="token class-name">DataSource</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Properties</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">Executor</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 11:33
+ * @description:
+ **/</span>
+<span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SchedulerConfig</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">DataSource</span> dataSource<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">Scheduler</span> <span class="token function">scheduler</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">schedulerFactoryBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getScheduler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">SchedulerFactoryBean</span> <span class="token function">schedulerFactoryBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">SchedulerFactoryBean</span> factoryBean <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SchedulerFactoryBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        factoryBean<span class="token punctuation">.</span><span class="token function">setSchedulerName</span><span class="token punctuation">(</span><span class="token string">"test-scheduler"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 注入数据源</span>
+        factoryBean<span class="token punctuation">.</span><span class="token function">setDataSource</span><span class="token punctuation">(</span>dataSource<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 选项</span>
+        factoryBean<span class="token punctuation">.</span><span class="token function">setApplicationContextSchedulerContextKey</span><span class="token punctuation">(</span><span class="token string">"application"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        factoryBean<span class="token punctuation">.</span><span class="token function">setQuartzProperties</span><span class="token punctuation">(</span><span class="token function">quartzProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 读取线程池配置</span>
+        factoryBean<span class="token punctuation">.</span><span class="token function">setTaskExecutor</span><span class="token punctuation">(</span><span class="token function">schedulerThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> factoryBean<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">Properties</span> <span class="token function">quartzProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">YamlPropertiesFactoryBean</span> yamlPropertiesFactoryBean <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">YamlPropertiesFactoryBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        yamlPropertiesFactoryBean<span class="token punctuation">.</span><span class="token function">setResources</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ClassPathResource</span><span class="token punctuation">(</span><span class="token string">"/spring-quartz.yml"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        yamlPropertiesFactoryBean<span class="token punctuation">.</span><span class="token function">afterPropertiesSet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> yamlPropertiesFactoryBean<span class="token punctuation">.</span><span class="token function">getObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> <span class="token class-name">Executor</span> <span class="token function">schedulerThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ThreadPoolTaskExecutor</span> taskExecutor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolTaskExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 核心线程数</span>
+        taskExecutor<span class="token punctuation">.</span><span class="token function">setCorePoolSize</span><span class="token punctuation">(</span><span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 最大线程数</span>
+        taskExecutor<span class="token punctuation">.</span><span class="token function">setMaxPoolSize</span><span class="token punctuation">(</span><span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 容量</span>
+        taskExecutor<span class="token punctuation">.</span><span class="token function">setQueueCapacity</span><span class="token punctuation">(</span><span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> taskExecutor<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>监听器</strong></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>priv<span class="token punctuation">.</span>quartz</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>quartz<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Autowired</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span></span><span class="token class-name">ApplicationListener</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>event<span class="token punctuation">.</span></span><span class="token class-name">ContextRefreshedEvent</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span></span><span class="token class-name">Component</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 14:09
+ * @description:
+ **/</span>
+<span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StartApplicationListener</span> <span class="token keyword">implements</span> <span class="token class-name">ApplicationListener</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ContextRefreshedEvent</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">Scheduler</span> scheduler<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onApplicationEvent</span><span class="token punctuation">(</span><span class="token class-name">ContextRefreshedEvent</span> contextRefreshedEvent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 开启调度</span>
+        <span class="token comment">// JobDetail有一个类型为JobKey的重要属性key，相当于是该任务的键值，JobDetail注册到任务调度器Schedule中的时候，key值不允许重复。</span>
+        <span class="token comment">// 整个任务调度过程中，Quartz都是通过JobKey来唯一识别JobDetail的。试图将重复键值的JobDetail注册到任务调度器中而不指定覆盖的话，是不被允许的。</span>
+        <span class="token comment">// JobKey可以通过JobBuilder的withIdentity方法指定，该方法接收name或name+group参数，从而唯一确定一个任务JobDetail。</span>
+        <span class="token comment">// 如果在JobDetail创建过程中不指定JobKey的话，Quartz会通过UUID的方式为该任务生成一个唯一的key值。</span>
+        <span class="token comment">// 所以，同一个Job实现类（也就是同一个任务），可以通过不同的JobKey值注册到任务调度器中、绑定不同的触发器执行</span>
+
+        <span class="token class-name">TriggerKey</span> triggerKey <span class="token operator">=</span> <span class="token class-name">TriggerKey</span><span class="token punctuation">.</span><span class="token function">triggerKey</span><span class="token punctuation">(</span><span class="token string">"trigger1"</span><span class="token punctuation">,</span> <span class="token string">"group1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Trigger</span> trigger <span class="token operator">=</span> scheduler<span class="token punctuation">.</span><span class="token function">getTrigger</span><span class="token punctuation">(</span>triggerKey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>trigger <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 触发器</span>
+                trigger <span class="token operator">=</span> <span class="token class-name">TriggerBuilder</span><span class="token punctuation">.</span><span class="token function">newTrigger</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                        <span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span>triggerKey<span class="token punctuation">)</span>
+                        <span class="token punctuation">.</span><span class="token function">withSchedule</span><span class="token punctuation">(</span><span class="token class-name">CronScheduleBuilder</span><span class="token punctuation">.</span><span class="token function">cronSchedule</span><span class="token punctuation">(</span><span class="token string">"0/10 * * * * ?"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                        <span class="token punctuation">.</span><span class="token function">startNow</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token class-name">JobDetail</span> jobDetail <span class="token operator">=</span> <span class="token class-name">JobBuilder</span><span class="token punctuation">.</span><span class="token function">newJob</span><span class="token punctuation">(</span><span class="token class-name">QuartzJob</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">withIdentity</span><span class="token punctuation">(</span><span class="token string">"job1"</span><span class="token punctuation">,</span> <span class="token string">"group1"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                scheduler<span class="token punctuation">.</span><span class="token function">scheduleJob</span><span class="token punctuation">(</span>jobDetail<span class="token punctuation">,</span> trigger<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                scheduler<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">SchedulerException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2024/08/08/Quartz/">https://tonkyshan.cn/2024/08/08/Quartz/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/Java/"># Java</a>
+                    
+                        <a href="../../../../tags/Quartz/"># Quartz</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../12/03/gRPC/">gRPC</a>
+            
+            
+            <a class="next" rel="next" href="../../../01/02/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93%E2%80%94%E2%80%942023/">个人总结——2023</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

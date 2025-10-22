@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>Kafka | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Kafka</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 10, 2025&nbsp;&nbsp;15:38:09</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/kafka/">kafka</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><hr>
+<h3 id="一、软件介绍"><a href="#一、软件介绍" class="headerlink" title="一、软件介绍"></a>一、软件介绍</h3><hr>
+<img src="https://tonkyshan.cn/img/20251010154925.png" alt="线程与线程之间的数据交互" style="zoom: 85%;" />
+
+<img src="https://tonkyshan.cn/img/20251010155744.png" alt="进程与进程之间的数据交互" style="zoom: 85%;" />
+
+<p><strong>存在的问题</strong></p>
+<img src="https://tonkyshan.cn/img/20251010160622.png" alt="线程与线程之间的数据交互" style="zoom: 85%;" />
+
+<p>当一个线程50&#x2F;s写入，一个线程30&#x2F;s消费，那么随着时间的累积会造成大量内存消耗，如果把这部分数据写入磁盘中，长期看来，也会造成大量资源消耗浪费，甚至系统不可用</p>
+<img src="https://tonkyshan.cn/img/20251010165330.png" alt="进程与进程之间的数据交互" style="zoom: 85%;" />
+
+<p>当一个进程需要向多个进程发送数据时，需要发送两份，造成资源浪费，如果数据不同，且指定对象，要增加逻辑和不同标记作为区分，增加进程复杂度，消耗资源，降低系统的反应速度，重复发送也会对系统吞吐量造成影响</p>
+<p><strong>解决方法</strong></p>
+<img src="https://tonkyshan.cn/img/20251010171229.png" alt="解决方法" style="zoom: 85%;" />
+
+<p>进程之间不直接通讯，增加缓冲区，降低进程之间的耦合性，对数据生产和接收进行调整，使传输过程平稳高效</p>
+<p>接收方也可以根据自己的业务场景动态的从缓冲区中获取自己想要的数据，发送方只考虑向缓冲区中发送数据就可以了</p>
+<p>缓冲区：对数据进行中转和临时存储，并不会对数据进行处理，所以这个第三方软件也被叫做消息中间件</p>
+<hr>
+<h3 id="二、JMS"><a href="#二、JMS" class="headerlink" title="二、JMS"></a>二、JMS</h3><hr>
+<img src="https://tonkyshan.cn/img/20251010194212.png" alt="JMS" style="zoom: 85%;" />
+
+<p><strong>P2P模型</strong> </p>
+<p>点对点 point-to-point</p>
+<img src="https://tonkyshan.cn/img/20251010201005.png" alt="P2P模型" style="zoom: 85%;" />
+
+<p><strong>PS模型</strong></p>
+<p>同组的人只能有一个人消费，不同组的人可以消费</p>
+<img src="https://tonkyshan.cn/img/20251010203646.png" alt="PS模型" style="zoom: 85%;" />
+
+<p>RabbitMQ、ActiveMQ、RocketMQ、Kafka</p>
+<p><strong>消息中间件对比</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">特性</th>
+<th align="center">ActiveMQ</th>
+<th align="center">RabbitMQ</th>
+<th align="center">RocketMQ</th>
+<th align="center">Kafka</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">单机吞吐量</td>
+<td align="center">万级，比RocketMQ、Kafka低一个数量级</td>
+<td align="center">万级，比RocketMQ、Kafka低一个数量级</td>
+<td align="center">10万级，支持高吞吐</td>
+<td align="center">10万级，支持高吞吐</td>
+</tr>
+<tr>
+<td align="center">Topic数量对吞吐量的影响</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Topic可以达到几百&#x2F;几千量级</td>
+<td align="center">Topic可以达到几百量级，如果更多的话，吞吐量会大幅度下降</td>
+</tr>
+<tr>
+<td align="center">时效性</td>
+<td align="center">ms级</td>
+<td align="center">微妙级别，延迟最低</td>
+<td align="center">ms级</td>
+<td align="center">ms级</td>
+</tr>
+<tr>
+<td align="center">可用性</td>
+<td align="center">高、基于主从架构实现高可用</td>
+<td align="center">高，基于主从架构实现高可用</td>
+<td align="center">非常高，分布式架构</td>
+<td align="center">非常高，分布式架构</td>
+</tr>
+<tr>
+<td align="center">消息可靠性</td>
+<td align="center">有较低的概率丢失数据</td>
+<td align="center">基本不丢</td>
+<td align="center">经过参数优化，可以做到0丢失</td>
+<td align="center">经过参数优化，可以做到0丢失</td>
+</tr>
+<tr>
+<td align="center">功能支持</td>
+<td align="center">MQ领域的功能极其完备</td>
+<td align="center">并发能力强，性能极好，延时很低</td>
+<td align="center">MQ功能较为完善，分布式，扩展性好</td>
+<td align="center">功能较为简单，支持简单的MQ功能，在大数据领域被广泛使用</td>
+</tr>
+<tr>
+<td align="center">其他</td>
+<td align="center">很早的软件，社区不是很活跃</td>
+<td align="center">开源，稳定，社区活跃度高</td>
+<td align="center">阿里开发，社区活跃度不高</td>
+<td align="center">开源，高吞吐量，社区活跃度极高</td>
+</tr>
+</tbody></table>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2025/10/10/Kafka/">https://tonkyshan.cn/2025/10/10/Kafka/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"># 大数据</a>
+                    
+                        <a href="../../../../tags/kafka/"># kafka</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="../../../07/31/Python%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%85%A5%E9%97%A8/">Python机器学习入门</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>SQL查询优化器浅析 | 青训营笔记 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SQL查询优化器浅析 | 青训营笔记</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 25, 2022&nbsp;&nbsp;20:11:15</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="SQL查询优化器浅析"><a href="#SQL查询优化器浅析" class="headerlink" title="SQL查询优化器浅析"></a>SQL查询优化器浅析</h2><hr>
+<h3 id="1-1大数据体系和SQL"><a href="#1-1大数据体系和SQL" class="headerlink" title="1.1大数据体系和SQL"></a>1.1大数据体系和SQL</h3><hr>
+<p><strong>大数据体系中的SQL</strong></p>
+<p>分析引擎：</p>
+<ul>
+<li>批式分析：Spark、Hive、MR</li>
+<li>实时分析：Flink</li>
+<li>交互分析：Presto、ClickHouse、Doris</li>
+</ul>
+<p><strong>SQL的处理流程</strong></p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1d8c8519152d4a2e933a74323eab39b2~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<p><strong>一、Parser</strong></p>
+<p>String -&gt; AST(Abstract Syntax Tree)：抽象语法树</p>
+<ul>
+<li>词法分析：把源码中的一行行代码按照事先规定好的格式分隔成一个个单词符号(token)，拆分字符串，得到关键字、数值常量、字符串常量、运算符号等token</li>
+<li>语法分析：分析词法分析后的一个个token，是否能够拼装，组成事先规定好的语法中的一个，将token组成AST node(抽象语法树的节点)，最终得到一个AST</li>
+</ul>
+<p>实现：递归下降(ClickHouse)，Flex和Bison(PostgreSQL)，JavaCC(Flink)，Antlr(Presto，Spark)</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/eb13d9ac41f44ca5ae07b91d6c72498d~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<p><strong>二、Analyzer和Logical Plan</strong></p>
+<p><strong>Analyzer</strong></p>
+<ul>
+<li>检查并绑定Database、Table、Column等元信息</li>
+<li>SQL的合法性检查，比如min，max，avg的输入是数值</li>
+<li>AST -&gt; Logical Plan</li>
+</ul>
+<p><strong>Logical Plan</strong></p>
+<ul>
+<li>逻辑地描述SQL对应的分步骤计算操作</li>
+<li>计算操作：算子(operator)</li>
+</ul>
+<p>逻辑优化阶段对逻辑计划应用标准的基于规则的优化，这些规则包括常量合并、谓词下推、列裁切、布尔表达式简化等。</p>
+<blockquote>
+<p>tips：查询优化</p>
+<p>SQL只是声明式语言，用户只描述做什么，没有告诉数据库怎么做，目标：找到一个正确且执行代价最小的物理执行计划。</p>
+</blockquote>
+<p><strong>三、Physical Plan和Executor</strong></p>
+<p><strong>Physical Plan</strong></p>
+<p>执行计划子树</p>
+<ul>
+<li>目标：最小化网络数据传输</li>
+<li>利用上数据的物理分布(数据亲和性)</li>
+<li>增加Shuffle算子</li>
+</ul>
+<p><strong>Executor</strong></p>
+<ul>
+<li>单机并行：cache、pipeline、SIMD</li>
+<li>多机并行：一个fragment对应多个实例</li>
+</ul>
+<blockquote>
+<p>总结：One SQL rules big data all</p>
+</blockquote>
+<hr>
+<h3 id="1-2常见的查询优化器"><a href="#1-2常见的查询优化器" class="headerlink" title="1.2常见的查询优化器"></a>1.2常见的查询优化器</h3><hr>
+<p><strong>一、查询优化器的分类</strong></p>
+<p><strong>Top-down Optimizer</strong></p>
+<ul>
+<li>从目标输出开始，由上往下遍历计划树，找到最完整的最优执行计划</li>
+<li>例子：Volcano&#x2F;Cascade、SQLServer</li>
+</ul>
+<p><strong>Bottom-up Optimizer</strong></p>
+<ul>
+<li>从零开始，由下往上遍历计划树，找到完整的执行计划</li>
+<li>例子：System R、PostgreSQL、IBM DB2</li>
+</ul>
+<p><strong>Rule-based Optimizer(RBO)</strong></p>
+<p>基于规则的优化器</p>
+<ul>
+<li>根据关系代数等价语义，重写查询</li>
+<li>基于启发式规则</li>
+<li>会访问表的元信息(catalog)，不会涉及具体的表数据(data)</li>
+</ul>
+<p><strong>Cost-based Optimizer(CBO)</strong></p>
+<p>基于代价的优化器</p>
+<ul>
+<li>使用一个模型估算执行计划的代价，选择代价最小的执行计划</li>
+</ul>
+<p><strong>二、RBO</strong></p>
+<p>关系代数</p>
+<ul>
+<li>运算符：Select(σ)，Project(Π)，Join(▷◁)，Rename(ρ)，Union(U)等</li>
+<li>等价变化：结合律，交换律，传递性</li>
+</ul>
+<p>优化原则</p>
+<ul>
+<li>Read data less and faster(I&#x2F;O)</li>
+<li>Transfer data less and faster(Network)</li>
+<li>Process data less and faster(CPU &amp; Memory)</li>
+</ul>
+<p>1.列裁剪：类似剪枝思想，把不用的列减去，减少参与的数据量</p>
+<p>2.谓词下推：把类似&gt;&lt;&#x3D;≠之类的条件下推，减少数据量</p>
+<p>3.传递闭包：创建新谓词，下推，减少数据量</p>
+<p>4.Runtime Filter：通过在join的probe端提前过滤掉那些不会命中join的输入数据来大幅减少join中的数据传输和计算，从而减少整体的执行时间</p>
+<p><strong>小结</strong></p>
+<ul>
+<li><p>优点：实现简单，优化速度快</p>
+</li>
+<li><p>缺点：不保证得到最优的执行计划</p>
+<ul>
+<li>单表扫描：索引扫描(随机I&#x2F;O) vs 全表扫描(顺序I&#x2F;O)：如果查询的数据非常不均衡，索引扫描可能不如全表扫描</li>
+<li>Join的实现：Hash Join vs SortMerge Join</li>
+<li>两表Hash Join：用小表构建哈希表—如何找到小表</li>
+<li>多表Join</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c9bf31459dc14df3beb6a1e5e70afd8d~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<p><strong>三、CBO</strong></p>
+<p><strong>概念</strong></p>
+<p>使用一个模型估算执行计划的代价，选择代价最小的执行计划</p>
+<ul>
+<li>执行计划的代价等于所有算子的执行代价总和</li>
+<li>通过RBO得到所有可能的等价执行计划</li>
+</ul>
+<p>算子代价：CPU、内存、磁盘I&#x2F;O，网络I&#x2F;O等代价</p>
+<ul>
+<li>和算子输入数据的统计信息有关：输入、输出结果的行数，每行大小等<ul>
+<li>叶子算子Scan：通过统计原始表数据得到</li>
+<li>中间算子：根据一定推到规则，通过下层算子的统计信息推导得到</li>
+</ul>
+</li>
+<li>和具体的算子类型，以及算子的物理实现有关</li>
+<li>例：Spark Join算子代价：<code>weight * row_count + (1.0 - weight) * size</code></li>
+</ul>
+<p><strong>统计信息</strong></p>
+<p>原始表统计信息</p>
+<ul>
+<li>表或者分区级别：行数、行平均大小、表在磁盘中占用了多少字节等</li>
+<li>列级别：min、max、num nulls、num not nulls、num distinct value(NDV)、histogram等</li>
+</ul>
+<p>推导统计信息</p>
+<ul>
+<li>**选择率(selectivity)**：对于某一个过滤条件，查询会从表中返回多大比例的数据</li>
+<li>**基数(cardinality)**：在查询计划中常指算子需要处理的行数</li>
+</ul>
+<blockquote>
+<p>tips：准确的cardinality，远比代价模型本身重要。</p>
+</blockquote>
+<p><strong>统计信息的收集方式</strong></p>
+<ul>
+<li>在DDL里指定需要收集的统计信息，数据库会在数据写入时收集或者更新统计信息</li>
+<li>手动执行explain analyze statement，触发数据库收集或者更新统计信息</li>
+<li>动态采样<code>SELECT count(*) FROM table_name</code></li>
+</ul>
+<p><strong>统计信息推导规则</strong></p>
+<p>假设列和列之间是独立的，列的值是均匀分布</p>
+<p><strong>Filter Selectivity</strong></p>
+<ul>
+<li>AND：fs(a AND b) &#x3D; fs(a) * fs(b)</li>
+<li>OR：fs(a OR b) &#x3D; fs(a) + fs(b) - (fs(a) * fs(b))</li>
+<li>NOT：fs(NOT a) &#x3D; 1.0 - fs(a)</li>
+<li>等于条件(x &#x3D; literal)<ul>
+<li>literal &lt; min &amp;&amp; literal &gt; max ： 0</li>
+<li>1 &#x2F; NDV</li>
+</ul>
+</li>
+<li>小于条件(x &lt; literal)<ul>
+<li>literal &lt; min：0</li>
+<li>literal &gt; max：1</li>
+<li>(literal - min) &#x2F; (max - min)</li>
+</ul>
+</li>
+</ul>
+<p><strong>问题</strong></p>
+<p>假设经常与现实不符：列与列之间不独立</p>
+<p><strong>执行计划枚举</strong></p>
+<p>通常使用<strong>贪心算法</strong>或者<strong>动态规划</strong>选出最优的执行计划</p>
+<p><strong>TPS-DS Q25</strong></p>
+<p>关闭CBO时：</p>
+<ul>
+<li>Shuffle数据量太大</li>
+<li>执行效率差</li>
+</ul>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/226f5e7b8ffa4881a6bbc03cfb7d2dd6~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<p>开启CBO时：</p>
+<ul>
+<li>减少了90%的Shuffle数据量</li>
+<li>3.4倍的加速比</li>
+</ul>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/70ad5e76f7574b41a7281edc2921199a~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<p><strong>CBO小结</strong></p>
+<ul>
+<li>CBO使用代价模型和统计信息估算执行计划的代价</li>
+<li>CBO使用贪心或者动态规划算法寻找最优执行计划</li>
+<li>在大数据场景下CBO对查询性能非常重要</li>
+</ul>
+<hr>
+<h3 id="1-3社区开源实践"><a href="#1-3社区开源实践" class="headerlink" title="1.3社区开源实践"></a>1.3社区开源实践</h3><hr>
+<p><strong>概览</strong></p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/97d82e9225844c6a93b0e7d5fed8d301~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<p><strong>Apache Calcite</strong></p>
+<p>Apache Calcite 是面向 Hadoop 新的查询引擎，它提供了标准的 SQL 语言、多种查询优化和连接各种数据源的能力。</p>
+<p>Calcite 的目标是“ one size fits all （一种方案适应所有需求场景）”， 希望能为不同计算平台和数据源提供统一的查询引擎，并以类似传统数据库的访问方式（SQL 和高级查询优化）来访问Hadoop 上的数据。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/aca371f40e9f48aaa806c330f5068a73~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+<ul>
+<li>One size fits all：统一的SQL查询引擎</li>
+<li>模块化、插件化，稳定可靠</li>
+<li>支持异构数据模型<ul>
+<li>关系型</li>
+<li>半结构化</li>
+<li>流式</li>
+<li>地理空间数据</li>
+</ul>
+</li>
+<li>内置RBO和CBO</li>
+</ul>
+<p><strong>Calcite RBO</strong></p>
+<p>HepPlanner</p>
+<ul>
+<li>优化规则(Rule)<ul>
+<li>Pattern：匹配表达式子树</li>
+<li>等价变换：得到新的表达式</li>
+</ul>
+</li>
+<li>四种匹配规则<ul>
+<li>ARBITRARY&#x2F;DEPTH_FIRST：深度优先</li>
+<li>TOP_DOWN：拓扑排序</li>
+<li>BOTTOM_UP：与拓扑排序顺序相反</li>
+</ul>
+</li>
+<li>遍历所有的rule，直到没有rule可以被触发</li>
+<li>优化速度快，实现简单，但是不能保证最优</li>
+<li>内置100+优化规则</li>
+</ul>
+<p>VolcanoPlanner</p>
+<ul>
+<li>基于<strong>Volcano&#x2F;Cascade</strong>框架</li>
+<li>成本最优假设</li>
+<li>Memo：存储候选执行计划<ul>
+<li>Group：等价计划集合</li>
+</ul>
+</li>
+<li>Top_down：动态规划搜索</li>
+</ul>
+<p>VolcanoPlanner</p>
+<ul>
+<li>应用Rule搜索候选计划</li>
+<li>Memo<ul>
+<li>本质：AND&#x2F;OR graph</li>
+<li>共享子树减少内存开销</li>
+</ul>
+</li>
+<li>Group winner：目前的最优计划</li>
+<li>剪枝(Branch-and-bound pruning)：减少搜索空间</li>
+<li>Top-down遍历：选择winner构建最优执行计划</li>
+</ul>
+<p><strong>总结</strong></p>
+<ul>
+<li>主流的查询优化器都包含RBO和CBO</li>
+<li>Apache Calcite是大数据领域很流行的查询优化器</li>
+<li>Apache Calcite RBO定义了许多优化规则，使用pattern匹配子树，执行等价变换</li>
+<li>Apache Calcite CBO基于Volcano&#x2F;Cascade框架</li>
+<li>Volcano&#x2F;Cascade的精髓: Memo、 动态规划、剪枝</li>
+</ul>
+<hr>
+<h3 id="1-4前沿趋势"><a href="#1-4前沿趋势" class="headerlink" title="1.4前沿趋势"></a>1.4前沿趋势</h3><hr>
+<p>对SQL优化器的新要求：</p>
+<ul>
+<li>引擎架构的进化：储存计算分离，一体化(HTAP，HSAP，HTSAP)</li>
+<li>Cloud云原生 serverless</li>
+<li>湖仓一体：Query Federation</li>
+<li><strong>DATA + AI</strong></li>
+</ul>
+<p><strong>DATA + AI</strong></p>
+<p>AI4DB</p>
+<ul>
+<li>自配置<ul>
+<li>智能调参(OtterTune，QTune)</li>
+<li>负载预测&#x2F;调度</li>
+</ul>
+</li>
+<li>自诊断和自愈合：错误恢复和迁移</li>
+<li>自优化：<ul>
+<li>统计信息估计</li>
+<li>代价估计</li>
+<li>学习型优化器</li>
+<li>索引&#x2F;视图推荐</li>
+</ul>
+</li>
+</ul>
+<p>DB4AI</p>
+<ul>
+<li>内嵌人工智能算法(MLSQL，SQLFlow)</li>
+<li>内嵌机器学习框架(SparkML，Alink，dl-on-flink)</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2022/07/25/SQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8%E6%B5%85%E6%9E%90-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/">https://tonkyshan.cn/2022/07/25/SQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8%E6%B5%85%E6%9E%90-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"># 大数据</a>
+                    
+                        <a href="../../../../tags/SQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8/"># SQL查询优化器</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../31/%E6%B5%81-%E6%89%B9-OLAP%E4%B8%80%E4%BD%93%E7%9A%84Flink%E5%BC%95%E6%93%8E-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/">流/批/OLAP一体的Flink引擎 | 青训营笔记</a>
+            
+            
+            <a class="next" rel="next" href="../../02/Git/">Git</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>
