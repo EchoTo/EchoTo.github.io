@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>Exactly Once语义在Flink中的实现 | 青训营笔记 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Exactly Once语义在Flink中的实现 | 青训营笔记</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 1, 2022&nbsp;&nbsp;9:50:12</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Exactly-Once语义在Flink中的实现"><a href="#Exactly-Once语义在Flink中的实现" class="headerlink" title="Exactly Once语义在Flink中的实现"></a>Exactly Once语义在Flink中的实现</h2><hr>
+<h3 id="1-1数据流和动态表"><a href="#1-1数据流和动态表" class="headerlink" title="1.1数据流和动态表"></a>1.1数据流和动态表</h3><hr>
+<p><strong>专有名词：</strong></p>
+<ul>
+<li><p>Stream：数据流</p>
+</li>
+<li><p>Dynamic Table：动态表</p>
+</li>
+<li><p>Continuous Queries：连续查询</p>
+</li>
+<li><p>Append-only Stream：Append-only 流（只有 INSERT 消息）</p>
+</li>
+<li><p>Retract Stream：Retract 流（同时包含 INSERT 消息和 DELETE 消息）</p>
+</li>
+<li><p>Upsert Stream：Upsert 流（同时包含 UPSERT 消息和 DELETE 消息）</p>
+</li>
+<li><p>Changelog：包含 INSERT&#x2F;UPDATE&#x2F;DELETE 等的数据流</p>
+</li>
+<li><p>State：计算处理逻辑的状态</p>
+</li>
+</ul>
+<p><strong>动态表：随时间不断变化的表</strong>，在任意时刻，可以像查询静态批处理表一样查询它们</p>
+<p><strong>一、传统SQL和流处理</strong></p>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>SQL</th>
+<th>流处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>处理数据的有界性</td>
+<td>处理的表是有界的</td>
+<td>流是一个无限元组序列</td>
+</tr>
+<tr>
+<td>处理数据的完整性</td>
+<td>执行查询可以访问完整的数据</td>
+<td>执行查询无法访问所有的数据</td>
+</tr>
+<tr>
+<td>执行时间</td>
+<td>批处理查询产生固定大小结果后终止</td>
+<td>查询不断更新结果，永不终止</td>
+</tr>
+</tbody></table>
+<p>实时流的查询特点：</p>
+<ul>
+<li>查询从不终止</li>
+<li>查询结果会不断更新，并且会产生一个新的动态表</li>
+<li>结果的动态表也可转换成输出的实时流</li>
+</ul>
+<p><strong>二、数据流与动态表的转换</strong></p>
+<ul>
+<li>动态表到实时流的转换<ul>
+<li>Append-only Stream：Append-only 流（只有 INSERT 消息）</li>
+<li><strong>Retract Stream</strong>：Retract 流（同时包含 INSERT 消息和 DELETE 消息）</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1604b80a4a914de3a369d5d94433768a~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
+<ul>
+<li>Upsert Stream：Upsert 流（同时包含 UPSERT 消息和 DELETE 消息）</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9fd495a37cb348ad87b4f3f5c82a66aa~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
+<ul>
+<li>算子状态<ul>
+<li>在流式计算中，会存在有<strong>状态</strong>的计算逻辑（算子），有状态的算子典型处理逻辑如下图所示：</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3749eaf076e24a509110bb8e4eaba03a~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
+<p>比如，需要计算某个用户在网上的点击量，该用户在网站当前的总点击次数就是算子状态，对于新的输入数据，先判断是否是该用户的点击行为，如果是，则将保留的点击次数（状态）增加一，并将当前累加结果输出。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a01d767f3e2046b4bed880e2e1970064~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2022/08/01/Exactly-Once%E8%AF%AD%E4%B9%89%E5%9C%A8Flink%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/">https://tonkyshan.cn/2022/08/01/Exactly-Once%E8%AF%AD%E4%B9%89%E5%9C%A8Flink%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"># 大数据</a>
+                    
+                        <a href="../../../../tags/Exactly-Once%E8%AF%AD%E4%B9%89%E5%9C%A8Flink%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0/"># Exactly Once语义在Flink中的实现</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../11/24/ES6/">ES6</a>
+            
+            
+            <a class="next" rel="next" href="../../../07/31/%E6%B5%81-%E6%89%B9-OLAP%E4%B8%80%E4%BD%93%E7%9A%84Flink%E5%BC%95%E6%93%8E-%E9%9D%92%E8%AE%AD%E8%90%A5%E7%AC%94%E8%AE%B0/">流/批/OLAP一体的Flink引擎 | 青训营笔记</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

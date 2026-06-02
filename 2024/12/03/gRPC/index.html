@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>gRPC | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">gRPC</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 3, 2024&nbsp;&nbsp;11:45:42</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/gRPC/">gRPC</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="GRPC"><a href="#GRPC" class="headerlink" title="GRPC"></a>GRPC</h1><hr>
+<h2 id="1-1-gRPC简介"><a href="#1-1-gRPC简介" class="headerlink" title="1.1 gRPC简介"></a>1.1 gRPC简介</h2><hr>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">gRPC是由Google开源的一个高性能的RPC框架。由Stubby Google内部RPC演化而来，2015年正式开源。支持异构系统的RPC
+
+云原生时代是一个RPC标准： 
+容器：
+<span class="token list punctuation">*</span> 容器化 Docker go语言开发
+<span class="token list punctuation">*</span> 服务编排 k8s go语言开发
+<span class="token list punctuation">*</span> gRPC go语言开发
+ 
+ gRPC的设计思路
+ 		1、网络通信 ---> gRPC自己封装网络通信的部分 提供多语言的 网络通信的封装(C Java[Netty] GO)
+ 		2、协议 ---> HTTP2 传输数据的时候 二进制数据内容 支持双向流(双工) 连接的多路复用
+ 		3、序列化 ---> 基于文本 JSON 基于二进制 Java原生序列化方式 Thrift二进制的序列化 压缩二进制序列化
+ 									protobuf (Protocol Buffers) Google开源的一种序列化方式 时间效率和空间效率是JSON的3-5倍
+ 									IDL语言
+ 		4、代理的创建 ---> 让调用者像调用本地方法一样 去调用远端的服务方法
+ 											stub
+ gRPC 与 ThriftRPC 区别
+ 		共性：支持异构语言的RPC
+ 		区别：
+ 				1、网络通信 Thrift TCP（传输层协议）专属协议  传输速度更快
+ 				 				 	gRPC	HTTP2（应用层协议）        更方便整合
+ 			  2、性能角度 Thrift RPC 性能 高于 gRPC
+ 			  3、gRPC 大厂背书 (Google) 云原生时代与其他组件合作的顺利。所以gRPC应用更加广泛
+ gRPC的好处
+ 		1、高效的进行进程间通信
+ 		2、支持多种语言 原生支持C Go Java实现 C语言版本上扩展 C++ C# NodeJS Python Ruby PHP...
+ 		3、支持多平台运行 Linux Android IOS MacOS Windows
+ 		4、gRPC序列化方式采用protobuf 效率更高
+ 		5、使用HTTP2协议
+ 		6、大厂的背书<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="2-1-HTTP2-0协议"><a href="#2-1-HTTP2-0协议" class="headerlink" title="2.1 HTTP2.0协议"></a>2.1 HTTP2.0协议</h2><hr>
+<p><strong>HTTP1.x协议</strong></p>
+<p>一、HTTP1.0协议</p>
+<ul>
+<li>请求 响应的模式</li>
+<li>短连接协议（无状态协议）</li>
+<li>HTTP基于TCP协议，TCP协议是长连接协议，为什么HTTP是短连接协议？HTTP自己主动切断的，互联网发展前期，服务器中通信长时间处于连接状态会导致资源不足</li>
+<li>传输数据 文本结构 单工（只能客户端找服务端，服务器不能主动向客户端推送数据） 无法实现服务端推送 变相实现推送（客户端轮询的方式）</li>
+</ul>
+<p>二、HTTP1.1协议</p>
+<ul>
+<li>有限的长连接 （保持一段时间 keepalived决定）</li>
+<li>升级的方式 WebSocket </li>
+<li>双工 实现服务器向客户端推送</li>
+</ul>
+<p>三、共性</p>
+<ul>
+<li>传输数据文本格式 可读性好但是效率差</li>
+<li>本质上HTTP1.x协议无法实现双工通信，是因为升级了WebSocket才实现的双工通信</li>
+<li>资源的请求 需要发送多次请求 建立多个连接才可以完成</li>
+</ul>
+<p><strong>HTTP2.0协议</strong></p>
+<ul>
+<li>HTTP2.0协议是一个二进制协议，效率高于HTTP1.x协议，可读性差</li>
+<li>可以实现双工通信</li>
+<li>一个请求 一个连接 可以请求多个数据 【多路复用】</li>
+</ul>
+<p><strong>HTTP2.0协议的三个概念</strong></p>
+<ul>
+<li>数据流 stream</li>
+<li>消息 message</li>
+<li>帧 frame</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20240802160614.png" alt="20240802160614.png" style="zoom:40%;" />
+
+<p>概念</p>
+<ul>
+<li>数据流的优先级：可以通过为不同的stream设置权重，来限制不同流的传输顺序</li>
+<li>流控：client发送的数据太快了，server处理不过来，通知client暂停数据的发送</li>
+</ul>
+<hr>
+<h2 id="2-2-Protocol-Buffers【protobuf】"><a href="#2-2-Protocol-Buffers【protobuf】" class="headerlink" title="2.2 Protocol Buffers【protobuf】"></a>2.2 Protocol Buffers【protobuf】</h2><hr>
+<p>protobuf 是一种与编程语言无关【IDL】 与具体平台无关【OS】它定义的中间语言，可以方便的在client与server中进行RPC的数据传输</p>
+<p>protobuf 两种版本 proto2 proto3，但是目前主流应用的都是proto3</p>
+<p>protobuf 的使用需要安装的protobuf的编译器，编译器的目的是把protobuf的IDL语言，转换成具体某一种开发语言</p>
+<p><strong>protobuf编译器的安装</strong></p>
+<p><code>brew install prorobuf</code></p>
+<img src="/Users/test/Library/Application Support/typora-user-images/截屏2024-08-05 09.57.54.png" alt="截屏2024-08-05 09.57.54" style="zoom:50%;" />
+
+<img src="https://tonkyshan.cn/img/20240805095754.png" alt="20240805095754.png" style="zoom:50%;" />
+
+<p><strong>protobuf语法</strong></p>
+<ul>
+<li><p>文件格式</p>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">.proto<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>版本设定</p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>注释</p>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">1、单行注释     //
+2、多行注释     /<span class="token italic"><span class="token punctuation">*</span><span class="token content"> </span><span class="token punctuation">*</span></span>/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li><p>与Java语言相关的语法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 后续protobuf生成的java代码 一个源文件还是多个源文件  xx.java</span>
+option java_multiple_files <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 指定protobuf生成的类 放置在哪个包中</span>
+option java_package <span class="token operator">=</span> <span class="token string">"com.suns"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 指定protobuf生成的外部类的名字（管理内部类【内部类才是真正开发使用的类】）</span>
+option java_outer_classname <span class="token operator">=</span> <span class="token string">"UserService"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>逻辑包【了解】</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// protobuf对于文件内容的管理</span>
+<span class="token keyword">package</span> <span class="token namespace">xxx</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li><p>导入</p>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">UserService.proto
+
+OrderService.proto
+	import "xxx/UserService.proto";<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>基本类型</p>
+<img src="https://tonkyshan.cn/img/20240805163224.png" alt="20240805163224.png" style="zoom:90%;" />
+</li>
+<li><p>枚举类型</p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">enum</span> <span class="token class-name">SEASON</span> <span class="token punctuation">&#123;</span>
+	SPRING <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	SUMMER <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 枚举的值 必须是0开始</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>消息 Message</p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">message</span> <span class="token class-name">LoginRequest</span> <span class="token punctuation">&#123;</span>
+	<span class="token builtin">string</span> username <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">// 1这个值 是字段在message中的编号</span>
+	<span class="token builtin">string</span> password <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+	<span class="token builtin">int32</span> age <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 编号 从1开始 到 2^29-1 注意：19000 - 19999的编号不能用，因为它是protobuf自己保留的。 </span>
+<span class="token operator">-</span> singular <span class="token punctuation">:</span> 这个字段的值 只能是<span class="token number">0</span>个或者<span class="token number">1</span>个（默认关键字） null <span class="token string">"123456"</span>
+<span class="token operator">-</span> <span class="token keyword">repeated</span>
+
+<span class="token keyword">message</span> <span class="token class-name">Result</span> <span class="token punctuation">&#123;</span>
+	<span class="token builtin">string</span> content <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token keyword">repeated</span> <span class="token builtin">string</span> status <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span> <span class="token comment">// 这个字段的返回值 是多个 等价于Java List Protobuf getStatusList() --> List</span>
+<span class="token punctuation">&#125;</span>
+
+protobuf【grpc】
+<span class="token comment">// 可以定义多个消息</span>
+
+<span class="token keyword">message</span> <span class="token class-name">LoginRequest</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">message</span> <span class="token class-name">LoginResponse</span> <span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span>
+
+消息可以嵌套
+<span class="token keyword">message</span> <span class="token class-name">SearchResponse</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">message</span> <span class="token class-name">Result</span> <span class="token punctuation">&#123;</span>
+		<span class="token builtin">string</span> url <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+		<span class="token builtin">string</span> title <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	
+	<span class="token builtin">string</span> xxx <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token builtin">int32</span> yyy <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+	<span class="token positional-class-name class-name">Result</span> ppp <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+SearchResponse<span class="token punctuation">.</span>Result
+
+<span class="token keyword">message</span> <span class="token class-name">AAA</span> <span class="token punctuation">&#123;</span>
+	<span class="token builtin">string</span> xxx <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token positional-class-name class-name">SearchResponse<span class="token punctuation">.</span>Result</span> yyy <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">oneof</span>【其中一个】
+<span class="token keyword">message</span> <span class="token class-name">SimpleMessage</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">oneof</span> test_oneof <span class="token punctuation">&#123;</span>
+		<span class="token builtin">string</span> name <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+		<span class="token builtin">int32</span> age <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// test_oneof值只能为name和age中的一个</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>服务</p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">service</span> <span class="token class-name">HelloService</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">rpc</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span><span class="token punctuation">(</span><span class="token class-name">HelloResponse</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 里面是可以定义多个服务方法</span>
+<span class="token comment">// 定义多个服务接口</span>
+<span class="token comment">// gRPC 服务 4个服务方式</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<hr>
+<h2 id="2-3-gRPC开发"><a href="#2-3-gRPC开发" class="headerlink" title="2.3 gRPC开发"></a>2.3 gRPC开发</h2><hr>
+<ul>
+<li><p>项目结构</p>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">一、xxx-api模块
+	定义 protobuf IDL语言
+	并且通过命令创建具体的代码，后续client server引入使用
+	1、message
+	2、service
+二、xxx-server模块
+	1、实现api模块中定义的服务接口
+	2、发布gRPC服务（创建服务端程序）
+三、xxx-client模块
+	1、创建服务端stub（代理）
+	2、基于代理（stub）RPC调用<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>api模块</p>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">一、.proto文件 书写protobuf的IDL
+二、[了解]protoc命令 把proto文件中的IDL 转换成编程语言
+	protoc --java_out=/xxx/xxx   /xxx/xxx/xx.proto
+三、[实战] maven插件 进行protobuf IDL 文件的编译，并把他放置在IDEA具体位置 
+	grpc-java<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>导入依赖和插件</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.grpc<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>grpc-netty-shaded<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.30.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>runtime<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.grpc<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>grpc-protobuf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.26.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.grpc<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>grpc-stub<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.26.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.tomcat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>annotations-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>6.0.53<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>provided<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>extensions</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>extension</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>kr.motd.maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>os-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.7.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>extension</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>extensions</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.xolstice.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>protobuf-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.6.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>protoSourceRoot</span><span class="token punctuation">></span></span>src/main/proto<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>protoSourceRoot</span><span class="token punctuation">></span></span>
+                    <span class="token comment">&lt;!-- protoc命令 —— message信息 --></span>
+                  	<span class="token comment">&lt;!-- $&#123;&#125; maven内置变量 获取当前操作系统类型 坑：macos M芯片运行时可能出问题--></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>protocArtifact</span><span class="token punctuation">></span></span>com.google.protobuf:protoc:3.21.7:exe:$&#123;os.detected.classifier&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>protocArtifact</span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pluginId</span><span class="token punctuation">></span></span>grpc-java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pluginId</span><span class="token punctuation">></span></span>
+                  	<span class="token comment">&lt;!-- 生成服务接口 service --></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pluginArtifact</span><span class="token punctuation">></span></span>io.grpc:protoc-gen-grpc-java:1.52.1:exe:$&#123;os.detected.classifier&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pluginArtifact</span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>outputDirectory</span><span class="token punctuation">></span></span>$&#123;basedir&#125;/src/main/java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>outputDirectory</span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>clearOutputDirectory</span><span class="token punctuation">></span></span>false<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>clearOutputDirectory</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executions</span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>execution</span><span class="token punctuation">></span></span>
+                        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>goals</span><span class="token punctuation">></span></span>
+                            <span class="token comment">&lt;!-- 编译消息对象 --></span>
+                            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>goal</span><span class="token punctuation">></span></span>compile<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>goal</span><span class="token punctuation">></span></span>
+                            <span class="token comment">&lt;!-- 依赖消息对象,生成接口服务 --></span>
+                            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>goal</span><span class="token punctuation">></span></span>compile-custom<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>goal</span><span class="token punctuation">></span></span>
+                        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>goals</span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>execution</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executions</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>proto文件</p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">option</span> java_multiple_files <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token keyword">option</span> java_package <span class="token operator">=</span> <span class="token string">"com.grpc"</span><span class="token punctuation">;</span>
+<span class="token keyword">option</span> java_outer_classname <span class="token operator">=</span> <span class="token string">"HelloProto"</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * IDL文件 目的 发布RPC服务，service ---> message    message &lt;---
+ */</span>
+
+<span class="token keyword">message</span> <span class="token class-name">HelloRequest</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">string</span> name <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">message</span> <span class="token class-name">HelloResponse</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">string</span> result <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">service</span> <span class="token class-name">HelloService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Hello</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>点击protobuf:compile 生成message相关信息</p>
+<img src="https://tonkyshan.cn/img/20240808161140.png" alt="20240808161140.png" />
+
+<p>点击protobuf:compile-custom 生成接口相关信息</p>
+<img src="https://tonkyshan.cn/img/20240808162857.png" alt="20240808162857.png" />
+
+<img src="https://tonkyshan.cn/img/20240806102313.png" alt="20240806102313.png" style="zoom:50%;" />
+</li>
+<li><p>xxx-server服务端模块</p>
+</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 1、实现业务接口 添加具体的功能 （MyBatis + MySQL）</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:19
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServiceImpl</span> <span class="token keyword">extends</span> <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceImplBase</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">/*
+       1、接受client提交的参数
+       2、业务处理service + dao调用对应的业务功能
+       3、提供返回值
+     */</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span> responseObserver<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//1、接收client的请求参数</span>
+        <span class="token class-name">String</span> name <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2、业务处理</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name Parameter："</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3、封装响应</span>
+        <span class="token comment">//3.1、创建相应对象的构造者</span>
+        <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3.2、填充数据</span>
+        builder<span class="token punctuation">.</span><span class="token function">setResult</span><span class="token punctuation">(</span><span class="token string">"hello method invoke ok"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3.3、封装相应</span>
+        <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> helloResponse <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span>helloResponse<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 2、创建服务端 （Netty）</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceImpl</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">Server</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ServerBuilder</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:50
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcServer1</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//1、绑定端口</span>
+        <span class="token class-name">ServerBuilder</span> serverBuilder <span class="token operator">=</span> <span class="token class-name">ServerBuilder</span><span class="token punctuation">.</span><span class="token function">forPort</span><span class="token punctuation">(</span><span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2、发布服务</span>
+        serverBuilder<span class="token punctuation">.</span><span class="token function">addService</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HelloServiceImpl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3、创建服务对象</span>
+        <span class="token class-name">Server</span> server <span class="token operator">=</span> serverBuilder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        server<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>xxx-client模块</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 1、client通过代理对象完成远端对象的调用</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannel</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 19:20
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcClient1</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1、创建通信的管道</span>
+        <span class="token class-name">ManagedChannel</span> managedChannel <span class="token operator">=</span> <span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">.</span><span class="token function">forAddress</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">usePlaintext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 2、获得代理对象 stub</span>
+            <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceBlockingStub</span> helloService <span class="token operator">=</span> <span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">.</span><span class="token function">newBlockingStub</span><span class="token punctuation">(</span>managedChannel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3、完成RPC调用</span>
+            <span class="token comment">// 3.1、准备参数</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            builder<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"shantq"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> helloRequest <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3.2、进行功能RPC调用，获取相应内容</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> helloResponse <span class="token operator">=</span> helloService<span class="token punctuation">.</span><span class="token function">hello</span><span class="token punctuation">(</span>helloRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">String</span> result <span class="token operator">=</span> helloResponse<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"result："</span> <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>repeated</strong></p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">option</span> java_multiple_files <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token keyword">option</span> java_package <span class="token operator">=</span> <span class="token string">"com.grpc"</span><span class="token punctuation">;</span>
+<span class="token keyword">option</span> java_outer_classname <span class="token operator">=</span> <span class="token string">"HelloProto"</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * IDL文件 目的 发布RPC服务，service ---> message    message &lt;---
+ */</span>
+
+<span class="token keyword">message</span> <span class="token class-name">HelloRequest</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">string</span> name <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">message</span> <span class="token class-name">HelloResponse</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">string</span> result <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">message</span> <span class="token class-name">HelloRequest1</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">repeated</span> <span class="token builtin">string</span> name <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">message</span> <span class="token class-name">HelloResponse1</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">string</span> result <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">service</span> <span class="token class-name">HelloService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Hello</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Hello1</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest1</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>protobuf<span class="token punctuation">.</span></span><span class="token class-name">ProtocolStringList</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:19
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServiceImpl</span> <span class="token keyword">extends</span> <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceImplBase</span><span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">hello1</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest1</span> request<span class="token punctuation">,</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse1</span><span class="token punctuation">></span></span> responseObserver<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">ProtocolStringList</span> nameList <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getNameList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> s <span class="token operator">:</span> nameList<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"s = "</span> <span class="token operator">+</span> s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"HelloServiceImpl.hello1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse1<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse1</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        builder<span class="token punctuation">.</span><span class="token function">setResult</span><span class="token punctuation">(</span><span class="token string">"ok"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse1</span> helloResponse1 <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span>helloResponse1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannel</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 19:20
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcClient2</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1、创建通信的管道</span>
+        <span class="token class-name">ManagedChannel</span> managedChannel <span class="token operator">=</span> <span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">.</span><span class="token function">forAddress</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">usePlaintext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 2、获得代理对象 stub</span>
+            <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceBlockingStub</span> helloService <span class="token operator">=</span> <span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">.</span><span class="token function">newBlockingStub</span><span class="token punctuation">(</span>managedChannel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3、完成RPC调用</span>
+            <span class="token comment">// 3.1、准备参数</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest1<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest1</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            builder<span class="token punctuation">.</span><span class="token function">addName</span><span class="token punctuation">(</span><span class="token string">"shantq1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            builder<span class="token punctuation">.</span><span class="token function">addName</span><span class="token punctuation">(</span><span class="token string">"shantq2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            builder<span class="token punctuation">.</span><span class="token function">addName</span><span class="token punctuation">(</span><span class="token string">"shantq3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest1</span> build <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3.2、进行功能RPC调用，获取相应内容</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse1</span> helloResponse <span class="token operator">=</span> helloService<span class="token punctuation">.</span><span class="token function">hello1</span><span class="token punctuation">(</span>build<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">String</span> result <span class="token operator">=</span> helloResponse<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"result："</span> <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li><p>tips</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span>helloResponse1<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 通过这个方法 把响应的消息 回传client</span>
+responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>          <span class="token comment">// 通知client 整个服务结束  底层返回标记</span>
+																				<span class="token comment">// client就会监听标记 【grpc做的】</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<hr>
+<h2 id="2-4-gRPC的四种通信方式"><a href="#2-4-gRPC的四种通信方式" class="headerlink" title="2.4 gRPC的四种通信方式"></a>2.4 gRPC的四种通信方式</h2><hr>
+<p><strong>一、简单rpc 一元rpc（Unary RPC）</strong></p>
+<p>第一个RPC程序，实际上就是一元RPC</p>
+<ul>
+<li>特点</li>
+</ul>
+<img src="https://tonkyshan.cn/img/20240809113741.png" alt="20240809113741.png" style="zoom:40%;" />
+
+<p>当client发起调用后，提交数据，并且等待 服务器响应</p>
+<p>开发过程中，主要采用就是一元RPC的这种通信方式</p>
+<ul>
+<li>语法</li>
+</ul>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">service</span> <span class="token class-name">HelloService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Hello</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Hello1</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest1</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>二、服务端流式RPC（Server Streaming RPC）</strong></p>
+<p>一个请求对象，服务端可以回传多个结果对象</p>
+<img src="https://tonkyshan.cn/img/20240809115637.png" alt="20240809115637.png" style="zoom:40%;" />
+
+<p>错误的认知：</p>
+<ul>
+<li>认为服务端返回的是一组数据 就应该封装在一个List中，如果这样进行，叫做返回一个结果</li>
+</ul>
+<p>返回的多组数据不一定同时返回</p>
+<p>使用场景：</p>
+<ul>
+<li>查询股票行情</li>
+</ul>
+<p>语法：</p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">service</span> <span class="token class-name">HelloService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Hello</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Hello1</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest1</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">rpc</span> <span class="token function">C2ss</span><span class="token punctuation">(</span><span class="token class-name">HelloRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token keyword">stream</span> <span class="token class-name">HelloResponse</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token comment">//服务端流式rpc</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>protobuf<span class="token punctuation">.</span></span><span class="token class-name">ProtocolStringList</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:19
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServiceImpl</span> <span class="token keyword">extends</span> <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceImplBase</span><span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">c2ss</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span> responseObserver<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//1、接收client的请求参数</span>
+        <span class="token class-name">String</span> name <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2、做业务处理</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name = "</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3、根据业务处理的结果，提供响应</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            builder<span class="token punctuation">.</span><span class="token function">setResult</span><span class="token punctuation">(</span><span class="token string">"处理的结果"</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> build <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span>build<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+
+        responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceImpl</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">Server</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ServerBuilder</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:50
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcServer1</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//1、绑定端口</span>
+        <span class="token class-name">ServerBuilder</span> serverBuilder <span class="token operator">=</span> <span class="token class-name">ServerBuilder</span><span class="token punctuation">.</span><span class="token function">forPort</span><span class="token punctuation">(</span><span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2、发布服务</span>
+        serverBuilder<span class="token punctuation">.</span><span class="token function">addService</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HelloServiceImpl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3、创建服务对象</span>
+        <span class="token class-name">Server</span> server <span class="token operator">=</span> serverBuilder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        server<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannel</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Iterator</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 19:20
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcClient3</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1、创建通信的管道</span>
+        <span class="token class-name">ManagedChannel</span> managedChannel <span class="token operator">=</span> <span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">.</span><span class="token function">forAddress</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">usePlaintext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 2、获得代理对象 stub  （阻塞的形式，等待服务端响应时不能异步处理任务，不符合真正的开发需求）</span>
+            <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceBlockingStub</span> helloService <span class="token operator">=</span> <span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">.</span><span class="token function">newBlockingStub</span><span class="token punctuation">(</span>managedChannel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3、完成RPC调用</span>
+            <span class="token comment">// 3.1、准备参数</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            builder<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"shantq"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> helloRequest <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3.2、进行功能RPC调用，获取相应内容</span>
+            <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span> helloResponseIterator <span class="token operator">=</span> helloService<span class="token punctuation">.</span><span class="token function">c2ss</span><span class="token punctuation">(</span>helloRequest<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span>helloResponseIterator<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"result: "</span> <span class="token operator">+</span> helloResponseIterator<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/*
+	监听 异步方式 处理服务端流式RPC的开发
+	1、api
+	2、server
+	3、client
+*/</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannel</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Iterator</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">TimeUnit</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 19:20
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcClient4</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1、创建通信的管道</span>
+        <span class="token class-name">ManagedChannel</span> managedChannel <span class="token operator">=</span> <span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">.</span><span class="token function">forAddress</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">usePlaintext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 2、获得代理对象 stub</span>
+            <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceStub</span> helloService <span class="token operator">=</span> <span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">.</span><span class="token function">newStub</span><span class="token punctuation">(</span>managedChannel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3、完成RPC调用</span>
+            <span class="token comment">// 3.1、准备参数</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            builder<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"shantq"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> helloRequest <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3.2、进行功能RPC调用，获取相应内容</span>
+            helloService<span class="token punctuation">.</span><span class="token function">c2ss</span><span class="token punctuation">(</span>helloRequest<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> helloResponse<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token comment">// 服务端 响应了 一个消息后 如果需要立即处理，把代码写在这个方法中</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"服务端每一次响应端信息"</span> <span class="token operator">+</span> helloResponse<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onError</span><span class="token punctuation">(</span><span class="token class-name">Throwable</span> throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"ERROR!!!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token comment">// 需要把服务端 响应端所有数据 拿到后 再进行业务处理</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"需要把服务端 响应端所有数据 拿到后 再进行业务处理"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            managedChannel<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>三、客户端流式RPC（Client Streaming RPC）</strong></p>
+<p>客户端发送多个请求对象，服务端只返回一个结果</p>
+<p>应用场景：IOT(物联网【传感器】向服务端 发送数据)</p>
+<p>语法：</p>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">rpc</span> <span class="token function">Cs2s</span><span class="token punctuation">(</span><span class="token keyword">stream</span> <span class="token class-name">HelloRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">HelloResponse</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>protobuf<span class="token punctuation">.</span></span><span class="token class-name">ProtocolStringList</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:19
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServiceImpl</span> <span class="token keyword">extends</span> <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceImplBase</span><span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">></span></span> <span class="token function">cs2s</span><span class="token punctuation">(</span><span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span> responseObserver<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> helloRequest<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"接收到了client发送的消息"</span> <span class="token operator">+</span> helloRequest<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                builder<span class="token punctuation">.</span><span class="token function">setResult</span><span class="token punctuation">(</span><span class="token string">"this is result"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> build <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span>build<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onError</span><span class="token punctuation">(</span><span class="token class-name">Throwable</span> throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"client的所有消息 都发送到了 服务端..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">/*
+                如果想让server都接收完client发送的数据之后再统一处理，可以将response结果在onCompleted里设置，否则可以在onNext中设置(接收一条，响应一条)
+                HelloProto.HelloResponse.Builder builder = HelloProto.HelloResponse.newBuilder();
+                builder.setResult("this is result");
+                HelloProto.HelloResponse build = builder.build();
+                responseObserver.onNext(build);
+                responseObserver.onCompleted();*/</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// server不用变 同上 通信用的netty  实现：绑定接口 发布服务 创建服务对象</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannel</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">TimeUnit</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 19:20
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcClient5</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1、创建通信的管道</span>
+        <span class="token class-name">ManagedChannel</span> managedChannel <span class="token operator">=</span> <span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">.</span><span class="token function">forAddress</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">usePlaintext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 2、获得代理对象 stub</span>
+            <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceStub</span> helloService <span class="token operator">=</span> <span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">.</span><span class="token function">newStub</span><span class="token punctuation">(</span>managedChannel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3、完成RPC调用</span>
+            <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">></span></span> streamObserver <span class="token operator">=</span> helloService<span class="token punctuation">.</span><span class="token function">cs2s</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> helloResponse<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token comment">// 监控响应</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"服务端 响应 数据内容为："</span> <span class="token operator">+</span> helloResponse<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onError</span><span class="token punctuation">(</span><span class="token class-name">Throwable</span> throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"服务端响应结束..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment">// 客户端发送数据到服务端 多条数据 不定时</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest<span class="token punctuation">.</span>Builder</span> builder <span class="token operator">=</span> <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                builder<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"shantq "</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> build <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                streamObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span>build<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            streamObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>四、双向流RPC（Bi-directional Stream RPC）</strong></p>
+<p>客户端可以发送多个请求消息，服务器响应多个响应消息</p>
+<img src="https://tonkyshan.cn/img/20240812115511.png" alt="20240812115511.png" style="zoom:50%;" />
+
+<p>应用场景：聊天室</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>protobuf<span class="token punctuation">.</span></span><span class="token class-name">ProtocolStringList</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:19
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServiceImpl</span> <span class="token keyword">extends</span> <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceImplBase</span><span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">></span></span> <span class="token function">cs2ss</span><span class="token punctuation">(</span><span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span> responseObserver<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> helloRequest<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"接收到client 提交的消息 "</span> <span class="token operator">+</span> helloRequest<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setResult</span><span class="token punctuation">(</span><span class="token string">"response "</span> <span class="token operator">+</span> helloRequest<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"result "</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onError</span><span class="token punctuation">(</span><span class="token class-name">Throwable</span> throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"接收了所有的请求消息..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannel</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">TimeUnit</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 19:20
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcClient6</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1、创建通信的管道</span>
+        <span class="token class-name">ManagedChannel</span> managedChannel <span class="token operator">=</span> <span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">.</span><span class="token function">forAddress</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">usePlaintext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 2、获得代理对象 stub</span>
+            <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceStub</span> helloService <span class="token operator">=</span> <span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">.</span><span class="token function">newStub</span><span class="token punctuation">(</span>managedChannel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3、完成RPC调用</span>
+            <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">></span></span> streamObserver <span class="token operator">=</span> helloService<span class="token punctuation">.</span><span class="token function">cs2ss</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> helloResponse<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"响应的结果 "</span> <span class="token operator">+</span> helloResponse<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onError</span><span class="token punctuation">(</span><span class="token class-name">Throwable</span> throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"响应全部结束..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                streamObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"shantq "</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            streamObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            managedChannel<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="2-5-gRPC代理方式"><a href="#2-5-gRPC代理方式" class="headerlink" title="2.5 gRPC代理方式"></a>2.5 gRPC代理方式</h2><hr>
+<p>一、BlockingStub</p>
+<ul>
+<li>阻塞 通信方式</li>
+</ul>
+<p>二、Stub</p>
+<ul>
+<li>异步 通过监听处理</li>
+</ul>
+<p>三、FutureStub</p>
+<ul>
+<li>同步 异步 NettyFuture</li>
+<li>FutureStub只能应用 一元RPC</li>
+</ul>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">option</span> java_multiple_files <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token keyword">option</span> java_package <span class="token operator">=</span> <span class="token string">"com.grpc"</span><span class="token punctuation">;</span>
+<span class="token keyword">option</span> java_outer_classname <span class="token operator">=</span> <span class="token string">"TestProto"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">message</span> <span class="token class-name">TestRequest</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">string</span> name <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">message</span> <span class="token class-name">TestResponse</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">string</span> result <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">service</span> <span class="token class-name">TestService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">rpc</span> <span class="token function">Test1</span><span class="token punctuation">(</span><span class="token class-name">TestRequest</span><span class="token punctuation">)</span> <span class="token keyword">returns</span> <span class="token punctuation">(</span><span class="token class-name">TestResponse</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">TestProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">TestServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-12 15:15
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestServiceImpl</span> <span class="token keyword">extends</span> <span class="token class-name">TestServiceGrpc<span class="token punctuation">.</span>TestServiceImplBase</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test1</span><span class="token punctuation">(</span><span class="token class-name">TestProto<span class="token punctuation">.</span>TestRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">TestProto<span class="token punctuation">.</span>TestResponse</span><span class="token punctuation">></span></span> responseObserver<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> name <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name = "</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">TestProto<span class="token punctuation">.</span>TestResponse</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setResult</span><span class="token punctuation">(</span><span class="token string">"test is ok"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceImpl</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>service<span class="token punctuation">.</span></span><span class="token class-name">TestServiceImpl</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">Server</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ServerBuilder</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 17:50
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcServer1</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//1、绑定端口</span>
+        <span class="token class-name">ServerBuilder</span> serverBuilder <span class="token operator">=</span> <span class="token class-name">ServerBuilder</span><span class="token punctuation">.</span><span class="token function">forPort</span><span class="token punctuation">(</span><span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//2、发布服务</span>
+        serverBuilder<span class="token punctuation">.</span><span class="token function">addService</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HelloServiceImpl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        serverBuilder<span class="token punctuation">.</span><span class="token function">addService</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">TestServiceImpl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//3、创建服务对象</span>
+        <span class="token class-name">Server</span> server <span class="token operator">=</span> serverBuilder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        server<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        server<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>common<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">FutureCallback</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>common<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">Futures</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>common<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">ListenableFuture</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannel</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>checkerframework<span class="token punctuation">.</span>checker<span class="token punctuation">.</span>nullness<span class="token punctuation">.</span>compatqual<span class="token punctuation">.</span></span><span class="token class-name">NullableDecl</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">Executors</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">TimeUnit</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @author: tianqi shan
+ * @create: 2024-08-08 19:20
+ * @description:
+ **/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GrpcClient7</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1、创建通信的管道</span>
+        <span class="token class-name">ManagedChannel</span> managedChannel <span class="token operator">=</span> <span class="token class-name">ManagedChannelBuilder</span><span class="token punctuation">.</span><span class="token function">forAddress</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9000</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">usePlaintext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 2、获得代理对象 stub</span>
+            <span class="token class-name">TestServiceGrpc<span class="token punctuation">.</span>TestServiceFutureStub</span> testServiceFutureStub <span class="token operator">=</span> <span class="token class-name">TestServiceGrpc</span><span class="token punctuation">.</span><span class="token function">newFutureStub</span><span class="token punctuation">(</span>managedChannel<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 3、完成RPC调用</span>
+            <span class="token class-name">ListenableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">TestProto<span class="token punctuation">.</span>TestResponse</span><span class="token punctuation">></span></span> future <span class="token operator">=</span> testServiceFutureStub<span class="token punctuation">.</span><span class="token function">test1</span><span class="token punctuation">(</span><span class="token class-name">TestProto<span class="token punctuation">.</span>TestRequest</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"shantq"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">/*
+            同步操作
+            TestProto.TestResponse testResponse = future.get();
+            System.out.println(testResponse.getResult());*/</span>
+
+            <span class="token comment">/*
+            future.addListener(() -> &#123;
+                System.out.println("异步的rpc响应 回来了");
+            &#125;, Executors.newCachedThreadPool());*/</span>
+
+            <span class="token class-name">Futures</span><span class="token punctuation">.</span><span class="token function">addCallback</span><span class="token punctuation">(</span>future<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">FutureCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">TestProto<span class="token punctuation">.</span>TestResponse</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onSuccess</span><span class="token punctuation">(</span><span class="token annotation punctuation">@NullableDecl</span> <span class="token class-name">TestProto<span class="token punctuation">.</span>TestResponse</span> testResponse<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"result："</span> <span class="token operator">+</span> testResponse<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token annotation punctuation">@Override</span>
+                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onFailure</span><span class="token punctuation">(</span><span class="token class-name">Throwable</span> throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"后续的操作..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+            managedChannel<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="2-6-gRPC与SpringBoot整合"><a href="#2-6-gRPC与SpringBoot整合" class="headerlink" title="2.6 gRPC与SpringBoot整合"></a>2.6 gRPC与SpringBoot整合</h2><hr>
+<img src="https://tonkyshan.cn/img/20240812155942.png" alt="20240812155942.png" style="zoom:40%;" />
+
+<img src="https://tonkyshan.cn/img/20240813095042.png" alt="20240813095042.png" style="zoom:50%;" />
+
+<p>一、搭建SpringBoot开发环境</p>
+<p>二、引入与Grpc相关的内容（服务端和客户端都要引）</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.example<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>rpc-grpc-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.0-SNAPSHOT<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>net.devh<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>grpc-server-spring-boot-starter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.12.0.RELEASE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>三、开发服务</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// server</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>service</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>stub<span class="token punctuation">.</span></span><span class="token class-name">StreamObserver</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">net<span class="token punctuation">.</span>devh<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>server<span class="token punctuation">.</span>service<span class="token punctuation">.</span></span><span class="token class-name">GrpcService</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@GrpcService</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServiceImpl</span> <span class="token keyword">extends</span> <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceImplBase</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">StreamObserver</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">></span></span> responseObserver<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">String</span> name <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name = "</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        responseObserver<span class="token punctuation">.</span><span class="token function">onNext</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setResult</span><span class="token punctuation">(</span><span class="token string">"this is result..."</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        responseObserver<span class="token punctuation">.</span><span class="token function">onCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># 核心配置的 就是gRPC服务的端口号</span>
+<span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">application</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> boot<span class="token punctuation">-</span>server
+  <span class="token key atrule">main</span><span class="token punctuation">:</span>
+    <span class="token key atrule">web-application-type</span><span class="token punctuation">:</span> none <span class="token comment">#不启动tomcat</span>
+
+<span class="token key atrule">grpc</span><span class="token punctuation">:</span>
+  <span class="token key atrule">server</span><span class="token punctuation">:</span>
+    <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">9000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// client</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>controller</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloProto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span></span><span class="token class-name">HelloServiceGrpc</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">net<span class="token punctuation">.</span>devh<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>grpc<span class="token punctuation">.</span>client<span class="token punctuation">.</span>inject<span class="token punctuation">.</span></span><span class="token class-name">GrpcClient</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">RequestMapping</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">RestController</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestController</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@GrpcClient</span><span class="token punctuation">(</span><span class="token string">"grpc-server"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">HelloServiceGrpc<span class="token punctuation">.</span>HelloServiceBlockingStub</span> stub<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/test1"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">test1</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name = "</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloResponse</span> hello <span class="token operator">=</span> stub<span class="token punctuation">.</span><span class="token function">hello</span><span class="token punctuation">(</span><span class="token class-name">HelloProto<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> hello<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">application</span><span class="token punctuation">:</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> boot<span class="token punctuation">-</span>client
+
+<span class="token key atrule">grpc</span><span class="token punctuation">:</span>
+  <span class="token key atrule">client</span><span class="token punctuation">:</span>
+    <span class="token key atrule">grpc-server</span><span class="token punctuation">:</span>
+      <span class="token key atrule">address</span><span class="token punctuation">:</span> <span class="token string">'static://127.0.0.1:9000'</span>
+      <span class="token key atrule">negotiation-type</span><span class="token punctuation">:</span> plaintext<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="2-7-gRPC的高级应用"><a href="#2-7-gRPC的高级应用" class="headerlink" title="2.7 gRPC的高级应用"></a>2.7 gRPC的高级应用</h2><hr>
+<p>一、拦截器 一元拦截器</p>
+<p>二、Stream Tracer [监听流] 流式拦截器</p>
+<p>三、Retry Policy 客户端重试机制</p>
+<p>四、NameResolver</p>
+<ul>
+<li>consule</li>
+<li>ectd</li>
+</ul>
+<p>五、负载均衡（pick-first，轮询）</p>
+<p>六、grpc与微服务整合</p>
+<ul>
+<li>序列化（protobuf）Dobbo</li>
+<li>grpc                        Dobbo</li>
+<li>grpc                        GateWay</li>
+<li>grpc                        JWT</li>
+<li>grpc                        Nacos2.0</li>
+<li>grpc                        OpenFeign</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2024/12/03/gRPC/">https://tonkyshan.cn/2024/12/03/gRPC/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/Java/"># Java</a>
+                    
+                        <a href="../../../../tags/gRPC/"># gRPC</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../05/RabbitMQ/">RabbitMQ</a>
+            
+            
+            <a class="next" rel="next" href="../../../08/08/Quartz/">Quartz</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

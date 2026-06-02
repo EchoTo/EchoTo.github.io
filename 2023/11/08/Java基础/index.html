@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>Java基础 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java基础</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 8, 2023&nbsp;&nbsp;18:52:44</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E5%85%AB%E8%82%A1%E6%96%87/">八股文</a>
+                            
+                                <a href="../../../../categories/%E5%85%AB%E8%82%A1%E6%96%87/%E9%9D%A2%E8%AF%95/">面试</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Java基础-一"><a href="#Java基础-一" class="headerlink" title="Java基础(一)"></a>Java基础(一)</h2><hr>
+<h3 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a><strong>完全二叉树</strong></h3><p>高度为k的二叉树，其1~h-1层为满结点，且其h层（叶子结点层）的节点从左至右依次排列（最多2^h-1个，最少0个）</p>
+<h3 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a><strong>满二叉树</strong></h3><p>除最后一层外，每个结点都有左右子结点的二叉树</p>
+<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a><strong>平衡二叉树</strong></h3><p>任一结点的左右子树的高度差绝对值不超过1，且左右子树均为平衡二叉树（<strong>防止树退化成链表</strong>）</p>
+<h3 id="B树与B-树的比较"><a href="#B树与B-树的比较" class="headerlink" title="B树与B+树的比较"></a><strong>B树与B+树的比较</strong></h3><p>1、B树中关键字集合分布在整棵树中，叶节点中不包含任何关键字信息，而B+树关键字集合分布在叶子结点中，非叶节点只是叶子结点中关键字的索引；</p>
+<p>2、B树中任何一个关键字只出现在一个结点中，而B+树中的关键字必须出现在叶节点中，也可能在非叶结点中重复出现；</p>
+<h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a><strong>红黑树</strong></h3><p><strong>本质：自平衡二叉树</strong></p>
+<p>在二叉查找树基础上，添加以下性质</p>
+<ol>
+<li>节点是红色或黑色</li>
+<li>根节点是黑色</li>
+<li>每个为空的叶子节点是黑色的</li>
+<li>每个红色节点的两个子节点都是黑色</li>
+<li>从任一节点到其每个叶子节点的所有路径都包含相同数目的黑色节点</li>
+</ol>
+<p>时间复杂度为O（lgn）</p>
+<p><strong>插入</strong></p>
+<p>将红黑树当做一颗二叉查找树插入 2. 将插入的节点着色为“红色”（基于性质5） 3. 通过一系列旋转或重新着色等操作，使之重新成为一颗红黑树（不会违背性质1，2，3只需考虑性质4） 4. 进行情况判断，修正红黑树</p>
+<p><strong>删除</strong><br>和二叉树差不多</p>
+<p><strong>优点</strong></p>
+<p>红黑树的插入删除效率更高，任何不平衡都会在三次旋转内解决 2. 二叉平衡树比红黑树更为平衡，因此插入或删除时变动频次更高，但查找效率也更高</p>
+<h3 id="Set底层"><a href="#Set底层" class="headerlink" title="Set底层"></a><strong>Set底层</strong></h3><p>哈希表</p>
+<h3 id="HashSet处理重复数据（忽略还是报错）"><a href="#HashSet处理重复数据（忽略还是报错）" class="headerlink" title="HashSet处理重复数据（忽略还是报错）"></a><strong>HashSet处理重复数据（忽略还是报错）</strong></h3><p>set集合是一种不允许重复元素的数据结构，当你插入一个重复元素时，插入元素不会成功但也不会发生报错；添加元素时Set集合的add方法会调用hashcode方法生成一个哈希值，然后和集合中的元素进行比较，如果哈希值相同则不添加元素，反之向Set集合中添加新元素</p>
+<h3 id="多线程操作Set-线程安全怎么实现"><a href="#多线程操作Set-线程安全怎么实现" class="headerlink" title="多线程操作Set,线程安全怎么实现"></a><strong>多线程操作Set,线程安全怎么实现</strong></h3><p>方式一:同步代码块：<br>synchronized(同步监视器){<br>&#x2F;&#x2F;需要被同步的代码<br>}</p>
+<p>&#x2F;&#x2F;TODO 解决线程安全问题的方式三：Lock ——JDK5.0新增</p>
+<h3 id="set怎么遍历"><a href="#set怎么遍历" class="headerlink" title="set怎么遍历"></a><strong>set怎么遍历</strong></h3><p>foreach或迭代器</p>
+<h3 id="自定义排序怎么实现"><a href="#自定义排序怎么实现" class="headerlink" title="自定义排序怎么实现"></a><strong>自定义排序怎么实现</strong></h3><p>Java自定义排序可以通过实现Comparator接口来实现。Comparator接口是一个函数式接口，它定义了一个用于比较两个对象的方法compare()。通过实现compare()方法，我们可以根据自己的需求来定义对象的排序规则</p>
+<p>class FruitComparator implements Comparator {</p>
+<p>@Override</p>
+<p>public int compare(String fruit1, String fruit2) {</p>
+<p>&#x2F;&#x2F; 根据首字母的字典顺序进行排序</p>
+<p>return fruit1.compareTo(fruit2);</p>
+<p>}</p>
+<p>然后，我们使用Collections.sort()方法对该List进行排序，传入了一个自定义的比较器FruitComparator。FruitComparator实现了Comparator接口，并重写了compare()方法，根据水果名称的字典顺序进行比较。</p>
+<p>Collections.sort(fruits, new FruitComparator());</p>
+<h3 id="set和list区别，使用场景"><a href="#set和list区别，使用场景" class="headerlink" title="set和list区别，使用场景"></a><strong>set和list区别，使用场景</strong></h3><p>\1. 存储方式：</p>
+<p>- set集合是一种无序的、不重复的集合，它的元素没有固定的顺序，并且不允许重复元素的存在。</p>
+<p>- list集合是一种有序的、可重复的集合，它的元素按照插入的顺序排列，并且允许重复元素的存在。</p>
+<p>\2. 元素访问：</p>
+<p>- set集合不支持通过索引来访问元素，因为元素没有固定的顺序。</p>
+<p>- list集合可以通过索引来访问元素，可以根据索引位置获取指定元素。</p>
+<p>\3. 元素操作：</p>
+<p>- set集合主要用于判断元素是否存在，可以快速地进行元素的查找和去重。</p>
+<p>- list集合可以进行元素的增加、删除和修改操作，可以根据需要对元素进行灵活的操作。</p>
+<p>\4. 性能特点：</p>
+<p>- set集合在判断元素是否存在时具有较高的效率，因为它使用了哈希表来存储元素。</p>
+<p>- list集合在插入和删除元素时具有较高的效率，因为它使用了动态数组来存储元素。</p>
+<p>set集合适用于需要快速判断元素是否存在且不允许重复的场景，而list集合适用于需要按照插入顺序存储元素且允许重复的场景。根据具体的需求和使用场景，选择合适的集合类型可以提高代码的效率和可读性。</p>
+<h3 id="arraylist的addAll方法，如果容量为1，addAll一个容量为100000的数组，怎么扩容？（addAll底层）"><a href="#arraylist的addAll方法，如果容量为1，addAll一个容量为100000的数组，怎么扩容？（addAll底层）" class="headerlink" title="arraylist的addAll方法，如果容量为1，addAll一个容量为100000的数组，怎么扩容？（addAll底层）"></a><strong>arraylist的addAll方法，如果容量为1，addAll一个容量为100000的数组，怎么扩容？（addAll底层）</strong></h3><p>先判断是否有足够的空间进行动态扩容，底层还是grow方法</p>
+<h3 id="Hash因子和Hash冲突"><a href="#Hash因子和Hash冲突" class="headerlink" title="Hash因子和Hash冲突"></a><strong>Hash因子和Hash冲突</strong></h3><p>不同的key通过hash映射到同一个地址,这种情况就叫hash冲突。 负载因子:可以理解为key的个数与数组的长度的比值。负载因子越大,越会出现hash冲突</p>
+<h3 id="为什么负载因子是0-75"><a href="#为什么负载因子是0-75" class="headerlink" title="为什么负载因子是0.75"></a><strong>为什么负载因子是0.75</strong></h3><p>至此，我们知道了loadFactor是HashMap中的一个重要概念，他表示这个HashMap最大的满的程度。</p>
+<p>为了避免哈希碰撞，HashMap需要在合适的时候进行扩容。那就是当其中的元素个数达到临界值的时候，而这个临界值前面说过和loadFactor有关，换句话说，设置一个合理的loadFactor，可以有效的避免哈希冲突。</p>
+<p>那么，到底loadFactor设置成多少算合适呢？</p>
+<p>这个值现在在JDK的源码中是0.75:</p>
+<p>一般来说，默认的负载因子(0.75)在时间和空间成本之间提供了很好的权衡。更高的值减少了空间开销，但增加了查找成本(反映在HashMap类的大多数操作中，包括get和put)。</p>
+<p>试想一下，如果我们把负载因子设置成1，容量使用默认初始值16，那么表示一个HashMap需要在”满了”之后才会进行扩容。</p>
+<p>那么在HashMap中，最好的情况是这16个元素通过hash算法之后分别落到了16个不同的桶中，否则就必然发生哈希碰撞。而且随着元素越多，哈希碰撞的概率越大，查找速度也会越低。</p>
+<h3 id="为什么会产生哈希冲突，哈希值和输入数值为什么不能1：1"><a href="#为什么会产生哈希冲突，哈希值和输入数值为什么不能1：1" class="headerlink" title="为什么会产生哈希冲突，哈希值和输入数值为什么不能1：1"></a><strong>为什么会产生哈希冲突，哈希值和输入数值为什么不能1：1</strong></h3><ol>
+<li>数据加密：哈希函数可以将原始数据加密成固定长度的密文，可以用于保护敏感数据的安全性，防止数据被篡改或窃取。</li>
+<li>数据完整性验证：哈希函数可以将数据转换成散列值，这个散列值可以用于验证数据的完整性。只要数据未被篡改，计算出的散列值就应该是不变的。如果散列值不一致，就说明数据可能已被篡改。</li>
+<li>数据检索：哈希函数可以将数据映射为固定长度的散列值，这些散列值可以用于数据检索。哈希表就是一种基于哈希函数实现的数据结构，可以快速地进行数据查找、插入、删除等操作。</li>
+<li>数据分片：哈希函数可以将数据映射到不同的分片中，这些分片可以被用于数据分布式存储和处理。哈希函数可以将数据的哈希值与分片数量取模得到一个分片编号，然后将数据存储到对应的分片中。</li>
+<li>安全验证：哈希函数可以被用于安全验证，例如密码验证。在存储用户密码时，通常会使用哈希函数将用户密码转换成散列值，然后将这个散列值存储在数据库中。当用户登录时，系统会将用户输入的密码再次通过哈希函数转换成散列值，然后与数据库中存储的散列值进行比较，从而进行密码验证。</li>
+</ol>
+<h3 id="常见的哈希函数"><a href="#常见的哈希函数" class="headerlink" title="常见的哈希函数"></a><strong>常见的哈希函数</strong></h3><ol>
+<li>MD5：基于消息的长度产生一个 128 位的散列值，常用于数据完整性验证和密码加密。</li>
+<li>SHA-1：基于消息的长度产生一个 160 位的散列值，被广泛应用于数字签名和证书认证。</li>
+<li>SHA-2：包括 SHA-224、SHA-256、SHA-384、SHA-512 等多种变体，散列值长度从 224 位到 512 位不等，是一种安全性较高的哈希函数。</li>
+<li>CRC：循环冗余校验码，通常用于数据传输错误检测。</li>
+<li>MurmurHash：一种非加密型哈希函数，适用于大规模数据的哈希处理，具有较低的冲突率和较高的速度。</li>
+<li>CityHash：一种快速的哈希函数，适用于大规模数据和分布式环境下的哈希处理。</li>
+<li>FNV Hash：一种非加密型哈希函数，通过将数据的每个字节与一个较大的质数进行异或运算得到哈希值，速度较快。</li>
+<li>Jenkins Hash：一种流行的哈希函数，适用于任何大小的数据，能够产生高质量的哈希值，冲突率较低。</li>
+</ol>
+<h3 id="为什么用红黑树"><a href="#为什么用红黑树" class="headerlink" title="为什么用红黑树"></a><strong>为什么用红黑树</strong></h3><p>因为相较于普通的二叉搜索树，红黑树具有平衡性。这与AVL树相似，在增加或删除元素后可能会出现旋转的操作。<br>但是相较于AVL树严格的约束（左右子树的高度之差的绝对值最多为1），红黑树的平衡约束更为宽松，其旋转操作的时间复杂度为O(1)，而AVL树的旋转操作的时间复杂度为O(log n)。<br>因此在做增加、删除操作时可以选择红黑树，而在做搜索操作时选择AVL树（因为严格的平衡性，高度一般比红黑树低）。</p>
+<p>1、更快的搜索和插入速度</p>
+<p>红黑树是一种自平衡二叉搜索树，因此查找和插入操作的时间复杂度为 O(log n)，而链表的时间复杂度为 O(n)。在哈希冲突比较严重的情况下，使用红黑树能够更快地进行搜索和插入操作。</p>
+<p>例如，假设一个 HashMap 中有 1000 个元素，且它们都哈希到同一个桶中。如果使用链表进行解决冲突，需要遍历整个链表才能进行搜索和插入操作，而使用红黑树只需要进行 O(log n) 次操作就能找到目标元素。</p>
+<p>2、更稳定的性能</p>
+<ul>
+<li>红黑树是”近似平衡“的。</li>
+<li>红黑树相比avl树，在检索的时候效率其实差不多，都是通过平衡来二分查找。但对于插入删除等操作效率提高很多。红黑树不像avl树一样追求绝对的平衡，他允许局部很少的不完全平衡，这样对于效率影响不大，但省去了很多没有必要的调平衡操作，avl树调平衡有时候代价较大，所以效率不如红黑树，在现在很多地方都是底层都是红黑树的天下啦。</li>
+<li>红黑树的高度只比高度平衡的AVL树的高度（log2n）仅仅大了一倍，在性能上却好很多。</li>
+<li>HashMap在里面就是链表加上红黑树的一种结构，这样利用了链表对内存的使用率以及红黑树的高效检索，是一种很happy的数据结构。</li>
+<li>AVL树是一种高度平衡的二叉树，所以查找的非常高，但是，有利就有弊，AVL树为了维持这种高度的平衡，就要付出更多代价。每次插入、删除都要做调整，就比较复杂、耗时。所以，对于有频繁的插入、删除操作的数据集合，使用AVL树的代价就有点高了。</li>
+<li>红黑树只是做到了近似平衡，并不严格的平衡，所以在维护的成本上，要比AVL树要低。</li>
+<li>所以，红黑树的插入、删除、查找各种操作性能都比较稳定。对于工程应用来说，要面对各种异常情况，为了支撑这种工业级的应用，我们更倾向于这种性能稳定的平衡二叉查找树。</li>
+</ul>
+<p>由于红黑树是自平衡的，因此它的高度是相对稳定的，即使在最坏情况下也不会退化为一条链表。这意味着 HashMap 的性能可以得到更好的保障。</p>
+<p>3、更好的迭代性能</p>
+<p>在 Java 8 中，当 HashMap 内部使用红黑树时，元素是按照键的自然顺序排序的。这意味着在迭代 HashMap 的元素时，元素的顺序是可预测的，而不是像使用链表时那样随机的。此外，由于红黑树的结构特点，可以更快地进行范围查询等操作。</p>
+<h3 id="service中a方法调用了this-b-，b方法开启了事务，此时事务会生效吗？"><a href="#service中a方法调用了this-b-，b方法开启了事务，此时事务会生效吗？" class="headerlink" title="service中a方法调用了this.b()，b方法开启了事务，此时事务会生效吗？"></a>service中a方法调用了this.b()，b方法开启了事务，此时事务会生效吗？</h3><p>此处的this指向目标对象，调用this.b()不会执行b事务的切面（不会执行事物增强aop），因此b方法的事物不会起作用。</p>
+<pre><code>    在一个Service内部，事务方法之间的嵌套调用，普通方法和事务方法之间的嵌套调用，都不会开启新的事务。
+
+    是因为spring采用动态代理机制来实现事务控制，而动态代理最终都是要调用原始对象的，而原始对象方法再去调用方法时，是不会再触发代理了。
+</code></pre>
+<p>1.在spring 事务传播行为中，同一个servic类中:A方法（无事务）调B方法（有事务）事务是不生效。</p>
+<p>2.在同一个类中，一个方法调用另外一个有注解（比如@Async，@Transational）的方法，注解是不会生效的。</p>
+<p>解决方法：重新建一个service类来写B方法。</p>
+<h3 id="Default修饰符和Proteted修饰符区别"><a href="#Default修饰符和Proteted修饰符区别" class="headerlink" title="Default修饰符和Proteted修饰符区别"></a><strong>Default修饰符和Proteted修饰符区别</strong></h3><p>protected 和 default 的主要区别在于 protected 在子类中可以被访问和修改，而 default 在子类中不能被访问和修改。 protected 和 default的区别是protected 可以被子类重写，而default不能。在Java中，”protected”和”default”都是访问修饰符，用于控制类、接口、方法和变量的可见性和访问级别。</p>
+<p>“protected”用于指定受保护的访问级别，它可以让子类访问被修饰的成员变量和方法，但对于同一包中的其他类和对象而言，这些成员变量和方法仍然是不可见的。</p>
+<p>“default”也称为”package-private”，意味着在同一包内可见。如果没有指定任何访问修饰符，则默认为”default”。这意味着在同一包中的所有类和对象都可以访问被修饰的成员变量和方法，但对于其他包中的类和对象而言，这些成员变量和方法则是不可见的。</p>
+<p>总之，”protected”和”default”都是Java中的访问修饰符，用于控制成员变量和方法的可见性和访问级别。”protected”可以让子类访问被修饰的成员变量和方法，而”default”则仅在同一包内可见。</p>
+<h3 id="接口和抽象类，使用场景区别"><a href="#接口和抽象类，使用场景区别" class="headerlink" title="接口和抽象类，使用场景区别"></a><strong>接口和抽象类，使用场景区别</strong></h3><p>1.1 定义方式不同<br>抽象类是使用关键字abstract来定义的，而接口是使用关键字interface来定义的。</p>
+<p>1.2.成员方法不同<br>抽象类可以包含普通方法和抽象方法，而接口只能包含抽象方法。</p>
+<p>1.3 实现方式不同<br>抽象类可以被继承，子类可以继承父类的属性和方法，并且必须实现父类中的抽象方法。而接口则不能被继承，它只能被实现，实现了接口的类必须实现接口中所有的抽象方法。</p>
+<p>1.4 构造方法不同<br>抽象类可以包含构造方法，而接口不可以。</p>
+<p>1.5 访问修饰符不同<br>抽象类中的成员方法可以包含public、protected和private三种访问修饰符，而接口中的成员方法只能包含public访问修饰符。</p>
+<p>1.6 关注点不同<br>抽象类强调“是不是”，主要用于定义一些基础类，而接口强调“能否”，主要用于定义一些可替换的类或行为。</p>
+<p>2.1 抽象类的使用场景<br>抽象类通常用于定义一些基础类，它们的主要作用是为派生类提供公共的基础方法和属性。抽象类可以包含普通方法和抽象方法，其中普通方法可以提供默认实现，而抽象方法则需要子类去实现。除此之外，抽象类还可以包含protected和private成员变量和方法，以及构造方法。下面是一个用抽象类定义的基础类的例子：</p>
+<p>2.2 接口的使用场景</p>
+<p>接口通常用于定义一些行为规范，它们的主要作用是约束各个实现类的行为，从而提高程序的可扩展性和可替换性。接口只包含抽象方法，没有属性和方法的实现。下面是一个用接口定义的日志记录器的例子：</p>
+<h3 id="抽象类和抽象方法抽象字段之间的因果关系"><a href="#抽象类和抽象方法抽象字段之间的因果关系" class="headerlink" title="抽象类和抽象方法抽象字段之间的因果关系"></a><strong>抽象类和抽象方法抽象字段之间的因果关系</strong></h3><p>两者联系：抽象类中不一定包含抽象方法，但是包含抽象方法的类一定要被声明为抽象类，抽象类本身不具备实际的功能，只能用于派生其子类，抽象类中可以包含构造方法，但是构造方法不能被声明为抽象，抽象类不能用final来修饰，即一个类不能既是最终类又是抽象类，abstract不能与private，static,final,native并列修饰同一个方法</p>
+<p>具体类中给字段申明的时候不给字段赋值，该字段变为抽象字段</p>
+<h3 id="abstract关键字能修饰什么"><a href="#abstract关键字能修饰什么" class="headerlink" title="abstract关键字能修饰什么"></a><strong>abstract关键字能修饰什么</strong></h3><p>abstract是Java中的一个修饰符，表示“抽象的”，只能用来修饰类和方法，不能修饰属性。如果用来修饰类，表示该类是一个抽象类；如果用来修饰方法，表示该方法是一个抽象方法</p>
+<h3 id="枚举类，可以new出来么"><a href="#枚举类，可以new出来么" class="headerlink" title="枚举类，可以new出来么"></a><strong>枚举类，可以new出来么</strong></h3><p>枚举类不可以 new 实例对象，因为自定义的枚举，都默认继承 Enum 类，且 Enum 类是抽象类，所以不可以产生实例</p>
+<h3 id="反射，反射的应用，反射存在的问题"><a href="#反射，反射的应用，反射存在的问题" class="headerlink" title="反射，反射的应用，反射存在的问题"></a><strong>反射，反射的应用，反射存在的问题</strong></h3><p>反射的定义：反射是指在Java运行状态中<br>给定一个类对象（Class对象）,通过反射获取这个对象（Class对象）的所有成员结构；<br>给定一个具体的对象，能够动态的调用它的方法及对任意属性值进行获取和赋值<br>这种动态获取类的内容、创建对象、以及动态调用对象方法及操作属性的机制，就叫做Java的反射机制。</p>
+<p>反射的优点：<br>增加程序的灵活性，避免将固有的逻辑程序写死到代码里<br>代码简洁，可读性强，可提高代码的复用率</p>
+<p>反射的缺点：<br>相较直接调用在创建对象比较多的情 景下反射性能下降<br>内部暴露和安全隐患（破坏单例）</p>
+<p>反射性能慢的原因：<br>寻找类Class字节码的过程，比如通过ClassName找到对应的字节码Class，然后加载、解析，会比较慢，而new的方式则无需寻找，因为在Linking的解析阶段已经将符号引用转为了直接引用<br>安全管理机制的权限验证等<br>若需要调用native方法调用时JNI接口的使用<br>入参校验</p>
+<p>获取Class对象的四种方式</p>
+<ol>
+<li>通过ClassLoader对象的loadClass（）方法</li>
+<li>类名.class</li>
+<li>Class.forName()</li>
+<li>object.getClass()</li>
+</ol>
+<p>3.反射安全性问题</p>
+<ol>
+<li>可以通过setAccessible(true)方法设置对象可被强制访问</li>
+<li>可以破坏单例的封装性</li>
+</ol>
+<p>4.反射在Spring中的应用</p>
+<ol>
+<li>JDBC的封装</li>
+<li>SpringIOC</li>
+</ol>
+<h3 id="解释一下索引下推"><a href="#解释一下索引下推" class="headerlink" title="解释一下索引下推"></a><strong>解释一下索引下推</strong></h3><p>索引下推（Index condition pushdown）是一种优化数据库查询的技术，它利用了数据库索引的特性，在一定条件下，在索引层面就过滤掉不需要的数据，从而减少查询时需要访问的数据块，提高查询效率。</p>
+<p>在普通的查询中，数据库需要先从表中读取所有的数据记录，然后再根据查询条件过滤不需要的记录，最后返回查询结果。而在索引下推中，数据库会在索引树的节点上进行条件过滤，只将满足条件的数据块返回，而不是读取整个数据记录。这样可以避免从磁盘读取不必要的数据，降低IO开销，提升查询速度。</p>
+<p>索引下推的主要优点是减少了回表操作，即减少了访问磁盘的次数和需要传输的数据量，从而提高了查询效率和响应速度。具体来说，如果查询条件涉及到的字段都可以通过索引直接获取，而不需要回表操作，那么查询速度将大大提高。</p>
+<p>需要注意的是，索引下推并不是适用于所有类型的查询，它涉及到查询中所使用的索引类型和查询条件的限制。通常，只有涉及到等值查询或范围查询的情况下，才能使用索引下推技术实现优化。同时，索引下推也会产生额外的开销，需要消耗更多的CPU资源，因此需要在实际应用中进行评估和优化。</p>
+<p>代码说明：</p>
+<p>下面是一个使用索引下推进行优化的例子：</p>
+<p>假设有一个名为orders的表，其中包含订单编号（order_id）、客户编号（cust_id）、订单金额（amount）等字段，其中order_id、cust_id字段分别创建了索引，现在需要查询订单金额大于等于1000元的订单数量，SQL查询语句为：</p>
+<p>SELECT COUNT(*) FROM orders WHERE amount &gt;&#x3D; 1000;<br>如果按照传统的查询方式，数据库需要先遍历整个表，找到所有金额大于等于1000元的订单记录，然后再统计符合条件的订单数量。这种方式的查询效率比较低，尤其是在表数据较大的情况下。</p>
+<p>而如果使用索引下推技术，数据库就可以在索引树上进行条件过滤，只返回符合条件的订单数量。因为amount字段创建了索引，查询引擎会先在索引树上进行条件过滤，过滤掉所有金额小于1000元的订单记录，只将金额大于等于1000元的订单记录传给查询结果集，最后统计符合条件的订单数量。这种方式的查询效率相对较高，尤其是在数据量较大时效果更加明显。</p>
+<p>如果要使用索引下推优化查询，首先需要创建支持索引下推的索引，具体步骤如下：</p>
+<p>创建适当的索引：根据实际查询场景以及涉及到的字段创建索引，可以使用普通索引、唯一索引、全文索引等。</p>
+<p>查询条件与索引关联：查询条件必须涉及到索引字段，才能进行索引下推优化。如果查询条件没有涉及到索引字段，就不能利用索引下推的优势。</p>
+<p>检查查询计划：通过 explain 命令或可视化工具，查看查询计划，确保索引下推优化被使用。</p>
+<p>下面以MySQL数据库为例，介绍如何创建索引和使用索引下推进行优化：</p>
+<p>创建索引</p>
+<p>使用CREATE INDEX语句创建索引。例如，为orders表的amount字段创建索引，可以执行如下命令：</p>
+<p>CREATE INDEX idx_amount ON orders (amount);<br>查询条件与索引关联</p>
+<p>查询条件必须涉及到索引字段。例如，查询所有金额大于等于1000元的订单，SQL查询语句为：</p>
+<p>SELECT order_id, cust_id FROM orders WHERE amount &gt;&#x3D; 1000;<br>这里的查询条件涉及到amount字段，是orders表上的一个索引字段。</p>
+<p>检查查询计划</p>
+<p>可以使用explain命令查看查询计划，确认是否使用了索引下推。例如，执行如下命令：</p>
+<p>explain SELECT order_id, cust_id FROM orders WHERE amount &gt;&#x3D; 1000;<br>如果查询计划中出现了Extra列中的Using index condition，则表示使用了索引下推。</p>
+<p>需要注意的是，使用索引下推优化查询的效果会受到多个因素的影响，如索引类型、查询条件、数据量等。因此，在实际应用中需要针对具体的查询场景进行评估和优化。</p>
+<p>换句话说：索引下推能减少回表查询次数，提高查询效率</p>
+<h3 id="MySQL发生死锁的情况，怎么解除死锁"><a href="#MySQL发生死锁的情况，怎么解除死锁" class="headerlink" title="MySQL发生死锁的情况，怎么解除死锁"></a><strong>MySQL发生死锁的情况，怎么解除死锁</strong></h3><p>MySQL死锁是指两个或多个进程试图同时访问同一资源，而导致的相互等待的情况。当发生死锁时，MySQL会自动检测到问题并且抛出一个错误。</p>
+<p>解决MySQL死锁的方法取决于锁定的类型和锁定的资源。在大多数情况下，以下四种方法可以帮助你解除MySQL死锁。</p>
+<pre class="line-numbers language-none"><code class="language-none">1. 找到导致死锁的进程
+使用SHOW ENGINE INNODB STATUS命令可以找到导致死锁的进程。该命令可以提供有关死锁和其他有关事务信息的详细信息，包括当前的事务和锁信息。
+2. 终止一个进程
+可以使用KILL命令终止进程。你需要知道进程的ID号，然后使用下面的命令：
+KILL [CONN_ID];
+CONN_ID是连接的编号，可以使用SHOW PROCESSLIST命令查找。
+3. 调整MySQL的超时设置
+你可以尝试通过增加超时值来解决死锁，这样在死锁发生之前，MySQL会等待更长的时间以获得需要的锁。你可以使用参数innodb_lock_wait_timeout来设置超时值。
+4. 重新连接MySQL
+在某些情况下，重新连接MySQL可以解决死锁问题。如果无法解决死锁，考虑重新启动MySQL服务器。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="对象的创建过程"><a href="#对象的创建过程" class="headerlink" title="对象的创建过程"></a><strong>对象的创建过程</strong></h3><p>对象创建过程分为以下几步：</p>
+<p>检查类是否已经被加载；</p>
+<p>new关键字时创建对象时，首先会去运行时常量池中查找该引用所指向的类有没有被虚拟机加载，如果没有被加载，那么会进行类的加载过程。类的加载过程需要经历：加载、链接、初始化三个阶段。</p>
+<p>具体过程可参考文章：Java类的加载机制</p>
+<p>为对象分配内存空间；</p>
+<p>此时，对象所属类已经加载，现在需要在堆内存中为该对象分配一定的空间，该空间的大小在类加载完成时就已经确定下来了。</p>
+<p>为对象分配内存空间有两种方式：</p>
+<p>第一种是jvm将堆区抽象为两块区域，一块是已经被其他对象占用的区域，另一块是空白区域，中间通过一个指针进行标注，这时只需要将指针向空白区域移动相应大小空间，就完成了内存的分配，当然这种划分的方式要求虚拟机的对内存是地址连续的，且虚拟机带有内存压缩机制，可以在内存分配完成时压缩内存，形成连续地址空间，这种分配内存方式成为“指针碰撞”，但是很明显，这种方式也存在一个比较严重的问题，那就是多线程创建对象时，会导致指针划分不一致的问题，例如A线程刚刚将指针移动到新位置，但是B线程之前读取到的是指针之前的位置，这样划分内存时就出现不一致的问题，解决这种问题，虚拟机采用了循环CAS操作来保证内存的正确划分。<br>第二种也是为了解决第一种分配方式的不足而创建的方式，多线程分配内存时，虚拟机为每个线程分配了不同的空间，这样每个线程在分配内存时只是在自己的空间中操作，从而避免了上述问题，不需要同步。当然，当线程自己的空间用完了才需要需申请空间，这时候需要进行同步锁定。为每个线程分配的空间称为“本地线程分配缓冲（TLAB）”,是否启用TLAB需要通过 -XX:+&#x2F;-UseTLAB参数来设定。<br>为对象的字段赋默认值；</p>
+<p>分配完内存后，需要对对象的字段进行零值初始化（赋默认值），对象头除外。</p>
+<p>零值初始化意思就是对对象的字段赋0值，或者null值，这也就解释了为什么这些字段在不需要进程初始化时候就能直接使用。</p>
+<p>设置对象头；</p>
+<p>对这个将要创建出来的对象，进行信息标记，包括是否为新生代&#x2F;老年代，对象的哈希码，元数据信息，这些标记存放在对象头信息中。</p>
+<p>执行实例的初始化方法lint</p>
+<p>linit方法包含成员变量、构造代码块的初始化，按照声明的顺序执行。</p>
+<p>执行构造方法。</p>
+<p>执行对象的构造方法。至此，对象创建成功。</p>
+<p>上述为无父类的对象创建过程。对于有父类的对象创建过程，还需满足如下条件：</p>
+<p>先加载父类；再加载本类；<br>先执行父类的实例的初始化方法init（成员变量、构造代码块），父类的构造方法；执行本类的实例的初始化方法init（成员变量、构造代码块），本类的构造方法。</p>
+<h3 id="AOP都有什么应用场景？"><a href="#AOP都有什么应用场景？" class="headerlink" title="AOP都有什么应用场景？"></a><strong>AOP都有什么应用场景？</strong></h3><p>权限控制，日志记录，事务管理，异常处理</p>
+<h3 id="简单介绍一下红黑树？应用场景是"><a href="#简单介绍一下红黑树？应用场景是" class="headerlink" title="简单介绍一下红黑树？应用场景是"></a><strong>简单介绍一下红黑树？应用场景是</strong></h3><p>红黑树（Red-Black Tree，以下简称RBTree）的实际应用非常广泛，比如Linux内核中的完全公平调度器、高精度计时器、ext3文件系统等等，各种语言的函数库如Java的TreeMap和TreeSet，C++ STL的map、multimap、multiset等。</p>
+<p>RBTree也是函数式语言中最常用的持久数据结构之一，在计算几何中也有重要作用。值得一提的是，Java 8中HashMap的实现也因为用RBTree取代链表，性能有所提升。</p>
+<h3 id="HashMap为什么在哈希冲突的链表长度超过8的时候转为红黑树？为什么是8？"><a href="#HashMap为什么在哈希冲突的链表长度超过8的时候转为红黑树？为什么是8？" class="headerlink" title="HashMap为什么在哈希冲突的链表长度超过8的时候转为红黑树？为什么是8？"></a><strong>HashMap为什么在哈希冲突的链表长度超过8的时候转为红黑树？为什么是8？</strong></h3><p>这是因为当链表的长度超过8时，查找和插入操作的效率会下降，而将链表转换为红黑树可以提高查找和插入操作的效率。但是，当链表的长度小于等于8时，链表的效率要高于红黑树，因此将链表转换为红黑树并不会提高效率。因此，8被认为是一个比较合适的阈值。</p>
+<p>需要注意的是，在Java 8之后，HashMap的实现方式有所变化，采用的是数组+链表&#x2F;红黑树+红黑树的方式，当链表的长度超过8时，会先判断数组长度是否大于等于64，如果大于等于64，才将链表转换为红黑树，这个阈值是8和64的综合考虑得出的。</p>
+<h3 id="内连接和左外连接有什么区别？各自有什么应用？举个具体的使用场景？"><a href="#内连接和左外连接有什么区别？各自有什么应用？举个具体的使用场景？" class="headerlink" title="内连接和左外连接有什么区别？各自有什么应用？举个具体的使用场景？"></a><strong>内连接和左外连接有什么区别？各自有什么应用？举个具体的使用场景？</strong></h3><pre class="line-numbers language-none"><code class="language-none">-- join
+select * from A  join B on A.id &#x3D; B.id 
+
+-- inner join
+select * from A inner join B on A.id &#x3D; B.id 
+
+-- 逗号的连表方式就是内连接
+select * from A , B where A.id &#x3D; B.id <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>内连接查询的是两张表的交集，也就是A表和B表都必须有数据才能查询出来</p>
+<pre class="line-numbers language-none"><code class="language-none">-- left join
+select * from A left join B on  A.id &#x3D; B.id 
+
+-- left outer join
+select * from A left outer join B on  A.id &#x3D; B.id <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>左外连接和左连接是以左表为基础，根据ON后给出的两表的条件将两表连接起来。结果会将左表所有的查询信息列出，而右表只列出ON后条件与左表满足的部分。左连接全称为左外连接，是外连接的一种。</p>
+<pre class="line-numbers language-none"><code class="language-none">-- right join
+select * from A right join B on  A.id &#x3D; B.id 
+
+-- right outer join
+select * from A right outer join B on  A.id &#x3D; B.id <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>右外连接和右连接是以右表为基础，根据ON后给出的两表的条件将两表连接起来。结果会将右表所有的查询信息列出，而左表只列出ON后条件与右表满足的部分。右连接全称为右外连接，是外连接的一种。</p>
+<pre class="line-numbers language-none"><code class="language-none">select * from a left join b on a.id &#x3D; b.id
+union
+select * from a right join b on a.id &#x3D; b.id<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>全连接显示两侧表中所有满足检索条件的行。</p>
+<h3 id="redis满了，扩容"><a href="#redis满了，扩容" class="headerlink" title="redis满了，扩容"></a><strong>redis满了，扩容</strong></h3><p>增加节点、增加内存、虚拟节点</p>
+<h3 id="前后端接口http的过程"><a href="#前后端接口http的过程" class="headerlink" title="前后端接口http的过程"></a><strong>前后端接口http的过程</strong></h3><p>1.构建请求</p>
+<p>首先，浏览器构建请求行信息（如下所示），构建好后，浏览器准备发起网络请求。</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">GET /index.html HTTP1.1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>2.查找缓存</p>
+<p>在真正发起网络请求之前，浏览器会先在浏览器缓存中查询是否有要请求的文件。其中，<strong>浏览器缓存是一种在本地保存资源副本，以供下次请求时直接使用的技术。</strong></p>
+<p>当浏览器发现请求的资源已经在浏览器缓存中存有副本，它会拦截请求，返回该资源的副本，并直接结束请求，而不会再去源服务器重新下载。这样做(即强制缓存)的好处有：</p>
+<ul>
+<li>缓解服务器端压力，提升性能（获取资源的耗时更短了）；</li>
+<li>对于网站来说，缓存是实现快速资源加载的重要组成部分。</li>
+</ul>
+<p>当然，如果缓存查找不到，就会进入网络请求过程。</p>
+<p>3.准备IP地址和端口</p>
+<p>不过，在了解网络请求之前，我们需要先看看HTTP和TCP的关系。因为浏览器使用HTTP协议作为应用层协议，用来封装请求的文本信息；并使用TCP&#x2F;IP作传输层协议将它发到网络上，所以在HTTP工作开始之前，浏览器需要通过TCP与服务器建立连接，也就是说<strong>HTTP的内容是通过TCP的传输数据阶段来实现的</strong>，你可以结合下图更好地理解这二者的关系。</p>
+<h3 id="Tcp-是什么？"><a href="#Tcp-是什么？" class="headerlink" title="Tcp 是什么？"></a><strong>Tcp 是什么？</strong></h3><p>传输控制协议（TCP，Transmission Control Protocol） 是一种面向连接的<strong>、</strong>可靠的<strong>、</strong>基于字节流的传输层**通信协议，由IETF的RFC 793定义。</p>
+<h3 id="http-https-区别，哪个是加密"><a href="#http-https-区别，哪个是加密" class="headerlink" title="**http https 区别，哪个是加密 **"></a>**http https 区别，哪个是加密 **</h3><p>HTTP协议以明文方式发送内容，不提供任何方式的数据加密。HTTP协议不适合传输一些敏感信息，比如：信用卡号、密码等支付信息。https则是具有安全性的ssl加密传输协议。http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。并且https协议需要到ca申请证书。HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，要比http协议安全。</p>
+<h3 id="三次握手过程"><a href="#三次握手过程" class="headerlink" title="三次握手过程"></a><strong>三次握手过程</strong></h3><p>第一次握手：客户端发送syn包(seq&#x3D;x)到服务器，并进入SYN_SEND状态，等待服务器确认;</p>
+<p>第二次握手：服务器收到syn包，必须确认客户的SYN(ack&#x3D;x+1)，同时自己也发送一个SYN包(seq&#x3D;y)，即SYN+ACK包，此时服务器进入SYN_RECV状态;</p>
+<p>第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack&#x3D;y+1)，此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手。</p>
+<p>第一次挥手：主动关闭方发送一个FIN，用来关闭主动方到被动关闭方的数据传送，也就是主动关闭方告诉被动关闭方：我已经不会再给你发数据了(当 然，在fin包之前发送出去的数据，如果没有收到对应的ack确认报文，主动关闭方依然会重发这些数据)，但此时主动关闭方还可以接受数据。</p>
+<p>第二次挥手：被动关闭方收到FIN包后，发送一个ACK给对方，确认序号为收到序号+1(与SYN相同，一个FIN占用一个序号)。</p>
+<p>第三次挥手：被动关闭方发送一个FIN，用来关闭被动关闭方到主动关闭方的数据传送，也就是告诉主动关闭方，我的数据也发送完了，不会再给你发数据了。</p>
+<p>第四次挥手：主动关闭方收到FIN后，发送一个ACK给被动关闭方，确认序号为收到序号+1，至此，完成四次挥手。</p>
+<h3 id="Map中哪些是线程安全的，怎么实现安全"><a href="#Map中哪些是线程安全的，怎么实现安全" class="headerlink" title="Map中哪些是线程安全的，怎么实现安全"></a><strong>Map中哪些是线程安全的，怎么实现安全</strong></h3><p>HashTable，现原理是在增删改查的方法上使用了synchronized锁机制，在多线程环境下，无论是读数据还是修改数据，在同一时刻只能有一个线程在执行synchronized方法（所有线程竞争同一把锁），因为对整个表进行锁定。所以线程越多，对该map的竞争越激烈，效率越低。</p>
+<p>使用ConcurrentHashMap</p>
+<p>实现原理是HashTable是对整个表进行加锁，而ConcurrentHashMap是把表进行分段，初始情况下分成16段，每一段都有一把锁。当多个线程访问不同的段时，因为获取到的锁是不同的，所以可以并行访问。效率比HashTable</p>
+<h3 id="web容器的作用是什么？"><a href="#web容器的作用是什么？" class="headerlink" title="**web容器的作用是什么？ **"></a>**web容器的作用是什么？ **</h3><p>1.通信支持</p>
+<p>通过web容器中的方法，只需简单的操作就能实现servlet与web服务器间的通信。而不需要自己创建socket，监听接口、新的流等一系列复杂的操作。Servlet容器包含在web服务器中，web服务器监听来自特定端口的HTTP请求，这个端口通常是80。当客户端（使用web浏览器的用户）发送一个HTTP请求时，Servlet容器会创建新的HttpServletRequest和HttpServletResponse对象，并且把它们传递给已经创建的Filter和URL模式与请求URL匹配的Servlet实例的方法，所有的这些都使用同一个线程。<br>request对象提供了获取HTTP请求的所有信息的入口，比如请求头和请求实体。response对象提供了控制和发送HTTP响应的便利方法，比如设置响应头和响应实体（通常是JSP生成的HTML内容）。当HTTP响应被提交并结束后，request和response对象都会被销毁。</p>
+<p>2.控制servlet生命周期</p>
+<p>如何加载类，实例化和初始化servlet，调用servlet方法，并使servlet实例能够被垃圾回收。有了容器，我们就不用花精力去考虑这些资源管理垃圾回收之类的事情。当Servlet容器启动时，它会部署并加载所有的web应用。当web应用被加载时，Servlet容器会一次性为每个应用创建Servlet上下文（ServletContext）并把它保存在内存里。Servlet容器会处理web应用的web.xml文件，并且一次性创建在web.xml里定义的Servlet、Filter和Listener，同样也会把它们保存在内存里。当Servlet容器关闭时，它会卸载所有的web应用和ServletContext，所有的Servlet、Filter和Listner实例都会被销毁。</p>
+<p>3.多线程支持</p>
+<p>为每个servlet请求创建一个线程，servlet运行完成后容器就会自动结束这个线程。</p>
+<h3 id="request和reponse使用了什么设计模式？"><a href="#request和reponse使用了什么设计模式？" class="headerlink" title="request和reponse使用了什么设计模式？"></a><strong>request和reponse使用了什么设计模式？</strong></h3><p>装饰器模式（Decorator Pattern）允许向一个现有的对象添加新的功能，同时又不改变其结构</p>
+<h3 id="线程间通信的几种方式"><a href="#线程间通信的几种方式" class="headerlink" title="线程间通信的几种方式"></a><strong>线程间通信的几种方式</strong></h3><p>1、消息队列，是最常用的一种，也是最灵活的一种，通过自定义数据结构，可以传输复杂和简单的数据结构。</p>
+<p>2、使用全局变量 </p>
+<h3 id="java8相较于java7的新特性"><a href="#java8相较于java7的新特性" class="headerlink" title="java8相较于java7的新特性"></a><strong>java8相较于java7的新特性</strong></h3><ol>
+<li>Lambda表达式</li>
+<li>改进的垃圾收集器：Java 8的JVM支持新的垃圾收集器，比如G1垃圾收集器，可以提高垃圾收集的效率。</li>
+<li>改进的ConcurrentHashMap：Java 8的ConcurrentHashMap在并发情况下的性能有了明显的提升。</li>
+</ol>
+<h3 id="redis作用，为什么不用本地缓存"><a href="#redis作用，为什么不用本地缓存" class="headerlink" title="redis作用，为什么不用本地缓存?"></a><strong>redis作用，为什么不用本地缓存?</strong></h3><ol>
+<li><p>数据持久化：Redis可以将数据持久化到磁盘上，这样即使机器宕机或重启，也不会丢失已经保存的数据。而使用本地内存存储没有这样的保障，如果机器出现问题，数据将无法恢复。</p>
+</li>
+<li><p>高可用性：Redis提供了主从复制机制，可以将数据在多个节点之间进行同步。当主节点宕机时，可以快速自动切换到备用节点，提高了系统的可用性。</p>
+</li>
+<li><p>分布式：Redis支持分布式部署，可以在多个节点中存储数据。这样即使其中一个节点宕机，也不会影响系统的正常运行。</p>
+</li>
+<li><p>更好的性能：Redis可以支持更大的内存存储空间，数据存储在内存中可以加快访问速度和响应时间，比本地内存存储更快。</p>
+</li>
+</ol>
+<h2 id="Java基础-二"><a href="#Java基础-二" class="headerlink" title="Java基础(二)"></a>Java基础(二)</h2><hr>
+<h3 id="一、Object类相关方法"><a href="#一、Object类相关方法" class="headerlink" title="一、Object类相关方法"></a>一、Object类相关方法</h3><p>1、getClass：获取当前运行时对象的Class对象</p>
+<p>2、hashCode：返回对象的hash码</p>
+<p>3、clone：拷贝当前对象，必须实现Cloneable接口</p>
+<p><strong>浅拷贝</strong>对基本类型进行值拷贝，对引用类型拷贝引用</p>
+<p><strong>深拷贝</strong>对基本类型进行值拷贝，对引用类型对象不但拷贝引用还拷贝对象的相关属性和方法</p>
+<p>两者不同在于深拷贝创建了一个新的对象</p>
+<p>4、equals：通过内存地址比较两个对象是否相等，String类重写了这个方法使用值来比较是否相等</p>
+<p>5、toString：返回类名@哈希码的16进制</p>
+<p>6、notify：唤醒当前对象监视器的任一个线程</p>
+<p>7、notifyAll：唤醒当前对象监视器上的所有线程</p>
+<p>8、wait：</p>
+<ul>
+<li>暂停线程的执行</li>
+<li>三个不同参数方法(等待多少毫秒;额外等待多少毫秒;一直等待)</li>
+<li>与Thread.sleep(long time)相比，sleep使当前线程休眠一段时间，并没有释放该对象的锁，wait释放了锁</li>
+</ul>
+<p>9、finalize：对象被垃圾回收器回收时执行的方法</p>
+<hr>
+<h3 id="二、基本数据类型"><a href="#二、基本数据类型" class="headerlink" title="二、基本数据类型"></a>二、基本数据类型</h3><ul>
+<li>整型：byte(8)，short(16)，int(32)，long(64)</li>
+<li>浮点型：float(32)，double(64)</li>
+<li>布尔型：boolean(8)</li>
+<li>字符型：char(16)</li>
+</ul>
+<blockquote>
+<p>tips：Java默认整形int，浮点型double</p>
+</blockquote>
+<hr>
+<h3 id="三、序列化"><a href="#三、序列化" class="headerlink" title="三、序列化"></a>三、序列化</h3><p>Java序列化是将对象转换为字节序列的过程，通过实现Serializable接口来实现。序列化可以用于网络传输和对象持久化等场景。在实现Java序列化时，需要注意类的成员变量是否也需要序列化，以及静态变量和transient变量的处理。序列化和反序列化的类需要保持一致，以避免版本不兼容的问题</p>
+<p>Java对象实现序列化要实现Serializable接口</p>
+<p>反序列化并不会调用构造方法，反序列的对象是由JVM自己生成的对象，不通过构造方法生成</p>
+<p>序列化对象的引用成员变量，也必须是可序列化的，否则，会报错</p>
+<p>如果想让某个变量不被序列化，使用<strong>transient</strong></p>
+<hr>
+<h3 id="四、String、StringBuffer、StringBuilder"><a href="#四、String、StringBuffer、StringBuilder" class="headerlink" title="四、String、StringBuffer、StringBuilder"></a>四、String、StringBuffer、StringBuilder</h3><p>1、String由char[]数组构成，使用了final修饰，是不可变对象，可以理解为常量，线程安全。对String进行改变时每次都会新生成一个String对象，然后把指针指向新的引用对象</p>
+<p>2、StringBuffer对象线程安全，StringBuilder线程不安全</p>
+<p>3、操作少量字符用String，单线程操作大量数据用StringBuilder，多线程操作大量数据用StringBuffer</p>
+<hr>
+<h3 id="五、重载与重写"><a href="#五、重载与重写" class="headerlink" title="五、重载与重写"></a>五、重载与重写</h3><p><strong>重载</strong>发生在同一个类中，方法名相同，参数的类型，个数，顺序不同，方法的返回值和修饰符可以不同</p>
+<p>参数列表必须不同的原因：为了让编译器能够根据不同的参数列表来区分不同的方法，以便在调用方法时能够正确的选择到具体的方法，如果参数列表相同，编译器就无法区分不同的方法，会导致方法调用的歧义或者错误</p>
+<p><strong>重写</strong>，也叫覆盖，发生在父子类中，方法名和参数相同，返回值范围小于等于父类，抛出的异常范围小于等于父类，访问修饰符范围大于等于父类，如果父类方法访问修饰符为private或者final则子类就不能重写该方法</p>
+<hr>
+<h3 id="六、final"><a href="#六、final" class="headerlink" title="六、final"></a>六、final</h3><p>修饰基本类型变量，一经初始化后就不能够对其进行修改</p>
+<p>修饰引用类型变量，不能够指向另一个引用</p>
+<p>修饰类或方法，不能被继承或重写</p>
+<hr>
+<h3 id="七、反射"><a href="#七、反射" class="headerlink" title="七、反射"></a>七、反射</h3><p>在运行时，动态的获取类的完整信息，增加程序的灵活性，JDK动态代理使用了反射</p>
+<hr>
+<h3 id="八、JDK动态代理"><a href="#八、JDK动态代理" class="headerlink" title="八、JDK动态代理"></a>八、JDK动态代理</h3><p>使用步骤</p>
+<p>创建接口及实现类</p>
+<p>实现代理处理器：实现InvokationHandler，实现invoke(Proxy proxy，Method method，Object[] args)方法</p>
+<p>通过Proxy.newProxyInstance(ClassLoaderloader，Class[] interfaces，InvocationHandler h)获得代理类</p>
+<p>通过代理类调用方法</p>
+<hr>
+<h3 id="九、Java-IO"><a href="#九、Java-IO" class="headerlink" title="九、Java IO"></a>九、Java IO</h3><p>普通IO：面向流，同步阻塞线程</p>
+<p>NIO：面向缓冲区，同步非阻塞</p>
+<p>Java IO和NIO的主要区别在于两者的处理方式不同。Java IO是面向流（Stream）的，它将输入输出数据直接传输到目标设备或文件中，以流的形式进行读写；而NIO则是面向缓冲区（Buffer）的，它将会使用缓存去管理数据，使得读写操作更加快速和灵活。</p>
+<p>特别是在网络编程和高并发场景下，Java NIO表现得更为出色。Java IO在进行网络通信时，每个客户端连接都需要创建一个线程来进行处理，这样会导致系统资源的浪费。Java NIO则只需要一个线程就可以完成对多个客户端连接的处理，大大减少系统资源的占用。</p>
+<hr>
+<h3 id="十、多线程"><a href="#十、多线程" class="headerlink" title="十、多线程"></a>十、多线程</h3><p>线程的六种状态</p>
+<ul>
+<li>New</li>
+<li>Runnable</li>
+<li>Blocked</li>
+<li>Waiting</li>
+<li>Timed Waiting</li>
+<li>Terminated</li>
+</ul>
+<hr>
+<h3 id="十一、计算机网络"><a href="#十一、计算机网络" class="headerlink" title="十一、计算机网络"></a>十一、计算机网络</h3><p><img src="https://tonkyshan.cn/img/image-20231107150407174.png" alt="20231107150407174"></p>
+<p>1、浏览器输入地址后做了什么？</p>
+<table>
+<thead>
+<tr>
+<th align="center">过程</th>
+<th align="center">使用的协议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1、浏览器查找域名的IP地址(DNS查找过程：浏览器缓存、路由器缓存、DNS缓存)</td>
+<td align="center">DNS：或取域名对应IP</td>
+</tr>
+<tr>
+<td align="center">2、浏览器向web服务器发送一个HTTP请求(cookies会随着请求发送给服务器)</td>
+<td align="center">1、TCP：与服务器建立TCP连接</td>
+</tr>
+<tr>
+<td align="center">3、服务器处理请求(请求 处理请求&amp;它的参数、cookies、生成一个HTML响应)</td>
+<td align="center">2、IP：建立TCP协议时，需要发送数据，发送数据在网络层使用IP协议</td>
+</tr>
+<tr>
+<td align="center">4、服务器发回一个HTML响应</td>
+<td align="center">3、OPSF：IP数据包在路由器之间，路由选择使用OPSF协议4、ARP：路由器在与服务器通信时，需要将ip地址转换为MAC地址，需要使用ARP协议</td>
+</tr>
+<tr>
+<td align="center">5、浏览器开始显示HTML</td>
+<td align="center">5、HTTP：在TCP建立完成后，使用HTTP协议访问地址</td>
+</tr>
+</tbody></table>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2023/11/08/Java%E5%9F%BA%E7%A1%80/">https://tonkyshan.cn/2023/11/08/Java%E5%9F%BA%E7%A1%80/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E5%85%AB%E8%82%A1%E6%96%87/"># 八股文</a>
+                    
+                        <a href="../../../../tags/%E9%9D%A2%E8%AF%95/"># 面试</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../../2024/01/02/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93%E2%80%94%E2%80%942023/">个人总结——2023</a>
+            
+            
+            <a class="next" rel="next" href="../../../08/24/Java-%E5%85%AB%E8%82%A1%E6%96%87/">Java 八股文</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>
