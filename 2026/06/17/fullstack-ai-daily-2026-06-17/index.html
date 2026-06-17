@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>全栈与 AI 应用开发前沿日报 - 2026-06-17 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">全栈与 AI 应用开发前沿日报 - 2026-06-17</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 17, 2026&nbsp;&nbsp;9:30:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E6%8A%80%E6%9C%AF%E6%97%A5%E6%8A%A5/">技术日报</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>面向 Java &#x2F; Python 后端开发者的全栈与 AI 应用开发日报。今天的判断：<strong>过去 72 小时的主线不是“又出了一个炫酷模型”，而是 AI 应用开始补齐生产工程：长时间沙箱、可取消工作流、部署前行为模拟、成本治理与 Agent 安全。全栈开发也正在被 Agent 化重塑，框架、云平台和运行时都在给“机器开发者”准备接口。</strong></p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>Agent 工作负载正在从短任务走向长任务。</strong> Vercel Sandbox 将运行时长提高到 24 小时，Functions 也支持更长的 Node.js &#x2F; Python 执行时间；这说明云平台开始认真服务长时间 E2E、数据处理、代码生成和多步骤 Agent 工作流。</li>
+<li><strong>AI 应用的“上线前评估”正在升维。</strong> OpenAI 发布 Deployment Simulation，用真实会话数据模拟模型上线后的行为，这比只跑离线 benchmark 更接近生产风险评估。</li>
+<li><strong>工作流控制比单次推理更重要。</strong> Vercel Workflow SDK 支持 <code>AbortController</code> &#x2F; <code>AbortSignal</code> 跨 workflow 和 step 取消，反映出 Agent&#x2F;Workflow 工程里“可中断、可回收、可治理”正在成为基础能力。</li>
+<li><strong>模型路由进入平台化阶段。</strong> Vercel AI Gateway 新增 GLM 5.2，叠加 OpenAI、Anthropic、DeepSeek、Qwen 等供应商，开发者需要把“模型选择”抽象成策略，而不是写死一个 API。</li>
+<li><strong>Node.js 生态今天有安全提醒。</strong> Node.js 项目发布 2026 年 6 月安全版本公告；全栈应用如果使用 Node 作为 BFF、SSR 或工具链运行时，应把运行时升级纳入常规发布流程。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-全栈：Serverless-正在长任务化，给-Agent-留运行空间"><a href="#2-1-全栈：Serverless-正在长任务化，给-Agent-留运行空间" class="headerlink" title="2.1 全栈：Serverless 正在长任务化，给 Agent 留运行空间"></a>2.1 全栈：Serverless 正在长任务化，给 Agent 留运行空间</h3><p>过去 Serverless 的心智是“短请求、快返回、无状态”。今天的变化是：平台开始允许更长运行时间、更持久的沙箱、更复杂的 workflow。</p>
+<p>这背后的需求很清楚：AI Coding Agent、自动化测试、文档批处理、数据抽取、代码迁移都不是 10 秒能结束的任务。它们需要：</p>
+<ul>
+<li>独立且可销毁的运行环境；</li>
+<li>长时间执行和中途取消；</li>
+<li>持久状态与任务恢复；</li>
+<li>运行日志、预览环境、成本监控；</li>
+<li>人类最终审批与回滚。</li>
+</ul>
+<p>对后端转全栈的人来说，这意味着别只学“页面怎么写”。更重要的是理解 <strong>Next.js &#x2F; Node.js &#x2F; Python runtime + workflow + queue + sandbox + observability</strong> 这条链路。未来很多全栈应用的核心不在 UI，而在“浏览器里按下按钮后，后端如何安全地让 Agent 跑 20 分钟”。</p>
+<h3 id="2-2-AI-应用：从-prompt-工程转向部署前模拟与运行中治理"><a href="#2-2-AI-应用：从-prompt-工程转向部署前模拟与运行中治理" class="headerlink" title="2.2 AI 应用：从 prompt 工程转向部署前模拟与运行中治理"></a>2.2 AI 应用：从 prompt 工程转向部署前模拟与运行中治理</h3><p>OpenAI 的 Deployment Simulation 值得重点关注。它的方向不是再发一个模型，而是讨论如何在发布前用真实对话样本模拟模型行为，以提前发现风险。这和传统软件里的 staging、灰度、回放测试很像。</p>
+<p>AI 应用开发正在形成一套新工程流程：</p>
+<ol>
+<li>采集真实任务与失败样本；</li>
+<li>构建 eval dataset；</li>
+<li>在新模型 &#x2F; 新 prompt &#x2F; 新工具链上线前做仿真；</li>
+<li>比较质量、成本、延迟和安全指标；</li>
+<li>小流量灰度，再全量发布。</li>
+</ol>
+<p>这对 Java&#x2F;Python 后端开发者其实很友好：你熟悉的测试、灰度、日志、回滚、SLA 思维，在 AI 应用里会重新变得稀缺且值钱。</p>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><h3 id="3-1-Vercel-Sandbox：24-小时沙箱强化-Agent-基础设施"><a href="#3-1-Vercel-Sandbox：24-小时沙箱强化-Agent-基础设施" class="headerlink" title="3.1 Vercel Sandbox：24 小时沙箱强化 Agent 基础设施"></a>3.1 Vercel Sandbox：24 小时沙箱强化 Agent 基础设施</h3><p>Vercel Sandbox 现在可运行最长 24 小时，适合大规模数据处理、E2E 测试流水线和长期 Agent 工作流。我的判断：这类能力会成为 AI Coding 和企业 Agent 的标准底座。</p>
+<p>短期实践价值：</p>
+<ul>
+<li>让 Coding Agent 在隔离环境中改代码、跑测试、生成预览；</li>
+<li>让数据处理 Agent 执行长时间 ingestion &#x2F; parsing；</li>
+<li>让自动化 QA Agent 长时间控制浏览器做回归测试；</li>
+<li>避免把不可信代码直接跑在主服务或开发机上。</li>
+</ul>
+<h3 id="3-2-Vercel-Workflow-SDK：支持-inflight-cancellation"><a href="#3-2-Vercel-Workflow-SDK：支持-inflight-cancellation" class="headerlink" title="3.2 Vercel Workflow SDK：支持 inflight cancellation"></a>3.2 Vercel Workflow SDK：支持 inflight cancellation</h3><p>Workflow SDK 支持标准 <code>AbortController</code> 和 <code>AbortSignal</code> 跨 workflow &#x2F; step 传播。这个功能看似小，但对 Agent 很关键：</p>
+<ul>
+<li>用户取消任务时，后续模型调用、工具调用和数据处理都应停止；</li>
+<li>预算超限时，要能终止 workflow；</li>
+<li>检测到危险工具调用时，要能熔断；</li>
+<li>多 Agent 竞速时，已有答案后要取消其余分支。</li>
+</ul>
+<p>后端开发者可以把它类比成分布式任务里的 cancellation token。AI 应用不是“调一次 LLM”，而是一串可被取消、可重试、可审计的步骤。</p>
+<h3 id="3-3-GLM-5-2-接入-AI-Gateway：长上下文工程任务继续升温"><a href="#3-3-GLM-5-2-接入-AI-Gateway：长上下文工程任务继续升温" class="headerlink" title="3.3 GLM 5.2 接入 AI Gateway：长上下文工程任务继续升温"></a>3.3 GLM 5.2 接入 AI Gateway：长上下文工程任务继续升温</h3><p>Vercel AI Gateway 新增 GLM 5.2，官方定位偏长周期任务和项目级工程上下文。无论单个模型表现如何，这说明平台层正在将更多模型纳入统一网关。</p>
+<p>建议在项目里尽早做模型抽象：</p>
+<pre class="line-numbers language-ts" data-language="ts"><code class="language-ts">interface ModelProvider &#123;
+  chat(input: ChatInput): Promise&lt;ChatOutput&gt;
+  embed?(input: EmbedInput): Promise&lt;EmbedOutput&gt;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>不要把 OpenAI &#x2F; Anthropic &#x2F; Gemini &#x2F; Qwen &#x2F; DeepSeek 的 SDK 调用散落在业务代码里。模型供应商会变，业务链路不能跟着重写。</p>
+<h3 id="3-4-LangChain：Deep-Agents-与-Loop-Engineering"><a href="#3-4-LangChain：Deep-Agents-与-Loop-Engineering" class="headerlink" title="3.4 LangChain：Deep Agents 与 Loop Engineering"></a>3.4 LangChain：Deep Agents 与 Loop Engineering</h3><p>LangChain 6 月 16 日发布关于 Deep Agents 和 Loop Engineering 的文章，重点是复杂 Agent 架构不只是“给模型一个工具列表”，而是要设计循环、状态、检查点、退出条件和质量反馈。</p>
+<p>我对这条路线的判断：Agent 框架的竞争会从“封装调用模型”转向“帮你控制不确定性”。LangGraph 这类状态图能力仍然值得投入，因为它更接近生产系统需要的确定性边界。</p>
+<h3 id="3-5-LlamaIndex：文档解析与检索-harness-继续成为-RAG-主战场"><a href="#3-5-LlamaIndex：文档解析与检索-harness-继续成为-RAG-主战场" class="headerlink" title="3.5 LlamaIndex：文档解析与检索 harness 继续成为 RAG 主战场"></a>3.5 LlamaIndex：文档解析与检索 harness 继续成为 RAG 主战场</h3><p>LlamaIndex 最近围绕 LiteParse、LlamaParse、ParseBench 和 retrieval harness 做持续更新。RAG 的重点已经不只是向量库，而是：</p>
+<ul>
+<li>PDF &#x2F; 表格 &#x2F; 图表能否正确解析；</li>
+<li>chunk 是否保留章节、页码、坐标等证据；</li>
+<li>检索是否能组合 grep、embedding、rerank；</li>
+<li>回答是否能追溯到原文。</li>
+</ul>
+<p>如果你做企业知识库，最应该投入的是 ingestion pipeline，而不是一开始就换更贵的模型。</p>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-OpenAI：Deployment-Simulation-与-Partner-Network"><a href="#4-1-OpenAI：Deployment-Simulation-与-Partner-Network" class="headerlink" title="4.1 OpenAI：Deployment Simulation 与 Partner Network"></a>4.1 OpenAI：Deployment Simulation 与 Partner Network</h3><p>OpenAI 过去 72 小时有两条值得工程侧关注：</p>
+<ul>
+<li><strong>Deployment Simulation</strong>：用真实会话数据预测模型上线后行为，核心价值是把 AI 安全和质量评估前移。</li>
+<li><strong>OpenAI Partner Network</strong>：投入资源推动企业 AI 采用，说明企业落地会越来越依赖实施、集成、合规和工作流改造。</li>
+</ul>
+<p>对开发者的启发：未来“会调模型”不够，能把模型安全地接进企业系统、做权限、审计、评估、回滚，才是更强壁垒。</p>
+<h3 id="4-2-Node-js：安全版本公告提醒运行时治理"><a href="#4-2-Node-js：安全版本公告提醒运行时治理" class="headerlink" title="4.2 Node.js：安全版本公告提醒运行时治理"></a>4.2 Node.js：安全版本公告提醒运行时治理</h3><p>Node.js 官方博客列出 6 月 17 日安全版本。即使具体补丁细节需要等公告完全展开，行动上也应做好三件事：</p>
+<ol>
+<li>确认生产和 CI 使用的 Node 版本；</li>
+<li>对 LTS 与 Current 分支分别制定升级策略；</li>
+<li>在 Next.js &#x2F; NestJS &#x2F; Express &#x2F; 工具链项目中跑一次依赖和运行时安全检查。</li>
+</ol>
+<p>全栈开发不是只写业务代码，运行时治理也是基本功。</p>
+<h3 id="4-3-Cloudflare-x2F-Deno-x2F-Bun：边缘、沙箱和安全仍是运行时分化方向"><a href="#4-3-Cloudflare-x2F-Deno-x2F-Bun：边缘、沙箱和安全仍是运行时分化方向" class="headerlink" title="4.3 Cloudflare &#x2F; Deno &#x2F; Bun：边缘、沙箱和安全仍是运行时分化方向"></a>4.3 Cloudflare &#x2F; Deno &#x2F; Bun：边缘、沙箱和安全仍是运行时分化方向</h3><p>近几周的趋势仍然清晰：</p>
+<ul>
+<li>Cloudflare 围绕 AI Gateway、Workers、Browser Run、Dynamic Workflows 和 Vite&#x2F;VoidZero 生态加强开发者平台；</li>
+<li>Deno 强调权限、安全、Sandbox、Agent firewall；</li>
+<li>Bun 继续补 Node 兼容、性能和内置能力，例如测试、install、image、cron、WebView 等。</li>
+</ul>
+<p>建议不要把它们看成互斥选择：</p>
+<ul>
+<li>主流业务：Node.js + Next.js；</li>
+<li>高速本地工具和脚本：Bun 可尝试；</li>
+<li>不可信代码、权限隔离、Agent 工具执行：Deno &#x2F; Sandbox 思路值得学习；</li>
+<li>边缘和多租户工作流：Cloudflare Workers &#x2F; Workflows 值得关注。</li>
+</ul>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><h3 id="建议一：把“长任务-可取消”做成全栈能力"><a href="#建议一：把“长任务-可取消”做成全栈能力" class="headerlink" title="建议一：把“长任务 + 可取消”做成全栈能力"></a>建议一：把“长任务 + 可取消”做成全栈能力</h3><p>今天开始，练习写一个不是 CRUD 的全栈功能：用户提交任务后，后端异步执行，前端展示进度，并支持取消。</p>
+<p>技术点包括：</p>
+<ul>
+<li>Next.js Route Handler 或独立 FastAPI&#x2F;NestJS 服务；</li>
+<li>任务状态表：<code>pending/running/succeeded/failed/canceled</code>；</li>
+<li><code>AbortController</code> 或后端 cancellation token；</li>
+<li>日志流式输出；</li>
+<li>失败重试和超时控制。</li>
+</ul>
+<p>这套能力会直接迁移到 AI Agent 产品。</p>
+<h3 id="建议二：AI-应用必须提前设计-provider-abstraction"><a href="#建议二：AI-应用必须提前设计-provider-abstraction" class="headerlink" title="建议二：AI 应用必须提前设计 provider abstraction"></a>建议二：AI 应用必须提前设计 provider abstraction</h3><p>不要在业务层到处写：</p>
+<pre class="line-numbers language-ts" data-language="ts"><code class="language-ts">const client &#x3D; new OpenAI(...)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更好的做法是把模型调用封装成统一接口，并记录每次调用的：模型、prompt version、输入输出摘要、token、延迟、成本、错误码。这样未来换 Anthropic、Gemini、Qwen、DeepSeek 或 GLM 才不会伤筋动骨。</p>
+<h3 id="建议三：RAG-学习重点从“向量库”移到“数据质量”"><a href="#建议三：RAG-学习重点从“向量库”移到“数据质量”" class="headerlink" title="建议三：RAG 学习重点从“向量库”移到“数据质量”"></a>建议三：RAG 学习重点从“向量库”移到“数据质量”</h3><p>后端开发者做 RAG，最容易过度关注 vector DB。更实用的优先级是：</p>
+<ol>
+<li>文档解析正确率；</li>
+<li>metadata 设计；</li>
+<li>chunk 策略；</li>
+<li>hybrid search；</li>
+<li>rerank；</li>
+<li>eval；</li>
+<li>最后才是换向量库。</li>
+</ol>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>做一个 2-3 小时小项目：<strong>“可取消的 AI 文档摘要任务”</strong>。</p>
+<p>要求：</p>
+<ol>
+<li>前端上传一篇 Markdown 或 PDF；</li>
+<li>后端创建任务并返回 <code>taskId</code>；</li>
+<li>后端分步骤执行：解析 → 分块 → 摘要 → 合并；</li>
+<li>前端轮询或 SSE 显示进度；</li>
+<li>增加“取消任务”按钮；</li>
+<li>记录每一步耗时、token、错误信息；</li>
+<li>输出最终摘要和引用片段。</li>
+</ol>
+<p>加分项：为同一文档跑两种 prompt，把结果放进一个简单 eval 表格，比较准确性和成本。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li>OpenAI：Predicting model behavior before release by simulating deployment：<a target="_blank" rel="noopener" href="https://openai.com/index/deployment-simulation">https://openai.com/index/deployment-simulation</a></li>
+<li>OpenAI：Introducing the OpenAI Partner Network：<a target="_blank" rel="noopener" href="https://openai.com/index/introducing-openai-partner-network">https://openai.com/index/introducing-openai-partner-network</a></li>
+<li>Vercel：Sandbox can now run for up to 24 hours：<a target="_blank" rel="noopener" href="https://vercel.com/changelog/vercel-sandbox-can-now-run-for-up-to-24-hours">https://vercel.com/changelog/vercel-sandbox-can-now-run-for-up-to-24-hours</a></li>
+<li>Vercel：Functions can now run up to 30 minutes：<a target="_blank" rel="noopener" href="https://vercel.com/changelog/vercel-functions-can-now-run-up-to-30-minutes">https://vercel.com/changelog/vercel-functions-can-now-run-up-to-30-minutes</a></li>
+<li>Vercel：Workflow SDK supports inflight cancellation：<a target="_blank" rel="noopener" href="https://vercel.com/changelog/workflow-sdk-now-supports-inflight-cancellation">https://vercel.com/changelog/workflow-sdk-now-supports-inflight-cancellation</a></li>
+<li>Vercel：GLM 5.2 now available on AI Gateway：<a target="_blank" rel="noopener" href="https://vercel.com/changelog/glm-5-2-now-available-on-ai-gateway">https://vercel.com/changelog/glm-5-2-now-available-on-ai-gateway</a></li>
+<li>Node.js：June 2026 Security Releases：<a target="_blank" rel="noopener" href="https://nodejs.org/en/blog/vulnerability/june-2026-security-releases">https://nodejs.org/en/blog/vulnerability/june-2026-security-releases</a></li>
+<li>LangChain Blog：Deep Agents &#x2F; Loop Engineering：<a target="_blank" rel="noopener" href="https://blog.langchain.com/">https://blog.langchain.com/</a></li>
+<li>LlamaIndex Blog：ParseBench &#x2F; LlamaParse &#x2F; Retrieval Harness：<a target="_blank" rel="noopener" href="https://www.llamaindex.ai/blog">https://www.llamaindex.ai/blog</a></li>
+<li>Cloudflare Developers Blog：AI Gateway &#x2F; Workers &#x2F; Dynamic Workflows：<a target="_blank" rel="noopener" href="https://blog.cloudflare.com/tag/developers/">https://blog.cloudflare.com/tag/developers/</a></li>
+<li>Deno Blog：Deno 2.8 与 Claw Patrol：<a target="_blank" rel="noopener" href="https://deno.com/blog">https://deno.com/blog</a></li>
+<li>Bun Blog：Bun 1.3.x 系列更新：<a target="_blank" rel="noopener" href="https://bun.sh/blog">https://bun.sh/blog</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2026/06/17/fullstack-ai-daily-2026-06-17/">https://tonkyshan.cn/2026/06/17/fullstack-ai-daily-2026-06-17/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/RAG/"># RAG</a>
+                    
+                        <a href="../../../../tags/Agent/"># Agent</a>
+                    
+                        <a href="../../../../tags/%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91/"># 全栈开发</a>
+                    
+                        <a href="../../../../tags/AI-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"># AI 应用开发</a>
+                    
+                        <a href="../../../../tags/TypeScript/"># TypeScript</a>
+                    
+                        <a href="../../../../tags/DevOps/"># DevOps</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="../../16/%E5%85%A8%E6%A0%88%E4%B8%8E-AI-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5-2026-06-16/">全栈与 AI 应用开发前沿日报 - 2026-06-16</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>
