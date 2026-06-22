@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>全栈与 AI 应用开发前沿日报 - 2026-06-22 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">全栈与 AI 应用开发前沿日报 - 2026-06-22</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 22, 2026&nbsp;&nbsp;9:30:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E6%8A%80%E6%9C%AF%E6%97%A5%E6%8A%A5/">技术日报</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>面向 Java &#x2F; Python 后端开发者的全栈与 AI 应用开发日报。今天的判断：<strong>过去 24-72 小时的主线不是某个框架突然颠覆，而是“AI Agent 进入企业规模化使用”与“全栈运行时继续补安全、成本和可观测性”。后端同学转型时，别只追 UI 框架，要把预算、权限、日志、评估和部署一起纳入学习路径。</strong></p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>AI Coding 正在从个人效率工具进入企业基础设施。</strong> OpenAI 6 月 21 日宣布 Samsung Electronics 在全球范围部署 ChatGPT Enterprise 与 Codex；这类案例说明 Coding Agent 不再只是 IDE 插件，而会被纳入企业权限、预算、审计和研发流程。</li>
+<li><strong>Agent 成本治理成为刚需。</strong> OpenAI 6 月 18 日更新企业 usage analytics 与 spend controls；结合最近 LangChain 生态持续讨论 trace、verifier、Loop Engineering，可以看到生产级 AI 应用的核心能力正在从“会调用模型”转向“可控地持续运行”。</li>
+<li><strong>Node.js 安全更新值得优先处理。</strong> Node.js 官方在 6 月 18 日发布 26.3.1 Current、24.17.0 LTS、22.23.0 LTS，并伴随 6 月安全发布。全栈项目如果依赖 Node&#x2F;Next&#x2F;Nest&#x2F;Vite 工具链，应优先跟进 LTS 升级与 CI 镜像更新。</li>
+<li><strong>MCP 热度继续扩散，但要警惕工具权限边界。</strong> Product Hunt 近两天出现 Cloudback MCP Server 这类“从 Claude &#x2F; Cursor &#x2F; VS Code 管理备份”的产品；HN 也有“200 行 Go 写 MCP Server”的工程实践。信号很明确：MCP 正在变成 AI 应用接工具的默认接口之一，但安全模型不能后补。</li>
+<li><strong>RAG 的竞争点继续落在解析、证据链和评估。</strong> 模型能力越来越强后，企业知识库应用的短板反而更集中在文档解析、引用定位、权限过滤、更新同步和答案评估。向量库只是基础设施，不是完整解决方案。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-企业-AI-应用进入“规模化治理”阶段"><a href="#2-1-企业-AI-应用进入“规模化治理”阶段" class="headerlink" title="2.1 企业 AI 应用进入“规模化治理”阶段"></a>2.1 企业 AI 应用进入“规模化治理”阶段</h3><p>Samsung + ChatGPT &#x2F; Codex 的企业部署、OpenAI usage analytics &#x2F; spend controls 更新，说明大公司关注点已经从“能不能用 AI 写代码”变成：谁在用、用了多少、成本是否可预测、产出是否可审计、数据是否合规。</p>
+<p>对后端开发者来说，这其实是熟悉领域：</p>
+<ul>
+<li>用户、团队、项目维度的配额；</li>
+<li>token、模型、工具调用、失败重试的日志；</li>
+<li>高风险操作审批；</li>
+<li>任务队列与超时控制；</li>
+<li>报表、告警、审计留痕。</li>
+</ul>
+<p>区别在于，Agent 的执行路径不是完全确定的，所以还要额外加入 eval、trace judge、prompt &#x2F; tool 版本管理和回放能力。</p>
+<h3 id="2-2-全栈运行时继续围绕“安全-稳定-DX”迭代"><a href="#2-2-全栈运行时继续围绕“安全-稳定-DX”迭代" class="headerlink" title="2.2 全栈运行时继续围绕“安全 + 稳定 + DX”迭代"></a>2.2 全栈运行时继续围绕“安全 + 稳定 + DX”迭代</h3><p>Node.js 6 月 18 日同时更新 Current 与两个 LTS 分支，并发布安全公告。这个节奏提醒我们：全栈不是只写 React 页面，运行时版本、安全补丁、依赖锁定和部署镜像同样重要。</p>
+<p>建议主线仍然保持：</p>
+<ul>
+<li>生产：Node.js LTS + TypeScript；</li>
+<li>前端框架：React &#x2F; Next.js 作为默认选择；</li>
+<li>后端框架：NestJS &#x2F; Fastify &#x2F; Hono 按团队和部署形态选择；</li>
+<li>脚本与工具链：可以评估 Bun；</li>
+<li>运行不可信代码或需要权限隔离时：持续关注 Deno &#x2F; sandbox 方案。</li>
+</ul>
+<h3 id="2-3-MCP-从“协议新鲜感”变成“工具产品化入口”"><a href="#2-3-MCP-从“协议新鲜感”变成“工具产品化入口”" class="headerlink" title="2.3 MCP 从“协议新鲜感”变成“工具产品化入口”"></a>2.3 MCP 从“协议新鲜感”变成“工具产品化入口”</h3><p>Cloudback MCP Server 这类产品的方向很有代表性：不是再做一个聊天机器人，而是把已有业务能力封装成 AI IDE &#x2F; Agent 可调用的工具。未来很多 SaaS 可能会同时提供 REST API、Webhook 和 MCP Server。</p>
+<p>但 MCP 的风险也很直接：一旦模型能操作文件、备份、云资源、数据库，就必须有最小权限、确认机制和审计日志。外部网页、用户上传文档、第三方 issue &#x2F; PR 内容都可能携带 prompt injection，不能把它们当成可信指令。</p>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><h3 id="3-1-Cloudback-MCP-Server：MCP-正在进入真实运维场景"><a href="#3-1-Cloudback-MCP-Server：MCP-正在进入真实运维场景" class="headerlink" title="3.1 Cloudback MCP Server：MCP 正在进入真实运维场景"></a>3.1 Cloudback MCP Server：MCP 正在进入真实运维场景</h3><p>Product Hunt 近两天出现的 Cloudback MCP Server 主打“从 Claude、Cursor、VS Code 管理备份”。它的价值不在于备份本身多新，而在于它展示了一个趋势：<strong>AI Coding 工具正在从写代码延伸到操作开发与运维系统。</strong></p>
+<p>对开发者的启发：如果你正在做内部平台，可以考虑为常用能力设计 MCP 层，例如：查询部署状态、读取日志、创建测试环境、触发回滚预案。但第一版就要做权限控制，不要让 Agent 拿到全量管理员权限。</p>
+<h3 id="3-2-Agent-37-Cloud：Agent-as-a-Service-继续细分"><a href="#3-2-Agent-37-Cloud：Agent-as-a-Service-继续细分" class="headerlink" title="3.2 Agent 37 Cloud：Agent as a Service 继续细分"></a>3.2 Agent 37 Cloud：Agent as a Service 继续细分</h3><p>Product Hunt 上的 Agent 37 Cloud 标语是“给每个客户一个自己的 Hermes 或 OpenClaw agent”。这类产品说明 Agent 托管正在从“我提供一个通用助手”变成“为每个客户运行独立上下文、独立权限、独立任务队列”。</p>
+<p>工程上要关注三件事：</p>
+<ul>
+<li>多租户隔离；</li>
+<li>长任务状态持久化；</li>
+<li>工具权限按客户 &#x2F; 项目 &#x2F; 会话分层。</li>
+</ul>
+<h3 id="3-3-Node-js-26-3-1-x2F-24-17-0-x2F-22-23-0：安全更新优先级高于追新"><a href="#3-3-Node-js-26-3-1-x2F-24-17-0-x2F-22-23-0：安全更新优先级高于追新" class="headerlink" title="3.3 Node.js 26.3.1 &#x2F; 24.17.0 &#x2F; 22.23.0：安全更新优先级高于追新"></a>3.3 Node.js 26.3.1 &#x2F; 24.17.0 &#x2F; 22.23.0：安全更新优先级高于追新</h3><p>这轮 Node.js 更新覆盖 Current 与 LTS，且伴随安全发布。对全栈项目的实际建议：</p>
+<ul>
+<li>本地开发环境可以继续跟随团队版本；</li>
+<li>CI、Docker base image、生产服务器优先升级到对应 LTS patch；</li>
+<li>跑一次依赖测试与端到端 smoke test；</li>
+<li>如果使用 Next.js &#x2F; Vite &#x2F; NestJS，重点看构建、SSR、server action、文件上传、鉴权中间件是否受影响。</li>
+</ul>
+<h3 id="3-4-HN-工程实践：小型-MCP-Server-更适合作为学习入口"><a href="#3-4-HN-工程实践：小型-MCP-Server-更适合作为学习入口" class="headerlink" title="3.4 HN 工程实践：小型 MCP Server 更适合作为学习入口"></a>3.4 HN 工程实践：小型 MCP Server 更适合作为学习入口</h3><p>HN 上出现“用 200 行 Go 写 MCP Server，让 Claude 更有用”的实践文章。即使不采用 Go，这个方向也适合学习：MCP 的核心不是复杂框架，而是清晰定义工具、输入输出 schema、权限和错误处理。</p>
+<p>今日如果要练手，建议用 TypeScript 或 Python 写一个只读 MCP Server：比如查询本地项目 README、列出最近 Git commit、读取测试报告。先做只读，再考虑写操作。</p>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-OpenAI：Codex-企业化意味着-AI-Coding-要接入研发治理"><a href="#4-1-OpenAI：Codex-企业化意味着-AI-Coding-要接入研发治理" class="headerlink" title="4.1 OpenAI：Codex 企业化意味着 AI Coding 要接入研发治理"></a>4.1 OpenAI：Codex 企业化意味着 AI Coding 要接入研发治理</h3><p>Samsung 部署 ChatGPT Enterprise 与 Codex 的消息，重点不是“大厂也用了 AI”，而是企业会要求 AI Coding 满足统一账号、权限、数据边界、使用分析和成本控制。未来团队引入 AI 编码工具时，技术负责人会问：</p>
+<ul>
+<li>能否限制访问仓库与文件？</li>
+<li>是否记录模型生成与工具调用？</li>
+<li>是否能按团队统计成本？</li>
+<li>是否支持私有知识库或内部规范？</li>
+<li>生成代码如何进入 review &#x2F; CI &#x2F; 安全扫描？</li>
+</ul>
+<p>这正是后端转 AI 应用开发的机会：把传统研发流程和 AI Agent 连接起来。</p>
+<h3 id="4-2-Spend-Controls：AI-应用需要“预算即架构”"><a href="#4-2-Spend-Controls：AI-应用需要“预算即架构”" class="headerlink" title="4.2 Spend Controls：AI 应用需要“预算即架构”"></a>4.2 Spend Controls：AI 应用需要“预算即架构”</h3><p>OpenAI 的 usage analytics 与 spend controls 更新说明，AI 应用上线后的主要问题之一是成本不可控。尤其 Agent 任务会循环、检索、调用工具、重试，单次用户请求可能变成几十次模型调用。</p>
+<p>建议每个 AI 功能默认设计：</p>
+<ul>
+<li>最大 token &#x2F; 最大步骤 &#x2F; 最大工具调用次数；</li>
+<li>按用户和任务类型做预算；</li>
+<li>高成本模型只用于关键节点；</li>
+<li>失败重试指数退避；</li>
+<li>超预算时返回可解释的降级结果，而不是静默失败。</li>
+</ul>
+<h3 id="4-3-RAG：别只换向量库，先补解析与评估"><a href="#4-3-RAG：别只换向量库，先补解析与评估" class="headerlink" title="4.3 RAG：别只换向量库，先补解析与评估"></a>4.3 RAG：别只换向量库，先补解析与评估</h3><p>很多 RAG 项目效果差，不是因为 embedding 模型不够新，而是因为文档解析错误、chunk 粒度混乱、权限过滤缺失、引用不可追踪。后端同学做 RAG 时建议把流程拆成：</p>
+<ol>
+<li>ingestion：抓取、解析、清洗、去重；</li>
+<li>indexing：chunk、embedding、metadata、权限字段；</li>
+<li>retrieval：混合检索、重排、上下文压缩；</li>
+<li>generation：引用、拒答、结构化输出；</li>
+<li>evaluation：命中率、事实一致性、引用准确性、人工反馈。</li>
+</ol>
+<h3 id="4-4-多模态与领域-Agent：先选可落地场景"><a href="#4-4-多模态与领域-Agent：先选可落地场景" class="headerlink" title="4.4 多模态与领域 Agent：先选可落地场景"></a>4.4 多模态与领域 Agent：先选可落地场景</h3><p>OpenAI 近期健康、生命科学、AI chemist 相关内容很多。对普通开发者来说，不必马上追领域论文，但要看到趋势：模型正在进入高专业度工作流。真正有价值的应用不是“聊天”，而是把模型嵌进具体流程：资料收集、候选方案生成、验证、记录、审批。</p>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ol>
+<li><strong>全栈主线：TypeScript + React &#x2F; Next.js + Node LTS。</strong> 这条路线生态、招聘、云部署、AI Coding 支持都最稳。</li>
+<li><strong>把后端优势迁移到全栈。</strong> 鉴权、数据库、缓存、队列、日志、CI&#x2F;CD、安全更新，比单纯写 UI 更能形成差异化。</li>
+<li><strong>AI 应用先学三件套：RAG、Agent 状态机、评估体系。</strong> 不要只会调用 chat API；要会处理文档、工具、状态、失败和成本。</li>
+<li><strong>MCP 先从只读工具做起。</strong> 读日志、查文档、查 commit、查部署状态都适合；删除、发布、转账、发邮件这类写操作必须加人工确认。</li>
+<li><strong>建立版本和成本纪律。</strong> Node LTS、依赖安全更新、模型版本、prompt 版本、eval 数据集都要纳入工程管理。</li>
+</ol>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>用 90 分钟做一个“只读 MCP + RAG 小工具”：</p>
+<ol>
+<li>选择一个本地项目或技术笔记目录；</li>
+<li>写一个只读工具：<code>search_docs(query)</code> 和 <code>read_doc(path)</code>；</li>
+<li>给工具加白名单目录，禁止读取目录外文件；</li>
+<li>用任意 LLM 客户端或 Agent 框架接入；</li>
+<li>记录 5 个问题的回答质量：是否命中文档、是否引用来源、是否胡编；</li>
+<li>最后写一页总结：哪些问题是检索失败，哪些是生成失败，哪些是文档本身缺失。</li>
+</ol>
+<p>这个练习比“再看一个框架教程”更接近真实 AI 应用开发。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li>OpenAI：Samsung Electronics brings ChatGPT and Codex to employees - <a target="_blank" rel="noopener" href="https://openai.com/index/samsung-electronics-chatgpt-codex-deployment">https://openai.com/index/samsung-electronics-chatgpt-codex-deployment</a></li>
+<li>OpenAI：New usage analytics and updated spend controls for enterprises - <a target="_blank" rel="noopener" href="https://openai.com/index/chatgpt-enterprise-spend-controls">https://openai.com/index/chatgpt-enterprise-spend-controls</a></li>
+<li>Node.js：Node.js 26.3.1 Current - <a target="_blank" rel="noopener" href="https://nodejs.org/en/blog/release/v26.3.1">https://nodejs.org/en/blog/release/v26.3.1</a></li>
+<li>Node.js：Node.js 24.17.0 LTS - <a target="_blank" rel="noopener" href="https://nodejs.org/en/blog/release/v24.17.0">https://nodejs.org/en/blog/release/v24.17.0</a></li>
+<li>Node.js：Node.js 22.23.0 LTS - <a target="_blank" rel="noopener" href="https://nodejs.org/en/blog/release/v22.23.0">https://nodejs.org/en/blog/release/v22.23.0</a></li>
+<li>Node.js：June 2026 Security Releases - <a target="_blank" rel="noopener" href="https://nodejs.org/en/blog/vulnerability/june-2026-security-releases">https://nodejs.org/en/blog/vulnerability/june-2026-security-releases</a></li>
+<li>Product Hunt：Cloudback MCP Server - <a target="_blank" rel="noopener" href="https://www.producthunt.com/products/cloudback">https://www.producthunt.com/products/cloudback</a></li>
+<li>Product Hunt：Agent 37 Cloud - <a target="_blank" rel="noopener" href="https://www.producthunt.com/products/agent-37-38">https://www.producthunt.com/products/agent-37-38</a></li>
+<li>Hacker News：MCP &#x2F; AI &#x2F; RAG 相关最新讨论 - <a target="_blank" rel="noopener" href="https://news.ycombinator.com/newest">https://news.ycombinator.com/newest</a></li>
+<li>Bun Blog：Bun v1.3.14 - <a target="_blank" rel="noopener" href="https://bun.com/blog/bun-v1.3.14">https://bun.com/blog/bun-v1.3.14</a></li>
+<li>Deno Blog - <a target="_blank" rel="noopener" href="https://deno.com/blog">https://deno.com/blog</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2026/06/22/fullstack-ai-daily-2026-06-22/">https://tonkyshan.cn/2026/06/22/fullstack-ai-daily-2026-06-22/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/RAG/"># RAG</a>
+                    
+                        <a href="../../../../tags/Agent/"># Agent</a>
+                    
+                        <a href="../../../../tags/%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91/"># 全栈开发</a>
+                    
+                        <a href="../../../../tags/AI-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"># AI 应用开发</a>
+                    
+                        <a href="../../../../tags/TypeScript/"># TypeScript</a>
+                    
+                        <a href="../../../../tags/MCP/"># MCP</a>
+                    
+                        <a href="../../../../tags/Node-js/"># Node.js</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="../../21/fullstack-ai-daily-2026-06-21/">全栈与 AI 应用开发前沿日报 - 2026-06-21</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>
