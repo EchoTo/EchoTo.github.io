@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>全栈与 AI 应用开发前沿日报 - 2026-06-25 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">全栈与 AI 应用开发前沿日报 - 2026-06-25</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 25, 2026&nbsp;&nbsp;9:30:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E6%8A%80%E6%9C%AF%E6%97%A5%E6%8A%A5/">技术日报</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>面向 Java &#x2F; Python 后端开发者的全栈与 AI 应用开发日报。今天的判断：<strong>过去 24-72 小时的技术主线不是“又多了一个聊天入口”，而是 AI 应用正在向更底层、更工程化的方向下沉：推理芯片、开源安全修复、长任务 Agent、文档解析评测、云平台 OAuth 与 Agent Runtime 都在补生产化短板。后端同学转全栈和 AI 应用，应该把注意力放在“可运行、可审计、可控成本、可维护”的系统能力上。</strong></p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>AI 基础设施开始进入全栈竞争。</strong> OpenAI 与 Broadcom 公布面向 LLM 推理的 Jalapeño 加速器，信号很清楚：模型公司不只拼模型 API，也在向芯片、网络、调度、Serving 系统延伸。对应用开发者来说，短期不需要研究芯片细节，但要意识到推理成本、延迟和可用性会继续改变产品形态。</li>
+<li><strong>AI Coding 的下一阶段是“长任务 + 可验证步骤”。</strong> OpenAI 发布 Codex long-running work 白皮书，强调把复杂目标拆成可验证步骤、保留上下文、区分人类监督与 Agent 执行边界。单次 prompt 技巧的重要性下降，任务拆解、测试、回放和验收的重要性上升。</li>
+<li><strong>开源安全成为 AI 应用落地的重要战场。</strong> OpenAI 的 Patch the Planet 把 AI 辅助漏洞发现、人工复核、补丁和测试结合起来，初始涉及 cURL、NATS、pyca&#x2F;cryptography、Sigstore、aiohttp、Go、Python 等关键项目。这说明 AI 安全不是只“扫漏洞”，而是要能融入维护者工作流。</li>
+<li><strong>前端框架继续围绕构建速度、路由和可观测性进化。</strong> Astro 7.0 发布，重点包括 Vite 8、新 Rust 编译器、Advanced Routing、后台 dev server 与结构化日志。内容站、文档站、营销站和轻交互产品仍然适合 Astro；复杂应用默认仍以 React &#x2F; Next.js 为主。</li>
+<li><strong>Agent 应用的工程关键词是：Memory、Harness、权限、成本。</strong> LangChain 最新文章聚焦 Agent Memory；GitHub Trending 中 OpenMontage、Orca、design.md、harness 等项目显示，开发者正在把 Agent 从“聊天机器人”推进到多工具、多技能、多上下文的生产系统。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-从模型-API-到“推理基础设施”的全栈化"><a href="#2-1-从模型-API-到“推理基础设施”的全栈化" class="headerlink" title="2.1 从模型 API 到“推理基础设施”的全栈化"></a>2.1 从模型 API 到“推理基础设施”的全栈化</h3><p>OpenAI 与 Broadcom 公布 Jalapeño 推理芯片，强调从模型、kernel、Serving、网络、调度到产品体验的一体化优化。这个方向对普通开发者的直接影响不是“明天就换芯片”，而是未来 AI 产品会越来越受三件事影响：</p>
+<ul>
+<li><strong>延迟</strong>：语音、多模态、Coding Agent、实时协作都需要低延迟；</li>
+<li><strong>成本</strong>：Agent 多轮调用、检索、工具执行会放大 token 和推理成本；</li>
+<li><strong>可用性</strong>：模型服务不再只是一个 HTTP API，而是依赖更复杂的底层集群和调度。</li>
+</ul>
+<p>后端转 AI 应用开发时，不能只会调用 <code>chat.completions</code> 或 Responses API。更有竞争力的是：会做队列、限流、缓存、降级、批处理、异步任务、失败重试和成本观测。</p>
+<h3 id="2-2-Agent-从“会回答”转向“能持续推进工作”"><a href="#2-2-Agent-从“会回答”转向“能持续推进工作”" class="headerlink" title="2.2 Agent 从“会回答”转向“能持续推进工作”"></a>2.2 Agent 从“会回答”转向“能持续推进工作”</h3><p>Codex long-running work 的核心不是某个新按钮，而是方法论变化：把长期目标拆成可以验证的小任务，并让 Agent 在一个持久工作区里持续推进。这里很像后端工程里的任务编排：</p>
+<ul>
+<li>目标拆解成 step；</li>
+<li>每一步有输入、输出和验收标准；</li>
+<li>中间状态要持久化；</li>
+<li>失败后能重试、回滚或交给人；</li>
+<li>最终结果必须经过测试或 review。</li>
+</ul>
+<p>这意味着 AI Coding 的学习重点应从“让模型一次生成大段代码”转到“让模型在测试、lint、类型检查、PR review 中闭环”。</p>
+<h3 id="2-3-前端框架的隐性竞争点：构建、路由、日志、Agent-友好"><a href="#2-3-前端框架的隐性竞争点：构建、路由、日志、Agent-友好" class="headerlink" title="2.3 前端框架的隐性竞争点：构建、路由、日志、Agent 友好"></a>2.3 前端框架的隐性竞争点：构建、路由、日志、Agent 友好</h3><p>Astro 7.0 把 Vite 8、Rust compiler、Advanced Routing、structured logging 放到核心升级里。Next.js 今年也在强调 agentic future、MCP、日志可见性。框架之间的竞争已经不只是组件语法，而是：</p>
+<ul>
+<li>构建速度是否足够快；</li>
+<li>路由和服务端渲染是否稳定；</li>
+<li>日志是否方便人和 Agent 共同理解；</li>
+<li>是否能在云平台、边缘运行时、CI&#x2F;CD 中顺滑部署；</li>
+<li>出问题时是否容易定位。</li>
+</ul>
+<p>对学习者来说，不要在 React &#x2F; Vue &#x2F; Svelte 的语法偏好上消耗太多。先把 TypeScript、组件状态、路由、表单、鉴权、服务端数据获取、部署和可观测性打通。</p>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><h3 id="3-1-Astro-7-0：内容型全栈项目继续提速"><a href="#3-1-Astro-7-0：内容型全栈项目继续提速" class="headerlink" title="3.1 Astro 7.0：内容型全栈项目继续提速"></a>3.1 Astro 7.0：内容型全栈项目继续提速</h3><p>Astro 7.0 的关键词是 Vite 8、Rust compiler、Advanced Routing、background dev server 和 structured logging。它适合：</p>
+<ul>
+<li>博客、文档、官网、产品落地页；</li>
+<li>需要少量交互但重视性能的站点；</li>
+<li>多框架组件共存的内容系统；</li>
+<li>希望构建快、默认输出静态或轻服务端渲染的项目。</li>
+</ul>
+<p>如果你是 Java&#x2F;Python 后端转全栈，Astro 可以作为“低心智负担做前端成果”的入口；但如果目标是后台系统、复杂 SaaS、AI 工作台，React &#x2F; Next.js 的生态和组件库仍然更稳。</p>
+<h3 id="3-2-Cloudflare-Self-Managed-OAuth：开发者平台继续补“授权基础设施”"><a href="#3-2-Cloudflare-Self-Managed-OAuth：开发者平台继续补“授权基础设施”" class="headerlink" title="3.2 Cloudflare Self-Managed OAuth：开发者平台继续补“授权基础设施”"></a>3.2 Cloudflare Self-Managed OAuth：开发者平台继续补“授权基础设施”</h3><p>Cloudflare 6 月 24 日发布 Self-Managed OAuth 面向所有开发者，并介绍了核心 OAuth 引擎零停机迁移。这个动态值得关注，因为 AI 应用和 SaaS 插件生态都会越来越依赖标准授权：</p>
+<ul>
+<li>用户授权第三方应用访问资源；</li>
+<li>Agent 代表用户调用工具；</li>
+<li>MCP &#x2F; API &#x2F; Webhook 之间需要明确身份边界；</li>
+<li>多租户系统需要细粒度权限和可撤销 token。</li>
+</ul>
+<p>做 AI 应用时，别把 API key 写死在服务端然后“一把梭”。长期看，OAuth、短期 token、scope、审计日志、撤销机制都会成为标配。</p>
+<h3 id="3-3-GitHub-Trending：Agent-正从单体助手变成“工具链与团队”"><a href="#3-3-GitHub-Trending：Agent-正从单体助手变成“工具链与团队”" class="headerlink" title="3.3 GitHub Trending：Agent 正从单体助手变成“工具链与团队”"></a>3.3 GitHub Trending：Agent 正从单体助手变成“工具链与团队”</h3><p>今日 GitHub Trending 里几个项目很有代表性：</p>
+<ul>
+<li><strong>OpenMontage</strong>：开源 agentic video production system，把视频生产拆成多 pipeline、多工具、多技能；</li>
+<li><strong>stablyai&#x2F;orca</strong>：面向并行 coding agents 的 ADE，强调 fleet of agents；</li>
+<li><strong>google-labs-code&#x2F;design.md</strong>：用结构化 <code>DESIGN.md</code> 给 coding agents 提供持续的设计系统上下文；</li>
+<li><strong>revfactory&#x2F;harness</strong>：生成领域专用 Agent 团队和技能；</li>
+<li><strong>hiring-agent</strong>：用 AI Agent 做简历评估。</li>
+</ul>
+<p>这些项目共同说明：Agent 应用正在从“一个聊天框”变成“带上下文文件、工具协议、执行环境、技能配置和评估机制的工程系统”。</p>
+<h3 id="3-4-LlamaIndex-ParseBench：RAG-的基础从向量库前移到文档解析"><a href="#3-4-LlamaIndex-ParseBench：RAG-的基础从向量库前移到文档解析" class="headerlink" title="3.4 LlamaIndex ParseBench：RAG 的基础从向量库前移到文档解析"></a>3.4 LlamaIndex ParseBench：RAG 的基础从向量库前移到文档解析</h3><p>LlamaIndex 推出的 ParseBench 强调用企业文档页和大量人工校验规则评估解析质量，维度包括表格、图表、内容忠实度、语义格式和视觉定位。这个方向非常关键：很多 RAG 项目失败，不是因为模型不够强，而是因为输入材料在 ingestion 阶段已经丢结构、丢表格、丢引用位置。</p>
+<p>如果你做企业知识库，文档解析、chunk 策略、metadata、权限字段和引用定位，优先级应该高于“换一个更潮的向量数据库”。</p>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-Patch-the-Planet：AI-安全要从报告漏洞走向合并补丁"><a href="#4-1-Patch-the-Planet：AI-安全要从报告漏洞走向合并补丁" class="headerlink" title="4.1 Patch the Planet：AI 安全要从报告漏洞走向合并补丁"></a>4.1 Patch the Planet：AI 安全要从报告漏洞走向合并补丁</h3><p>OpenAI 的 Patch the Planet 联合 Trail of Bits，目标是帮助关键开源项目发现、验证并修复安全问题。它的工程启发有三点：</p>
+<ol>
+<li><strong>AI 负责扩大搜索面，人类负责高风险判断。</strong> 安全场景不能完全自动化提交结论，误报和误修复都可能造成负担。</li>
+<li><strong>补丁、测试、CI&#x2F;CD 同样重要。</strong> 真正有价值的不是“发现一个问题”，而是让维护者能接受、验证、合并。</li>
+<li><strong>历史 CVE 可以变成可复用的检索和变体分析流程。</strong> 这和 RAG &#x2F; Agent 非常接近：检索旧知识，抽取模式，在新代码中查找相似风险，再交给评估器和人类复核。</li>
+</ol>
+<p>后端同学可以把这个思路迁移到自己的项目：用 AI 辅助读依赖公告、生成测试、检查危险 API 使用，但不要绕过 code review。</p>
+<h3 id="4-2-Agent-Memory：记忆不是聊天记录，而是可治理状态"><a href="#4-2-Agent-Memory：记忆不是聊天记录，而是可治理状态" class="headerlink" title="4.2 Agent Memory：记忆不是聊天记录，而是可治理状态"></a>4.2 Agent Memory：记忆不是聊天记录，而是可治理状态</h3><p>LangChain 6 月 24 日发布 Agent Memory 相关内容。这里的重点不是“让机器人更像人”，而是让 Agent 能在长期任务中保留有用状态：用户偏好、项目约束、已尝试方案、失败原因、待办事项。</p>
+<p>生产级 Agent Memory 至少要考虑：</p>
+<ul>
+<li>写入条件：什么信息值得记；</li>
+<li>删除和过期：过时信息如何清理；</li>
+<li>权限隔离：不同用户、项目、租户不能串；</li>
+<li>可解释性：回答基于哪些记忆；</li>
+<li>防注入：外部文档不能随便写入长期记忆。</li>
+</ul>
+<p>这对后端开发者是优势区：本质上是数据建模、权限、审计和生命周期管理。</p>
+<h3 id="4-3-AI-成本治理：预算应该成为架构的一部分"><a href="#4-3-AI-成本治理：预算应该成为架构的一部分" class="headerlink" title="4.3 AI 成本治理：预算应该成为架构的一部分"></a>4.3 AI 成本治理：预算应该成为架构的一部分</h3><p>近期 OpenAI、LangChain、Cloudflare 都在不同角度谈 AI spend &#x2F; trace &#x2F; gateway。原因很现实：Agent 一旦接入搜索、RAG、工具调用和重试，单次用户请求可能变成几十次模型调用。</p>
+<p>建议每个 AI 功能上线前都定义：</p>
+<ul>
+<li>最大步骤数；</li>
+<li>最大工具调用次数；</li>
+<li>每用户 &#x2F; 每组织 &#x2F; 每任务预算；</li>
+<li>高成本模型的触发条件；</li>
+<li>超预算后的降级答案；</li>
+<li>trace 与日志采样策略。</li>
+</ul>
+<p>没有预算边界的 Agent，本质上是一个不受控的后台任务。</p>
+<h3 id="4-4-MCP-与工具权限：默认只读，写操作必须确认"><a href="#4-4-MCP-与工具权限：默认只读，写操作必须确认" class="headerlink" title="4.4 MCP 与工具权限：默认只读，写操作必须确认"></a>4.4 MCP 与工具权限：默认只读，写操作必须确认</h3><p>MCP 生态继续扩散，开发者会越来越习惯把数据库、文件、浏览器、云资源、CI&#x2F;CD 封装成工具给 Agent 使用。这里最容易踩坑的是权限过大。</p>
+<p>建议第一版 MCP Server 遵循：</p>
+<ul>
+<li>只读优先；</li>
+<li>白名单目录 &#x2F; 白名单资源；</li>
+<li>输入 schema 严格校验；</li>
+<li>高风险操作二次确认；</li>
+<li>每次工具调用记录日志；</li>
+<li>外部网页、issue、PR、用户上传文件都视为不可信内容。</li>
+</ul>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ol>
+<li><strong>全栈主线继续选 TypeScript + React &#x2F; Next.js。</strong> 这是就业、生态、AI Coding 支持最稳的路线；Astro 适合作为内容站和文档站补充。</li>
+<li><strong>保留后端优势，不要只学页面。</strong> 鉴权、OAuth、RBAC、多租户、日志、队列、缓存、CI&#x2F;CD、部署、安全补丁，都是你从后端切入全栈的护城河。</li>
+<li><strong>AI 应用学习顺序建议：RAG ingestion → Agent tool calling → eval &#x2F; trace → 成本治理。</strong> 不要一上来就追复杂多 Agent，先让一个小系统可验证、可回放、可降级。</li>
+<li><strong>把 Agent 当后台任务系统设计。</strong> 它需要状态、超时、重试、取消、幂等、权限和审计，而不是一个无限循环的聊天脚本。</li>
+<li><strong>关注文档解析和结构化上下文。</strong> <code>README</code>、<code>DESIGN.md</code>、API schema、测试报告、部署日志，都会成为 AI Coding Agent 的上下文燃料。</li>
+</ol>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>用 90 分钟做一个“Agent 友好的项目上下文包”：</p>
+<ol>
+<li>在一个前端或全栈项目根目录创建 <code>DESIGN.md</code>，写清楚颜色、间距、组件风格和页面语气；</li>
+<li>创建 <code>ARCHITECTURE.md</code>，写清楚前端路由、后端 API、数据库表、鉴权方式；</li>
+<li>创建 <code>AI_TASKS.md</code>，列出 3 个可交给 Coding Agent 的小任务，每个任务包含验收标准；</li>
+<li>跑一次 lint &#x2F; test，把结果保存到 <code>reports/</code>；</li>
+<li>让 AI 根据这些文件改一个小功能；</li>
+<li>检查它是否遵守设计、架构和验收标准。</li>
+</ol>
+<p>这个练习的价值在于：你不是单纯“问 AI 写代码”，而是在训练自己搭建 AI 可协作的工程环境。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li>OpenAI：OpenAI and Broadcom unveil LLM-optimized inference chip - <a target="_blank" rel="noopener" href="https://openai.com/index/openai-broadcom-jalapeno-inference-chip/">https://openai.com/index/openai-broadcom-jalapeno-inference-chip/</a></li>
+<li>OpenAI：Patch the Planet - <a target="_blank" rel="noopener" href="https://openai.com/index/patch-the-planet/">https://openai.com/index/patch-the-planet/</a></li>
+<li>OpenAI：Daybreak - <a target="_blank" rel="noopener" href="https://openai.com/index/daybreak-securing-the-world/">https://openai.com/index/daybreak-securing-the-world/</a></li>
+<li>OpenAI：Codex-maxxing for long-running work - <a target="_blank" rel="noopener" href="https://openai.com/index/codex-maxxing-long-running-work/">https://openai.com/index/codex-maxxing-long-running-work/</a></li>
+<li>LangChain Blog：How To Give Your Agent Memory - <a target="_blank" rel="noopener" href="https://www.langchain.com/blog">https://www.langchain.com/blog</a></li>
+<li>LlamaIndex：Introducing ParseBench - <a target="_blank" rel="noopener" href="https://www.llamaindex.ai/blog/parsebench">https://www.llamaindex.ai/blog/parsebench</a></li>
+<li>Astro Blog：Astro 7.0 - <a target="_blank" rel="noopener" href="https://astro.build/blog/astro-7/">https://astro.build/blog/astro-7/</a></li>
+<li>Cloudflare Blog：Self-Managed OAuth for all developers - <a target="_blank" rel="noopener" href="https://blog.cloudflare.com/oauth-for-all/">https://blog.cloudflare.com/oauth-for-all/</a></li>
+<li>Cloudflare Blog：How we found a bug in the hyper HTTP library - <a target="_blank" rel="noopener" href="https://blog.cloudflare.com/hyper-bug/">https://blog.cloudflare.com/hyper-bug/</a></li>
+<li>GitHub Trending - <a target="_blank" rel="noopener" href="https://github.com/trending?since=daily">https://github.com/trending?since=daily</a></li>
+<li>Bun Blog - <a target="_blank" rel="noopener" href="https://bun.sh/blog">https://bun.sh/blog</a></li>
+<li>Deno Blog - <a target="_blank" rel="noopener" href="https://deno.com/blog">https://deno.com/blog</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2026/06/25/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-06-25/">https://tonkyshan.cn/2026/06/25/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-06-25/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/RAG/"># RAG</a>
+                    
+                        <a href="../../../../tags/Agent/"># Agent</a>
+                    
+                        <a href="../../../../tags/%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91/"># 全栈开发</a>
+                    
+                        <a href="../../../../tags/AI-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"># AI 应用开发</a>
+                    
+                        <a href="../../../../tags/TypeScript/"># TypeScript</a>
+                    
+                        <a href="../../../../tags/MCP/"># MCP</a>
+                    
+                        <a href="../../../../tags/Cloudflare/"># Cloudflare</a>
+                    
+                        <a href="../../../../tags/Astro/"># Astro</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="../../24/fullstack-ai-daily-2026-06-24/">全栈与 AI 应用开发前沿日报 - 2026-06-24</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>
