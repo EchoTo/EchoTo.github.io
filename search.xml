@@ -14,6 +14,204 @@
       </tags>
   </entry>
   <entry>
+    <title>全栈与 AI 应用开发前沿日报 - 2026-06-29</title>
+    <url>//2026/06/29/fullstack-ai-daily-2026-06-29/</url>
+    <content><![CDATA[<blockquote>
+<p>面向 Java &#x2F; Python 后端开发者的全栈与 AI 应用开发日报。今天的判断：前沿不再只是“模型更强”，而是模型、Agent 工程、运行时、可观测性、文档解析和部署安全一起进入工程化竞争。</p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>AI 应用开发正在从“调用大模型 API”转向“可观测、可缓存、可评估、可控成本的 Agent 系统”。</strong> LangChain 近期密集讨论 Deep Agents、Prompt Caching、Agent Memory、Loop Engineering、Trace Judge 和 Sandbox，说明生产级 Agent 的核心已经变成工程系统设计，而不是 prompt 技巧。</li>
+<li><strong>全栈框架的下一轮竞争点是“给 AI 编程代理更好的上下文”。</strong> Next.js 官方持续强调 agentic future；GitHub Trending 上 <code>DESIGN.md</code>、agent skills、网站克隆、AI 原生设计工具等项目爆火，说明前端工程正在围绕“让 Agent 读懂项目、设计系统、构建流程”重塑。</li>
+<li><strong>JS&#x2F;TS 运行时继续向“一体化后端工具箱”演进。</strong> Deno 2.9 发布，重点包括 <code>deno desktop</code>、从 npm&#x2F;pnpm&#x2F;yarn&#x2F;Bun 迁移、CSS module imports、测试增强、Node.js 26 兼容；Bun 近期版本也持续强化内置图片处理、HTTP&#x2F;2&#x2F;3、安装性能、cron、WebView、测试和 Node 兼容。后端同学转全栈时，不能只把 JS 当浏览器脚本看了。</li>
+<li><strong>文档处理是 RAG &#x2F; Agent 落地的关键瓶颈。</strong> LlamaIndex &#x2F; LlamaParse 推出 ParseBench，强调表格、图表、语义格式、视觉 grounding 等维度。对企业 AI 应用来说，入口数据质量决定最终答案质量。</li>
+<li><strong>GitHub 热门项目显示 AI Coding 已进入“工作流化”。</strong> AI 网站克隆、代码终端代理、Agent 编排器、AI 安全扫描、AI 投研、多 Agent 研究框架等项目说明：开发者正在把 AI 嵌入具体场景，而不是停留在聊天窗口。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-前端框架：从组件工程转向-Agent-友好工程"><a href="#2-1-前端框架：从组件工程转向-Agent-友好工程" class="headerlink" title="2.1 前端框架：从组件工程转向 Agent 友好工程"></a>2.1 前端框架：从组件工程转向 Agent 友好工程</h3><p>React 官方近期没有新的重大版本发布，但 React Server Components 相关安全事件仍是长期提醒：现代 React &#x2F; Next.js 项目把更多逻辑放到服务端后，<strong>安全边界、序列化边界、依赖升级策略</strong>必须纳入日常工程纪律。</p>
+<p>Next.js 博客中“Building Next.js for an agentic future”这条路线值得关注：框架不只是服务人类开发者，也要服务 AI coding agents。实际含义是：</p>
+<ul>
+<li>日志、错误、构建输出要更适合机器读取；</li>
+<li>项目结构、路由、缓存、服务端动作需要更清晰；</li>
+<li>MCP、设计系统描述、规范化上下文文件会成为团队工程资产。</li>
+</ul>
+<p>对后端转全栈的人来说，学习重点不应只放在“会写页面”，而是要理解：</p>
+<ul>
+<li>Server Components &#x2F; Server Actions 的数据边界；</li>
+<li>缓存、流式渲染、预渲染与动态渲染的取舍；</li>
+<li>API Route &#x2F; 独立后端服务 &#x2F; BFF 的边界划分。</li>
+</ul>
+<h3 id="2-2-JS-x2F-TS-运行时：Node-仍是主干，Bun-x2F-Deno-在补齐工程闭环"><a href="#2-2-JS-x2F-TS-运行时：Node-仍是主干，Bun-x2F-Deno-在补齐工程闭环" class="headerlink" title="2.2 JS&#x2F;TS 运行时：Node 仍是主干，Bun &#x2F; Deno 在补齐工程闭环"></a>2.2 JS&#x2F;TS 运行时：Node 仍是主干，Bun &#x2F; Deno 在补齐工程闭环</h3><p>Deno 2.9 的重点是把 Web 技术带到桌面应用，并继续强化 npm 生态迁移、测试、编译和 Node.js 兼容。这说明 Deno 不再只强调“安全 TypeScript runtime”，而是在争取成为完整应用平台。</p>
+<p>Bun 近期版本持续强化：</p>
+<ul>
+<li>内置图片处理 API；</li>
+<li>更快的安装和 isolated linker；</li>
+<li>HTTP&#x2F;2、HTTP&#x2F;3、QUIC 探索；</li>
+<li><code>Bun.cron()</code>、WebView、测试并行、Node 兼容。</li>
+</ul>
+<p>判断：<strong>生产主线仍以 Node.js + pnpm&#x2F;npm + Vite&#x2F;Next 为稳妥默认值</strong>；但 Bun &#x2F; Deno 值得在 CLI、边缘函数、内部工具、桌面小工具、Agent sandbox 中试用。不要为了追新强行迁移核心系统。</p>
+<h3 id="2-3-数据库与后端：实时、文档、图、可观测数据继续融合"><a href="#2-3-数据库与后端：实时、文档、图、可观测数据继续融合" class="headerlink" title="2.3 数据库与后端：实时、文档、图、可观测数据继续融合"></a>2.3 数据库与后端：实时、文档、图、可观测数据继续融合</h3><p>GitHub Trending 中 SurrealDB、GreptimeDB、PeerDB、Telegraf 等项目持续活跃，体现两个方向：</p>
+<ul>
+<li>应用数据库正在支持更复杂的数据模型：文档、图、实时协作；</li>
+<li>可观测性数据正在从“日志&#x2F;指标&#x2F;链路分散存储”走向统一查询与降本。</li>
+</ul>
+<p>Java &#x2F; Python 后端转型时，数据库学习建议从三层展开：</p>
+<ol>
+<li><strong>业务主库</strong>：PostgreSQL 仍是优先选择，掌握 JSONB、全文检索、向量扩展、事务和索引；</li>
+<li><strong>检索层</strong>：向量数据库或 PostgreSQL + pgvector，重点是召回、重排、过滤、评估；</li>
+<li><strong>可观测层</strong>：日志、trace、metrics 与 Agent 执行轨迹要统一记录。</li>
+</ol>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><p>以下不是简单罗列，而是按“是否值得后端转型者关注”筛选。</p>
+<h3 id="3-1-DESIGN-md：给-AI-Coding-Agent-的设计系统说明书"><a href="#3-1-DESIGN-md：给-AI-Coding-Agent-的设计系统说明书" class="headerlink" title="3.1 DESIGN.md：给 AI Coding Agent 的设计系统说明书"></a>3.1 DESIGN.md：给 AI Coding Agent 的设计系统说明书</h3><p>GitHub Trending 上 <code>google-labs-code/design.md</code> 热度很高，它提出用结构化格式描述视觉身份和设计系统，让 coding agent 能持续理解一个项目的 UI 风格。</p>
+<p>我的判断：这类文件会变成 AI 时代的“前端 README + Design Token + 组件规范”。以后团队可能会同时维护：</p>
+<ul>
+<li><code>README.md</code>：人类与项目总览；</li>
+<li><code>AGENTS.md</code> &#x2F; <code>CLAUDE.md</code>：Agent 工作规则；</li>
+<li><code>DESIGN.md</code>：设计系统与 UI 约束；</li>
+<li><code>openapi.yaml</code> &#x2F; <code>schema.prisma</code>：接口和数据模型。</li>
+</ul>
+<h3 id="3-2-Wasp：AI-时代的-batteries-included-全栈框架"><a href="#3-2-Wasp：AI-时代的-batteries-included-全栈框架" class="headerlink" title="3.2 Wasp：AI 时代的 batteries-included 全栈框架"></a>3.2 Wasp：AI 时代的 batteries-included 全栈框架</h3><p><code>wasp-lang/wasp</code> 继续在 TypeScript 趋势榜出现。它主打 React、Node.js、Prisma、Auth、后台任务、RPC、邮件、部署等能力的一体化抽象。</p>
+<p>对后端同学的价值：可以用它理解现代全栈应用的“标配能力清单”。即使不采用 Wasp，也应该能在自己的 Next.js &#x2F; NestJS &#x2F; FastAPI 项目里搭出这些模块。</p>
+<h3 id="3-3-Vercel-Labs-Skills-x2F-12-factor-agents：Agent-工程规范化"><a href="#3-3-Vercel-Labs-Skills-x2F-12-factor-agents：Agent-工程规范化" class="headerlink" title="3.3 Vercel Labs Skills &#x2F; 12-factor-agents：Agent 工程规范化"></a>3.3 Vercel Labs Skills &#x2F; 12-factor-agents：Agent 工程规范化</h3><p><code>vercel-labs/skills</code> 和 <code>humanlayer/12-factor-agents</code> 都指向同一趋势：Agent 开发需要可复用技能、边界、状态、错误恢复、人机协作和部署纪律。</p>
+<p>这对 AI 应用开发很关键。未来写 Agent 不是写一个 while loop，而是要回答：</p>
+<ul>
+<li>工具权限如何收敛？</li>
+<li>长任务如何恢复？</li>
+<li>人类审批点在哪里？</li>
+<li>失败如何降级？</li>
+<li>成本如何预算？</li>
+</ul>
+<h3 id="3-4-Open-SEO、AI-Website-Cloner、OpenPencil：AI-生成前端进入垂直场景"><a href="#3-4-Open-SEO、AI-Website-Cloner、OpenPencil：AI-生成前端进入垂直场景" class="headerlink" title="3.4 Open SEO、AI Website Cloner、OpenPencil：AI 生成前端进入垂直场景"></a>3.4 Open SEO、AI Website Cloner、OpenPencil：AI 生成前端进入垂直场景</h3><p>GitHub Trending 中出现了 AI 网站克隆、开源 SEO 替代、AI 原生矢量设计工具等项目。这些项目共同说明：AI 生成 UI 不再只是 demo，而是在进入 SEO、设计、站点复刻、在线编辑器等具体场景。</p>
+<p>但要警惕：这类工具适合提效和原型，不适合直接无审查上线。版权、品牌、可维护性、安全依赖仍需要工程师兜底。</p>
+<h3 id="3-5-AI-安全与漏洞工作流：从辅助审计到自动化攻防"><a href="#3-5-AI-安全与漏洞工作流：从辅助审计到自动化攻防" class="headerlink" title="3.5 AI 安全与漏洞工作流：从辅助审计到自动化攻防"></a>3.5 AI 安全与漏洞工作流：从辅助审计到自动化攻防</h3><p>Python &#x2F; JavaScript 趋势榜里出现了 AI bug bounty、AI hackers、安全扫描、社交分析等项目。对应用团队来说，这既是机会也是风险：</p>
+<ul>
+<li>机会：可以把 SAST、依赖扫描、日志审计、代码审查接入 AI；</li>
+<li>风险：攻击者同样能用 Agent 扩大扫描规模。</li>
+</ul>
+<p>建议把安全能力前置到开发流程，而不是上线后补救。</p>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-OpenAI：GPT-5-6-Sol-预览与企业落地信号"><a href="#4-1-OpenAI：GPT-5-6-Sol-预览与企业落地信号" class="headerlink" title="4.1 OpenAI：GPT-5.6 Sol 预览与企业落地信号"></a>4.1 OpenAI：GPT-5.6 Sol 预览与企业落地信号</h3><p>OpenAI 新闻页显示，6 月 26 日发布了 GPT-5.6 Sol 预览与系统卡，6 月 25 日发布了 agents transforming work，6 月 24 日还有面向推理芯片的合作信息。</p>
+<p>可落地的判断：</p>
+<ul>
+<li>模型能力继续提升，但企业更关心可控性、成本和安全说明；</li>
+<li>系统卡、评估、部署安全会越来越影响模型选型；</li>
+<li>Agent 在企业内部会先落在支持、研发、文档、数据分析、运营流程，而不是一上来完全替代业务系统。</li>
+</ul>
+<h3 id="4-2-LangChain：Deep-Agents、缓存、记忆、评估与沙箱"><a href="#4-2-LangChain：Deep-Agents、缓存、记忆、评估与沙箱" class="headerlink" title="4.2 LangChain：Deep Agents、缓存、记忆、评估与沙箱"></a>4.2 LangChain：Deep Agents、缓存、记忆、评估与沙箱</h3><p>LangChain 近几天的博客集中在：</p>
+<ul>
+<li>Prompt Caching with Deep Agents；</li>
+<li>June 2026 Newsletter；</li>
+<li>Full Text Search in SmithDB；</li>
+<li>Why the best agents are simpler than you think；</li>
+<li>How To Give Your Agent Memory；</li>
+<li>Loop Engineering；</li>
+<li>Trace Judge；</li>
+<li>Agent Sandbox。</li>
+</ul>
+<p>这很明确：<strong>Agent 的工程化重点正在从“能不能跑”转向“是否稳定、便宜、可调试、可评估”。</strong></p>
+<p>建议后端开发者建立一套 Agent 基础设施认知：</p>
+<ul>
+<li>Trace：每次模型调用、工具调用、状态变化都要可追踪；</li>
+<li>Eval：用数据集和回归测试衡量改动是否变好；</li>
+<li>Memory：区分短期上下文、用户长期偏好、业务知识库；</li>
+<li>Sandbox：外部代码执行、浏览器操作、文件操作必须隔离；</li>
+<li>Cache：prompt caching 和结果缓存能显著影响成本。</li>
+</ul>
+<h3 id="4-3-LlamaIndex-x2F-LlamaParse：文档解析成为-RAG-的核心基础设施"><a href="#4-3-LlamaIndex-x2F-LlamaParse：文档解析成为-RAG-的核心基础设施" class="headerlink" title="4.3 LlamaIndex &#x2F; LlamaParse：文档解析成为 RAG 的核心基础设施"></a>4.3 LlamaIndex &#x2F; LlamaParse：文档解析成为 RAG 的核心基础设施</h3><p>LlamaIndex 近期重点推 ParseBench，强调对企业文档解析质量的评测，包括表格、图表、内容忠实度、语义格式和视觉定位等。</p>
+<p>这对 RAG 的启发很直接：</p>
+<ul>
+<li>不要把 RAG 简化成“PDF -&gt; 文本 -&gt; embedding”；</li>
+<li>表格、图、页眉页脚、脚注、章节层级会严重影响答案；</li>
+<li>解析质量要可评估，不能只看模型回答是否“像那么回事”。</li>
+</ul>
+<p>如果做企业知识库，优先补齐：文档解析评估、chunk 策略、metadata、引用定位、答案可追溯。</p>
+<h3 id="4-4-模型路由与多供应商策略"><a href="#4-4-模型路由与多供应商策略" class="headerlink" title="4.4 模型路由与多供应商策略"></a>4.4 模型路由与多供应商策略</h3><p>GitHub Trending 中出现了 AI gateway、model router、统一多模型 endpoint 等项目，说明开发者正在主动降低对单一模型供应商的依赖。</p>
+<p>实用建议：</p>
+<ul>
+<li>新项目不要把模型调用散落在业务代码里；</li>
+<li>抽象统一 <code>ModelClient</code>，支持 OpenAI &#x2F; Anthropic &#x2F; Google &#x2F; Qwen &#x2F; DeepSeek 等替换；</li>
+<li>为不同任务配置不同模型：规划、编码、摘要、检索重排、JSON 抽取不一定用同一个；</li>
+<li>记录 token、延迟、失败率和质量评分。</li>
+</ul>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><h3 id="5-1-先补-TypeScript，而不是急着追所有框架"><a href="#5-1-先补-TypeScript，而不是急着追所有框架" class="headerlink" title="5.1 先补 TypeScript，而不是急着追所有框架"></a>5.1 先补 TypeScript，而不是急着追所有框架</h3><p>后端转全栈，最值得投入的是 TypeScript 类型系统、异步模型、模块化和构建工具。React &#x2F; Vue &#x2F; Svelte 可以后续按项目需要学，但 TypeScript 是共同底座。</p>
+<p>建议优先掌握：</p>
+<ul>
+<li>类型收窄、泛型、条件类型、工具类型；</li>
+<li>zod &#x2F; valibot 这类运行时 schema；</li>
+<li>fetch、stream、AbortController；</li>
+<li>pnpm workspace &#x2F; monorepo；</li>
+<li>ESLint、Prettier、Vitest、Playwright。</li>
+</ul>
+<h3 id="5-2-用-Next-js-做主线项目，但保留独立后端能力"><a href="#5-2-用-Next-js-做主线项目，但保留独立后端能力" class="headerlink" title="5.2 用 Next.js 做主线项目，但保留独立后端能力"></a>5.2 用 Next.js 做主线项目，但保留独立后端能力</h3><p>对 Java&#x2F;Python 背景，最佳路线不是“抛弃后端”，而是：</p>
+<ul>
+<li>前台：Next.js + React + Tailwind；</li>
+<li>后台：NestJS &#x2F; FastAPI &#x2F; Spring Boot 继续承担复杂业务；</li>
+<li>数据：PostgreSQL + Redis + 对象存储；</li>
+<li>AI：RAG &#x2F; Agent 服务单独模块化；</li>
+<li>部署：Docker + CI&#x2F;CD + 云函数或 VPS。</li>
+</ul>
+<p>这样既能学会全栈，又不会丢掉后端优势。</p>
+<h3 id="5-3-AI-应用项目要从第一天加入评估和日志"><a href="#5-3-AI-应用项目要从第一天加入评估和日志" class="headerlink" title="5.3 AI 应用项目要从第一天加入评估和日志"></a>5.3 AI 应用项目要从第一天加入评估和日志</h3><p>很多 AI demo 做得快，但上线困难。原因通常不是模型不够强，而是：</p>
+<ul>
+<li>没有 golden dataset；</li>
+<li>没有失败样本归档；</li>
+<li>没有引用和证据链；</li>
+<li>没有成本统计；</li>
+<li>没有工具权限控制。</li>
+</ul>
+<p>建议每个 AI 项目都内置四张表：</p>
+<ol>
+<li><code>ai_runs</code>：一次 AI 任务的总记录；</li>
+<li><code>ai_messages</code>：模型输入输出；</li>
+<li><code>tool_calls</code>：工具调用与结果；</li>
+<li><code>eval_cases</code>：评估样本与预期。</li>
+</ol>
+<h3 id="5-4-安全意识要升级到-Agent-时代"><a href="#5-4-安全意识要升级到-Agent-时代" class="headerlink" title="5.4 安全意识要升级到 Agent 时代"></a>5.4 安全意识要升级到 Agent 时代</h3><p>Agent 能读文件、调 API、跑代码、操作浏览器，就意味着攻击面扩大。必须关注：</p>
+<ul>
+<li>prompt injection；</li>
+<li>工具权限最小化；</li>
+<li>外部网页和文档不可信；</li>
+<li>secrets 隔离；</li>
+<li>sandbox 执行；</li>
+<li>人工审批。</li>
+</ul>
+<p>这不是“高级功能”，而是生产 AI 应用的基础设施。</p>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>今天建议做一个 90 分钟小练习：<strong>给自己的 Next.js &#x2F; FastAPI 项目加一个最小 AI 运行日志系统。</strong></p>
+<p>目标：</p>
+<ol>
+<li>新建一张 <code>ai_runs</code> 表，字段包括：<code>id</code>、<code>task_type</code>、<code>model</code>、<code>input_preview</code>、<code>output_preview</code>、<code>token_usage</code>、<code>latency_ms</code>、<code>status</code>、<code>created_at</code>；</li>
+<li>封装一个 <code>callModel()</code> 方法，所有模型调用都经过它；</li>
+<li>每次调用自动写入耗时、模型名、状态和错误；</li>
+<li>做一个简单后台页面，能查看最近 20 次 AI 调用；</li>
+<li>手动挑 5 个失败样本，整理成 <code>eval_cases</code>。</li>
+</ol>
+<p>这个练习比单纯试一个新模型更有价值，因为它把你从“会调用 API”推进到“会做 AI 应用工程”。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li>OpenAI News：<a href="https://openai.com/news/">https://openai.com/news/</a></li>
+<li>LangChain Blog：<a href="https://www.langchain.com/blog">https://www.langchain.com/blog</a></li>
+<li>LlamaIndex Blog：<a href="https://www.llamaindex.ai/blog">https://www.llamaindex.ai/blog</a></li>
+<li>Deno Blog：<a href="https://deno.com/blog">https://deno.com/blog</a></li>
+<li>Bun Blog：<a href="https://bun.com/blog">https://bun.com/blog</a></li>
+<li>Next.js Blog：<a href="https://nextjs.org/blog">https://nextjs.org/blog</a></li>
+<li>React Blog：<a href="https://react.dev/blog">https://react.dev/blog</a></li>
+<li>GitHub Trending TypeScript：<a href="https://github.com/trending/typescript?since=daily">https://github.com/trending/typescript?since=daily</a></li>
+<li>GitHub Trending Python：<a href="https://github.com/trending/python?since=daily">https://github.com/trending/python?since=daily</a></li>
+<li>GitHub Trending JavaScript：<a href="https://github.com/trending/javascript?since=daily">https://github.com/trending/javascript?since=daily</a></li>
+<li>GitHub Trending Go：<a href="https://github.com/trending/go?since=daily">https://github.com/trending/go?since=daily</a></li>
+<li>GitHub Trending Rust：<a href="https://github.com/trending/rust?since=daily">https://github.com/trending/rust?since=daily</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术日报</category>
+      </categories>
+      <tags>
+        <tag>RAG</tag>
+        <tag>Agent</tag>
+        <tag>Java</tag>
+        <tag>Python</tag>
+        <tag>全栈开发</tag>
+        <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>全栈与 AI 应用开发前沿日报 - 2026-06-25</title>
     <url>/2026/06/25/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-06-25/</url>
     <content><![CDATA[<blockquote>
@@ -8566,9 +8764,9 @@ master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
         <category>OpenShift</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>OpenShift</tag>
         <tag>Docker</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -20448,8 +20646,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>K8s</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>K8s</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
