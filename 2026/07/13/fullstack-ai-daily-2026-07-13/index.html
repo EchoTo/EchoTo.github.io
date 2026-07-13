@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>全栈与 AI 应用开发前沿日报 - 2026-07-13 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">全栈与 AI 应用开发前沿日报 - 2026-07-13</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 13, 2026&nbsp;&nbsp;9:30:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E6%8A%80%E6%9C%AF%E6%97%A5%E6%8A%A5/">技术日报</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><p>过去 24-72 小时的信号并不是“某个大模型突然改变世界”，而是更接近工程侧的持续收敛：全栈框架在补可观测性、缓存、构建链路和运行时兼容；AI 应用框架在补状态管理、工具调用边界、记忆层和评估闭环。</p>
+<p>对从 Java&#x2F;Python 后端转全栈与 AI 应用开发的人来说，今天最值得关注的不是追每一个新库，而是把能力栈补成三层：前端框架能交付复杂交互，后端能稳定组织数据与任务，AI 层能被观测、回放、评估和限制权限。</p>
+<p>今日判断：Agent 开发正在从“写 prompt + 接 API”进入“软件工程化”阶段。谁能把上下文成本、工具权限、状态迁移、失败恢复和线上观测做扎实，谁就更接近可交付的 AI 应用。</p>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="Next-js-继续把重点放在请求级可观测"><a href="#Next-js-继续把重点放在请求级可观测" class="headerlink" title="Next.js 继续把重点放在请求级可观测"></a>Next.js 继续把重点放在请求级可观测</h3><p>Next.js 近期 canary 版本继续推进 request insights，v16.3.0-canary.84 的发布说明里提到记录本地 framework spans、派生 request history 和 fetch data、向工具与 HMR 暴露开发快照。这类能力不只是调试体验优化，它反映了现代全栈框架的方向：服务端组件、缓存、数据请求、路由和构建工具越来越深地绑在一起，框架必须提供请求级视角，否则线上问题很难定位。</p>
+<p>对后端开发者来说，这一点很熟悉：它相当于把分布式追踪、慢查询、缓存命中率这套思维带进前端框架。学习 Next.js 时，不应只学页面和路由，还要关注 fetch 缓存、Server Actions、RSC 边界、middleware、日志与 trace 的设计。</p>
+<h3 id="React-近期不是高频大版本，但生态重心仍在服务端协作"><a href="#React-近期不是高频大版本，但生态重心仍在服务端协作" class="headerlink" title="React 近期不是高频大版本，但生态重心仍在服务端协作"></a>React 近期不是高频大版本，但生态重心仍在服务端协作</h3><p>React 最近的公开 release 距离今天已有一段时间，所以今天不宜写成“React 新发布”。但从 Next.js、Remix、TanStack、Astro 等生态的变化看，React 的工程重心仍在服务端渲染、异步数据、Server Components 和编译&#x2F;打包协作。它的价值不再只是组件库，而是成为全栈框架的 UI runtime。</p>
+<p>这意味着学习 React 不能停在 useState&#x2F;useEffect。后端转型者应该重点理解：组件树如何映射数据依赖，服务端和客户端边界如何切分，哪些状态应该留在 URL、服务端缓存、数据库或浏览器本地。</p>
+<h3 id="Deno、Bun-与-Node-的竞争进入兼容和工具链阶段"><a href="#Deno、Bun-与-Node-的竞争进入兼容和工具链阶段" class="headerlink" title="Deno、Bun 与 Node 的竞争进入兼容和工具链阶段"></a>Deno、Bun 与 Node 的竞争进入兼容和工具链阶段</h3><p>Deno 2.9.x 近期仍在更新，Bun 近期 release 不在 72 小时内，但两个运行时都在持续推动 TypeScript、npm 兼容、测试、打包、权限模型和开发体验。运行时竞争的核心已经不是“谁跑分更快”，而是谁能让团队在现有 npm 生态、CI、部署平台和安全约束里更少折腾。</p>
+<p>对生产项目，Node.js 仍是默认稳妥选择；对新工具、脚本、内部平台和边缘实验，Bun&#x2F;Deno 值得小范围试用。不要因为热度直接迁移主业务运行时，先用非核心链路验证依赖兼容、构建产物、监控和部署流程。</p>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><h3 id="clodex-ide：本地优先、零信任-Agent-IDE-的热度信号"><a href="#clodex-ide：本地优先、零信任-Agent-IDE-的热度信号" class="headerlink" title="clodex-ide：本地优先、零信任 Agent IDE 的热度信号"></a>clodex-ide：本地优先、零信任 Agent IDE 的热度信号</h3><p>GitHub 近两天新项目里，<code>mereyabdenbekuly-ctrl/clodex-ide</code> 在很短时间内获得较高关注，描述是 local-first、zero-trust 的 agentic IDE，用于可验证的自主软件开发。这个项目本身还需要继续观察代码质量和维护持续性，但它代表了一个重要方向：AI Coding 工具正在从“聊天窗口生成代码”走向“有权限边界、有可验证执行过程、有本地工作区上下文”的开发环境。</p>
+<p>采用建议：可以观察，不建议马上纳入核心开发流。任何 agentic IDE 都要先审查它读取文件、执行命令、联网和写入代码的权限模型。</p>
+<h3 id="AI-内容知识库和本地记忆项目升温"><a href="#AI-内容知识库和本地记忆项目升温" class="headerlink" title="AI 内容知识库和本地记忆项目升温"></a>AI 内容知识库和本地记忆项目升温</h3><p>GitHub 新项目和 HN 讨论里，本地优先知识库、跨 Agent 记忆、内容知识系统持续出现。HN 上“一页 Wikipedia 会消耗 AI agent 68000 tokens”的讨论也再次提醒：上下文不是免费资源，RAG 和记忆层的设计会直接影响成本、延迟和回答质量。</p>
+<p>判断：未来 AI 应用的差异点不会只是模型，而是上下文工程。包括文档切分、检索路由、摘要缓存、长期记忆、引用校验、隐私边界和可删除性。</p>
+<h3 id="MCP、skills、llms-txt-类生态继续扩散"><a href="#MCP、skills、llms-txt-类生态继续扩散" class="headerlink" title="MCP、skills、llms.txt 类生态继续扩散"></a>MCP、skills、llms.txt 类生态继续扩散</h3><p>多个新项目把 MCP setup、Claude Code plugin、agent skills、llms.txt 放进 README 和 SDK 设计里。这说明 AI 工具调用生态正在形成“机器可读接入说明”的默认期待。对于应用开发者，这既是机会也是风险：机会是工具更容易被 Agent 调用，风险是权限暴露、提示注入和供应链攻击面变大。</p>
+<p>落地时要建立白名单：哪些工具可读，哪些工具可写，哪些工具需要人工确认，哪些工具永远不能暴露给模型。</p>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="LangGraph-继续围绕状态更新和-CLI-演进"><a href="#LangGraph-继续围绕状态更新和-CLI-演进" class="headerlink" title="LangGraph 继续围绕状态更新和 CLI 演进"></a>LangGraph 继续围绕状态更新和 CLI 演进</h3><p>LangGraph 1.2.9 在 7 月 10 日发布，变更集中在 updateState metadata&#x2F;counters for delta channel 等状态更新细节；LangGraph CLI 也在同期更新。这类小版本看似不大，但对 Agent 系统很关键：Agent 的复杂性常常不是模型调用，而是多轮状态、分支、重试、人工介入和回放。</p>
+<p>如果你正在用 LangChain&#x2F;LangGraph，今天的重点不是盲目升级，而是检查自己的 Agent 是否具备：状态持久化、步骤日志、失败重放、工具调用记录、人工审批节点、评估样例集。</p>
+<h3 id="RAG-从“向量库接入”转向“检索治理”"><a href="#RAG-从“向量库接入”转向“检索治理”" class="headerlink" title="RAG 从“向量库接入”转向“检索治理”"></a>RAG 从“向量库接入”转向“检索治理”</h3><p>近期讨论继续指向一个问题：把文档塞进向量数据库并不等于完成 RAG。真正难的是决定何时检索、检索多少、如何压缩、如何引用、如何发现幻觉、如何处理过期知识。</p>
+<p>对 Java&#x2F;Python 后端学习者，推荐把 RAG 当成一个后端系统设计题，而不是一个 AI demo：文档入库流水线、权限过滤、索引版本、召回评估、缓存策略、审计日志都要纳入设计。</p>
+<h3 id="AI-Coding-的下一阶段是工程权限与验证"><a href="#AI-Coding-的下一阶段是工程权限与验证" class="headerlink" title="AI Coding 的下一阶段是工程权限与验证"></a>AI Coding 的下一阶段是工程权限与验证</h3><p>AI Coding 工具仍在高速增长，但生产团队真正关心的是：生成的代码是否可测试，命令是否安全，依赖是否可信，改动是否可审查，回滚是否容易。Agent 能写代码只是第一步，能在受控环境里持续交付才是核心。</p>
+<p>推荐策略：把 AI Coding 放进现有工程约束里，而不是绕过约束。也就是让它跑测试、读 lint、提交小 diff、解释风险，而不是让它直接大范围重写项目。</p>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><p>第一，继续把 TypeScript 作为全栈主线。后端开发者学习前端时，最容易低估类型系统在组件 props、API schema、表单校验和服务端数据契约中的价值。建议把 Zod&#x2F;Valibot、tRPC 或 OpenAPI 类型生成、React Hook Form 这类工具串起来练。</p>
+<p>第二，把 Next.js 当作“前后端一体框架”学习，而不是只当 React 脚手架。重点掌握 App Router、Server Components、Route Handlers、缓存策略、认证、数据库访问、文件上传、日志和部署。</p>
+<p>第三，AI 应用不要只写聊天页面。要练一个有真实工程边界的小系统：用户上传资料，后台解析入库，RAG 回答带引用，Agent 只能调用白名单工具，所有调用可回放，失败时有人工接管。</p>
+<p>第四，保留后端优势。Java&#x2F;Python 后端经验在 AI 应用里非常有价值：任务队列、异步处理、权限、审计、数据一致性、可观测性、成本控制，这些正是很多 AI demo 缺失的部分。</p>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>今天建议做一个 90 分钟练习：用 Next.js + Python&#x2F;FastAPI 或 Next.js Route Handler 做一个“文档问答最小闭环”。</p>
+<p>要求如下：</p>
+<ol>
+<li>上传一份 Markdown 或 PDF 文档。</li>
+<li>后台切分文本并写入本地向量库或 SQLite FTS。</li>
+<li>前端输入问题后，先展示检索到的片段，再展示模型回答。</li>
+<li>回答必须带引用片段编号。</li>
+<li>记录每次问题、检索片段、模型输入 token 估算、回答结果。</li>
+<li>加一个开关：超过指定 token 预算时先摘要再回答。</li>
+</ol>
+<p>这个练习能同时覆盖全栈、RAG、成本意识和可观测性，比单纯调一个聊天 API 更接近真实项目。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li>Next.js v16.3.0-canary.84 Release: <a target="_blank" rel="noopener" href="https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.84">https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.84</a></li>
+<li>Next.js v16.3.0-canary.83 Release: <a target="_blank" rel="noopener" href="https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.83">https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.83</a></li>
+<li>LangGraph 1.2.9 Release: <a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/releases/tag/1.2.9">https://github.com/langchain-ai/langgraph/releases/tag/1.2.9</a></li>
+<li>LangGraph CLI 0.4.31 Release: <a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/releases/tag/cli%3D%3D0.4.31">https://github.com/langchain-ai/langgraph/releases/tag/cli%3D%3D0.4.31</a></li>
+<li>Deno 2.9.2 Release: <a target="_blank" rel="noopener" href="https://github.com/denoland/deno/releases/tag/v2.9.2">https://github.com/denoland/deno/releases/tag/v2.9.2</a></li>
+<li>React Releases: <a target="_blank" rel="noopener" href="https://github.com/facebook/react/releases">https://github.com/facebook/react/releases</a></li>
+<li>Bun Releases: <a target="_blank" rel="noopener" href="https://github.com/oven-sh/bun/releases">https://github.com/oven-sh/bun/releases</a></li>
+<li>HN: One Wikipedia page costs your AI agent 68,000 tokens: <a target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=48867021">https://news.ycombinator.com/item?id=48867021</a></li>
+<li>HN: Reverse-engineering web apps into agent tools: <a target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=48847834">https://news.ycombinator.com/item?id=48847834</a></li>
+<li>GitHub: clodex-ide: <a target="_blank" rel="noopener" href="https://github.com/mereyabdenbekuly-ctrl/clodex-ide">https://github.com/mereyabdenbekuly-ctrl/clodex-ide</a></li>
+<li>GitHub: AI-assisted personal content knowledge systems: <a target="_blank" rel="noopener" href="https://github.com/mrbear1024/ai-content-kb">https://github.com/mrbear1024/ai-content-kb</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2026/07/13/fullstack-ai-daily-2026-07-13/">https://tonkyshan.cn/2026/07/13/fullstack-ai-daily-2026-07-13/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/RAG/"># RAG</a>
+                    
+                        <a href="../../../../tags/Agent/"># Agent</a>
+                    
+                        <a href="../../../../tags/%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91/"># 全栈开发</a>
+                    
+                        <a href="../../../../tags/Next-js/"># Next.js</a>
+                    
+                        <a href="../../../../tags/AI%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"># AI应用开发</a>
+                    
+                        <a href="../../../../tags/LangGraph/"># LangGraph</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="../../10/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-07-10/">全栈与 AI 应用开发前沿日报 - 2026-07-10</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>
