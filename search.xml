@@ -14,6 +14,110 @@
       </tags>
   </entry>
   <entry>
+    <title>全栈与 AI 应用开发前沿日报 - 2026-07-22</title>
+    <url>/2026/07/22/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-07-22/</url>
+    <content><![CDATA[<blockquote>
+<p>面向 Java&#x2F;Python 后端转全栈与 AI 应用开发的学习者：这份日报只保留近 24-72 小时里真正影响工程路线的信号，重点看“能不能落到项目里”。</p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>Agent 正在从“会聊天”变成“有工作台、有权限边界、有回路”的系统。</strong> GitHub 把 Copilot canvases 推成可交互工作面，Vercel 把 Agent 直接放进仪表盘和生产调查链路里。今天最重要的不是再多一个 agent demo，而是把 agent 放进真实工作流。</li>
+<li><strong>平台型全栈继续吞掉更多后端职责。</strong> Vercel 近几天同时在讲 Agent、AI Gateway、Python cold start 优化和 30 分钟交付案例，说明部署平台已经不只是“托管前端”，而是在吃掉网关、运行时、权限和交付节奏。</li>
+<li><strong>AI 应用开发的分水岭在观测、成本和审批。</strong> 现在大家关心的不是模型会不会答，而是能不能追踪每一次调用、能不能解释每一步工具使用、能不能把风险挡在生产外。</li>
+<li><strong>RAG 仍然没过时，但重心前移到文档质量。</strong> 真正卡住项目的往往不是向量库，而是解析、切分、引用和表格&#x2F;版式保真。没有高质量输入，后面的检索和生成都只是放大噪声。</li>
+<li><strong>对 Java&#x2F;Python 后端转型者，最值钱的不是追框架数量，而是补齐 TypeScript + 运行时 + AI 流程工程。</strong> 这三件事比单纯学一个新库更能决定你能不能做出可上线的产品。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-Agent-的形态从“对话”变成“协作界面”"><a href="#2-1-Agent-的形态从“对话”变成“协作界面”" class="headerlink" title="2.1 Agent 的形态从“对话”变成“协作界面”"></a>2.1 Agent 的形态从“对话”变成“协作界面”</h3><p>GitHub 最新文章讲的是 Copilot canvases。这个变化很关键：agent 不再只在聊天框里给你一段回复，而是进入一个可以直接修改、拖拽、筛选、回写的工作区。对开发者来说，这意味着 agent 的 UI 设计开始接近产品设计，而不只是 prompt engineering。</p>
+<p>我更看重的判断是：<strong>未来真正有用的 agent，都会有“人类随时接管”的操作面。</strong> 这比纯文本对话稳得多，也更容易接到真实流程里。</p>
+<h3 id="2-2-全栈平台继续上收后端能力"><a href="#2-2-全栈平台继续上收后端能力" class="headerlink" title="2.2 全栈平台继续上收后端能力"></a>2.2 全栈平台继续上收后端能力</h3><p>Vercel 这两天的信号很一致：一边是 <code>Vercel Agent</code>，一边是 <code>AI Gateway</code> 和 Python cold start 优化，还有一个 Searchable 案例直接写到“30 分钟就能交付客户要的功能”。</p>
+<p>这说明一个现实趋势：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">前端框架 -> BFF -> 模型网关 -> 运行时 -> 观测 -> 审批 -> 交付<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这条链条正变成全栈默认结构。Java&#x2F;Python 后端并没有失去价值，但它们更像系统中的“稳定内核”；而 Next.js、Vercel、Cloudflare 这类平台在把产品交付链条做短。</p>
+<h3 id="2-3-Python-仍然有工程红利，但要看运行时成本"><a href="#2-3-Python-仍然有工程红利，但要看运行时成本" class="headerlink" title="2.3 Python 仍然有工程红利，但要看运行时成本"></a>2.3 Python 仍然有工程红利，但要看运行时成本</h3><p>Vercel 把 Python function bundles 的预编译字节码放进构建流程，直接把 median cold start 从 2.8 秒降到 1.3 秒。这个细节很值钱：它说明 Python 在 AI 应用和轻量后端里仍然很强，但部署成本、冷启动、依赖体积这些问题会越来越被平台优化和暴露出来。</p>
+<p>结论很简单：<strong>Python 适合继续做 AI 服务和业务编排，但你必须开始关心运行时性能，而不是只关心表达力。</strong></p>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><h3 id="3-1-GitHub-Copilot-canvases：把-agent-拉进交互式工作台"><a href="#3-1-GitHub-Copilot-canvases：把-agent-拉进交互式工作台" class="headerlink" title="3.1 GitHub Copilot canvases：把 agent 拉进交互式工作台"></a>3.1 GitHub Copilot canvases：把 agent 拉进交互式工作台</h3><p>这篇 GitHub 博文最值得记住的不是“canvas”这个词，而是它表达的产品方向：agent 不只是写答案，而是参与处理 issue、图谱、工作树、提示词优化这类更复杂的任务。</p>
+<p>对转型学习者，这类能力可以拆成三层练习：</p>
+<ul>
+<li>把模型输出从纯文本改成可操作对象；</li>
+<li>给 agent 加状态和撤销；</li>
+<li>让用户能在同一个工作台里继续干预。</li>
+</ul>
+<h3 id="3-2-Vercel-Agent：生产调查开始被平台化"><a href="#3-2-Vercel-Agent：生产调查开始被平台化" class="headerlink" title="3.2 Vercel Agent：生产调查开始被平台化"></a>3.2 Vercel Agent：生产调查开始被平台化</h3><p>Vercel 新 Agent 的定位很明确：先读日志、指标和部署，再提出修复方案，必要时才需要人工批准执行。这和传统聊天机器人差别很大，它已经在碰生产调查、回滚和 PR 修复了。</p>
+<p>这里的信号是：<strong>AI 应用开始吃掉 SRE &#x2F; 运维 &#x2F; 值班里的部分“第一响应”工作。</strong> 这会直接影响全栈工程师的工作方式。</p>
+<h3 id="3-3-Searchable-on-Vercel：AI-时代的产品迭代速度被重新定义"><a href="#3-3-Searchable-on-Vercel：AI-时代的产品迭代速度被重新定义" class="headerlink" title="3.3 Searchable on Vercel：AI 时代的产品迭代速度被重新定义"></a>3.3 Searchable on Vercel：AI 时代的产品迭代速度被重新定义</h3><p>Vercel 的案例里，一个 AI 相关产品把新功能交付压到 30 分钟量级。这个数字的含义不是“所有团队都该卷到这个速度”，而是说明 AI Gateway、模板化部署、统一鉴权和可回滚发布正在把小团队的交付边界拉宽。</p>
+<p>对个人开发者来说，这条线最实用：<strong>你不需要先把系统做大，再谈 AI 产品；你可以先把交付链做短，再让产品长出来。</strong></p>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-观测和审计已经是-agent-的必需品"><a href="#4-1-观测和审计已经是-agent-的必需品" class="headerlink" title="4.1 观测和审计已经是 agent 的必需品"></a>4.1 观测和审计已经是 agent 的必需品</h3><p>今天看下来，最稳定的共识不是“哪个模型最好”，而是：</p>
+<ul>
+<li>每次调用都要能追踪；</li>
+<li>每次工具调用都要能复盘；</li>
+<li>每次失败都要能回放；</li>
+<li>每次成本都要能统计。</li>
+</ul>
+<p>这也是为什么 Agent、AI Gateway、日志、metrics、trace、审批流会越来越像一个整体，而不是分散功能。</p>
+<h3 id="4-2-模型网关会越来越像基础设施"><a href="#4-2-模型网关会越来越像基础设施" class="headerlink" title="4.2 模型网关会越来越像基础设施"></a>4.2 模型网关会越来越像基础设施</h3><p>Vercel 的 AI Gateway 和类似能力说明，模型选择会从代码里的硬编码，转成运行时策略。对 AI 应用来说，未来常见的不是“接一个模型”，而是“接一个模型策略层”。</p>
+<p>我建议后端转型者直接把这件事做成习惯：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">task classification -> model routing -> cost tracking -> fallback -> approval/release<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="4-3-RAG-的短板还是文档入口"><a href="#4-3-RAG-的短板还是文档入口" class="headerlink" title="4.3 RAG 的短板还是文档入口"></a>4.3 RAG 的短板还是文档入口</h3><p>文档解析、表格抽取、引用定位、页码映射、版式保真，这些问题依旧是 RAG 的命门。你要做的是把“知识进入系统的过程”当成一个产品，而不是一个前处理脚本。</p>
+<p>这也是为什么很多企业项目最后会演化成：</p>
+<ul>
+<li>文档管道；</li>
+<li>检索层；</li>
+<li>评测集；</li>
+<li>审计和反馈闭环。</li>
+</ul>
+<h3 id="4-4-AI-应用的竞争点在“能不能接入真实工作”"><a href="#4-4-AI-应用的竞争点在“能不能接入真实工作”" class="headerlink" title="4.4 AI 应用的竞争点在“能不能接入真实工作”"></a>4.4 AI 应用的竞争点在“能不能接入真实工作”</h3><p>今天的产品信号都在往同一个方向收：进入 PR、进入工单、进入生产调查、进入工作台、进入审批流。纯聊天应用会越来越同质化，真正有壁垒的是把 AI 接进团队已经在用的流程里。</p>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ol>
+<li><strong>把 Next.js 当成服务端框架学。</strong> 不要只看组件，重点补 App Router、Route Handlers、Server Actions、缓存、鉴权和部署。</li>
+<li><strong>把 TypeScript 当成主力工程语言。</strong> 结合 Zod、Prisma&#x2F;Drizzle、React Query、tRPC&#x2F;OpenAPI，建立从数据库到 UI 的类型链路。</li>
+<li><strong>保留 Python 的 AI 服务优势。</strong> 它适合做模型编排、文档处理、评测和轻量 API，但要更在意冷启动、依赖和部署成本。</li>
+<li><strong>把 agent 项目做成可观测系统。</strong> 先有 trace、审批、成本表，再谈更聪明的模型。</li>
+<li><strong>RAG 项目先做文档质量。</strong> 复杂 PDF、表格、扫描件和引用回溯比 embedding 选型更先决定成败。</li>
+</ol>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>今天可以直接做一个很小但有价值的练习：<strong>给现有 AI 接口加一张“调用审计表”</strong>。</p>
+<p>最小字段：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">id
+user_id
+conversation_id
+task_type
+model_alias
+provider_model
+prompt_hash
+tool_calls_json
+retrieval_refs_json
+input_tokens
+output_tokens
+latency_ms
+cost_estimate
+status
+error_message
+created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>完成后，再做一个简单页面，按 conversation 展示模型调用、工具调用和错误。这个小任务会同时练到数据库、后端、前端和 AI 流程治理。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li>GitHub Blog - How to build interactive experiences with canvases: <a href="https://github.blog/ai-and-ml/github-copilot/how-to-build-interactive-experiences-with-canvases/">https://github.blog/ai-and-ml/github-copilot/how-to-build-interactive-experiences-with-canvases/</a></li>
+<li>Vercel Blog - Introducing the new Vercel Agent: <a href="https://vercel.com/blog/vercel-agent">https://vercel.com/blog/vercel-agent</a></li>
+<li>Vercel Blog - How Searchable ships customer-requested features in 30 minutes on Vercel: <a href="https://vercel.com/blog/how-searchable-ships-customer-requested-features-in-30-minutes-on-vercel">https://vercel.com/blog/how-searchable-ships-customer-requested-features-in-30-minutes-on-vercel</a></li>
+<li>Vercel Changelog - Python function bundles now include precompiled bytecode: <a href="https://vercel.com/changelog/python-function-bundles-now-include-precompiled-bytecode">https://vercel.com/changelog/python-function-bundles-now-include-precompiled-bytecode</a></li>
+<li>GitHub Blog RSS: <a href="https://github.blog/feed/">https://github.blog/feed/</a></li>
+<li>Vercel News Atom: <a href="https://vercel.com/atom">https://vercel.com/atom</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术日报</category>
+      </categories>
+      <tags>
+        <tag>RAG</tag>
+        <tag>Agent</tag>
+        <tag>全栈开发</tag>
+        <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>开发日报</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>全栈与 AI 应用开发前沿日报 - 2026-07-20</title>
     <url>/2026/07/20/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-07-20/</url>
     <content><![CDATA[<blockquote>
@@ -1571,8 +1675,8 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Python</tag>
+        <tag>Java</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
         <tag>全栈开发</tag>
@@ -10133,9 +10237,9 @@ master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
         <category>OpenShift</category>
       </categories>
       <tags>
+        <tag>K8s</tag>
         <tag>OpenShift</tag>
         <tag>Docker</tag>
-        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -13311,37 +13415,37 @@ master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <p>Nacos能让用户从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略</p>
 <hr>
 <h3 id="1-3-Nacos快速入门"><a href="#1-3-Nacos快速入门" class="headerlink" title="1.3 Nacos快速入门"></a>1.3 Nacos快速入门</h3><hr>
-<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">docker pull nacos&#x2F;nacos-server:v2.5.0
+<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">docker</span> pull nacos/nacos-server:v2.5.0
 
-docker run -d --name nacos-server \
-  -e MODE&#x3D;standalone \
-  -p 8848:8848 \
-  nacos&#x2F;nacos-server:v2.5.0
+<span class="token function">docker</span> run -d --name nacos-server <span class="token punctuation">\</span>
+  -e <span class="token assign-left variable">MODE</span><span class="token operator">=</span>standalone <span class="token punctuation">\</span>
+  -p <span class="token number">8848</span>:8848 <span class="token punctuation">\</span>
+  nacos/nacos-server:v2.5.0
 
-# 开启鉴权
-docker exec -it nacos-server &#x2F;bin&#x2F;bash
+<span class="token comment"># 开启鉴权</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it nacos-server /bin/bash
 
-2f8c80293f4f:&#x2F;home&#x2F;nacos# cd conf&#x2F;
-2f8c80293f4f:&#x2F;home&#x2F;nacos&#x2F;conf# vim application.properties
+2f8c80293f4f:/home/nacos<span class="token comment"># cd conf/</span>
+2f8c80293f4f:/home/nacos/conf<span class="token comment"># vim application.properties</span>
 
-##新增两行
-nacos.core.auth.enabled&#x3D;true
-nacos.core.auth.enable.userAgentAuthWhite&#x3D;false
+<span class="token comment">##新增两行</span>
+nacos.core.auth.enabled<span class="token operator">=</span>true
+nacos.core.auth.enable.userAgentAuthWhite<span class="token operator">=</span>false
 
-# 修改三行
-nacos.core.auth.plugin.nacos.token.secret.key&#x3D;$&#123;NACOS_AUTH_TOKEN:SecretKey01234567890123456789012345345678999987654901234567890123456789&#125; # 随意数字 不能太短
-nacos.core.auth.server.identity.key&#x3D;$&#123;NACOS_AUTH_IDENTITY_KEY:admin&#125;
-nacos.core.auth.server.identity.value&#x3D;$&#123;NACOS_AUTH_IDENTITY_VALUE:admin&#125;
+<span class="token comment"># 修改三行</span>
+nacos.core.auth.plugin.nacos.token.secret.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_TOKEN<span class="token operator">:</span>SecretKey01234567890123456789012345345678999987654901234567890123456789&#125;</span> <span class="token comment"># 随意数字 不能太短</span>
+nacos.core.auth.server.identity.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_KEY<span class="token operator">:</span>admin&#125;</span>
+nacos.core.auth.server.identity.value<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_VALUE<span class="token operator">:</span>admin&#125;</span>
 
-# 重启容器
-docker restart nacos
+<span class="token comment"># 重启容器</span>
+<span class="token function">docker</span> restart nacos
 
-# 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置
-spring.datasource.platform&#x3D;mysql
-db.num&#x3D;1
-db.url.0&#x3D;jdbc:mysql:&#x2F;&#x2F;ip:3306&#x2F;nacos_config?characterEncoding&#x3D;utf8&amp;connectTimeout&#x3D;1000&amp;socketTimeout&#x3D;3000&amp;autoReconnect&#x3D;true
-db.user&#x3D;用户名
-db.password&#x3D;密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置</span>
+spring.datasource.platform<span class="token operator">=</span>mysql
+db.num<span class="token operator">=</span><span class="token number">1</span>
+db.url.0<span class="token operator">=</span>jdbc:mysql://ip:3306/nacos_config?characterEncoding<span class="token operator">=</span>utf8<span class="token operator">&amp;</span><span class="token assign-left variable">connectTimeout</span><span class="token operator">=</span><span class="token number">1000</span><span class="token operator">&amp;</span><span class="token assign-left variable">socketTimeout</span><span class="token operator">=</span><span class="token number">3000</span><span class="token operator">&amp;</span><span class="token assign-left variable">autoReconnect</span><span class="token operator">=</span>true
+db.user<span class="token operator">=</span>用户名
+db.password<span class="token operator">=</span>密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -22015,8 +22119,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>K8s</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>Linux</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -22946,8 +23050,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>RabbitMQ</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>RabbitMQ</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -24890,8 +24994,8 @@ instance<span class="token punctuation">.</span><span class="token function">add
         <category>Quartz</category>
       </categories>
       <tags>
-        <tag>Quartz</tag>
         <tag>Java</tag>
+        <tag>Quartz</tag>
       </tags>
   </entry>
   <entry>
