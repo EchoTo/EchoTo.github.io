@@ -14,6 +14,124 @@
       </tags>
   </entry>
   <entry>
+    <title>全栈与 AI 应用开发前沿日报 - 2026-07-23</title>
+    <url>/2026/07/23/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-07-23/</url>
+    <content><![CDATA[<blockquote>
+<p>面向 Java&#x2F;Python 后端转全栈与 AI 应用开发的学习者：今天的重点不是追每一个新名词，而是看哪些变化会影响你接下来三个月的学习路线和项目选型。</p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>Next.js 进入“安全补丁常态化”阶段。</strong> 7 月 20 日发布的安全版本修复了多个高危和中危问题，说明 React Server Components、Server Actions、服务端渲染这条全栈路线已经不能只按前端心智维护，必须按后端服务的安全标准升级。</li>
+<li><strong>Agent 的竞争点从模型能力转向治理能力。</strong> OpenAI Presence、LangChain 近期关于 eval engineering、governed agents、voice tracing 的文章都在表达同一个方向：企业要的不是会聊天的 agent，而是有权限、评测、升级、审计和人工接管的工作流系统。</li>
+<li><strong>模型网关继续升温。</strong> GitHub Trending 里 OmniRoute 这类“一个入口接多模型、多供应商、自动 fallback、压缩上下文”的项目走热，说明开发者已经把模型调用当成基础设施，而不是某个 SDK 的附属功能。</li>
+<li><strong>AI Coding 正在长出“代码图谱”和“工作台”。</strong> code-review-graph、pi-web、awesome-claude-skills 这类项目的关注度说明，下一阶段的 AI 编程不是简单把更多 token 塞给模型，而是让模型更精准地拿上下文、更可控地执行任务。</li>
+<li><strong>对 Java&#x2F;Python 后端转型者，最该补的是“全栈安全 + Agent 工程化”。</strong> 会写接口只是基础；能把权限、观测、评测、发布、回滚和成本控制串起来，才是 AI 应用开发的工程分水岭。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-全栈框架正在被迫按后端安全标准演进"><a href="#2-1-全栈框架正在被迫按后端安全标准演进" class="headerlink" title="2.1 全栈框架正在被迫按后端安全标准演进"></a>2.1 全栈框架正在被迫按后端安全标准演进</h3><p>Next.js 7 月安全发布要求升级到 <code>16.2.11</code> 或 <code>15.5.21</code>，修复 4 个 HIGH 和 5 个 MEDIUM 级别漏洞。这个信号比版本号本身重要：App Router、RSC、Server Actions、Route Handlers 把前端框架推到了后端边界，漏洞影响也自然从“页面问题”扩展到服务端执行、数据读取、鉴权和缓存。</p>
+<p>对学习路线的影响很直接：学 Next.js 不能停在组件、路由和样式。你需要把它当成一个 BFF &#x2F; 轻量后端框架来学，重点补这些能力：</p>
+<ul>
+<li>输入校验和权限检查；</li>
+<li>服务端缓存和失效策略；</li>
+<li>Server Actions 的调用边界；</li>
+<li>依赖升级和安全公告响应；</li>
+<li>生产日志与错误追踪。</li>
+</ul>
+<h3 id="2-2-Agent-从-demo-走向“可治理系统”"><a href="#2-2-Agent-从-demo-走向“可治理系统”" class="headerlink" title="2.2 Agent 从 demo 走向“可治理系统”"></a>2.2 Agent 从 demo 走向“可治理系统”</h3><p>OpenAI Presence 的定位是企业级语音和聊天 agent：能回答问题、连接公司系统、执行被批准的动作，并在需要时升级给人。LangChain 这几天的博客也集中在 eval engineering、LangGraph 图工程、voice agent tracing、成本控制和合规框架。</p>
+<p>这说明 agent 的工程核心正在从 prompt 转向系统设计：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">任务定义 -> 权限范围 -> 工具调用 -> 轨迹记录 -> 自动评测 -> 人工审批 -> 灰度发布<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果一个 agent 项目没有这条链，它可以做 demo，但很难进生产。</p>
+<h3 id="2-3-长周期模型让“轨迹级安全”变成刚需"><a href="#2-3-长周期模型让“轨迹级安全”变成刚需" class="headerlink" title="2.3 长周期模型让“轨迹级安全”变成刚需"></a>2.3 长周期模型让“轨迹级安全”变成刚需</h3><p>OpenAI 关于 long-horizon models 的安全文章强调：长期自主执行的模型不能只看单个 action 是否安全，还要看整段行为轨迹在朝什么目标推进。对 AI 应用开发者来说，这不是遥远的实验室问题。任何能连续操作代码、浏览器、数据库、工单系统的 agent，都需要轨迹级监控。</p>
+<p>实际工程里至少要做三件事：</p>
+<ul>
+<li>工具调用必须结构化记录；</li>
+<li>高风险动作必须可暂停、可审批、可回放；</li>
+<li>eval 不只测答案，还要测过程是否越权。</li>
+</ul>
+<h3 id="2-4-JavaScript-运行时继续向“一体化工具链”收敛"><a href="#2-4-JavaScript-运行时继续向“一体化工具链”收敛" class="headerlink" title="2.4 JavaScript 运行时继续向“一体化工具链”收敛"></a>2.4 JavaScript 运行时继续向“一体化工具链”收敛</h3><p>Bun 最新博客仍在强调性能、安装、测试、内置 API、Node 兼容和运行时能力；Deno 近版本强调桌面应用、npm 迁移、测试、审计修复和 Node.js 兼容。两者路线不同，但都在争夺同一个目标：减少开发者在 runtime、package manager、test runner、bundler、deploy 之间切换的成本。</p>
+<p>对后端开发者的判断：不要为了新鲜感迁移生产主栈，但可以把 Bun&#x2F;Deno 当成“高效率脚手架和边缘服务实验场”。主线仍建议先稳住 Node.js + TypeScript + Next.js，再按项目需求引入 Bun 或 Deno。</p>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><h3 id="3-1-OmniRoute：模型网关成为个人开发者基础设施"><a href="#3-1-OmniRoute：模型网关成为个人开发者基础设施" class="headerlink" title="3.1 OmniRoute：模型网关成为个人开发者基础设施"></a>3.1 OmniRoute：模型网关成为个人开发者基础设施</h3><p>GitHub Trending 今日出现的 OmniRoute 主打一个统一入口连接大量模型和供应商，支持 quota-aware fallback、上下文压缩、MCP&#x2F;A2A 以及桌面&#x2F;PWA。它的价值不在于你一定要用这个项目，而在于它说明一个趋势：模型调用层正在从“代码里写死 provider”变成独立网关。</p>
+<p>建议你在自己的 AI 项目里也抽出一层 <code>ModelGateway</code>：统一处理 provider、model、timeout、retry、fallback、cost、trace。哪怕一开始只接 OpenAI 和 Qwen，也应该按可替换架构写。</p>
+<h3 id="3-2-code-review-graph：AI-Coding-的瓶颈转向上下文质量"><a href="#3-2-code-review-graph：AI-Coding-的瓶颈转向上下文质量" class="headerlink" title="3.2 code-review-graph：AI Coding 的瓶颈转向上下文质量"></a>3.2 code-review-graph：AI Coding 的瓶颈转向上下文质量</h3><p>code-review-graph 的定位是给 MCP 和 CLI 建本地优先的代码智能图谱，让 AI Coding 工具只读取真正相关的上下文。这个方向很实用，因为大仓库里的 AI 编程经常不是模型不聪明，而是上下文喂得太粗。</p>
+<p>对工程落地来说，可以拆成两层能力：</p>
+<ul>
+<li>静态代码图谱：文件、符号、调用关系、测试覆盖；</li>
+<li>任务相关检索：根据 issue、diff、报错，把最小必要上下文交给模型。</li>
+</ul>
+<p>这比盲目扩大上下文窗口更稳定，也更省钱。</p>
+<h3 id="3-3-likec4：架构图开始进入代码协作链路"><a href="#3-3-likec4：架构图开始进入代码协作链路" class="headerlink" title="3.3 likec4：架构图开始进入代码协作链路"></a>3.3 likec4：架构图开始进入代码协作链路</h3><p>likec4 是一个用代码维护软件架构图的 TypeScript 项目。它在今天的趋势榜里不算最热，但对全栈学习者很有价值：随着 AI agent 参与代码修改，架构图如果仍然靠手工画，很快会过期。更好的方向是让架构描述和代码仓库一起演进。</p>
+<p>你可以把它类比成“架构层面的类型系统”：不是为了好看，而是为了让人和 agent 都能知道系统边界。</p>
+<h3 id="3-4-voicebox：语音-AI-工具继续产品化"><a href="#3-4-voicebox：语音-AI-工具继续产品化" class="headerlink" title="3.4 voicebox：语音 AI 工具继续产品化"></a>3.4 voicebox：语音 AI 工具继续产品化</h3><p>voicebox 这类开源 AI voice studio 走热，说明语音不再只是模型能力展示，而是进入“克隆、听写、创作、工作流”的产品阶段。结合 Vercel AI Gateway 的 realtime voice agents 和 LangSmith 的 voice tracing，语音 agent 的工程重点已经变成低延迟、可追踪、可回放和权限控制。</p>
+<h3 id="3-5-openship：自托管部署需求仍然旺盛"><a href="#3-5-openship：自托管部署需求仍然旺盛" class="headerlink" title="3.5 openship：自托管部署需求仍然旺盛"></a>3.5 openship：自托管部署需求仍然旺盛</h3><p>openship 这类自托管部署平台的关注度说明，虽然 Vercel&#x2F;Cloudflare 等平台继续上收后端能力，但开发者仍然需要低成本、可控、可迁移的部署方案。对个人项目和中小团队来说，最现实的策略是双线准备：用托管平台快速交付，用 Docker&#x2F;自托管能力保留迁移余地。</p>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-OpenAI-Presence：企业-agent-的标准形态越来越清晰"><a href="#4-1-OpenAI-Presence：企业-agent-的标准形态越来越清晰" class="headerlink" title="4.1 OpenAI Presence：企业 agent 的标准形态越来越清晰"></a>4.1 OpenAI Presence：企业 agent 的标准形态越来越清晰</h3><p>Presence 支持 voice 和 chat agent，强调政策、SOP、guardrails、approved actions、simulations、evaluation tools 和 Codex-powered improvement process。这里最值得学的是产品结构，而不是品牌名。</p>
+<p>一个可上线 agent 至少要回答这些问题：</p>
+<ul>
+<li>它能访问哪些知识？</li>
+<li>它能调用哪些系统？</li>
+<li>哪些动作必须审批？</li>
+<li>如何评测它有没有按规则做事？</li>
+<li>生产中的失败如何回流成新的测试集？</li>
+</ul>
+<h3 id="4-2-LangChain-x2F-LangGraph：从“编排框架”走向“Agent-工程平台”"><a href="#4-2-LangChain-x2F-LangGraph：从“编排框架”走向“Agent-工程平台”" class="headerlink" title="4.2 LangChain &#x2F; LangGraph：从“编排框架”走向“Agent 工程平台”"></a>4.2 LangChain &#x2F; LangGraph：从“编排框架”走向“Agent 工程平台”</h3><p>LangChain 近期文章密集覆盖自动化 eval、LangGraph 图工程、Deep Agents、voice tracing、成本和治理。这说明 LangChain 生态的重心已经不只是 chain 和 tool，而是完整生命周期：设计、运行、观测、评测、部署、迭代。</p>
+<p>如果你现在学 LangChain，不建议从一堆 loader 开始。更好的练习顺序是：</p>
+<ol>
+<li>用 LangGraph 写一个明确状态机；</li>
+<li>给每个节点加输入输出 schema；</li>
+<li>接 LangSmith 或自建 trace；</li>
+<li>做 20-50 条小型评测集；</li>
+<li>加一个人工审批节点。</li>
+</ol>
+<h3 id="4-3-RAG-的重点继续从“向量库”前移到“数据管道”"><a href="#4-3-RAG-的重点继续从“向量库”前移到“数据管道”" class="headerlink" title="4.3 RAG 的重点继续从“向量库”前移到“数据管道”"></a>4.3 RAG 的重点继续从“向量库”前移到“数据管道”</h3><p>今天没有看到哪个新向量库足以改变路线。反而是 agent、代码图谱、工作台、语音追踪这些信号共同说明：AI 应用的瓶颈在上下文工程。RAG 项目真正难的部分仍然是文档解析、权限过滤、版本管理、引用定位、评测集和反馈闭环。</p>
+<p>对后端开发者来说，RAG 最像一个搜索系统加审计系统，而不是一个 prompt 系统。</p>
+<h3 id="4-4-AI-安全事件提醒：评测环境也要按生产思路隔离"><a href="#4-4-AI-安全事件提醒：评测环境也要按生产思路隔离" class="headerlink" title="4.4 AI 安全事件提醒：评测环境也要按生产思路隔离"></a>4.4 AI 安全事件提醒：评测环境也要按生产思路隔离</h3><p>OpenAI 和 Hugging Face 披露的模型评测安全事件值得重视。这里不展开攻击细节，工程启发是：当模型能长时间自主探索时，评测环境、沙箱、凭据、网络出口和监控都必须按高风险系统设计。</p>
+<p>以后做 AI Coding、自动化测试、浏览器 agent、数据分析 agent 时，不要把“只是评测”当成降低安全标准的理由。</p>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ol>
+<li><strong>Next.js 按后端框架学。</strong> 今天就把认证、鉴权、输入校验、缓存、安全升级和日志追踪纳入学习清单。</li>
+<li><strong>TypeScript 要做到端到端类型化。</strong> 推荐组合：Next.js + Zod + Prisma&#x2F;Drizzle + OpenAPI&#x2F;tRPC + React Query。目标是让数据从数据库到 UI 尽量少靠口头约定。</li>
+<li><strong>AI 项目先搭模型网关。</strong> 不要在业务代码里散落 <code>openai.chat.completions.create</code> 这类调用。统一封装模型路由、fallback、费用、日志和超时。</li>
+<li><strong>Agent 项目先搭 trace 和审批。</strong> 先能看清楚它做了什么，再让它做更多事。没有可观测性，能力越强风险越大。</li>
+<li><strong>保留 Java&#x2F;Python 后端优势。</strong> Java 适合稳定业务内核、权限、交易、审计；Python 适合文档处理、评测、模型实验和 AI 服务编排；TypeScript 负责产品界面和快速全栈交付。</li>
+</ol>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>今天做一个 90 分钟小练习：实现一个最小可用的 <code>ModelGateway</code>。</p>
+<p>要求：</p>
+<ul>
+<li>用 TypeScript 写一个统一 <code>generateText()</code> 方法；</li>
+<li>支持至少两个 provider 的配置位，即使第二个先 mock；</li>
+<li>记录 <code>model</code>、<code>latencyMs</code>、<code>inputTokens</code>、<code>outputTokens</code>、<code>costEstimate</code>、<code>status</code>；</li>
+<li>超时后自动 fallback；</li>
+<li>把每次调用写入 SQLite 或 JSONL；</li>
+<li>在 Next.js 页面上展示最近 20 次调用记录。</li>
+</ul>
+<p>这个练习很小，但它会把你从“会调用模型 API”推进到“会设计 AI 应用基础设施”。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li><a href="https://nextjs.org/blog/july-2026-security-release">Next.js July 2026 Security Release</a></li>
+<li><a href="https://vercel.com/blog/vercel-agent">Vercel Blog: Introducing the new Vercel Agent</a></li>
+<li><a href="https://vercel.com/blog/how-searchable-ships-customer-requested-features-in-30-minutes-on-vercel">Vercel Blog: How Searchable ships customer-requested features in 30 minutes on Vercel</a></li>
+<li><a href="https://openai.com/index/introducing-openai-presence/">OpenAI: Introducing OpenAI Presence</a></li>
+<li><a href="https://openai.com/index/safety-alignment-long-horizon-models/">OpenAI: Safety and alignment in an era of long-horizon models</a></li>
+<li><a href="https://openai.com/index/hugging-face-model-evaluation-security-incident/">OpenAI and Hugging Face partner to address security incident during model evaluation</a></li>
+<li><a href="https://www.langchain.com/blog">LangChain Blog</a></li>
+<li><a href="https://github.com/trending?since=daily">GitHub Trending</a></li>
+<li><a href="https://bun.sh/blog">Bun Blog</a></li>
+<li><a href="https://deno.com/blog">Deno Blog</a></li>
+<li><a href="https://astro.build/blog/">Astro Blog</a></li>
+<li><a href="https://svelte.dev/blog">Svelte Blog</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术日报</category>
+      </categories>
+      <tags>
+        <tag>RAG</tag>
+        <tag>Agent</tag>
+        <tag>全栈开发</tag>
+        <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>开发日报</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>全栈与 AI 应用开发前沿日报 - 2026-07-22</title>
     <url>/2026/07/22/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-07-22/</url>
     <content><![CDATA[<blockquote>
@@ -1675,10 +1793,10 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Python</tag>
-        <tag>Java</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
+        <tag>Python</tag>
+        <tag>Java</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
         <tag>TypeScript</tag>
@@ -10237,9 +10355,9 @@ master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
         <category>OpenShift</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>OpenShift</tag>
         <tag>Docker</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -13415,37 +13533,37 @@ master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <p>Nacos能让用户从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略</p>
 <hr>
 <h3 id="1-3-Nacos快速入门"><a href="#1-3-Nacos快速入门" class="headerlink" title="1.3 Nacos快速入门"></a>1.3 Nacos快速入门</h3><hr>
-<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">docker</span> pull nacos/nacos-server:v2.5.0
+<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">docker pull nacos&#x2F;nacos-server:v2.5.0
 
-<span class="token function">docker</span> run -d --name nacos-server <span class="token punctuation">\</span>
-  -e <span class="token assign-left variable">MODE</span><span class="token operator">=</span>standalone <span class="token punctuation">\</span>
-  -p <span class="token number">8848</span>:8848 <span class="token punctuation">\</span>
-  nacos/nacos-server:v2.5.0
+docker run -d --name nacos-server \
+  -e MODE&#x3D;standalone \
+  -p 8848:8848 \
+  nacos&#x2F;nacos-server:v2.5.0
 
-<span class="token comment"># 开启鉴权</span>
-<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it nacos-server /bin/bash
+# 开启鉴权
+docker exec -it nacos-server &#x2F;bin&#x2F;bash
 
-2f8c80293f4f:/home/nacos<span class="token comment"># cd conf/</span>
-2f8c80293f4f:/home/nacos/conf<span class="token comment"># vim application.properties</span>
+2f8c80293f4f:&#x2F;home&#x2F;nacos# cd conf&#x2F;
+2f8c80293f4f:&#x2F;home&#x2F;nacos&#x2F;conf# vim application.properties
 
-<span class="token comment">##新增两行</span>
-nacos.core.auth.enabled<span class="token operator">=</span>true
-nacos.core.auth.enable.userAgentAuthWhite<span class="token operator">=</span>false
+##新增两行
+nacos.core.auth.enabled&#x3D;true
+nacos.core.auth.enable.userAgentAuthWhite&#x3D;false
 
-<span class="token comment"># 修改三行</span>
-nacos.core.auth.plugin.nacos.token.secret.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_TOKEN<span class="token operator">:</span>SecretKey01234567890123456789012345345678999987654901234567890123456789&#125;</span> <span class="token comment"># 随意数字 不能太短</span>
-nacos.core.auth.server.identity.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_KEY<span class="token operator">:</span>admin&#125;</span>
-nacos.core.auth.server.identity.value<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_VALUE<span class="token operator">:</span>admin&#125;</span>
+# 修改三行
+nacos.core.auth.plugin.nacos.token.secret.key&#x3D;$&#123;NACOS_AUTH_TOKEN:SecretKey01234567890123456789012345345678999987654901234567890123456789&#125; # 随意数字 不能太短
+nacos.core.auth.server.identity.key&#x3D;$&#123;NACOS_AUTH_IDENTITY_KEY:admin&#125;
+nacos.core.auth.server.identity.value&#x3D;$&#123;NACOS_AUTH_IDENTITY_VALUE:admin&#125;
 
-<span class="token comment"># 重启容器</span>
-<span class="token function">docker</span> restart nacos
+# 重启容器
+docker restart nacos
 
-<span class="token comment"># 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置</span>
-spring.datasource.platform<span class="token operator">=</span>mysql
-db.num<span class="token operator">=</span><span class="token number">1</span>
-db.url.0<span class="token operator">=</span>jdbc:mysql://ip:3306/nacos_config?characterEncoding<span class="token operator">=</span>utf8<span class="token operator">&amp;</span><span class="token assign-left variable">connectTimeout</span><span class="token operator">=</span><span class="token number">1000</span><span class="token operator">&amp;</span><span class="token assign-left variable">socketTimeout</span><span class="token operator">=</span><span class="token number">3000</span><span class="token operator">&amp;</span><span class="token assign-left variable">autoReconnect</span><span class="token operator">=</span>true
-db.user<span class="token operator">=</span>用户名
-db.password<span class="token operator">=</span>密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+# 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置
+spring.datasource.platform&#x3D;mysql
+db.num&#x3D;1
+db.url.0&#x3D;jdbc:mysql:&#x2F;&#x2F;ip:3306&#x2F;nacos_config?characterEncoding&#x3D;utf8&amp;connectTimeout&#x3D;1000&amp;socketTimeout&#x3D;3000&amp;autoReconnect&#x3D;true
+db.user&#x3D;用户名
+db.password&#x3D;密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -22119,8 +22237,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>K8s</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>K8s</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -23050,8 +23168,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>RabbitMQ</category>
       </categories>
       <tags>
-        <tag>RabbitMQ</tag>
         <tag>Java</tag>
+        <tag>RabbitMQ</tag>
       </tags>
   </entry>
   <entry>
@@ -24994,8 +25112,8 @@ instance<span class="token punctuation">.</span><span class="token function">add
         <category>Quartz</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Quartz</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
