@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>全栈与 AI 应用开发前沿日报 - 2026-07-29 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">全栈与 AI 应用开发前沿日报 - 2026-07-29</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 29, 2026&nbsp;&nbsp;9:46:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E6%97%A5%E6%8A%A5/">日报</a>
+                            
+                                <a href="../../../../categories/%E6%97%A5%E6%8A%A5/%E5%85%A8%E6%A0%88/">全栈</a>
+                            
+                                <a href="../../../../categories/%E6%97%A5%E6%8A%A5/%E5%85%A8%E6%A0%88/AI%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/">AI应用开发</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="全栈与-AI-应用开发前沿日报-2026-07-29"><a href="#全栈与-AI-应用开发前沿日报-2026-07-29" class="headerlink" title="全栈与 AI 应用开发前沿日报 - 2026-07-29"></a>全栈与 AI 应用开发前沿日报 - 2026-07-29</h1><h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ul>
+<li>这两天的主线不是“更强模型”，而是“更可运营的 AI 应用栈”：编排、观测、权限、沙箱、部署开始一起进化。</li>
+<li>前端侧的 AI 产品更像业务控制台了。Open WebUI 的界面重做说明，聊天入口正在向“工作台”靠拢。</li>
+<li>Agent 不再只拼 prompt，开始拼 trace、approval、streaming、sandbox 和错误恢复。LangGraph、Agno、Langflow 都在往这个方向补。</li>
+<li>对转型来说，最值得补的不是某个新框架，而是“前后端 + AI + 运维”的闭环能力：能做页面、能接模型、能看日志、能控风险。</li>
+</ul>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><ul>
+<li>AI 应用正在从“对话框”转向“流程系统”。LangGraph 1.2.10 暴露更明确的 <code>stream_events</code> 类型和 <code>trace_policy</code>，说明状态流、链路追踪、可解释执行正在变成基础能力。</li>
+<li>低代码&#x2F;可视化编排也在补工程化短板。Langflow 1.11.1 这次重点修了 MCP、SSRF、agentic experience 默认开启、前端快捷键和流式内容处理，方向很清楚：能跑只是起点，可控才是门槛。</li>
+<li>沙箱化部署开始成为 AI 应用的标配。Mastra 1.52.0 把 sandbox deploy、网络访问、批量写文件、clone 都收进来了，这很适合做隔离环境、预览环境和多租户 agent。</li>
+<li>API 兼容性比“模型名”更重要。Vercel AI SDK 的 xAI 适配包开始明确提示：某些 Responses 模型会忽略不支持的采样参数。跨厂商接入时，别默认参数语义一致。</li>
+</ul>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><ul>
+<li>Open WebUI v0.11.0：界面整体重做，说明 AI Chat UI 正在从“玩具感”转向“产品级控制台感”。如果你在做内部 AI 工具，这类界面范式值得直接参考。</li>
+<li>Agno v2.8.5：新增 AgentOS Tools，能看 usage、latency、failures、schedules、evals、approvals。这个信号很强，agent 平台开始把运营视角做成一等公民。</li>
+<li>Langflow v1.11.1：修复一串和 agent、MCP、tracing、auth、SSRF 相关的问题。它的价值不只在拖拽，而在把“能演示”推进到“能上线”。</li>
+<li>HN 上的高频项目也很一致：OpenOTP、TrueDeck、Hubble、Marble、Margin 这类工具，几乎都在围绕“agent 记忆、终端协作、写作界面、笔记工作流”打磨。</li>
+</ul>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><ul>
+<li>观察到一个明显趋势：agent 产品的卖点已经从“自动化”变成“可控自动化”。谁能把权限、审批、日志、回放、恢复做扎实，谁更接近可交付。</li>
+<li>社区对模型安全和越权行为的关注明显升高。HN 里关于模型越权、网络逃逸、权限滥用的讨论，提醒我们：一旦接入真实工具，安全边界就不是附属项。</li>
+<li>语音、多模态、转录仍然是高价值入口，但真正难点不在识别本身，而在把内容接进工作流。转录、摘要、结构化提取、回写数据库，才是应用层的主战场。</li>
+<li>对 RAG 来说，大家已经不满足“能搜到”，而是要求检索链路可评估、可回放、可替换。这也是向 LangGraph &#x2F; Langflow &#x2F; Agno 一类框架靠拢的原因。</li>
+</ul>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ul>
+<li>先把全栈入口补齐：Next.js 或类似框架只需要先掌握一套稳的页面、路由、API、状态管理和部署链路，不必追所有新特性。</li>
+<li>Python 侧优先补 AI 编排和可观测性：LangGraph、Langflow、Agno 这三条线，分别适合偏流程、偏可视化、偏 agent 平台。</li>
+<li>Java&#x2F;Python 后端的优势不要丢：鉴权、事务、任务队列、缓存、日志、监控、灰度，这些正是 AI 应用最容易翻车的地方。</li>
+<li>选型时优先问三件事：能不能流式输出、能不能审计、能不能在沙箱里跑。答不上来，就先别上生产。</li>
+</ul>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><ul>
+<li>用你熟悉的后端栈起一个最小 AI 服务：<code>/chat</code> 接口 + 流式返回 + 一个工具调用。</li>
+<li>再加一层前端壳：用 Next.js 或 React 做一个聊天页，要求能看到 token 流和错误状态。</li>
+<li>给这个 demo 补上三样东西：请求日志、模型参数透传、一次人工审批开关。</li>
+<li>如果时间还有余量，把一次对话写入数据库，顺手做一个可查询的 history 页面。</li>
+</ul>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph/releases/tag/1.2.10">LangGraph 1.2.10</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/langflow-ai/langflow/releases/tag/v1.11.1">Langflow 1.11.1</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/open-webui/open-webui/releases/tag/v0.11.0">Open WebUI v0.11.0</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/agno-agi/agno/releases/tag/v2.8.5">Agno v2.8.5</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mastra-ai/mastra/releases/tag/%40mastra/core%401.52.0">Mastra 1.52.0</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%404.0.21">Vercel AI SDK xAI 4.0.21</a></li>
+<li><a target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=49092442">HN: Ask HN - How many AI agents do you actively use?</a></li>
+<li><a target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=49091730">HN: Hubble - Open-source notetaking app for you and your agents</a></li>
+<li><a target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=49091697">HN: OpenAI models used Artifactory zero-days to escape to the internet</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2026/07/29/2026-07-29-%E5%85%A8%E6%A0%88%E4%B8%8EAI%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5/">https://tonkyshan.cn/2026/07/29/2026-07-29-%E5%85%A8%E6%A0%88%E4%B8%8EAI%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/%E5%85%A8%E6%A0%88/"># 全栈</a>
+                    
+                        <a href="../../../../tags/AI%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"># AI应用开发</a>
+                    
+                        <a href="../../../../tags/LangGraph/"># LangGraph</a>
+                    
+                        <a href="../../../../tags/Langflow/"># Langflow</a>
+                    
+                        <a href="../../../../tags/Agno/"># Agno</a>
+                    
+                        <a href="../../../../tags/Open-WebUI/"># Open WebUI</a>
+                    
+                        <a href="../../../../tags/Mastra/"># Mastra</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="../../28/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-07-28/">全栈与 AI 应用开发前沿日报 - 2026-07-28</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>
