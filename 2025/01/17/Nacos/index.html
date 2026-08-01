@@ -246,37 +246,37 @@
 <p>Nacos能让用户从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略</p>
 <hr>
 <h3 id="1-3-Nacos快速入门"><a href="#1-3-Nacos快速入门" class="headerlink" title="1.3 Nacos快速入门"></a>1.3 Nacos快速入门</h3><hr>
-<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">docker pull nacos&#x2F;nacos-server:v2.5.0
+<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">docker</span> pull nacos/nacos-server:v2.5.0
 
-docker run -d --name nacos-server \
-  -e MODE&#x3D;standalone \
-  -p 8848:8848 \
-  nacos&#x2F;nacos-server:v2.5.0
+<span class="token function">docker</span> run -d --name nacos-server <span class="token punctuation">\</span>
+  -e <span class="token assign-left variable">MODE</span><span class="token operator">=</span>standalone <span class="token punctuation">\</span>
+  -p <span class="token number">8848</span>:8848 <span class="token punctuation">\</span>
+  nacos/nacos-server:v2.5.0
 
-# 开启鉴权
-docker exec -it nacos-server &#x2F;bin&#x2F;bash
+<span class="token comment"># 开启鉴权</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it nacos-server /bin/bash
 
-2f8c80293f4f:&#x2F;home&#x2F;nacos# cd conf&#x2F;
-2f8c80293f4f:&#x2F;home&#x2F;nacos&#x2F;conf# vim application.properties
+2f8c80293f4f:/home/nacos<span class="token comment"># cd conf/</span>
+2f8c80293f4f:/home/nacos/conf<span class="token comment"># vim application.properties</span>
 
-##新增两行
-nacos.core.auth.enabled&#x3D;true
-nacos.core.auth.enable.userAgentAuthWhite&#x3D;false
+<span class="token comment">##新增两行</span>
+nacos.core.auth.enabled<span class="token operator">=</span>true
+nacos.core.auth.enable.userAgentAuthWhite<span class="token operator">=</span>false
 
-# 修改三行
-nacos.core.auth.plugin.nacos.token.secret.key&#x3D;$&#123;NACOS_AUTH_TOKEN:SecretKey01234567890123456789012345345678999987654901234567890123456789&#125; # 随意数字 不能太短
-nacos.core.auth.server.identity.key&#x3D;$&#123;NACOS_AUTH_IDENTITY_KEY:admin&#125;
-nacos.core.auth.server.identity.value&#x3D;$&#123;NACOS_AUTH_IDENTITY_VALUE:admin&#125;
+<span class="token comment"># 修改三行</span>
+nacos.core.auth.plugin.nacos.token.secret.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_TOKEN<span class="token operator">:</span>SecretKey01234567890123456789012345345678999987654901234567890123456789&#125;</span> <span class="token comment"># 随意数字 不能太短</span>
+nacos.core.auth.server.identity.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_KEY<span class="token operator">:</span>admin&#125;</span>
+nacos.core.auth.server.identity.value<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_VALUE<span class="token operator">:</span>admin&#125;</span>
 
-# 重启容器
-docker restart nacos
+<span class="token comment"># 重启容器</span>
+<span class="token function">docker</span> restart nacos
 
-# 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置
-spring.datasource.platform&#x3D;mysql
-db.num&#x3D;1
-db.url.0&#x3D;jdbc:mysql:&#x2F;&#x2F;ip:3306&#x2F;nacos_config?characterEncoding&#x3D;utf8&amp;connectTimeout&#x3D;1000&amp;socketTimeout&#x3D;3000&amp;autoReconnect&#x3D;true
-db.user&#x3D;用户名
-db.password&#x3D;密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置</span>
+spring.datasource.platform<span class="token operator">=</span>mysql
+db.num<span class="token operator">=</span><span class="token number">1</span>
+db.url.0<span class="token operator">=</span>jdbc:mysql://ip:3306/nacos_config?characterEncoding<span class="token operator">=</span>utf8<span class="token operator">&amp;</span><span class="token assign-left variable">connectTimeout</span><span class="token operator">=</span><span class="token number">1000</span><span class="token operator">&amp;</span><span class="token assign-left variable">socketTimeout</span><span class="token operator">=</span><span class="token number">3000</span><span class="token operator">&amp;</span><span class="token assign-left variable">autoReconnect</span><span class="token operator">=</span>true
+db.user<span class="token operator">=</span>用户名
+db.password<span class="token operator">=</span>密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
