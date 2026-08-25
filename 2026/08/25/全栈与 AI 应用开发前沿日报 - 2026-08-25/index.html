@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+
+    <meta name="author" content="ShanTianQi">
+
+
+
+
+
+<title>全栈与 AI 应用开发前沿日报 - 2026-08-25 | ShanTianQi&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="../../../../favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="../../../../css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="../../../../js/script.js"></script>
+    
+    <script src="../../../../js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<!-- hexo injector head_end start --><script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@7.1.2/dist/mermaid.esm.min.mjs">
+    mermaid.initialize(
+      startOnLoad: true,
+    );
+    </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            pagebody.classList.add('dark-theme');
+            // mobile
+            document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // if (isDark) {
+            //     pagebody.classList.add('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            // } else {
+            //     pagebody.classList.remove('dark-theme');
+            //     // mobile
+            //     document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            // }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <!-- <div class="navbar-header header-logo"><a href="/">ShanTianQi&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div> -->
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <!-- <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">ShanTianQi&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="../../../../archives">Posts</a>
+                
+                    <a class="menu-item" href="../../../../category">Categories</a>
+                
+                    <a class="menu-item" href="../../../../tag">Tags</a>
+                
+                    <a class="menu-item" href="../../../../about">About</a>
+                
+            </div>
+        </div> -->
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">全栈与 AI 应用开发前沿日报 - 2026-08-25</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">ShanTianQi</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 25, 2026&nbsp;&nbsp;9:30:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="../../../../categories/%E6%8A%80%E6%9C%AF%E6%97%A5%E6%8A%A5/">技术日报</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>面向 Java &#x2F; Python 后端转全栈与 AI 应用开发的学习者。今天最值得抓住的判断是：<strong>前沿重心继续从“模型更强”转向“应用链路更稳、接入更广、权限更细、交付更快”。</strong></p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>全栈基础设施在继续向“可直接交付 AI 产品”收敛。</strong> Vercel 这两天把 Sandbox、Bun runtime、环境变量分级、v0 连接能力一起推上来，说明平台正在把“做 AI 应用”变成默认工作流，而不是额外拼装。</li>
+<li><strong>AI 应用的竞争点已经不是单纯聊天，而是任务、权限、观测和连接器。</strong> LangChain&#x2F;LangSmith、Cloudflare 的 MCP OAuth scopes、Anthropic 的 watermark 说明，生产级 AI 更像一个可审计系统。</li>
+<li><strong>运行时边界在变宽。</strong> Bun 1.4、Deno 2.9、Cloudflare 新能力都在强化“JS&#x2F;TS 既能做 Web，也能做工具、沙箱、桌面、代理层”。对转型者来说，这比再追一个 UI 语法更新更重要。</li>
+<li><strong>模型价格和能力都在继续内卷。</strong> 这对应用层是好事，但也意味着真正的差异化会越来越偏工程体验、数据闭环和工作流深度。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-全栈平台从“部署”走向“运行时-协作面”"><a href="#2-1-全栈平台从“部署”走向“运行时-协作面”" class="headerlink" title="2.1 全栈平台从“部署”走向“运行时 + 协作面”"></a>2.1 全栈平台从“部署”走向“运行时 + 协作面”</h3><p>Vercel 8 月 24 日的几条更新很集中：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://vercel.com/changelog/vercel-sandbox-is-now-globally-available">Vercel Sandbox 全球可用</a></li>
+<li><a target="_blank" rel="noopener" href="https://vercel.com/changelog/bun-runtime-now-supports-large-functions-and-extended-max-duration">Bun runtime 支持更大的函数包和更长执行时长</a></li>
+<li><a target="_blank" rel="noopener" href="https://vercel.com/changelog/environment-variables-now-use-config-and-secret-types">环境变量区分 Config &#x2F; Secret</a></li>
+<li><a target="_blank" rel="noopener" href="https://vercel.com/changelog/connect-v0-apps-to-slack-google-and-100-other-services">v0 应用可连接 Slack、Google 等 100+ 服务</a></li>
+</ul>
+<p>这几个动作放在一起看，信号很明确：</p>
+<ul>
+<li>AI 应用不再只是前端页面 + API</li>
+<li>它需要沙箱、密钥分级、外部服务连接和更长的任务执行窗口</li>
+<li>平台开始替开发者补“工具编排层”</li>
+</ul>
+<h3 id="2-2-运行时边界继续模糊"><a href="#2-2-运行时边界继续模糊" class="headerlink" title="2.2 运行时边界继续模糊"></a>2.2 运行时边界继续模糊</h3><p><a target="_blank" rel="noopener" href="https://bun.sh/blog/bun-v1.4">Bun v1.4</a> 是很强的工程信号：Rust 重写、内建 headless browser automation、JSON5&#x2F;JSONL、Terminal、cron API、Windows ARM64、并行测试、Node 26.3 兼容。它的意义不在于新 API 多，而在于：</p>
+<ul>
+<li>Web 运行时开始吃进更多自动化和脚本任务</li>
+<li>前端、后端、测试、自动化越来越难分家</li>
+<li>对全栈团队来说，一个 runtime 里能做的事情越多，交付摩擦越低</li>
+</ul>
+<p>Deno 2.9 也在继续往这个方向走：<code>deno desktop</code>、npm&#x2F;pnpm&#x2F;yarn&#x2F;Bun 迁移、CSS module imports、参数化测试、<code>deno compile</code> 体积更小、Node 26 兼容。它说明 web 技术栈正在继续侵蚀桌面和脚本场景。</p>
+<h3 id="2-3-云边缘平台开始内置-MCP-和权限边界"><a href="#2-3-云边缘平台开始内置-MCP-和权限边界" class="headerlink" title="2.3 云边缘平台开始内置 MCP 和权限边界"></a>2.3 云边缘平台开始内置 MCP 和权限边界</h3><p>Cloudflare 8 月 22 日把 <a target="_blank" rel="noopener" href="https://developers.cloudflare.com/changelog/post/2026-08-22-wrangler-mcp-optional-oauth-scopes/">Wrangler 和 Cloudflare API MCP server 的 OAuth scopes 变成可选</a>。这件事很小，但方向很大：</p>
+<ul>
+<li>MCP 不会只停留在“能连上”</li>
+<li>真正进入生产后，权限粒度、授权审计、最小授权会变成标配</li>
+<li>这和后端领域的 RBAC &#x2F; scopes &#x2F; audit log 是同一类问题</li>
+</ul>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><ul>
+<li>**<a target="_blank" rel="noopener" href="https://bun.sh/blog/bun-v1.4">Bun 1.4</a>**：这是今天最强的单点更新之一，兼顾 runtime、自动化、测试和 Node 兼容。</li>
+<li>**<a target="_blank" rel="noopener" href="https://vercel.com/changelog/vercel-sandbox-is-now-globally-available">Vercel Sandbox</a>**：很适合 AI 代码执行、在线试跑、交互式工具和受控任务环境。</li>
+<li>**<a target="_blank" rel="noopener" href="https://vercel.com/changelog/bun-runtime-now-supports-large-functions-and-extended-max-duration">Vercel Bun runtime 大函数支持</a>**：对长任务 AI 工具链很实用。</li>
+<li>**<a target="_blank" rel="noopener" href="https://deno.com/blog/v2.9">Deno 2.9</a>**：桌面、编译、迁移、测试一起推进，工程味很重。</li>
+<li>**<a target="_blank" rel="noopener" href="https://developers.cloudflare.com/changelog/post/2026-08-22-wrangler-mcp-optional-oauth-scopes/">Cloudflare MCP OAuth scopes</a>**：生产接入 MCP 时很值得关注。</li>
+<li><strong>GitHub Trending &#x2F; HN</strong>：HN 前排继续被 AI、平台安全、基础设施和自动化主题占据，说明开发者注意力正在从纯模型能力转到“能否真正嵌入工作流”。</li>
+</ul>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-Agent-更像系统，不像-prompt"><a href="#4-1-Agent-更像系统，不像-prompt" class="headerlink" title="4.1 Agent 更像系统，不像 prompt"></a>4.1 Agent 更像系统，不像 prompt</h3><p>LangChain 这两天的主线很清楚：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.langchain.com/blog/introducing-langsmith-tuned-evaluators-starting-with-perceived-error">LangSmith Tuned Evaluators</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.langchain.com/blog/langsmith-preview-builds-test-agent-changes-before-production">LangSmith Preview Builds</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.langchain.com/blog/managed-deep-agents-public-beta">Managed Deep Agents</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.langchain.com/blog/agentic-commerce-at-scale">Agentic Commerce at Scale</a></li>
+</ul>
+<p>这些内容共同说明一件事：</p>
+<ul>
+<li>agent 的重点不只是“会不会调用工具”</li>
+<li>更重要的是评测、回归、发布前预览、失败观察和生产治理</li>
+<li>这正是后端工程最擅长的地方</li>
+</ul>
+<h3 id="4-2-模型竞争继续下沉到价格和可部署性"><a href="#4-2-模型竞争继续下沉到价格和可部署性" class="headerlink" title="4.2 模型竞争继续下沉到价格和可部署性"></a>4.2 模型竞争继续下沉到价格和可部署性</h3><p>从 HN 前排能看到 <a target="_blank" rel="noopener" href="https://news.ycombinator.com/front">OpenAI 的 GPT 5.6 Sol 降价</a> 这类讨论继续升温。对应用层来说，结论很现实：</p>
+<ul>
+<li>模型能力差距在缩小</li>
+<li>成本、延迟、上下文、工具调用稳定性更关键</li>
+<li>真正值钱的是把模型塞进一个能持续运行的产品系统</li>
+</ul>
+<h3 id="4-3-安全、来源和可追踪性会越来越硬"><a href="#4-3-安全、来源和可追踪性会越来越硬" class="headerlink" title="4.3 安全、来源和可追踪性会越来越硬"></a>4.3 安全、来源和可追踪性会越来越硬</h3><p>Anthropic 继续强调 <a target="_blank" rel="noopener" href="https://www.anthropic.com/news/how-claude-s-text-watermark-works">Claude 的文本水印机制</a>。这类动作说明：</p>
+<ul>
+<li>大模型输出会越来越需要来源标记</li>
+<li>企业级应用会更在意可审计和责任链</li>
+<li>未来做 AI 应用，日志和回放不是附属品，而是基本盘</li>
+</ul>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ol>
+<li><strong>主线继续押 <code>TypeScript + Next.js + Bun/Node</code>。</strong> 这是全栈和 AI 应用最短的工程路径。</li>
+<li><strong>把 Python 放在 RAG、评测、数据处理、检索和模型周边。</strong> 不要把它浪费在纯代理层。</li>
+<li><strong>Java 继续负责业务核心、权限、交易、稳定性。</strong> 这些经验对 AI 产品一样值钱。</li>
+<li><strong>把 agent 当后端系统设计。</strong> 先做状态、幂等、超时、审计、回放，再写 prompt。</li>
+<li><strong>优先学“平台怎么托管运行时”，而不是只学某个前端语法。</strong> 沙箱、连接器、权限、观测，才是现在的关键。</li>
+</ol>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>做一个最小 AI 工具链骨架：</p>
+<ul>
+<li>1 个 Next.js 页面</li>
+<li>1 个 Bun&#x2F;Node API</li>
+<li>1 个模型调用</li>
+<li>1 个任务状态表</li>
+<li>1 个审计日志表</li>
+<li>1 个人工确认点</li>
+<li>3 条失败回放样例</li>
+</ul>
+<p>目标不是做大，而是把“能跑的 demo”推进到“能控的系统”。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://vercel.com/changelog">Vercel Changelog</a></li>
+<li><a target="_blank" rel="noopener" href="https://nextjs.org/blog">Next.js Blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://bun.sh/blog">Bun Blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://deno.com/blog">Deno Blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.cloudflare.com/changelog/">Cloudflare Changelog</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.langchain.com/blog">LangChain Blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anthropic.com/news">Anthropic News</a></li>
+<li><a target="_blank" rel="noopener" href="https://openai.com/news/">OpenAI News</a></li>
+<li><a target="_blank" rel="noopener" href="https://news.ycombinator.com/front">HN Front Page</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>ShanTianQi</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://tonkyshan.cn/2026/08/25/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-08-25/">https://tonkyshan.cn/2026/08/25/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-08-25/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="../../../../tags/Next-js/"># Next.js</a>
+                    
+                        <a href="../../../../tags/MCP/"># MCP</a>
+                    
+                        <a href="../../../../tags/%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91/"># 全栈开发</a>
+                    
+                        <a href="../../../../tags/AI-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"># AI 应用开发</a>
+                    
+                        <a href="../../../../tags/LangChain/"># LangChain</a>
+                    
+                        <a href="../../../../tags/Bun/"># Bun</a>
+                    
+                        <a href="../../../../tags/RAG/"># RAG</a>
+                    
+                        <a href="../../../../tags/Agent/"># Agent</a>
+                    
+                        <a href="../../../../tags/Cloudflare/"># Cloudflare</a>
+                    
+                        <a href="../../../../tags/Deno/"># Deno</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="../../../../2026/08/25/fullstack-ai-frontier-daily-2026-08-25/">全栈与 AI 应用开发前沿日报 - 2026-08-25</a>
+            
+            
+            <a class="next" rel="next" href="../../24/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-08-24/">全栈与 AI 应用开发前沿日报 - 2026-08-24</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <!-- <!--<footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© ShanTianQi | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+ -->
+    </div>
+</body>
+
+</html>

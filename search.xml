@@ -14,6 +14,203 @@
       </tags>
   </entry>
   <entry>
+    <title>全栈与 AI 应用开发前沿日报 - 2026-08-25</title>
+    <url>//2026/08/25/fullstack-ai-frontier-daily-2026-08-25/</url>
+    <content><![CDATA[<h1 id="全栈与-AI-应用开发前沿日报-2026-08-25"><a href="#全栈与-AI-应用开发前沿日报-2026-08-25" class="headerlink" title="全栈与 AI 应用开发前沿日报 - 2026-08-25"></a>全栈与 AI 应用开发前沿日报 - 2026-08-25</h1><p>今天能确认的硬信号不多，但方向很清楚：全栈栈正在继续往“运行时 + 工具链 + 生产正确性”收敛，AI 应用开发则继续往“SDK 化、工作流化、可观测化”收敛。今天最值得记住的不是某个单点功能，而是这些项目都在把边界问题往前推。</p>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ul>
+<li><code>Astro 7.2.6</code> 是今天最扎实的前沿信号，修的是开发态里 <code>new FetchState(request)</code> 在优化依赖场景下会失败的问题。这个修复很小，但它说明内容站、文档站和组件站的竞争点已经不是“能不能构建”，而是“开发态和线上态能不能一致”。</li>
+<li><code>vercel/ai</code> 在 8 月 24 日继续推包级发布，<code>@ai-sdk/xai@2.0.87</code> 这种粒度说明 AI 应用栈已经进入高频微更阶段。对工程团队来说，这意味着 SDK 兼容、依赖漂移和回归测试会变成日常成本。</li>
+<li>GitHub Trending 里最像“真能进工作流”的项目，仍然是 <code>openai/codex</code>、<code>makeplane/plane</code>、<code>NousResearch/hermes-agent</code>、<code>PostHog/posthog</code>、<code>openclaw/openclaw</code> 这一类。它们共同点很明显：不是玩概念，而是在做协作、agent、分析、自动化和基础设施。</li>
+<li><code>Next.js 16.3.2</code> 和 <code>Bun 1.4</code> 虽然不是今天才发，但它们延续的方向和今天高度一致：前者强调 backport、OIDC 远端缓存认证和 Turbopack 修补，后者把浏览器自动化、<code>Bun.markdown</code>、<code>Bun.cron()</code> 这类能力继续塞进运行时。</li>
+</ul>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="运行时继续吞掉工具层"><a href="#运行时继续吞掉工具层" class="headerlink" title="运行时继续吞掉工具层"></a>运行时继续吞掉工具层</h3><p>过去全栈的分水岭是“谁的框架更顺手”，现在更像“谁能把构建、自动化、脚本、部署和模型调用一起交付”。</p>
+<ul>
+<li>Bun 这类运行时把自动化和调度能力内建后，很多原本分散在脚本、CI、抓取和小工具里的活，会越来越倾向于直接写进运行时。</li>
+<li>Next.js 这种框架则继续往“生产正确性”压，真正值钱的是稳定、可观测、可回滚，而不是炫技式新 API。</li>
+<li>Astro 的修复说明静态&#x2F;内容型站点也在往更严肃的工程质量靠拢，尤其是开发态故障和构建一致性。</li>
+</ul>
+<h3 id="AI-应用进入包级持续发布时代"><a href="#AI-应用进入包级持续发布时代" class="headerlink" title="AI 应用进入包级持续发布时代"></a>AI 应用进入包级持续发布时代</h3><p>AI 应用不再是“接一个模型 API 就完事”，而是 SDK、provider、workflow、eval、trace 一起滚动。</p>
+<ul>
+<li><code>vercel/ai</code> 这类包级 release 说明 AI SDK 生态的变化频率会持续偏高。</li>
+<li>这类频繁更新最现实的影响不是“功能更多了”，而是“你必须把依赖升级、回归测试和错误追踪当成产品的一部分”。</li>
+</ul>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><ul>
+<li><code>Astro 7.2.6</code>：修复优化依赖下的开发态失败问题，典型的“看起来小，实际很烦”的工程修补。</li>
+<li><code>openai/codex</code>：AI coding 工具仍然是今天最有热度的方向之一，说明编程 agent 正从演示走进真实工作流。</li>
+<li><code>makeplane/plane</code>：协作和项目管理类基础设施依旧有热度，AI 再热，也绕不开团队协作。</li>
+<li><code>NousResearch/hermes-agent</code>：agent 方向继续有人买账，但真正有生命力的是能接工具、接状态、接审计的实现。</li>
+<li><code>PostHog/posthog</code>：分析和可观测性仍然是生产软件的底盘。</li>
+<li><code>openclaw/openclaw</code>：本地自动化和 agent 运行环境本身也在被关注，说明“会执行”的系统比“会回答”的系统更受欢迎。</li>
+</ul>
+<p>我的判断：</p>
+<ul>
+<li><code>openai/codex</code> 代表的是 coding agent 的入口正在标准化。</li>
+<li><code>plane</code> 和 <code>posthog</code> 代表的是协作、数据和反馈回路仍然是最稳的产品层。</li>
+<li><code>openclaw/openclaw</code> 这一类项目说明大家已经不满足于聊天式 AI，而是要可运行、可调度、可回放的系统。</li>
+</ul>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><p>今天最重要的不是模型参数，而是工程边界。</p>
+<ul>
+<li>AI 应用的主战场正在从“回答质量”转到“执行质量”：能不能稳定调用工具，能不能记录 trace，能不能重放失败样本，能不能限制高风险动作。</li>
+<li><code>vercel/ai</code> 的包级发布很典型。它说明 AI 应用开发已经和前端 SDK、服务端流式输出、provider 适配绑在一起，更新粒度会越来越碎。</li>
+<li>对转型者来说，真正该学的是“AI + 应用系统”的组合，而不是单独的 prompt 技巧。</li>
+</ul>
+<p>一句话：能跑的 demo 很容易，能长期维护的 AI 应用，靠的是状态、观测、回归和权限边界。</p>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ul>
+<li>把 TypeScript 当成一线后端语言学，别只把它当成前端补充。</li>
+<li>优先补 <code>Next.js</code> &#x2F; <code>Node.js</code> &#x2F; <code>Bun</code> &#x2F; <code>Postgres</code> &#x2F; <code>trace</code> &#x2F; <code>eval</code> &#x2F; <code>queue</code> 这一条线，先把小系统做稳。</li>
+<li>Java 和 Python 不用丢：Java 继续负责稳定业务、事务、并发和服务边界，Python 继续负责数据处理、实验和评估。</li>
+<li>不要先追最花的 agent 框架，先把日志、回放、失败样本和人工确认做出来。</li>
+</ul>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><ul>
+<li>用 Next.js 或 Bun 做一个最小 AI 工具页：一个输入框、一个模型调用、一个 trace 记录。</li>
+<li>给这个工具加一条最简单的评估规则，比如“是否引用了用户问题中的关键实体”。</li>
+<li>给一个高风险工具动作加人工确认，顺手把失败日志结构化。</li>
+</ul>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li><a href="https://github.com/trending?since=daily">https://github.com/trending?since=daily</a></li>
+<li><a href="https://github.com/vercel/ai/releases">https://github.com/vercel/ai/releases</a></li>
+<li><a href="https://github.com/vercel/next.js/releases/tag/v16.3.2">https://github.com/vercel/next.js/releases/tag/v16.3.2</a></li>
+<li><a href="https://github.com/oven-sh/bun/releases/tag/bun-v1.4.0">https://github.com/oven-sh/bun/releases/tag/bun-v1.4.0</a></li>
+<li><a href="https://github.com/withastro/astro/releases/tag/astro%407.2.6">https://github.com/withastro/astro/releases/tag/astro%407.2.6</a></li>
+<li><a href="https://github.com/openai/codex">https://github.com/openai/codex</a></li>
+<li><a href="https://github.com/makeplane/plane">https://github.com/makeplane/plane</a></li>
+<li><a href="https://github.com/NousResearch/hermes-agent">https://github.com/NousResearch/hermes-agent</a></li>
+<li><a href="https://github.com/PostHog/posthog">https://github.com/PostHog/posthog</a></li>
+<li><a href="https://github.com/openclaw/openclaw">https://github.com/openclaw/openclaw</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术日报</category>
+      </categories>
+      <tags>
+        <tag>AI应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>全栈开发</tag>
+        <tag>Astro</tag>
+        <tag>日报</tag>
+        <tag>前沿技术</tag>
+        <tag>Bun</tag>
+        <tag>Vercel AI SDK</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>全栈与 AI 应用开发前沿日报 - 2026-08-25</title>
+    <url>/2026/08/25/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-08-25/</url>
+    <content><![CDATA[<blockquote>
+<p>面向 Java &#x2F; Python 后端转全栈与 AI 应用开发的学习者。今天最值得抓住的判断是：<strong>前沿重心继续从“模型更强”转向“应用链路更稳、接入更广、权限更细、交付更快”。</strong></p>
+</blockquote>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ol>
+<li><strong>全栈基础设施在继续向“可直接交付 AI 产品”收敛。</strong> Vercel 这两天把 Sandbox、Bun runtime、环境变量分级、v0 连接能力一起推上来，说明平台正在把“做 AI 应用”变成默认工作流，而不是额外拼装。</li>
+<li><strong>AI 应用的竞争点已经不是单纯聊天，而是任务、权限、观测和连接器。</strong> LangChain&#x2F;LangSmith、Cloudflare 的 MCP OAuth scopes、Anthropic 的 watermark 说明，生产级 AI 更像一个可审计系统。</li>
+<li><strong>运行时边界在变宽。</strong> Bun 1.4、Deno 2.9、Cloudflare 新能力都在强化“JS&#x2F;TS 既能做 Web，也能做工具、沙箱、桌面、代理层”。对转型者来说，这比再追一个 UI 语法更新更重要。</li>
+<li><strong>模型价格和能力都在继续内卷。</strong> 这对应用层是好事，但也意味着真正的差异化会越来越偏工程体验、数据闭环和工作流深度。</li>
+</ol>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="2-1-全栈平台从“部署”走向“运行时-协作面”"><a href="#2-1-全栈平台从“部署”走向“运行时-协作面”" class="headerlink" title="2.1 全栈平台从“部署”走向“运行时 + 协作面”"></a>2.1 全栈平台从“部署”走向“运行时 + 协作面”</h3><p>Vercel 8 月 24 日的几条更新很集中：</p>
+<ul>
+<li><a href="https://vercel.com/changelog/vercel-sandbox-is-now-globally-available">Vercel Sandbox 全球可用</a></li>
+<li><a href="https://vercel.com/changelog/bun-runtime-now-supports-large-functions-and-extended-max-duration">Bun runtime 支持更大的函数包和更长执行时长</a></li>
+<li><a href="https://vercel.com/changelog/environment-variables-now-use-config-and-secret-types">环境变量区分 Config &#x2F; Secret</a></li>
+<li><a href="https://vercel.com/changelog/connect-v0-apps-to-slack-google-and-100-other-services">v0 应用可连接 Slack、Google 等 100+ 服务</a></li>
+</ul>
+<p>这几个动作放在一起看，信号很明确：</p>
+<ul>
+<li>AI 应用不再只是前端页面 + API</li>
+<li>它需要沙箱、密钥分级、外部服务连接和更长的任务执行窗口</li>
+<li>平台开始替开发者补“工具编排层”</li>
+</ul>
+<h3 id="2-2-运行时边界继续模糊"><a href="#2-2-运行时边界继续模糊" class="headerlink" title="2.2 运行时边界继续模糊"></a>2.2 运行时边界继续模糊</h3><p><a href="https://bun.sh/blog/bun-v1.4">Bun v1.4</a> 是很强的工程信号：Rust 重写、内建 headless browser automation、JSON5&#x2F;JSONL、Terminal、cron API、Windows ARM64、并行测试、Node 26.3 兼容。它的意义不在于新 API 多，而在于：</p>
+<ul>
+<li>Web 运行时开始吃进更多自动化和脚本任务</li>
+<li>前端、后端、测试、自动化越来越难分家</li>
+<li>对全栈团队来说，一个 runtime 里能做的事情越多，交付摩擦越低</li>
+</ul>
+<p>Deno 2.9 也在继续往这个方向走：<code>deno desktop</code>、npm&#x2F;pnpm&#x2F;yarn&#x2F;Bun 迁移、CSS module imports、参数化测试、<code>deno compile</code> 体积更小、Node 26 兼容。它说明 web 技术栈正在继续侵蚀桌面和脚本场景。</p>
+<h3 id="2-3-云边缘平台开始内置-MCP-和权限边界"><a href="#2-3-云边缘平台开始内置-MCP-和权限边界" class="headerlink" title="2.3 云边缘平台开始内置 MCP 和权限边界"></a>2.3 云边缘平台开始内置 MCP 和权限边界</h3><p>Cloudflare 8 月 22 日把 <a href="https://developers.cloudflare.com/changelog/post/2026-08-22-wrangler-mcp-optional-oauth-scopes/">Wrangler 和 Cloudflare API MCP server 的 OAuth scopes 变成可选</a>。这件事很小，但方向很大：</p>
+<ul>
+<li>MCP 不会只停留在“能连上”</li>
+<li>真正进入生产后，权限粒度、授权审计、最小授权会变成标配</li>
+<li>这和后端领域的 RBAC &#x2F; scopes &#x2F; audit log 是同一类问题</li>
+</ul>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><ul>
+<li>**<a href="https://bun.sh/blog/bun-v1.4">Bun 1.4</a>**：这是今天最强的单点更新之一，兼顾 runtime、自动化、测试和 Node 兼容。</li>
+<li>**<a href="https://vercel.com/changelog/vercel-sandbox-is-now-globally-available">Vercel Sandbox</a>**：很适合 AI 代码执行、在线试跑、交互式工具和受控任务环境。</li>
+<li>**<a href="https://vercel.com/changelog/bun-runtime-now-supports-large-functions-and-extended-max-duration">Vercel Bun runtime 大函数支持</a>**：对长任务 AI 工具链很实用。</li>
+<li>**<a href="https://deno.com/blog/v2.9">Deno 2.9</a>**：桌面、编译、迁移、测试一起推进，工程味很重。</li>
+<li>**<a href="https://developers.cloudflare.com/changelog/post/2026-08-22-wrangler-mcp-optional-oauth-scopes/">Cloudflare MCP OAuth scopes</a>**：生产接入 MCP 时很值得关注。</li>
+<li><strong>GitHub Trending &#x2F; HN</strong>：HN 前排继续被 AI、平台安全、基础设施和自动化主题占据，说明开发者注意力正在从纯模型能力转到“能否真正嵌入工作流”。</li>
+</ul>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><h3 id="4-1-Agent-更像系统，不像-prompt"><a href="#4-1-Agent-更像系统，不像-prompt" class="headerlink" title="4.1 Agent 更像系统，不像 prompt"></a>4.1 Agent 更像系统，不像 prompt</h3><p>LangChain 这两天的主线很清楚：</p>
+<ul>
+<li><a href="https://www.langchain.com/blog/introducing-langsmith-tuned-evaluators-starting-with-perceived-error">LangSmith Tuned Evaluators</a></li>
+<li><a href="https://www.langchain.com/blog/langsmith-preview-builds-test-agent-changes-before-production">LangSmith Preview Builds</a></li>
+<li><a href="https://www.langchain.com/blog/managed-deep-agents-public-beta">Managed Deep Agents</a></li>
+<li><a href="https://www.langchain.com/blog/agentic-commerce-at-scale">Agentic Commerce at Scale</a></li>
+</ul>
+<p>这些内容共同说明一件事：</p>
+<ul>
+<li>agent 的重点不只是“会不会调用工具”</li>
+<li>更重要的是评测、回归、发布前预览、失败观察和生产治理</li>
+<li>这正是后端工程最擅长的地方</li>
+</ul>
+<h3 id="4-2-模型竞争继续下沉到价格和可部署性"><a href="#4-2-模型竞争继续下沉到价格和可部署性" class="headerlink" title="4.2 模型竞争继续下沉到价格和可部署性"></a>4.2 模型竞争继续下沉到价格和可部署性</h3><p>从 HN 前排能看到 <a href="https://news.ycombinator.com/front">OpenAI 的 GPT 5.6 Sol 降价</a> 这类讨论继续升温。对应用层来说，结论很现实：</p>
+<ul>
+<li>模型能力差距在缩小</li>
+<li>成本、延迟、上下文、工具调用稳定性更关键</li>
+<li>真正值钱的是把模型塞进一个能持续运行的产品系统</li>
+</ul>
+<h3 id="4-3-安全、来源和可追踪性会越来越硬"><a href="#4-3-安全、来源和可追踪性会越来越硬" class="headerlink" title="4.3 安全、来源和可追踪性会越来越硬"></a>4.3 安全、来源和可追踪性会越来越硬</h3><p>Anthropic 继续强调 <a href="https://www.anthropic.com/news/how-claude-s-text-watermark-works">Claude 的文本水印机制</a>。这类动作说明：</p>
+<ul>
+<li>大模型输出会越来越需要来源标记</li>
+<li>企业级应用会更在意可审计和责任链</li>
+<li>未来做 AI 应用，日志和回放不是附属品，而是基本盘</li>
+</ul>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ol>
+<li><strong>主线继续押 <code>TypeScript + Next.js + Bun/Node</code>。</strong> 这是全栈和 AI 应用最短的工程路径。</li>
+<li><strong>把 Python 放在 RAG、评测、数据处理、检索和模型周边。</strong> 不要把它浪费在纯代理层。</li>
+<li><strong>Java 继续负责业务核心、权限、交易、稳定性。</strong> 这些经验对 AI 产品一样值钱。</li>
+<li><strong>把 agent 当后端系统设计。</strong> 先做状态、幂等、超时、审计、回放，再写 prompt。</li>
+<li><strong>优先学“平台怎么托管运行时”，而不是只学某个前端语法。</strong> 沙箱、连接器、权限、观测，才是现在的关键。</li>
+</ol>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><p>做一个最小 AI 工具链骨架：</p>
+<ul>
+<li>1 个 Next.js 页面</li>
+<li>1 个 Bun&#x2F;Node API</li>
+<li>1 个模型调用</li>
+<li>1 个任务状态表</li>
+<li>1 个审计日志表</li>
+<li>1 个人工确认点</li>
+<li>3 条失败回放样例</li>
+</ul>
+<p>目标不是做大，而是把“能跑的 demo”推进到“能控的系统”。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li><a href="https://vercel.com/changelog">Vercel Changelog</a></li>
+<li><a href="https://nextjs.org/blog">Next.js Blog</a></li>
+<li><a href="https://bun.sh/blog">Bun Blog</a></li>
+<li><a href="https://deno.com/blog">Deno Blog</a></li>
+<li><a href="https://developers.cloudflare.com/changelog/">Cloudflare Changelog</a></li>
+<li><a href="https://www.langchain.com/blog">LangChain Blog</a></li>
+<li><a href="https://www.anthropic.com/news">Anthropic News</a></li>
+<li><a href="https://openai.com/news/">OpenAI News</a></li>
+<li><a href="https://news.ycombinator.com/front">HN Front Page</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术日报</category>
+      </categories>
+      <tags>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>全栈开发</tag>
+        <tag>AI 应用开发</tag>
+        <tag>LangChain</tag>
+        <tag>Bun</tag>
+        <tag>RAG</tag>
+        <tag>Agent</tag>
+        <tag>Cloudflare</tag>
+        <tag>Deno</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>全栈与 AI 应用开发前沿日报 - 2026-08-24</title>
     <url>/2026/08/24/%E5%85%A8%E6%A0%88%E4%B8%8E%20AI%20%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%89%8D%E6%B2%BF%E6%97%A5%E6%8A%A5%20-%202026-08-24/</url>
     <content><![CDATA[<blockquote>
@@ -735,8 +932,8 @@
         <tag>Agent</tag>
         <tag>Claude Code</tag>
         <tag>Gemini CLI</tag>
-        <tag>vLLM</tag>
         <tag>Cloudflare</tag>
+        <tag>vLLM</tag>
       </tags>
   </entry>
   <entry>
@@ -3384,9 +3581,9 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
-        <tag>Python</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
+        <tag>Python</tag>
         <tag>Java</tag>
         <tag>TypeScript</tag>
       </tags>
@@ -11944,9 +12141,9 @@ master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
         <category>OpenShift</category>
       </categories>
       <tags>
+        <tag>K8s</tag>
         <tag>OpenShift</tag>
         <tag>Docker</tag>
-        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -23826,8 +24023,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>K8s</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>Linux</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -24757,8 +24954,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>RabbitMQ</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>RabbitMQ</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -26701,8 +26898,8 @@ instance<span class="token punctuation">.</span><span class="token function">add
         <category>Quartz</category>
       </categories>
       <tags>
-        <tag>Quartz</tag>
         <tag>Java</tag>
+        <tag>Quartz</tag>
       </tags>
   </entry>
   <entry>
