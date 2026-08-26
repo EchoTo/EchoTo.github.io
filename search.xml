@@ -14,6 +14,92 @@
       </tags>
   </entry>
   <entry>
+    <title>全栈与 AI 应用开发前沿日报 - 2026-08-26</title>
+    <url>//2026/08/26/fullstack-ai-frontier-daily-2026-08-26/</url>
+    <content><![CDATA[<h1 id="全栈与-AI-应用开发前沿日报-2026-08-26"><a href="#全栈与-AI-应用开发前沿日报-2026-08-26" class="headerlink" title="全栈与 AI 应用开发前沿日报 - 2026-08-26"></a>全栈与 AI 应用开发前沿日报 - 2026-08-26</h1><p>今天的信号很一致：全栈框架在继续往“安全、稳定、编辑器集成、工程正确性”收敛，AI 应用栈在继续往“SDK 化、运行时化、可执行化”收敛。对准备从 Java&#x2F;Python 后端转全栈和 AI 应用的人来说，最重要的不是追每个新名词，而是看清楚边界正在往哪里移动。</p>
+<h2 id="1-今日重点结论"><a href="#1-今日重点结论" class="headerlink" title="1. 今日重点结论"></a>1. 今日重点结论</h2><ul>
+<li><code>Next.js 16.3.3</code> 今天的核心信息不是新能力，而是安全修复，且覆盖到远程代码执行级别的问题。这个信号很直接：全栈框架的竞争重心已经从“功能堆叠”转成“生产可信度”。</li>
+<li><code>vercel/ai</code> 在 8 月 25 日继续按包粒度发布 <code>@ai-sdk/xai@4.0.44</code>。这说明 AI 应用栈已经变成持续微调的 SDK 生态，依赖漂移、兼容性和回归测试会越来越像日常成本。</li>
+<li><code>openai/codex</code> 在 8 月 24 日发布 <code>rust-v0.149.1</code>，而且已经是跨平台命令行&#x2F;服务端二进制的成熟分发形态。AI coding 工具正在从“演示”变成“可安装、可升级、可管控”的生产软件。</li>
+<li>Hacker News 前排里更像工程信号的，是 <code>TeXbrain</code>、<code>Maiao</code>、<code>Queryable Executables</code> 这类偏本地化、可执行、可协作的工具，而不是纯概念型 AI 话题。</li>
+</ul>
+<h2 id="2-前沿技术路线变化"><a href="#2-前沿技术路线变化" class="headerlink" title="2. 前沿技术路线变化"></a>2. 前沿技术路线变化</h2><h3 id="框架层：从新-API-转向硬质量"><a href="#框架层：从新-API-转向硬质量" class="headerlink" title="框架层：从新 API 转向硬质量"></a>框架层：从新 API 转向硬质量</h3><p>今天最能代表前端&#x2F;全栈框架方向的，不是花哨特性，而是补丁、稳定性和集成深度。</p>
+<ul>
+<li>Next.js 的安全修复说明：大框架现在必须把安全、部署面和边界漏洞当主战场。</li>
+<li>Astro 的 VS Code 扩展更新说明：文档站、内容站、组件站的下一阶段竞争，不只是构建速度，而是编辑器体验和开发时反馈。</li>
+</ul>
+<h3 id="AI-应用层：从-prompt-工程转向执行工程"><a href="#AI-应用层：从-prompt-工程转向执行工程" class="headerlink" title="AI 应用层：从 prompt 工程转向执行工程"></a>AI 应用层：从 prompt 工程转向执行工程</h3><p>AI 应用不再是“接模型 API 就结束”。真正值钱的是：</p>
+<ul>
+<li>能不能稳定调用工具。</li>
+<li>能不能把执行过程记录下来。</li>
+<li>能不能做回放和回归。</li>
+<li>能不能限制高风险动作。</li>
+</ul>
+<p>这也是为什么今天更值得盯的是 SDK 发布节奏、agent 运行形态和工具链，而不是单纯的模型榜单。</p>
+<h3 id="本地优先和浏览器原生工具继续升温"><a href="#本地优先和浏览器原生工具继续升温" class="headerlink" title="本地优先和浏览器原生工具继续升温"></a>本地优先和浏览器原生工具继续升温</h3><p>HN 上像 <code>TeXbrain</code> 这种“浏览器里跑本地编辑器&#x2F;本地文件流”的项目，说明一件事：很多开发工作流正在回到“本地、可控、可离线”的方向。AI 不是一定把一切搬去云端，它也在推动本地工具变得更强。</p>
+<h2 id="3-新框架-x2F-新工具-x2F-爆款项目"><a href="#3-新框架-x2F-新工具-x2F-爆款项目" class="headerlink" title="3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目"></a>3. 新框架 &#x2F; 新工具 &#x2F; 爆款项目</h2><ul>
+<li><code>Next.js 16.3.3</code>：安全修复优先级很高，说明生产框架现在拼的是可靠性底盘。</li>
+<li><code>openai/codex</code> <code>rust-v0.149.1</code>：AI coding 工具进入标准软件分发阶段，重点不再是能不能跑，而是能不能稳定接入团队工作流。</li>
+<li><code>@ai-sdk/xai@4.0.44</code>：AI SDK 生态继续细粒度发版，接入方必须接受“高频小步升级”的现实。</li>
+<li><code>astro-vscode@2.16.20</code>：编辑器层体验仍然是框架生态的重要战场。</li>
+<li><code>TeXbrain</code>：浏览器内 LaTeX 编辑 + 本地文件系统 + Git 的组合，代表了新一轮本地优先工具的典型形态。</li>
+<li><code>Maiao</code>：把 Gerrit 风格代码评审带回 GitHub&#x2F;GitLab&#x2F;Gitea，说明“审查流程”本身也是值得重做的产品层。</li>
+<li><code>Queryable Executables</code>：可查询、可检查、可理解的可执行文件，是更偏工程基础设施的方向。</li>
+</ul>
+<p>我的判断：</p>
+<ul>
+<li>真正有用的爆款，不一定最“AI”，但一定更接近执行和协作。</li>
+<li>工程团队现在最缺的不是再来一个聊天框，而是能接入权限、审计、回放和协作流程的工具。</li>
+</ul>
+<h2 id="4-AI-应用开发重点动态"><a href="#4-AI-应用开发重点动态" class="headerlink" title="4. AI 应用开发重点动态"></a>4. AI 应用开发重点动态</h2><p>今天这类 release 组合给出的信息很明确：</p>
+<ul>
+<li><code>openai/codex</code> 说明 coding agent 已经进入可分发的软件形态。</li>
+<li><code>vercel/ai</code> 的包级发布说明 AI 应用开发会越来越碎片化，应用方要做好依赖锁定和回归测试。</li>
+<li><code>Maiao</code> 和 <code>TeXbrain</code> 这类项目说明，真正能落地的 AI 周边工具，通常不是“单次回答更聪明”，而是“围绕真实工作流把步骤串起来”。</li>
+</ul>
+<p>对转型者来说，应该优先学习的是：</p>
+<ul>
+<li>流式输出。</li>
+<li>工具调用。</li>
+<li>状态管理。</li>
+<li>失败重试。</li>
+<li>人工确认点。</li>
+<li>日志和评估。</li>
+</ul>
+<h2 id="5-对-Java-x2F-Python-后端转型的行动建议"><a href="#5-对-Java-x2F-Python-后端转型的行动建议" class="headerlink" title="5. 对 Java&#x2F;Python 后端转型的行动建议"></a>5. 对 Java&#x2F;Python 后端转型的行动建议</h2><ul>
+<li>把 TypeScript 当成主力后端语言补起来，不要只把它当成前端附属技能。</li>
+<li>先学 <code>Next.js + Node.js + Postgres + 队列 + trace + eval</code> 这一条线，够你做出完整 AI 应用。</li>
+<li>Java 继续留在稳定业务、事务和并发服务；Python 继续留在数据处理、实验和评估。</li>
+<li>少碰“看起来很炫但没边界”的 agent 框架，先把权限、人工确认和失败样本跑通。</li>
+</ul>
+<h2 id="6-今日可实践的小任务"><a href="#6-今日可实践的小任务" class="headerlink" title="6. 今日可实践的小任务"></a>6. 今日可实践的小任务</h2><ul>
+<li>用 Next.js 写一个最小 AI 工具页：输入框、流式输出、历史记录。</li>
+<li>给它加一层简单的 trace 记录，保存每次请求的 prompt、工具调用和结果。</li>
+<li>给一个高风险动作加人工确认按钮，别让自动执行越界。</li>
+</ul>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ul>
+<li><a href="https://github.com/vercel/next.js/releases/tag/v16.3.3">https://github.com/vercel/next.js/releases/tag/v16.3.3</a></li>
+<li><a href="https://github.com/openai/codex/releases/tag/rust-v0.149.1">https://github.com/openai/codex/releases/tag/rust-v0.149.1</a></li>
+<li><a href="https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%404.0.44">https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%404.0.44</a></li>
+<li><a href="https://github.com/withastro/astro/releases/tag/astro-vscode%402.16.20">https://github.com/withastro/astro/releases/tag/astro-vscode%402.16.20</a></li>
+<li><a href="https://news.ycombinator.com/rss">https://news.ycombinator.com/rss</a></li>
+<li><a href="https://hnrss.org/frontpage">https://hnrss.org/frontpage</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术日报</category>
+      </categories>
+      <tags>
+        <tag>AI应用开发</tag>
+        <tag>全栈开发</tag>
+        <tag>Next.js</tag>
+        <tag>日报</tag>
+        <tag>前沿技术</tag>
+        <tag>TypeScript</tag>
+        <tag>AI Coding</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>全栈与 AI 应用开发前沿日报 - 2026-08-25</title>
     <url>//2026/08/25/fullstack-ai-frontier-daily-2026-08-25/</url>
     <content><![CDATA[<h1 id="全栈与-AI-应用开发前沿日报-2026-08-25"><a href="#全栈与-AI-应用开发前沿日报-2026-08-25" class="headerlink" title="全栈与 AI 应用开发前沿日报 - 2026-08-25"></a>全栈与 AI 应用开发前沿日报 - 2026-08-25</h1><p>今天能确认的硬信号不多，但方向很清楚：全栈栈正在继续往“运行时 + 工具链 + 生产正确性”收敛，AI 应用开发则继续往“SDK 化、工作流化、可观测化”收敛。今天最值得记住的不是某个单点功能，而是这些项目都在把边界问题往前推。</p>
@@ -84,8 +170,8 @@
       </categories>
       <tags>
         <tag>AI应用开发</tag>
-        <tag>Next.js</tag>
         <tag>全栈开发</tag>
+        <tag>Next.js</tag>
         <tag>Astro</tag>
         <tag>日报</tag>
         <tag>前沿技术</tag>
@@ -198,11 +284,11 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>LangChain</tag>
+        <tag>MCP</tag>
         <tag>Bun</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
@@ -296,11 +382,11 @@
       </categories>
       <tags>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>Node.js</tag>
+        <tag>MCP</tag>
         <tag>TypeScript</tag>
         <tag>shadcn/ui</tag>
         <tag>Vercel AI</tag>
@@ -406,12 +492,12 @@
       </categories>
       <tags>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>Node.js</tag>
         <tag>LangChain</tag>
+        <tag>MCP</tag>
         <tag>TypeScript</tag>
         <tag>Qwen</tag>
       </tags>
@@ -504,14 +590,14 @@
       </categories>
       <tags>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>Node.js</tag>
         <tag>Svelte</tag>
         <tag>Astro</tag>
         <tag>LangChain</tag>
+        <tag>MCP</tag>
         <tag>OpenAI</tag>
       </tags>
   </entry>
@@ -615,12 +701,12 @@
       </categories>
       <tags>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>Node.js</tag>
         <tag>LangChain</tag>
+        <tag>MCP</tag>
         <tag>TypeScript</tag>
         <tag>Gemini CLI</tag>
       </tags>
@@ -686,10 +772,10 @@
       </categories>
       <tags>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
         <tag>Claude Code</tag>
         <tag>Gemini CLI</tag>
       </tags>
@@ -798,10 +884,10 @@
       </categories>
       <tags>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
         <tag>Claude Code</tag>
         <tag>Gemini CLI</tag>
         <tag>Cloudflare</tag>
@@ -924,10 +1010,10 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
         <tag>Claude Code</tag>
@@ -1018,14 +1104,14 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>LangChain</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>Claude Code</tag>
         <tag>Gemini CLI</tag>
       </tags>
@@ -1119,13 +1205,13 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>Claude Code</tag>
         <tag>Gemini CLI</tag>
         <tag>Cloudflare</tag>
@@ -1211,13 +1297,13 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>Node.js</tag>
-        <tag>Agent</tag>
+        <tag>MCP</tag>
         <tag>TypeScript</tag>
+        <tag>Agent</tag>
         <tag>Claude Code</tag>
         <tag>Gemini CLI</tag>
       </tags>
@@ -1298,13 +1384,13 @@
       </categories>
       <tags>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>Node.js</tag>
-        <tag>Agent</tag>
+        <tag>MCP</tag>
         <tag>TypeScript</tag>
+        <tag>Agent</tag>
       </tags>
   </entry>
   <entry>
@@ -1423,14 +1509,14 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
         <tag>Node.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
       </tags>
   </entry>
   <entry>
@@ -1678,13 +1764,13 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -1789,13 +1875,13 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -1907,13 +1993,13 @@
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -2011,13 +2097,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -2141,13 +2227,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -2282,13 +2368,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -2422,13 +2508,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -2491,8 +2577,8 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
       <tags>
         <tag>AI应用开发</tag>
         <tag>LangGraph</tag>
-        <tag>Next.js</tag>
         <tag>全栈开发</tag>
+        <tag>Next.js</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
       </tags>
@@ -2650,13 +2736,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -2798,13 +2884,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -2946,13 +3032,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -3087,13 +3173,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -3246,13 +3332,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -3380,13 +3466,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -3581,11 +3667,11 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
-        <tag>RAG</tag>
-        <tag>Agent</tag>
+        <tag>TypeScript</tag>
         <tag>Python</tag>
         <tag>Java</tag>
-        <tag>TypeScript</tag>
+        <tag>RAG</tag>
+        <tag>Agent</tag>
       </tags>
   </entry>
   <entry>
@@ -3727,13 +3813,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
         <tag>Astro</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>Cloudflare</tag>
       </tags>
   </entry>
@@ -3874,13 +3960,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>TypeScript</tag>
         <tag>AI Coding</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -3998,12 +4084,12 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>开发日报</tag>
       </tags>
   </entry>
@@ -4121,13 +4207,13 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
         <tag>Node.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
       </tags>
   </entry>
   <entry>
@@ -4217,9 +4303,9 @@ created_at<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
         <tag>Serverless</tag>
       </tags>
@@ -4393,9 +4479,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
         <tag>Serverless</tag>
       </tags>
@@ -4555,9 +4641,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -4725,9 +4811,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -4881,9 +4967,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -5046,9 +5132,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
       </tags>
   </entry>
   <entry>
@@ -5252,13 +5338,13 @@ interface AIResponse &#123;
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
         <tag>Node.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
       </tags>
   </entry>
   <entry>
@@ -5421,12 +5507,12 @@ interface AIResponse &#123;
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -5556,12 +5642,12 @@ interface AIResponse &#123;
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -5721,14 +5807,14 @@ interface AIResponse &#123;
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
-        <tag>MCP</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>MCP</tag>
+        <tag>TypeScript</tag>
         <tag>AI Coding</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
       </tags>
   </entry>
   <entry>
@@ -5841,12 +5927,12 @@ interface AIResponse &#123;
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -5965,12 +6051,12 @@ interface AIResponse &#123;
         <category>技术日报</category>
       </categories>
       <tags>
-        <tag>Next.js</tag>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>Next.js</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -6136,9 +6222,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -6279,9 +6365,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -6415,9 +6501,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -6530,9 +6616,9 @@ interface AIResponse &#123;
       <tags>
         <tag>全栈开发</tag>
         <tag>AI 应用开发</tag>
+        <tag>TypeScript</tag>
         <tag>RAG</tag>
         <tag>Agent</tag>
-        <tag>TypeScript</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
@@ -15319,37 +15405,37 @@ master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <p>Nacos能让用户从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略</p>
 <hr>
 <h3 id="1-3-Nacos快速入门"><a href="#1-3-Nacos快速入门" class="headerlink" title="1.3 Nacos快速入门"></a>1.3 Nacos快速入门</h3><hr>
-<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">docker pull nacos&#x2F;nacos-server:v2.5.0
+<h4 id="1-3-1-安装"><a href="#1-3-1-安装" class="headerlink" title="1.3.1 安装"></a>1.3.1 安装</h4><pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">docker</span> pull nacos/nacos-server:v2.5.0
 
-docker run -d --name nacos-server \
-  -e MODE&#x3D;standalone \
-  -p 8848:8848 \
-  nacos&#x2F;nacos-server:v2.5.0
+<span class="token function">docker</span> run -d --name nacos-server <span class="token punctuation">\</span>
+  -e <span class="token assign-left variable">MODE</span><span class="token operator">=</span>standalone <span class="token punctuation">\</span>
+  -p <span class="token number">8848</span>:8848 <span class="token punctuation">\</span>
+  nacos/nacos-server:v2.5.0
 
-# 开启鉴权
-docker exec -it nacos-server &#x2F;bin&#x2F;bash
+<span class="token comment"># 开启鉴权</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it nacos-server /bin/bash
 
-2f8c80293f4f:&#x2F;home&#x2F;nacos# cd conf&#x2F;
-2f8c80293f4f:&#x2F;home&#x2F;nacos&#x2F;conf# vim application.properties
+2f8c80293f4f:/home/nacos<span class="token comment"># cd conf/</span>
+2f8c80293f4f:/home/nacos/conf<span class="token comment"># vim application.properties</span>
 
-##新增两行
-nacos.core.auth.enabled&#x3D;true
-nacos.core.auth.enable.userAgentAuthWhite&#x3D;false
+<span class="token comment">##新增两行</span>
+nacos.core.auth.enabled<span class="token operator">=</span>true
+nacos.core.auth.enable.userAgentAuthWhite<span class="token operator">=</span>false
 
-# 修改三行
-nacos.core.auth.plugin.nacos.token.secret.key&#x3D;$&#123;NACOS_AUTH_TOKEN:SecretKey01234567890123456789012345345678999987654901234567890123456789&#125; # 随意数字 不能太短
-nacos.core.auth.server.identity.key&#x3D;$&#123;NACOS_AUTH_IDENTITY_KEY:admin&#125;
-nacos.core.auth.server.identity.value&#x3D;$&#123;NACOS_AUTH_IDENTITY_VALUE:admin&#125;
+<span class="token comment"># 修改三行</span>
+nacos.core.auth.plugin.nacos.token.secret.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_TOKEN<span class="token operator">:</span>SecretKey01234567890123456789012345345678999987654901234567890123456789&#125;</span> <span class="token comment"># 随意数字 不能太短</span>
+nacos.core.auth.server.identity.key<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_KEY<span class="token operator">:</span>admin&#125;</span>
+nacos.core.auth.server.identity.value<span class="token operator">=</span><span class="token variable">$&#123;NACOS_AUTH_IDENTITY_VALUE<span class="token operator">:</span>admin&#125;</span>
 
-# 重启容器
-docker restart nacos
+<span class="token comment"># 重启容器</span>
+<span class="token function">docker</span> restart nacos
 
-# 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置
-spring.datasource.platform&#x3D;mysql
-db.num&#x3D;1
-db.url.0&#x3D;jdbc:mysql:&#x2F;&#x2F;ip:3306&#x2F;nacos_config?characterEncoding&#x3D;utf8&amp;connectTimeout&#x3D;1000&amp;socketTimeout&#x3D;3000&amp;autoReconnect&#x3D;true
-db.user&#x3D;用户名
-db.password&#x3D;密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置</span>
+spring.datasource.platform<span class="token operator">=</span>mysql
+db.num<span class="token operator">=</span><span class="token number">1</span>
+db.url.0<span class="token operator">=</span>jdbc:mysql://ip:3306/nacos_config?characterEncoding<span class="token operator">=</span>utf8<span class="token operator">&amp;</span><span class="token assign-left variable">connectTimeout</span><span class="token operator">=</span><span class="token number">1000</span><span class="token operator">&amp;</span><span class="token assign-left variable">socketTimeout</span><span class="token operator">=</span><span class="token number">3000</span><span class="token operator">&amp;</span><span class="token assign-left variable">autoReconnect</span><span class="token operator">=</span>true
+db.user<span class="token operator">=</span>用户名
+db.password<span class="token operator">=</span>密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -24954,8 +25040,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
         <category>RabbitMQ</category>
       </categories>
       <tags>
-        <tag>RabbitMQ</tag>
         <tag>Java</tag>
+        <tag>RabbitMQ</tag>
       </tags>
   </entry>
   <entry>
@@ -26898,8 +26984,8 @@ instance<span class="token punctuation">.</span><span class="token function">add
         <category>Quartz</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Quartz</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
