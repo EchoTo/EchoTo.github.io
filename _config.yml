@@ -104,5 +104,5 @@ theme: Chic
 deploy:
   type: git
   # repo: root@47.93.22.25:/var/repo/Blog.git
-  repo: https://github.com/EchoTo/EchoTo.github.io.git
+  repo: git@github.com:EchoTo/EchoTo.github.io.git
   branch: main
