@@ -1,6 +1,1 @@
-<% var posts = site.posts.sort('date', -1); %>
 <%- markdown(theme.intro) %>
-<h3>Notes</h3>
-<%- partial('_partial/post-list', { posts: posts.filter(function (p) { return !is_daily(p); }) }) %>
-<h3>Daily</h3>
-<%- partial('_partial/post-list', { posts: posts.filter(is_daily) }) %>

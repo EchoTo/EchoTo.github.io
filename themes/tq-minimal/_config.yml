@@ -1,7 +1,15 @@
 nav:
-  New blog: https://tonkyshan.cn/
-  Archive: /
+  Home: /
+  Blog: /archives/
+  Archive: /legacy/
 
-# Markdown shown above the post lists on the home page
+# Posts dated before this belong to the old blog and only appear under /legacy/
+fresh_start: 2026-10-28
+
+# Markdown shown on the home page
 intro: |
-  Archive of my old blog (2022 – 2026). New writing lives at [tonkyshan.cn](https://tonkyshan.cn/).
+  Blog of ShanTianQi, backend engineer working on autonomous driving and AI. Based in Hangzhou. Restarted October 2026.
+
+  - GitHub: [EchoTo](https://github.com/EchoTo)
+  - Old posts (2022 – 2026): [archive](/legacy/)
+  - Subscribe via [RSS feed](/atom.xml)

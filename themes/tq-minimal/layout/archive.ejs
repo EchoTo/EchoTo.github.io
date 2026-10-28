@@ -1,1 +1,6 @@
-<%- partial('_partial/post-list', { posts: site.posts.sort('date', -1) }) %>
+<% var posts = site.posts.sort('date', -1).filter(function (p) { return !is_legacy(p); }); %>
+<% if (posts.length) { %>
+<%- partial('_partial/post-list', { posts: posts }) %>
+<% } else { %>
+<p>No posts yet. Older writing lives in the <a href="<%- url_for('/legacy/') %>">archive</a>.</p>
+<% } %>
