@@ -7,9 +7,6 @@ const posts = (await getPosts()).filter((p) => !p.isLegacy);
 ---
 
 <Base title="Blog">
-  {posts.length ? (
-    <PostList posts={posts} />
-  ) : (
-    <p>No posts yet. Older writing lives in the <a href="/archives/">archive</a>.</p>
-  )}
+  {posts.length > 0 && <PostList posts={posts} />}
+  <p>Older posts (2022 – 2026) are in the <a href="/archives/">archive</a>.</p>
 </Base>
