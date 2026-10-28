@@ -1,10 +1,11 @@
 name: Deploy
 
-# Build the Astro site on every push to `main` and publish it to GitHub Pages.
-# Requires Settings → Pages → Source: "GitHub Actions".
+# Build the Astro site and publish it to GitHub Pages.
+# Manual only for now: the site is published from the gh-pages branch with `npm run deploy`.
+# To switch back: Settings → Pages → Source: "GitHub Actions", then uncomment `push`.
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 permissions:
