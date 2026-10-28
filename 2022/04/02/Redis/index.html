@@ -1,0 +1,521 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Redis | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Redis</h1><p><i><time datetime="2022-04-02T19:03:35.000Z">2 Apr, 2022</time></i></p><h2 id="redis">Redis</h2>
+<hr>
+<h2 id="第一章---概念">第一章   概念</h2>
+<hr>
+<h3 id="11概念">1.1概念</h3>
+<hr>
+<p>redis是一款高性能的NOSQL系列的非关系型数据库</p>
+<p><img src="/img/1..bmp" alt="1"></p>
+<hr>
+<h3 id="12nosql">1.2NOSQL</h3>
+<hr>
+<p>NoSQL (NoSQL = Not only sQL)，意即“不仅仅是SQL”，是一项全新的数据库理念，泛指非关系型的数据库。</p>
+<p>随着互联网web2.0网站的兴起，传统的关系数据库在应付web2.0网站，特别是超大规模和高并发的SNS类型的web2.0纯动态网站已经显得力不从心，暴露了很多难以克服的问题，而非关系型的数据库则由于其本身的特点得到了非常间速的发展。NoSQL数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题。</p>
+<hr>
+<h3 id="13对比">1.3对比</h3>
+<hr>
+<p><strong>优点∶</strong></p>
+<ul>
+<li>成本: nosql数据库简单易部署，基本都是开源软件，不需要像使用oracle那样花费大量成本购买使用，相比关系型数据库价格便宜。</li>
+<li>查询速度: nosql数据库将数据存储于缓存之中，关系型数据库将数据存储在硬盘中，自然查询速度远不及nosql数据库。</li>
+<li>存储数据的格式: nosql的存储格式是key，value形式、文档形式、图片形式等等，所以可以存储基础类型以及对象或者是集合等各种格式，而数据库则只支持基础类型。</li>
+<li>扩展性∶关系型数据库有类似join这样的多表查询机制的限制导致扩展很艰难。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>维护的工具和资料有限，因为nosql是属于新的技术，不能和关系型数据库10几年的技术同日而语。</li>
+<li>不提供对sql的支持，如果不支持sql这样的工业标准，将产生一定用户的学习和使用成本。</li>
+<li>不提供关系型数据库对事务的处理。</li>
+</ul>
+<p><strong>非关系型数据库的优势∶</strong></p>
+<ul>
+<li>性能NOSQL是基于键值对的，可以想象成表中的主键和值的对应关系，而且不需要经过SQL层的解析，所以性能非常高。</li>
+<li>可扩展性同样也是因为基于键值对，数据之间没有耦合性，所以非常容易水平扩展。</li>
+</ul>
+<p><strong>关系型数据库的优势︰</strong></p>
+<ul>
+<li>复杂查询可以用SQL语句方便的在一个表以及多个表之间做非常复杂的数据查询。</li>
+<li>事务支持使得对于安全性能很高的数据访问要求得以实现。对于这两类数据库，对方的优势就是自己的弱势，反之亦然。</li>
+</ul>
+<p><strong>总结</strong><br>
+关系型数据库与NOSQL数据库并非对立而是互补的关系，即通常情况下使用关系型数据库，在适合使用NOSQL的时候使用NOSQL数据库，让NOSQL数据库对关系型数据库的不足进行弥补。</p>
+<p>一般会将数据存储在关系型数据库中，在NOSQL数据库中备份存储关系型数据库的数据。</p>
+<hr>
+<h3 id="14redis">1.4Redis</h3>
+<hr>
+<p>Redis是用C语言开发的一个开源的高性能键值对(key -value)数据库，官方提供测试数据，50个并发执行100000个请求，读的速度是110000次/s,写的速度是81000次/s，且Redis通过提供多种键值数据类型来适应不同场景下的存储需求。目前为止Redis支持的键值数据类型如下:</p>
+<ul>
+<li>字符串类型string</li>
+<li>哈希类型hash</li>
+<li>列表类型list</li>
+<li>集合类型set</li>
+<li>有序集合类型sortedset</li>
+</ul>
+<p><strong>redis的应用场景</strong></p>
+<ul>
+<li>缓存(数据查询、短连接、新闻内容、商品内容等等)</li>
+<li>聊天室的在线好友列表</li>
+<li>任务队列。(秒杀、抢购、306等等)</li>
+<li>应用排行榜</li>
+<li>网站访问统计</li>
+<li>数据过期处理(可以精确到毫秒)</li>
+<li>分布式集群架构中的session分离</li>
+</ul>
+<hr>
+<ul>
+<li>redis.windows.conf :配置文件</li>
+<li>redis-cli.exe : redis的客户端</li>
+<li>redis-server.exe : redis服务器端</li>
+</ul>
+<hr>
+<h2 id="第二章---命令操作">第二章   命令操作</h2>
+<hr>
+<h3 id="21redis的数据结构">2.1redis的数据结构</h3>
+<hr>
+<p>redis存储的是：Key，Value格式的数据，其中Key都是字符串，Value有5种不同的数据结构</p>
+<ul>
+<li>字符串类型：string</li>
+<li>哈希类型 hash : map格式</li>
+<li>列表类型 list : linkedlist格式</li>
+<li>集合类型 set</li>
+<li>有序集合类型：sortedset</li>
+</ul>
+<p><img src="/img/2.bmp" alt="2"></p>
+<hr>
+<h3 id="22操作命令">2.2操作命令</h3>
+<hr>
+<p><strong>1.字符串类型   string</strong></p>
+<ul>
+<li>存储：set  key  value</li>
+<li>获取：get  key --->得到value</li>
+<li>删除：del  key</li>
+</ul>
+<p><strong>2.哈希类型   hash</strong></p>
+<ul>
+<li>存储：hset key filed value</li>
+<li>获取：
+<ul>
+<li>hget key filed：获取指定的filed对应的值</li>
+<li>hgetall key：获取所有的filed和value</li>
+</ul>
+</li>
+<li>删除：hdel key filed</li>
+</ul>
+<p><strong>3.列表类型   list</strong></p>
+<p>可以添加一个元素到列表的头部(左边)或者尾部(右边)</p>
+<p><img src="/img/3..bmp" alt="3.列表list数据结构"></p>
+<p>1.添加：</p>
+<ul>
+<li>lpush key value：将元素加入列表左边</li>
+<li>rpush key value：将元素加入列表右边</li>
+</ul>
+<p>2.获取：</p>
+<ul>
+<li>lrange key start end：范围获取</li>
+</ul>
+<p>3.删除：</p>
+<ul>
+<li>lpop key：删除列表最左边的元素，并将元素返回</li>
+<li>rpop key：删除列表最右边的元素，并将元素返回</li>
+</ul>
+<p><strong>4.集合类型  set</strong></p>
+<p>不允许重复</p>
+<p>1.存储：</p>
+<ul>
+<li>sadd key value</li>
+</ul>
+<p>2.获取：</p>
+<ul>
+<li>smembers key：获取set集合中所有元素</li>
+</ul>
+<p>3.删除：</p>
+<ul>
+<li>srem key value：删除set集合中的某个元素</li>
+</ul>
+<p><strong>5.有序集合类型  sortedset</strong></p>
+<p>不允许重复元素，且元素有顺序</p>
+<p>1.存储：</p>
+<ul>
+<li>zadd key score value</li>
+</ul>
+<p>2.获取：</p>
+<ul>
+<li>zrange key start end</li>
+</ul>
+<p>3.删除：</p>
+<ul>
+<li>zren key value</li>
+</ul>
+<p><strong>6.通用命令</strong></p>
+<ul>
+<li>key * ：查询所有的键</li>
+<li>type key：获取键对应的value的类型</li>
+<li>del key：删除指定的key value</li>
+</ul>
+<hr>
+<h2 id="第三章---持久化操作">第三章   持久化操作</h2>
+<hr>
+<p>1.redis是一个内存数据库，当reds服务器重后，或者电脑重后，数据会丢失，我们可以将redis内存中的数据持久化保存到硬盘的文件中。</p>
+<p>2.redis持久化机制：</p>
+<ul>
+<li>RDB：默认方式，不需要进行配置，默认就使用这种机制
+<ul>
+<li>在一定的间隔时间中，检测key的变化情况，然后持久化数据</li>
+</ul>
+</li>
+<li>AOF：日志记录的方式，可以记录每一条命令的操作。可以每一次命令操作后，持久化数据</li>
+</ul>
+<hr>
+<h3 id="21rdb">2.1RDB</h3>
+<hr>
+<p><strong>1.编辑redis.windows.conf文件</strong></p>
+<p>#after 900 sec (15 min) if at least 1 key changed</p>
+<p><strong>save 900 1</strong></p>
+<p>#after 300 sec (5 min) if at least 10 keys changed</p>
+<p><strong>save 300 10</strong></p>
+<p>#after 60 sec if at least 10000 keys changed</p>
+<p><strong>save 60 10000</strong></p>
+<p><strong>会生成.rdb文件</strong></p>
+<p><strong>2.重新启动redis服务器，并指定配置文件名称</strong></p>
+<p>redis根目录下 cmd <code>>redis-server.exe redis.windows.conf</code></p>
+<hr>
+<h3 id="22aof">2.2AOF</h3>
+<hr>
+<p>配置文件中找到：appendonly</p>
+<p>默认值为no(关闭AOF)</p>
+<p>改为yes后(开启AOF)</p>
+<ul>
+<li>appendfsync always：每一次操作都进行持久化</li>
+<li>appendfsync everysec：每隔一秒进行一次持久化**(默认开启)**</li>
+<li>appendfsync no：不进行持久化</li>
+</ul>
+<p><strong>会生成.aof文件</strong></p>
+<hr>
+<h2 id="第四章---jedis">第四章   Jedis</h2>
+<hr>
+<ul>
+<li>Jedis：一款java操作redis数据库的工具</li>
+</ul>
+<hr>
+<h3 id="41jedis快速入门">4.1Jedis快速入门</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.test;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.junit.Test;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.Jedis;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/*</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">* jedis测试类</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">* */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1.获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Jedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"localhost"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">6379</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.操作</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"username"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"zhangsan"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3.关闭连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><img src="/img/20220330232805.png" alt="20220330232805"></p>
+<ul>
+<li>Jedis操作各种redis中的数据结构</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.test;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.utils.JedisPoolUtils;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.junit.Test;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.Jedis;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPool;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPoolConfig;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.List;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Map;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Set;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/*</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">* jedis测试类</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">* */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1.获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Jedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"localhost"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">6379</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.操作</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"username"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"zhangsan"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3.关闭连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * string 数据结构操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1. 获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Jedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//如果使用空参构造，默认值 "localhost",6379端口</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2. 操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //存储</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"username"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"zhangsan"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String username </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"username"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(username);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //可以使用setex()方法存储可以指定过期时间的 key value</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setex</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"activecode"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">20</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"hehe"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//将activecode：hehe键值对存入redis，并且20秒后自动删除该键值对</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3. 关闭连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * hash 数据结构操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1. 获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Jedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//如果使用空参构造，默认值 "localhost",6379端口</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2. 操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 存储hash</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">hset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"lisi"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">hset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"age"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"23"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">hset</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"gender"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"female"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 获取hash</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">hget</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(name);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 获取hash的所有map中的数据</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Map&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> user </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">hgetAll</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"user"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // keyset</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Set&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> keySet </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> user.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">keySet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (String key </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> keySet) {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //获取value</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            String value </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> user.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(key);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(key </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> ":"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> value);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3. 关闭连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * list 数据结构操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test4</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1. 获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Jedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//如果使用空参构造，默认值 "localhost",6379端口</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2. 操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // list 存储</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">lpush</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mylist"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"a"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"b"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"c"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//从左边存</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">rpush</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mylist"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"a"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"b"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"c"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//从右边存</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // list 范围获取</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        List&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> mylist </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">lrange</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mylist"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(mylist);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // list 弹出</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String element1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">lpop</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mylist"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//c</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(element1);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String element2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">rpop</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mylist"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//c</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(element2);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // list 范围获取</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        List&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> mylist2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">lrange</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mylist"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(mylist2);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3. 关闭连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * set 数据结构操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test5</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1. 获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Jedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//如果使用空参构造，默认值 "localhost",6379端口</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2. 操作</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // set 存储</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sadd</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"myset"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"java"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"php"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"c++"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // set 获取</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Set&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> myset </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">smembers</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"myset"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(myset);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3. 关闭连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * sortedset 数据结构操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test6</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1. 获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Jedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//如果使用空参构造，默认值 "localhost",6379端口</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2. 操作</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // sortedset 存储</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">zadd</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mysortedset"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"亚瑟"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">zadd</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mysortedset"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">30</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"后裔"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">zadd</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mysortedset"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">55</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"孙悟空"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // sortedset 获取</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Set&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> mysortedset </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">zrange</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"mysortedset"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(mysortedset);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3. 关闭连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="42jedis连接池">4.2Jedis连接池</h3>
+<hr>
+<p>JedisPool</p>
+<ul>
+<li>使用：
+<ul>
+<li>创建JedisPool连接池对象</li>
+<li>调用方法getResource()方法获取Jedis连接</li>
+</ul>
+</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.test;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.utils.JedisPoolUtils;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.junit.Test;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.Jedis;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPool;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPoolConfig;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.List;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Map;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Set;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * jedis连接池使用</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test7</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //0.创建一个配置对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    JedisPoolConfig config </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisPoolConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    config.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setMaxTotal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">50</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//最大允许的连接数</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    config.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setMaxIdle</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">10</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//最大空闲连接</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //1.创建Jedis连接池对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    JedisPool jedisPool </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisPool</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(config, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"localhost"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">6379</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //2.获取连接</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedisPool.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getResource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //3. 使用</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"hehe"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"heihei"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //4. 关闭 归还到连接池中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}    </span></span></code></pre>
+<p><strong>Jedis连接池工具类</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="properties"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">host</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=127.0.0.1</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">port</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=6379</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">maxTotal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=50</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">maxIdle</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=10</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.utils;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.Jedis;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPool;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPoolConfig;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.InputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> JedisPool工具类</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    加载配置文件，配置连接池的参数</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    提供获取连接的方法</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisPoolUtils</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JedisPool jedisPool;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    static</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //读取配置文件</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        InputStream is </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JedisPoolUtils.class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getClassLoader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getResourceAsStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"jedis.properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建Properties对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Properties pro </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //关联文件</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            pro.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">load</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(is);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (IOException </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            e.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">printStackTrace</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取数据，设置到JedisPoolConfig中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        JedisPoolConfig config </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisPoolConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        config.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setMaxTotal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Integer.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">parseInt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(pro.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"maxTotal"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        config.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setMaxIdle</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Integer.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">parseInt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(pro.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"maxIdle"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)));</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //初始化JedisPool</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        jedisPool </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisPool</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(config,pro.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"host"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),Integer.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">parseInt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(pro.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"port"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)));</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * 获取连接方法</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Jedis </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jedisPool.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getResource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.test;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.jedis.utils.JedisPoolUtils;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.junit.Test;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.Jedis;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPool;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> redis.clients.jedis.JedisPoolConfig;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.List;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Map;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Set;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JedisTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * jedis连接池工具类使用</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> test8</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //通过连接池工具类获取</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Jedis jedis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JedisPoolUtils.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJedis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //3. 使用</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"hello"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"world"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //4. 关闭 归还到连接池中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    jedis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	}</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre><p class="tags"><a href="/tags/Redis/">#Redis</a><a href="/tags/NoSQL/">#NoSQL</a><a href="/tags/Jedis/">#Jedis</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

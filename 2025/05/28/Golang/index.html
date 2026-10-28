@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Golang | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Golang</h1><p><i><time datetime="2025-05-28T10:18:27.000Z">28 May, 2025</time></i></p><h1 id="golang">Golang</h1>
+<hr>
+<h2 id="第一章-基础">第一章 基础</h2>
+<hr>
+<p>Go语言保证了既能达到静态编译语言的安全和特性，又达到了动态语言开发维护的高效率，使用一个表达式来形容Go语言：</p>
+<p><strong>Go = C + Python</strong></p>
+<p>说明Go语言既有C静态语言程序的运行速度，又能达到python动态语言的快速开发</p>
+<p>1、从C语言中继承了很多理念，包括表达式语法，控制结构，基础数据类型，调用参数传值，指针等等，也保留了和C语言一样的编译执行方式及弱化的指针</p>
+<p>2、引入包的概念，用于组织程序结构，Go语言的一个文件都要归属于一个包，而不能单独的存在</p>
+<p>3、垃圾回收机制，内存自动回收，不需要开发人员管理</p>
+<p>4、天然并发</p>
+<ul>
+<li>从语言层面支持并发，实现简单</li>
+<li>goroutine，轻量级线程，可实现大并发处理，高效利用多核</li>
+<li>基于CPS并发模型(Communicating Sequential Processes) 实现</li>
+</ul>
+<p>5、吸收了管道通信机制，形成Go语言特有的管道channel，通过管道channel，可以实现不同的goroute之间的相互通信</p>
+<p>6、函数返回多个值</p>
+<p>7、新的创新：比如切片slice，延时执行defer等</p>
+<hr>
+<h3 id="11-golang执行流程分析">1.1 Golang执行流程分析</h3>
+<hr>
+<p>一、如果是对源码编译后，再执行，Go的执行流程如下</p>
+<pre><code class="language-mermaid">flowchart LR
+    InputData[.go文件 源文件] --> |go build 编译| Input1Data[可执行文件 .exe或可执行文件]
+    Input1Data[可执行文件 .exe或可执行文件] --> |运行|Input2Data[结果]
+</code></pre>
+<p>二、如果我们是对源码直接执行 go run 源码，Go的流程如下图</p>
+<pre><code class="language-mermaid">flowchart LR
+    InputData[.go文件 源文件] --> |go run 编译运行一步| Input1Data[结果]
+</code></pre>
+<p>说明：两种执行流程的方式区别</p>
+<p>1、如果我们先编译了可执行文件，那么我们可以将该可执行文件拷贝到没有go开发环境的机器上，仍然可以运行</p>
+<p>2、如果我们是直接go run go源码，那么如果要在另外一个机器上这么运行，也需要go开发环境，否则无法执行</p>
+<p>3、在编译时，编译器会将程序运行依赖的库文件包含在可执行文件中，所以，可执行文件变大了很多</p>
+<hr>
+<h3 id="12-语法">1.2 语法</h3>
+<hr>
+<p>数据类型</p>
+<ul>
+<li>基本数据类型：
+<ul>
+<li>数值型
+<ul>
+<li>整数类型 int int8 int16 int32 int64 uint unint8 unint16 unint32 unint64 byte</li>
+<li>浮点类型 float32 float64</li>
+</ul>
+</li>
+<li>字符型</li>
+<li>布尔型 bool</li>
+<li>字符串型 string</li>
+</ul>
+</li>
+<li>派生/复杂数据类型：
+<ul>
+<li>指针 Pointer</li>
+<li>数组</li>
+<li>结构体 struct</li>
+<li>管道 Channel</li>
+<li>函数</li>
+<li>切片 slice</li>
+<li>接口 interface</li>
+<li>map</li>
+</ul>
+</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 声明变量</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  "</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">fmt</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">func</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  s </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "gopher"</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  fmt.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Hello and welcome, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">%s</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, s)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">  for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 5</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">++</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		fmt.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"i ="</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">100</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">i)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre><p class="tags"><a href="/tags/Golang/">#Golang</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

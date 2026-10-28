@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Nacos | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Nacos</h1><p><i><time datetime="2025-01-17T15:09:05.000Z">17 Jan, 2025</time></i></p><h2 id="nacos">Nacos</h2>
+<hr>
+<h2 id="第一章-nacos配置管理">第一章 Nacos配置管理</h2>
+<hr>
+<h3 id="11-nacos简介">1.1 Nacos简介</h3>
+<hr>
+<p>Nacos是阿里的一个开源产品，它是针对微服务架构中的服务发现、配置管理、服务治理的综合型解决方案</p>
+<hr>
+<h3 id="12-nacos特性">1.2 Nacos特性</h3>
+<hr>
+<p>Nacos主要提供以下四大功能：</p>
+<p><strong>1、服务发现与服务健康检查</strong></p>
+<p>Nacos使服务更容易注册，并通过DNS或HTTP接口发现其他服务，Nacos还提供服务的实时健康检查，以防止向不健康的主机或服务实例发送请求</p>
+<p><strong>2、动态配置管理</strong></p>
+<p>动态配置服务允许在所有环境中以集中和动态的方式管理所有服务的配置，Nacos消除了在更新配置时重新部署应用程序，这使配置的更改更加高效和灵活</p>
+<p><strong>3、动态DNS服务</strong></p>
+<p>Nacos提供基于DNS协议的服务发现能力，旨在支持异构语言的服务发现，支持将注册在Nacos上的服务以域名的方式暴露端点，让三方应用方便的查阅及发现</p>
+<p><strong>4、服务和元数据管理</strong></p>
+<p>Nacos能让用户从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略</p>
+<hr>
+<h3 id="13-nacos快速入门">1.3 Nacos快速入门</h3>
+<hr>
+<h4 id="131-安装">1.3.1 安装</h4>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="shell"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">docker</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> pull</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> nacos/nacos-server:v2.5.0</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">docker</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> run</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -d</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> --name</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> nacos-server</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  -e</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> MODE=standalone</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">  -p</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> 8848:8848</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> \</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">  nacos/nacos-server:v2.5.0</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"># 开启鉴权</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">docker</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> exec</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> -it</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> nacos-server</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> /bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">2f8c80293f4f:/home/nacos#</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> cd</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> conf/</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">2f8c80293f4f:/home/nacos/conf#</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> vim</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> application.properties</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">##新增两行</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">nacos.core.auth.enabled</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">nacos.core.auth.enable.userAgentAuthWhite</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"># 修改三行</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">nacos.core.auth.plugin.nacos.token.secret.key</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${NACOS_AUTH_TOKEN</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">SecretKey01234567890123456789012345345678999987654901234567890123456789} </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"># 随意数字 不能太短</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">nacos.core.auth.server.identity.key</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${NACOS_AUTH_IDENTITY_KEY</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">admin}</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">nacos.core.auth.server.identity.value</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${NACOS_AUTH_IDENTITY_VALUE</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">admin}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"># 重启容器</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">docker</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> restart</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> nacos</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"># 单机模式nacos默认使用嵌入式数据库实现数据存储，如果想使用mysql存储nacos数据，需要安装mysql数据库，初始化数据库，修改nacos配置</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">spring.datasource.platform</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=mysql</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">db.num</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=1</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">db.url.0</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=jdbc:mysql://ip:3306/nacos_config?characterEncoding=utf8</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x26;connectTimeout</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x26;socketTimeout</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">3000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x26;autoReconnect</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">true</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">db.user</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=用户名</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">db.password</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">=密码</span></span></code></pre>
+<h4 id="132-nacos配置入门">1.3.2 Nacos配置入门</h4>
+<p><strong>发布配置</strong></p>
+<p>在Nacos中添加如下配置：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Data ID:	nacos-simple-demo.yaml</span></span>
+<span class="line"><span>Group:		DEFAULT_GROUP</span></span>
+<span class="line"><span>配置格式:  YAML</span></span>
+<span class="line"><span>配置内容:  common:</span></span>
+<span class="line"><span>            config1: something</span></span></code></pre>
+<blockquote>
+<p>tips: dataid是以properties(默认的文件扩展名方式)为扩展名，这里使用yaml</p>
+</blockquote>
+<p><strong>nacos客户端获取配置</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>com.alibaba.nacos&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>nacos-client&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>1.2.1&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.alibaba.nacos.api.NacosFactory;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.alibaba.nacos.api.config.ConfigService;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.alibaba.nacos.api.exception.NacosException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SimpleDemoMain</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> NacosException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String serverAddr </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "ip:8848"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String dataId </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "nacos-simple-demo.yaml"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String group </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "DEFAULT_GROUP"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Properties properties </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"serverAddr"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, serverAddr);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 如果开启了鉴权, 要添加用户名 密码</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"username"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"nacos"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"password"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"nacos"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ConfigService configService </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> NacosFactory.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">createConfigService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(properties);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String config </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> configService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataId, group, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(config);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // common:</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //	  config1: something</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<img src="/img/20250303114956.png" alt="Nacos">
+<hr>
+<h3 id="14-nacos配置管理基础应用">1.4 Nacos配置管理基础应用</h3>
+<hr>
+<h4 id="141-nacos配置管理模型">1.4.1 Nacos配置管理模型</h4>
+<p>对于Nacos配置管理，通过Namespace、group、Data ID能够定位到一个配置集</p>
+<ul>
+<li>Namespace
+<ul>
+<li>Group
+<ul>
+<li>Service / DataId</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>配置集(Data ID)</strong></p>
+<p>在系统中，一个配置文件通常就是一个<strong>配置集</strong>，一个配置集可以包含了系统的各种配置信息，例如，一个配置集可能包含了数据源、线程池、日志级别等配置项，每个配置集都可以定义一个有意义的名称，就是配置集的ID，即Data ID</p>
+<p><strong>配置项</strong></p>
+<p><strong>配置集</strong>中包含的一个个配置内容就是<strong>配置项</strong>，它代表一个具体的可配置的参数与其阈值，通常以KV的形式存在</p>
+<p><strong>配置分组(Group)</strong></p>
+<p>配置分组是对配置集进行分组，通过一个有意义的字符串(如Buy或Trade)来表示，不同的配置分组下可以有相同的配置集(Data ID)，在Nacos上创建一个配置时，如果未填写配置分组的名称，则配置分组的名称默认采用DEFAULT_GROUP。配置分组的常见场景：可用于区分不同的项目或应用，例如：学生管理系统的配置集可以定义一个group为：STUDENT_GROUP</p>
+<p><strong>命名空间(Namespace)</strong></p>
+<p>命名空间可用于进行不同环境的配置隔离，例如可以隔离开发环境、测试环境和生产环境，因为它们的配置可能各不相同，或者是隔离不同的用户，不同的开发人员使用同一个nacos管理各自的配置，可通过namespace隔离，不同的命名空间下，可以存在相同名称的配置分组(Group)或配置集</p>
+<ul>
+<li>Namespace：环境</li>
+<li>Group：项目</li>
+<li>Data ID：工程</li>
+</ul>
+<h4 id="142-命名空间管理">1.4.2 命名空间管理</h4>
+<p><strong>namespace隔离设计</strong></p>
+<p>namespace的设计是nacos基于此做多环境以及多租户(多个用户共同使用nacos)数据(<strong>配置和服务</strong>)隔离的</p>
+<img src="/img/20250303154824.png" alt="Nacos">
+<img src="/img/20250303154851.png" alt="Nacos">
+<h4 id="143-配置管理">1.4.3 配置管理</h4>
+<ul>
+<li>配置列表：导出 导入 克隆 删除</li>
+<li>历史版本：查看文件历史版本 回滚</li>
+<li>监听查询： 实时获取</li>
+</ul>
+<img src="/img/20250303160728.png" alt="Nacos">
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.alibaba.nacos.api.NacosFactory;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.alibaba.nacos.api.config.ConfigService;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.alibaba.nacos.api.config.listener.Listener;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.alibaba.nacos.api.exception.NacosException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.concurrent.Executor;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SimpleDemoMain</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> NacosException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String serverAddr </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "ip:8848"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String dataId </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "nacos-simple-demo.yaml"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String group </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "DEFAULT_GROUP"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Properties properties </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"serverAddr"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, serverAddr);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"username"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"nacos"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"password"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"nacos"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"namespace"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"33d4ecc4-15d0-48a4-bef1-fe4e77ec9581"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ConfigService configService </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> NacosFactory.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">createConfigService</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(properties);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String config </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> configService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataId, group, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(config);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        configService.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">addListener</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataId, group, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Listener</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Executor </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getExecutor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> receiveConfigInfo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">s</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        });</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                Thread.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (InterruptedException </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                throw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> RuntimeException</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(e);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * common:</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *     config1: something</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * common:</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *     config1: prod</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span></code></pre>
+<h4 id="144-用户管理">1.4.4 用户管理</h4>
+<p>密码加密方式：BCryptPasswordEncoder</p>
+<hr>
+<h3 id="15-nacos配置管理分布式系统">1.5 Nacos配置管理分布式系统</h3>
+<hr>
+<h4 id="151-分布式应用配置管理">1.5.1 分布式应用配置管理</h4>
+<ul>
+<li>用户通过Nacos Server的控制台集中对多个服务的配置进行管理</li>
+<li>各服务统一从Nacos Server中获取各自的配置，并监听配置的变化</li>
+</ul>
+<p><strong>发布配置</strong></p>
+<p>在配置管理-配置列表中添加如下配置：</p>
+<p>dev</p>
+<ul>
+<li>
+<p>service1.yaml</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Namespace: 357928dc-f286-49d9-b79d-fac85a512fe8 # 开发环境</span></span>
+<span class="line"><span>Data ID: service1.yaml</span></span>
+<span class="line"><span>Group: TEST_GROUP</span></span>
+<span class="line"><span>配置格式: YAML</span></span>
+<span class="line"><span>配置内容: common:</span></span>
+<span class="line"><span>				   name: service1 config</span></span></code></pre>
+</li>
+<li>
+<p>service2.yaml</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Namespace: 357928dc-f286-49d9-b79d-fac85a512fe8 # 开发环境</span></span>
+<span class="line"><span>Data ID: service2.yaml</span></span>
+<span class="line"><span>Group: TEST_GROUP</span></span>
+<span class="line"><span>配置格式: YAML</span></span>
+<span class="line"><span>配置内容: common:</span></span>
+<span class="line"><span>				   name: service2 config</span></span></code></pre>
+</li>
+</ul><p class="tags"><a href="/tags/Nacos/">#Nacos</a><a href="/tags/SpringCloud/">#SpringCloud</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

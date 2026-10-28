@@ -1,0 +1,355 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>XML基础 | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>XML基础</h1><p><i><time datetime="2022-01-25T06:23:24.000Z">25 Jan, 2022</time></i></p><h2 id="xml基础">XML基础</h2>
+<hr>
+<h2 id="第一章---概念">第一章   概念</h2>
+<hr>
+<p>1.概念：Extensible Markup Language   可扩展标记语言</p>
+<ul>
+<li>可扩展：标签都是自定义的。<code>&#x3C;user></code>     <code>&#x3C;student></code></li>
+</ul>
+<p>2.功能：</p>
+<ul>
+<li>
+<p>存储数据</p>
+<p>1.配置文件</p>
+<p>2.在网络中传输</p>
+</li>
+</ul>
+<p>3.xml与html的区别</p>
+<ul>
+<li>xml标签都是自定义的，html标签是预定义的。</li>
+<li>xml的语法严格，html语法松散</li>
+<li>xml是存储数据的，html是展示数据的</li>
+</ul>
+<p>W3C：万维网联盟</p>
+<hr>
+<h2 id="第二章---语法">第二章   语法</h2>
+<hr>
+<h3 id="21基本语法">2.1基本语法</h3>
+<hr>
+<ul>
+<li>xml文档的后缀名 .xml</li>
+<li>xml第一行必须定义为文档声明</li>
+<li>xml文档中有且仅有一个根标签</li>
+<li>属性值必须使用引号(单双都可)引起来</li>
+<li>标签必须正确关闭</li>
+<li>xml标签名称区分大小写</li>
+</ul>
+<hr>
+<h3 id="22快速入门">2.2快速入门</h3>
+<hr>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;?</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">xml</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1.0"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> encoding</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"UTF-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">?></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">users</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>zhangsan&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>23&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">gender</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>male&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">gender</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"2"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>lisi&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>24&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">gender</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>female&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">gender</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">user</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">users</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<hr>
+<h3 id="23组成部分">2.3组成部分</h3>
+<hr>
+<p>1.文档声明</p>
+<ul>
+<li>格式：<code>&#x3C;?xml 属性列表?></code></li>
+<li>属性列表：
+<ul>
+<li>version：版本号，必须的属性</li>
+<li>encoding：编码方式。告知解析引擎当前文档使用的字符集，默认值：ISO-8859-1</li>
+<li>standalone：是否独立
+<ul>
+<li>yes：不依赖其他文件</li>
+<li>no：依赖其他文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>2.指令(了解)：结合CSS的</p>
+<ul>
+<li><code>&#x3C;?xml-stylesheet href="a.css" type="text/css"?></code></li>
+</ul>
+<p>3.标签：标签名称是自定义的</p>
+<ul>
+<li>名称可以包含字母，数字以及其他字符</li>
+<li>名称不能以数字或者标点符号开始</li>
+<li>名称不能以字母xml(或者XML、Xml等等)开始</li>
+<li>名称不能包含空格</li>
+</ul>
+<p>4.属性</p>
+<ul>
+<li>id属性值唯一</li>
+</ul>
+<p>5.文本</p>
+<ul>
+<li>CSATA区：在该区域中数据会被原样展示
+<ul>
+<li>格式：<code>&#x3C;![CDATA][数据]></code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="24约束">2.4约束</h3>
+<hr>
+<p>规定xml文档的书写规则</p>
+<p>分类：</p>
+<ul>
+<li>DTD：一种简单的约束技术</li>
+<li>Schema：一种复杂的约束技术</li>
+</ul>
+<hr>
+<h4 id="dtd">DTD</h4>
+<p><strong>.dtd</strong></p>
+<ul>
+<li>引入dtd文档到xml文档中
+<ul>
+<li>内部dtd：将约束规则定义在xml文档中
+<ul>
+<li><code>&#x3C;!DOCTYPE 根标签名 [dtd文件内容]></code></li>
+</ul>
+</li>
+<li>外部dtd：将约束的规则定义在外部的dtd文件中
+<ul>
+<li>本地：<code>&#x3C;!DOCTYPE 根标签名 SYSTEM "dtd文件的位置"></code></li>
+<li>网络：<code>&#x3C;!DOCTYPE 根标签名 PUBLIC "dtd文件名字" dtd文件的位置URL"></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>缺点：不能规定标签内内容的有效性。</p>
+<hr>
+<h4 id="schema">Schema</h4>
+<p><strong>.xsd</strong></p>
+<p>规定好了标签内内容的数据类型和范围。</p>
+<p>引入：</p>
+<p>1.填写xml文档的根元素</p>
+<p>2.引入xsi前缀</p>
+<p>3.引入xsxd文件命名空间</p>
+<p>4.为每一个xsd约束声明一个前缀，作为标识</p>
+<hr>
+<h2 id="第三章---解析">第三章   解析</h2>
+<hr>
+<h3 id="31解析方式">3.1解析方式</h3>
+<hr>
+<p>解析：操作xml文档，将文档中的数据读取到内存中。</p>
+<ul>
+<li>
+<p><strong>操作xml文档</strong></p>
+<ul>
+<li>解析(读取)：将文档中的数据读取到内存中</li>
+<li>写入：将内存中的数据保存到xml文档中。持久化的存储</li>
+</ul>
+</li>
+<li>
+<p><strong>解析xml的方式</strong></p>
+<ul>
+<li>DOM：将标记语言文档一次性加载进内存，在内存中形成一颗DOM树
+<ul>
+<li>优点：操作方便，可以对文档进行CRUD的所有操作</li>
+<li>缺点：占内存</li>
+</ul>
+</li>
+<li>SAX：逐行读取，基于事件驱动的。类似指针，读一行释放一行，内存中永远只有一行
+<ul>
+<li>优点：不占内存</li>
+<li>缺点：只能读取，不能增删改</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="32常见的解析器">3.2常见的解析器</h3>
+<hr>
+<p>1.JAXP：sun公司提供的解析器，支持dom和sax两种思想。</p>
+<p>2.DOM4J：一款非常优秀的解析器。</p>
+<p>3.Jsoup：jsoup是一款Java的HTML解析器，可以直接解析某个URL地址、HTML文本内容。它提供了一套非常省力的API，可以通过DOM，CSS以及类似于jQuery的操作方法来取出和操作数据。</p>
+<p>4.PULL：Android操作系统内置的解析器，sax方式的。</p>
+<hr>
+<h2 id="第四章---jsoup">第四章   Jsoup</h2>
+<hr>
+<h3 id="41快速入门">4.1快速入门</h3>
+<hr>
+<p>步骤：</p>
+<ul>
+<li>导入jar包</li>
+<li>获取Document对象</li>
+<li>获取相应的标签Element对象</li>
+<li>获取数据</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.demo.xml.jsoup;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.jsoup.Jsoup;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.jsoup.nodes.Document;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.jsoup.nodes.Element;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.jsoup.select.Elements;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.File;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/*</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">* Jsoup快速入门</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">* */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JsoupDemo1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.获取Document对象，根据xml文档获取</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.1获取student.xml的path</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String path </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JsoupDemo1.class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getClassLoader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getResource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"student.xml"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getPath</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.2解析xml文档，加载文档进内存，获取dom树 ---> Document</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Document document </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Jsoup.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> File</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(path), </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"utf-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.3获取元素对象 Element</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Elements elements </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> document.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getElementsByTag</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(elements.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">size</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3.1获取第一个name的Element对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Element element </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> elements.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3.2获取数据</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> element.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">text</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(name);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;?</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">xml</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1.0"</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> encoding</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"UTF-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">?></span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">students</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">student</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>zhangsan&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>23&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">sex</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>male&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">sex</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">student</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">student</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> number</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"2"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>lisi&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>24&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">sex</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>female&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">sex</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">student</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">students</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<hr>
+<h3 id="42对象">4.2对象</h3>
+<hr>
+<p><strong>1.Jsoup对象</strong></p>
+<p>工具类，可以解析html或xml文档，返回Document</p>
+<ul>
+<li>parse：解析html或xml文档，返回Document
+<ul>
+<li><code>parse(File in, String charsetName)</code>：解析xml或html文件的。</li>
+<li><code>parse(String html)</code>：解析xml或html字符串。</li>
+<li><code>parse(URL url, int timeoutMillis)</code>：通过网络路径获取指定的html或xml的文档对象。</li>
+</ul>
+</li>
+</ul>
+<p><strong>2.Document对象</strong></p>
+<p>文档对象，代表内存中的dom树</p>
+<ul>
+<li>
+<p>获取Element对象</p>
+<ul>
+<li>
+<p><code>getElementById(String id)</code>：根据id属性值获取唯一的element对象。</p>
+</li>
+<li>
+<p><code>getElementsByTag(String tagName)</code>：根据标签名称获取元素对象集合。</p>
+</li>
+<li>
+<p><code>getElementsByAttribute(String Key)</code>：根据属性名称获取元素对象集合。</p>
+</li>
+<li>
+<p><code>getElementsByAttributeValue(String key, String value)</code>：根据对应的属性名和属性值获取元素对象集合。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>3.Elements对象</strong></p>
+<p>元素Element对象的集合。可以当做<code>ArrayList&#x3C;Element></code>来使用</p>
+<p><strong>4.Element对象</strong></p>
+<p>元素对象</p>
+<ul>
+<li>获取子元素对象
+<ul>
+<li>同Document对象获取Element对象方法一致。</li>
+</ul>
+</li>
+<li>获取属性值
+<ul>
+<li><code>String attr(String key)</code>：根据属性名称获取属性值。</li>
+</ul>
+</li>
+<li>获取文本
+<ul>
+<li><code>String text()</code>：获取文本内容</li>
+<li><code>String html()</code>：获取标签体的所有内容(包括子标签的字符串内容)</li>
+</ul>
+</li>
+</ul>
+<p><strong>5.Node对象</strong></p>
+<p>节点对象</p>
+<ul>
+<li>是Document和Element的父类</li>
+</ul>
+<hr>
+<h3 id="43查询">4.3查询</h3>
+<hr>
+<p><strong>1.selector：选择器</strong></p>
+<ul>
+<li>使用的方法：Elements  select(String cssQuery)
+<ul>
+<li>语法：参考Selector类中定义的语法</li>
+</ul>
+</li>
+</ul>
+<p><strong>2.Xpath</strong></p>
+<p>即为XML路径语言，它是一种用来确定XML(标准通用标记语言的子集)文档中某部分位置的语言</p>
+<ul>
+<li>使用Jsoup的Xpath需要导入jar包</li>
+<li>查询w3cshool参考手册，使用xpath的语法完成查询</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.demo.xml.jsoup;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> cn.wanghaomiao.xpath.model.JXDocument;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> cn.wanghaomiao.xpath.model.JXNode;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.jsoup.Jsoup;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.jsoup.nodes.Document;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.File;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.List;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JsoupDemo2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException, XpathSyntaxErrorException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1获取student.xml的path</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String path </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JsoupDemo1.class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getClassLoader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getResource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"student.xml"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getPath</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.获取Document对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Document document </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Jsoup.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">parse</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> File</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(path), </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"utf-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3.根据document对象，创建JXDocument对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        JXDocument jxDocument </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JXDocument</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(document);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //4.结合xpath语法查询</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        List&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">JXNode</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> jxNodes </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxDocument.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">selN</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"//student"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (JXNode jxNode </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxNodes) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(jxNode);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        List&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">JXNode</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> jxNodes2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxDocument.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">selN</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"//student/name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (JXNode jxNode </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxNodes2) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(jxNode);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        List&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">JXNode</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> jxNodes3 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxDocument.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">selN</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"//student/name[@number]"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (JXNode jxNode </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxNodes3) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(jxNode);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        List&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">JXNode</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> jxNodes4 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxDocument.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">selN</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"//student/name[@number = '1']"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (JXNode jxNode </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jxNodes4) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(jxNode);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre><p class="tags"><a href="/tags/XML/">#XML</a><a href="/tags/Jsoup/">#Jsoup</a><a href="/tags/JsoupXpath/">#JsoupXpath</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

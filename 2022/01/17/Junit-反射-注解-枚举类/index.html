@@ -1,0 +1,865 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Junit,反射,注解,枚举类 | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Junit,反射,注解,枚举类</h1><p><i><time datetime="2022-01-17T11:13:46.000Z">17 Jan, 2022</time></i></p><h2 id="junit反射注解枚举类">Junit、反射、注解、枚举类</h2>
+<hr>
+<h2 id="第一章junit单元测试">第一章	Junit单元测试</h2>
+<hr>
+<h3 id="11概述">1.1概述</h3>
+<ul>
+<li>测试分类：</li>
+</ul>
+<p>1.黑盒测试：不需要写代码，给输入值，看程序是否能够输出期望的值。</p>
+<p>2.白盒测试：需要写代码。关注程序具体的执行流程。</p>
+<p><img src="/img/202202281801968.png" alt="20210820172911"></p>
+<hr>
+<h3 id="12使用步骤">1.2使用步骤</h3>
+<p><strong>Junit(白盒测试)</strong></p>
+<p><strong>步骤：</strong></p>
+<p>1.定义一个测试类(测试用例)</p>
+<p>建议：测试类名：被测试的类名Test</p>
+<p>​           包名：xxx.xxx.xx.test</p>
+<p>2.定义测试方法：可以独立运行</p>
+<p>建议：方法名：test+测试的方法名</p>
+<p>​           返回值：void</p>
+<p>​           参数列表：空参</p>
+<p>3.给方法加@Test</p>
+<p>4.导入junit依赖环境</p>
+<p><strong>判定结果：</strong></p>
+<ul>
+<li>
+<p>红色：失败</p>
+</li>
+<li>
+<p>绿色：成功</p>
+</li>
+</ul>
+<p>一般我们会使用断言操作来处理结果</p>
+<ul>
+<li>Assert.assertEquals(期望的结果,运算的结果);</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">J</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">unit;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01Junit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * 加法</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@param</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> a</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@param</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> b</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@return</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> b</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> a</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">b;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * 减法</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@param</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> a</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@param</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> b</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@return</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> sub</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> a</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> b</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> a</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">b;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.test;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01Junit.Demo01Junit;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.junit.Assert;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.junit.Test;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01JunitTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    /**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     * 测试add方法</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> testAdd</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Demo01Junit d </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01Junit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> d.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(i);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //断言</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Assert.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">assertEquals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">3</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,i);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> testSub</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Demo01Junit d </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01Junit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> d.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sub</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(i);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //断言</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Assert.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">assertEquals</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,i);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="13beforeafter">1.3@Before&#x26;@After</h3>
+<p>1.@Before：</p>
+<ul>
+<li>修饰的方法会在测试方法之前被自动执行</li>
+</ul>
+<p>2.@After：</p>
+<ul>
+<li>修饰的方法会在测试方法之后被自动执行</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * 初始化方法：</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *   用于资源申请，所有测试方法在执行之前都会执行该方法</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Before</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> init</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"init..."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * 释放资源方法：</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *   在所有测试方法执行完后，都会自动执行该方法</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">After</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"close..."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="第二章反射">第二章	反射</h2>
+<hr>
+<h3 id="21概述">2.1概述</h3>
+<p><strong>反射：框架设计的灵魂</strong></p>
+<p>框架：半成品软件。可以在框架的基础上进行软件开发，简化编码</p>
+<p>反射：将类的各个组成部分封装为其他对象，这就是反射机制。</p>
+<p><img src="/img/202202281801970.png" alt="20210820192313"></p>
+<p>好处：</p>
+<ul>
+<li>可以在程序运行过程中，操作这些对象。</li>
+<li>可以解耦，提高程序的可扩展性。</li>
+</ul>
+<hr>
+<h3 id="22获取class对象的方式">2.2获取Class对象的方式</h3>
+<p>1.Class.forName(“全类名”)：将字节码文件加载进内存，返回Class文件。</p>
+<ul>
+<li>多用于配置文件，将类名定义在配置文件中。读取文件，加载类</li>
+</ul>
+<p>2.类名.class：通过类名的属性class获取。</p>
+<ul>
+<li>多用于参数的传递</li>
+</ul>
+<p>3.对象.getClass()：getClass()方法在Object类中定义着。</p>
+<ul>
+<li>多用于对象的获取字节码的方式</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">eflect;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01Reflect</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ClassNotFoundException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1.Class.forName("全类名")：将字节码文件加载进内存，返回Class文件。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class cls1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"com.priv.demo02Reflect.Person"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(cls1);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//class com.priv.demo02Reflect.Person</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.类名.class：通过类名的属性class获取。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class cls2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Person.class;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(cls2);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//class com.priv.demo02Reflect.Person</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3.对象.getClass()：getClass()方法在Object类中定义着。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Person person </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class cls3 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> person.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getClass</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(cls3);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//class com.priv.demo02Reflect.Person</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(cls1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">==</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cls2);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//比较地址值是否相同  true</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(cls1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">==</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cls3);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//true</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(cls3</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">==</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">cls2);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//true</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">eflect;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String name;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name;</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.age </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toString</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "Person{"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                "name='"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\'</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                ", age="</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                '}'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> setName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> getAge</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> setAge</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.age </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><strong>结论：</strong></p>
+<ul>
+<li>同一字节码文件(*.class)在一次程序运行过程中，只会被加载一次，不论通过哪一种方式获取的Class对象都是同一个。</li>
+</ul>
+<hr>
+<h3 id="23class对象功能">2.3Class对象功能</h3>
+<h4 id="概述">概述</h4>
+<p><strong>1.获取功能：</strong></p>
+<ul>
+<li>获取成员变量们</li>
+<li>获取构造方法们</li>
+<li>获取成员方法们</li>
+<li>获取类名</li>
+</ul>
+<h4 id="获取field成员变量">获取Field(成员变量)</h4>
+<ul>
+<li>
+<p><code>Field[] getFields()：</code>返回一个包含某些 <code>Field</code> 对象的数组，这些对象反映此 <code>Class</code>  对象所表示的类或接口的所有可访问公共字段。<strong>(获取所有public修饰的成员变量)</strong></p>
+</li>
+<li>
+<p><code>Field[] getField(String name)：</code>返回一个 <code>Field</code> 对象，它反映此 <code>Class</code> 对象所表示的类或接口的指定公共成员字段。</p>
+</li>
+<li>
+<p><code>Field[] getDeclaredFields()：</code>返回 <code>Field</code> 对象的一个数组，这些对象反映此 <code>Class</code> 对象所表示的类或接口所声明的所有字段。<strong>(获取所有的成员变量，不考虑修饰符)</strong></p>
+</li>
+<li>
+<p><code>Field[] getDeclaredField(String name)：</code>返回一个 <code>Field</code> 对象，该对象反映此 <code>Class</code> 对象所表示的类或接口的指定已声明字段。</p>
+</li>
+</ul>
+<p><code>Field</code>：成员变量</p>
+<p>操作：</p>
+<p>1.设置值</p>
+<ul>
+<li><code>void set(Object obj,Object value)</code></li>
+</ul>
+<p>2.获取值</p>
+<ul>
+<li><code>get(Object obj)</code></li>
+</ul>
+<p>3.忽略访问权限修饰符的安全检查</p>
+<ul>
+<li>对象名.setAccessible(true)：暴力反射</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">eflect;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.reflect.Field;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02Reflect</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class personClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Person.class;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`Field[] getFields()：`返回一个包含某些 `Field` 对象的数组，**(获取所有public修饰的成员变量)**</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        Field</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] fields </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getFields</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (Field field</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">fields) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(field);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//public java.lang.String com.priv.demo02Reflect.Person.sex</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`Field[] getField(String name)：`返回一个 `Field` 对象，</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Field sex </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getField</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"sex"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取成员变量sex的值</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Person p </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object value </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> sex.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(p);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(value);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//没有初始值的String类型数据默认值为null</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //设置成员变量sex的值</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        sex.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">set</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(p,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"man"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(p);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//Person{name='null', age=0, sex='man'}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`Field[] getDeclaredFields()：返回 `Field` 对象的一个数组，**(获取所有的成员变量，不考虑修饰符)**</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        Field</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] declaredFields </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getDeclaredFields</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (Field field</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> declaredFields) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(field);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //private java.lang.String com.priv.demo02Reflect.Person.name</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //private int com.priv.demo02Reflect.Person.age</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public java.lang.String com.priv.demo02Reflect.Person.sex</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`Field[] getDeclaredField(String name)：`返回一个 `Field` 对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Field name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getDeclaredField</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"name"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        ///忽略访问权限修饰符的安全检查</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        name.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setAccessible</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//暴力反射</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object value1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(p);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(value1);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//如果直接打印私有成员变量的值会报错IllegalAccessException</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //null</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">         </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<h4 id="获取constructor构造方法">获取Constructor(构造方法)</h4>
+<ul>
+<li><code>Constructor&#x3C;?>[] getConstructors()：</code>返回一个包含某些 <code>Constructor</code> 对象的数组，这些对象反映此 <code>Class</code>  对象所表示的类的所有公共构造方法。<strong>(获取所有public修饰的构造方法)</strong></li>
+<li><code>Constructor&#x3C;T> getConstructor(类&#x3C;?>... parameterTypes)：</code>返回一个 <code>Constructor</code> 对象，它反映此 <code>Class</code> 对象所表示的类的指定公共构造方法。</li>
+<li><code>Constructor&#x3C;T> getDeclaredConstructor(类&#x3C;?>... parameterTypes)：</code>返回一个 <code>Constructor</code> 对象，该对象反映此 <code>Class</code> 对象所表示的类或接口的指定构造方法。</li>
+<li><code>Constructor&#x3C;?> getDeclaredConstructors()：</code>返回 <code>Constructor</code> 对象的一个数组，这些对象反映此 <code>Class</code> 对象表示的类声明的所有构造方法。<strong>(获取所有的构造方法，不考虑修饰符)</strong></li>
+</ul>
+<p><code>Constructor</code>：构造方法</p>
+<p>创建对象：</p>
+<ul>
+<li><code>T newInstance(Object... initargs)</code></li>
+<li>如果使用空参数构造方法创建对象，操作可以简化：Class对象的newInstance方法</li>
+<li>忽略访问权限修饰符的安全检查，对象名.setAccessible(true)：暴力反射</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">eflect;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.reflect.Constructor;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo03ReflectConstructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class personClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Person.class;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`Constructor&#x3C;?>[] getConstructors()：`返回一个包含某些 `Constructor` 对象的数组</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        Constructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] constructors </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getConstructors</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (Constructor constructor</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">constructors) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(constructor);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public com.priv.demo02Reflect.Person()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public com.priv.demo02Reflect.Person(java.lang.String,int,java.lang.String)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`Constructor&#x3C;T> getConstructor(类&#x3C;?>... parameterTypes)：`返回一个 `Constructor` 对象</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //满参</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Constructor constructor </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getConstructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String.class, int.class, String.class);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(constructor);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//public com.priv.demo02Reflect.Person(java.lang.String,int,java.lang.String)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object person </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> constructor.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newInstance</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"张三"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">24</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"man"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(person);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//Person{name='张三', age=24, sex='man'}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //空参</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Constructor constructor1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getConstructor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(constructor1);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//public com.priv.demo02Reflect.Person()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object person1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> constructor1.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newInstance</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(person1);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//Person{name='null', age=0, sex='null'}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //相当于Object o = personClass.newInstance();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<h4 id="获取method成员方法">获取Method(成员方法)</h4>
+<ul>
+<li><code>Method[] getMethods()：</code>返回一个包含某些 <code>Method</code> 对象的数组，这些对象反映此 <code>Class</code>  对象所表示的类或接口（包括那些由该类或接口声明的以及从超类和超接口继承的那些的类或接口）的公共 <em>member</em> 方法。<strong>(获取所有public修饰的成员方法)</strong></li>
+<li><code>Method[] getMethod(String name,类&#x3C;?>... parameterTypes)：</code>返回一个 <code>Method</code> 对象，它反映此 <code>Class</code> 对象所表示的类或接口的指定公共成员方法。</li>
+<li><code>Method[] getDeclaredMethods()：</code>返回 <code>Method</code> 对象的一个数组，这些对象反映此 <code>Class</code>  对象表示的类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法。<strong>(获取所有的成员方法，不考虑修饰符)</strong></li>
+<li><code>Method[] getDeclaredMethod(String name,类&#x3C;?>... parameterTypes)：</code>返回一个 <code>Method</code> 对象，该对象反映此 <code>Class</code> 对象所表示的类或接口的指定已声明方法。</li>
+</ul>
+<p>Method：方法对象</p>
+<ul>
+<li>执行方法：<code>Object invoke(Object obj,Object... args)</code></li>
+<li>获取方法名称：<code>String getName</code>：获取方法名</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">eflect;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.reflect.Method;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo04ReflectMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> personClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Person.class;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`Method[] getMethods()：`返回一个包含某些 `Method` 对象的数组</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        Method</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] methods </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getMethods</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (Method method</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">methods) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(method);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            String name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> method.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(name);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public java.lang.String com.priv.demo02Reflect.Person.toString()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public java.lang.String com.priv.demo02Reflect.Person.getName()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public void com.priv.demo02Reflect.Person.setName(java.lang.String)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public void com.priv.demo02Reflect.Person.setAge(int)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public java.lang.String com.priv.demo02Reflect.Person.getSex()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public void com.priv.demo02Reflect.Person.setSex(java.lang.String)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public int com.priv.demo02Reflect.Person.getAge()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public final void java.lang.Object.wait() throws java.lang.InterruptedException</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public boolean java.lang.Object.equals(java.lang.Object)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public native int java.lang.Object.hashCode()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public final native java.lang.Class java.lang.Object.getClass()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public final native void java.lang.Object.notify()</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //public final native void java.lang.Object.notifyAll()</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //`Method[] getMethod(String name,类&#x3C;?>... parameterTypes)：`返回一个 `Method` 对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            Method eat </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"eat"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(eat);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//public void com.priv.demo02Reflect.Person.eat()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            Person p </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //执行方法</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            eat.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">invoke</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(p);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            Method eat1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"eat"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, String.class);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            eat1.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">invoke</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(p,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"饭"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span></code></pre>
+<h4 id="获取类名">获取类名</h4>
+<ul>
+<li><code>String getName()：</code>以 <code>String</code> 的形式返回此 <code>Class</code> 对象所表示的实体（类、接口、数组类、基本类型或 void）名称。</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">eflect;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo05ReflectClass</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class personClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Person.class;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> personClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(name);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//com.priv.demo02Reflect.Person</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="24案例">2.4案例</h3>
+<p>需求：写一个”框架”，不能改变该类任何代码的前提下，可以帮助我们创建任意类的对象，并且执行其中任意方法。</p>
+<p><strong>1.实现：</strong></p>
+<ul>
+<li>
+<p>配置对象</p>
+</li>
+<li>
+<p>反射</p>
+</li>
+</ul>
+<p><strong>2.步骤：</strong></p>
+<ul>
+<li>将需要创建的对象的全类名和需要执行的方法定义在配置文件中</li>
+<li>在程序中加载读取配置文件</li>
+<li>使用反射技术来加载类文件进内存</li>
+<li>创建对象</li>
+<li>执行方法</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>className=com.priv.demo02Reflect.Person</span></span>
+<span class="line"><span>methodName=eat</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">eflect;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.InputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.reflect.Method;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo06ReflectTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      //在程序中加载读取配置文件</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Properties properties </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ClassLoader classLoader </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Demo06ReflectTest.class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getClassLoader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        InputStream resourceAsStream </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> classLoader.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getResourceAsStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"pro.properties"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">load</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(resourceAsStream);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取配置文件中的数据</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String className </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"className"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//获取全类名</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String methodName </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"methodName"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//获取方法名</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用反射技术来加载类文件进内存</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class aClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(className);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//获取Class对象aClass</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object obj </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> aClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newInstance</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取方法对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Method method </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> aClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(methodName);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        method.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">invoke</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(obj);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="第三章注解">第三章	注解</h2>
+<hr>
+<h3 id="31概念">3.1概念</h3>
+<ul>
+<li>
+<p>注解：说明程序的。给计算机看</p>
+</li>
+<li>
+<p>注释：用文字描述程序的。给程序员看</p>
+</li>
+</ul>
+<p>**定义：**注解(Annotation)，也叫元数据。一种代码级别的说明。它是JDK1.5及以后版本引入的一个特性，与类、接口、枚举是在同一个层次。它可以声明在包、类、字段、方法、局部变量、方法参数等的前面，用来对这些元素进行说明，注释。</p>
+<p><strong>概念描述：</strong></p>
+<ul>
+<li>JDK1.5之后的新特性</li>
+<li>说明程序的</li>
+<li>使用注解：@注解名称</li>
+</ul>
+<p><strong>作用分类：</strong></p>
+<ul>
+<li>
+<p>编写文档:通过代码里标识的注解生成文档【生成文档doc文档】javadoc命令生成文档</p>
+</li>
+<li>
+<p>代码分析:通过代码里标识的注解对代码进行分析【使用反射】</p>
+</li>
+<li>
+<p>编译检查:通过代码里标识的注解让编译器能够实现基本的编译检查【override】</p>
+</li>
+</ul>
+<hr>
+<h3 id="32jdk内置注解">3.2JDK内置注解</h3>
+<h4 id="1override">1.@Override</h4>
+<p>检测被该注解标注的方法是否是继承自父类(接口)的</p>
+<h4 id="2deprecated">2.@Deprecated</h4>
+<p>将该注解标注的内容，表示<strong>已过时</strong></p>
+<h4 id="3suppresswarnings">3.@SuppressWarnings</h4>
+<p>压制警告</p>
+<p>一般传递参数all：@SuppressWarnings(all)</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">A</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">nnotation;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * JDK内置注解演示</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">SuppressWarnings</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"all"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//压制所有的警告⚠</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02Annotation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //### 1.@Override</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //检测被该注解标注的方法是否是继承自父类(接口)的</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toString</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> super</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toString</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Deprecated</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> show01</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //有缺陷</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> show02</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //替代show01方法</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> demo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        show01</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//已过时  不建议使用</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="33自定义注解">3.3自定义注解</h3>
+<h4 id="格式本质">格式&#x26;本质</h4>
+<p><strong>格式：</strong></p>
+<ul>
+<li>
+<p>元注解</p>
+</li>
+<li>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">interface</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> 注解名称</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    属性列表;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+</li>
+</ul>
+<p><strong>本质：</strong></p>
+<p>注解本质上就是一个接口，该接口默认继承Annotation接口</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo03MyAnnotation</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> extends</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">Annotation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {}</span></span></code></pre>
+<h4 id="属性定义">属性定义</h4>
+<p>**属性：**接口中的抽象方法</p>
+<p>要求：</p>
+<ul>
+<li><strong>属性的返回类型有下列取值：</strong></li>
+</ul>
+<p>1.基本数据类型</p>
+<p>2.String</p>
+<p>3.枚举</p>
+<p>4.注解</p>
+<p>以上类型的数组</p>
+<ul>
+<li><strong>定义了属性，在使用时需要给属性赋值</strong></li>
+</ul>
+<p>1.如果定义属性时，使用default关键字给属性默认初始化值，则使用注解时，可以不进行属性的赋值。</p>
+<p>2.如果只有一个属性需要赋值，并且属性的名称是value，则value可以省略，直接定义值即可。</p>
+<p>3.数组赋值时，值使用{ }包裹。如果数组中只有一个值，则{ }可以省略。</p>
+<h4 id="元注解">元注解</h4>
+<p>用于描述注解的注解</p>
+<h5 id="target">@Target</h5>
+<p><strong>描述注解能够作用的位置</strong></p>
+<p>ElementType取值：</p>
+<ul>
+<li>TYPE：可以作用于类上</li>
+<li>METHOD：可以作用于方法上</li>
+<li>FIELD：可以作用于成员变量上</li>
+</ul>
+<p>赋值时value可以省略</p>
+<h5 id="retention">@Retention</h5>
+<p><strong>描述注解被保留的阶段</strong></p>
+<ul>
+<li>@Retention(RetentionPolicy.SOURCE)：当前被描述的注解，不会保留到class字节码文件中。</li>
+<li>@Retention(RetentionPolicy.CLASS)：当前被描述的注解，会保留到class字节码文件中，但是不会JVM读取到。</li>
+<li>@Retention(RetentionPolicy.RUNTIME)：当前被描述的注解，会保留到class字节码文件中，并被JVM读取到。</li>
+</ul>
+<h5 id="documented">@Documented</h5>
+<p><strong>描述注解是否被抽取到api文档中</strong></p>
+<p>加入此注解后的注解，在标记时，会在api文档中显示(显示的是被@Documented标注的那个注解)。</p>
+<h5 id="inherited">@Inherited</h5>
+<p><strong>描述注解是否被子类继承</strong></p>
+<p>当A注解被此注解描述时，一个类继承了被A注解标注的类时，这个子类会继承这个A注解。</p>
+<hr>
+<h3 id="34解析使用注解">3.4解析(使用)注解</h3>
+<p><strong>获取注解中定义的属性值</strong></p>
+<p>1.获取注解定义的位置的对象(class,Method,Field)</p>
+<p>2.获取指定的注解<br>
+*getAnnotation(class)</p>
+<p>3.调用注解中的抽象方法获取配置的属性值</p>
+<blockquote>
+<p>字节码文件对象.getAnnotation(注解名.class)来获取注解对象</p>
+<p>注解对象.方法获取定义的抽象方法的返回值</p>
+</blockquote>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">A</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">nnotation;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.ElementType;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.Retention;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.RetentionPolicy;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.Target;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *描述需要执行的类名，方法名</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Target</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ElementType.TYPE})</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Retention</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(RetentionPolicy.RUNTIME)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">interface</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> Pro</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">className</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">MethodName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">A</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">nnotation;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.reflect.Method;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Pro</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">className</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "com.priv.demo03Annotation.Demo06"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">MethodName</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "show01"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo05ReflectTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //1.解析注解</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //1.1获取该类的字节码文件对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Demo05ReflectTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> d </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Demo05ReflectTest.class;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //2.获取上边的注解对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Pro annotation </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> d.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getAnnotation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Pro.class);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">///其实就是在内存中生成了一个该注解接口的子类实现对象</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //3.调用注解对象中定义的抽象方法，获取返回值</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String s </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> annotation.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">className</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String s1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> annotation.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">MethodName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用反射技术来加载类文件进内存</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class aClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//获取Class对象aClass</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object obj </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> aClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newInstance</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取方法对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Method method </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> aClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s1);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        method.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">invoke</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(obj);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="35案例简单的测试框架">3.5案例：简单的测试框架</h3>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">A</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">nnotation;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.ElementType;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.Retention;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.RetentionPolicy;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.annotation.Target;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *描述需要执行的类名，方法名</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Target</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">({ElementType.TYPE})</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Retention</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(RetentionPolicy.RUNTIME)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">interface</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> Pro</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">className</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">MethodName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">A</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">nnotation;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo08Calculator</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //加法</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1+0="</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //减法</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> sbu</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1-0="</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //乘法</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> mul</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1*0="</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">*</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //除法</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> div</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"1/0="</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">/</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//InvocationTargetException</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> show</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"永无bug..."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">A</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">nnotation;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.lang.reflect.Method;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * 测试类框架</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Pro</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">className</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "com.priv.demo03Annotation.Demo08Calculator"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">MethodName</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "show"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo09Test</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //解析注解</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取该类的字节码文件对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Demo09Test</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> demo09TestClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Demo09Test.class;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取注解对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Pro annotation </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> demo09TestClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getAnnotation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Pro.class);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //调用注解对象中定义的抽象方法，获取返回值</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String s </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> annotation.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">MethodName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String s1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> annotation.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">className</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用反射技术来加载类文件进内存</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Class&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">?</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> aClass </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">forName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s1);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//获取Class对象aClass</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object obj </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> aClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newInstance</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //获取方法对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Method method </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> aClass.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getMethod</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        method.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">invoke</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(obj);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="第四章枚举类">第四章	枚举类</h2>
+<hr>
+<h3 id="41枚举类的使用">4.1枚举类的使用</h3>
+<ul>
+<li>类的对象：有限个，确定的</li>
+</ul>
+<p><img src="/img/202202281801978.png" alt="20210821113625"></p>
+<ul>
+<li>当需要定义一组常量时，强烈建议使用枚举类</li>
+<li>如果枚举类中只有一个对象，则可以作为单例模式的实现方式</li>
+</ul>
+<hr>
+<h3 id="42定义枚举类">4.2定义枚举类</h3>
+<p>方式一：jdk5.0之前，自定义枚举类</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">E</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">num;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01Enum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Season spring </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season.SPRING;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(spring);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//Season{seasonName='春天', seasonDesc='春暖花开'}</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //声明Season对象的属性：private final修饰</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String seasonDesc;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //私有化类的构造器,并给对象属性赋值</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     private</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">seasonName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">seasonDesc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">         this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.seasonName </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">         this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.seasonDesc </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonDesc;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     //提供当前枚举类的多个对象：public static final的</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season SPRING </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"春天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"春暖花开"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season SUMMER </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"夏天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"夏日炎炎"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season AUTUMN </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"秋天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"秋高气爽"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season WINTER </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"冬天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"冰天雪地"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSeasonName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">         return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSeasonDesc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">         return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonDesc;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">     public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toString</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">         return</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "Season{"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                 "seasonName='"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonName </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\'</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                 ", seasonDesc='"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonDesc </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\'</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                 '}'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> }</span></span></code></pre>
+<p>方式二：在jdk5.0，可以使用enum关键字定义枚举类</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">E</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">num;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * 使用enum关键字定义枚举类</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * 说明：定义的枚举类默认继承于java.lang.Enum类</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@author</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> Echo</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @create 2021 8.21 上午 12：35</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02Enum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Season1 spring </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season1.SPRING;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(spring);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Season1.class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSuperclass</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//class java.lang.Enum</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">enum</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    SPRING</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"春天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"春暖花开"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    SUMMER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"夏天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"夏日炎炎"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    AUTUMN</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"秋天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"秋高气爽"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    WINTER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"冬天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"冰天雪地"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String seasonDesc;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    Season1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">seasonName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">seasonDesc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.seasonName </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.seasonDesc </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonDesc;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSeasonName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSeasonDesc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonDesc;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="43enum类中的常用方法">4.3Enum类中的常用方法</h3>
+<ul>
+<li><code>values()：</code>返回枚举类型的对象数组。该方法可以很方便的遍历所有的枚举值。</li>
+<li><code>valueOf(String str)：</code>可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常。</li>
+<li><code>toString()：</code>返回当前枚举类对象常量的名称。</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">E</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">num;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * 使用enum关键字定义枚举类</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * 说明：定义的枚举类默认继承于java.lang.Enum类</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> *</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@author</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> Echo</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @create 2021 8.21 上午 12：35</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> */</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02Enum</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Season1 spring </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season1.SPRING;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`toString()：`返回当前枚举类对象常量的名称。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(spring);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Season1.class.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSuperclass</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//class java.lang.Enum</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`values()：`返回枚举类型的对象数组。该方法可以很方便的遍历所有的枚举值。</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        Season1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] values </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season1.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">values</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (Season1 value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">values) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(value);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //SPRING</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //SUMMER</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //AUTUMN</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //WINTER</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Thread.</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">State</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] values1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Thread.State.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">values</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (Thread.State s</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">values1) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //NEW</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //RUNNABLE</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //BLOCKED</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //WAITING</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //TIMED_WAITING</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //TERMINATED</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //`valueOf(String str)：`可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Season1 winter </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Season1.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">valueOf</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"WINTER"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(winter);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//WINTER 打印方法名</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">enum</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Season1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    SPRING</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"春天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"春暖花开"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    SUMMER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"夏天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"夏日炎炎"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    AUTUMN</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"秋天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"秋高气爽"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">    WINTER</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"冬天"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"冰天雪地"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String seasonDesc;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    Season1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">seasonName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">seasonDesc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.seasonName </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.seasonDesc </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonDesc;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSeasonName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonName;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSeasonDesc</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> seasonDesc;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="44使用enum关键字定义的枚举类实现接口的情况">4.4使用enum关键字定义的枚举类实现接口的情况</h3>
+<p>情况一：实现接口，在enum类中实现抽象方法</p>
+<p>情况二：让枚举类的对象分别实现接口中的抽象方法/img/</p><p class="tags"><a href="/tags/Junit/">#Junit</a><a href="/tags/反射/">#反射</a><a href="/tags/注解/">#注解</a><a href="/tags/枚举类/">#枚举类</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

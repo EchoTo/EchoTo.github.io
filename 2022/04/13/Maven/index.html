@@ -1,0 +1,660 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Maven | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Maven</h1><p><i><time datetime="2022-04-13T20:26:13.000Z">13 Apr, 2022</time></i></p><h2 id="maven基础">Maven基础</h2>
+<hr>
+<h2 id="第一章---概述">第一章   概述</h2>
+<hr>
+<h3 id="11概述">1.1概述</h3>
+<hr>
+<p>传统项目管理状态分析：</p>
+<ul>
+<li>jar包不统一，jar包不兼容</li>
+<li>工程升级维护过程操作繁琐</li>
+<li>…</li>
+</ul>
+<p>Maven的本质：Maven是一个项目管理工具，它包含了一个项目对象模型(POM：Project object Model)，一组标准集合，一个项目生命周期(Project Lifecycle)，一个依赖管理系统(Dependency Management System)，和用来运行定义在生命周期阶段(phase)中插件(plugin)目标(goal)的逻辑。</p>
+<ul>
+<li>将项目开发和管理过程抽象成一个项目对象模型(POM)</li>
+<li>项目构建：提供标准的、跨平台的自动化项目构建方式</li>
+<li>依赖管理：方便快捷的管理项目依赖的资源(jar包)，避免资源间的版本冲突问题</li>
+</ul>
+<p><img src="/img/20220411120954.png" alt="20220411120954"></p>
+<hr>
+<h2 id="第二章---使用">第二章   使用</h2>
+<hr>
+<h3 id="21maven仓库">2.1Maven仓库</h3>
+<hr>
+<p>仓库：用于存储资源，包含各种jar包。</p>
+<p><strong>分类：</strong></p>
+<ul>
+<li>本地仓库：用来存储从远程仓库或中央仓库下载的插件和jar包，项目使用一些插件或jar包优先从本地仓库查找。默认本地仓库在<code>${user.dir}/.m2/repository</code>，<code>${user.dir</code>}表示 windows用户目录。</li>
+<li>远程仓库：如果本地需要插件或者jar包，本地仓库没有，默认去远程仓库下载，远程仓库可以在互联网内也可以在局域网内。
+<ul>
+<li>中央仓库：在 maven 软件中内置一个远程仓库地址 <code>http://repo1.maven.org/maven2</code>，它是中央仓库，服务于整个互联网，它是由Maven团队自己维护，里面存储了非常全的 jar包，它包含了世界上大部分流行的开源项目构件。</li>
+<li>私服：部门/公司范围内存储资源的仓库，从中央仓库获取资源</li>
+</ul>
+</li>
+</ul>
+<p><strong>私服的作用：</strong></p>
+<ul>
+<li>保存具有版权的资源,包含购买或自主研发的jar
+<ul>
+<li>中央仓库中的jar都是开源的，不能存储具有版权的资源</li>
+</ul>
+</li>
+<li>一定范围内共享资源，仅对内部开放，不对外共享</li>
+</ul>
+<p><img src="/img/20220401224606.png" alt="20220401224606"></p>
+<p><strong>仓库配置：</strong></p>
+<p><img src="/img/20220411131525.png" alt="20220411131525"></p>
+<p>修改本地仓库默认位置</p>
+<p>国外中央仓库由于下载速度缓慢，这里建议用阿里云的镜像仓库。</p>
+<p><img src="/img/20220411122025.png" alt="20220411122025"></p>
+<hr>
+<h3 id="22maven目录结构">2.2Maven目录结构</h3>
+<hr>
+<p><img src="/img/20220401225842.png" alt="20220401225842"></p>
+<hr>
+<h3 id="23maven常用命令">2.3Maven常用命令</h3>
+<hr>
+<ul>
+<li>mvn compile：产生一个target目录存放java字节码文件(编译)</li>
+<li>mvn clean：删除target(清理)</li>
+<li>mvn test：(测试)</li>
+<li>mvn package：打成war包(打包)</li>
+<li>mvn install：将当前项目安装到本地仓库(安装到本地仓库)</li>
+</ul>
+<p><strong>插件创建工程</strong></p>
+<p>Java工程</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mvn archetype</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">generate </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DgroupId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{project</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">packaging} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DartifactId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{project</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">name} </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DarchetypeArtifactId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">maven</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">archetype</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">quickstart </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Dversion</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0.0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">snapshot </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DinteractiveMode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span></code></pre>
+<p>Web工程</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mvn archetype</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">generate </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DgroupId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{project</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">packaging} </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DartifactId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{project</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">name} </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DarchetypeArtifactId</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">maven</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">archetype</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">webapp </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Dversion</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0.0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">snapshot </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">DinteractiveMode</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span></code></pre>
+<hr>
+<h3 id="24maven生命周期">2.4Maven生命周期</h3>
+<hr>
+<p>三套生命周期：</p>
+<ul>
+<li>Clean Lifecycle：清理</li>
+<li>Default Lifecycle：编译、测试、打包、安装</li>
+<li>Site Lifecycle：站点发步</li>
+</ul>
+<p>在同一套生命周期中，执行后面的操作，会自动执行前面的所有操作</p>
+<p>例：运行打包命令，会自动进行编译和测试。</p>
+<p><img src="/img/20220411161959.png" alt="20220411161959"></p>
+<p><img src="/img/20220411162028.png" alt="20220411162028"></p>
+<p><img src="/img/20220411162133.png" alt="20220411162133"></p>
+<p><strong>插件</strong></p>
+<ul>
+<li>插件与生命周期内的阶段绑定，在执行到对应生命周期时执行对应的插件功能</li>
+<li>默认maven在各个生命周期上绑定有预设的功能</li>
+<li>通过插件可以自定义其他功能</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.apache.tomcat.maven&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>tomcat7-maven-plugin&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">      &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>2.1&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      &#x3C;!--</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      &#x3C;executions></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      	&#x3C;execution></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      		&#x3C;goals></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      			&#x3C;goal>jar&#x3C;/goal>  源码打包</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      		&#x3C;/goals></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      		&#x3C;phase>generate-test-resources&#x3C;/phase> 在这个阶段执行</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      	&#x3C;/execution></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">      &#x3C;/executions></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">	  --></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">plugins</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<hr>
+<h3 id="25maven坐标">2.5Maven坐标</h3>
+<hr>
+<p>坐标：被Maven管理的资源的唯一标识</p>
+<ul>
+<li>groupld：定义当前Maven项目隶属组织名称(通常是域名反写，例如: org.mybatis)</li>
+<li>atifactld：定义当前Maven项目名称(通常是模块名称，例如CRM、SMS)</li>
+<li>version：定义当前项目版本号</li>
+</ul>
+<p>打包方式：packaging：</p>
+<ul>
+<li>jar：java项目。默认值</li>
+<li>war：web项目。</li>
+<li>pom</li>
+</ul>
+<hr>
+<h3 id="26依赖管理">2.6依赖管理</h3>
+<hr>
+<p><strong>一、依赖配置</strong></p>
+<ul>
+<li>依赖指当前项目运行所需的jar包，一个项目可以设置多个依赖</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p><strong>二、依赖传递</strong></p>
+<p>依赖具有传递性</p>
+<ul>
+<li>
+<p>直接依赖：在当前项目中通过依赖配置建立的依赖关系</p>
+</li>
+<li>
+<p>间接依赖：被资源的资源如果依赖其他资源，当前项目间接依赖其他资源</p>
+</li>
+<li>
+<p>将一个项目的依赖传递给另一个项目</p>
+</li>
+</ul>
+<p>格式：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">         &#x3C;!--项目1的坐标--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p><strong>依赖传递冲突问题</strong></p>
+<ul>
+<li>路径优先：当依赖中出现相同的资源时，层级越深，优先级越低，层级越浅，优先级越高</li>
+<li>声明优先：当资源在相同层级被依赖时，配置顺序靠前的覆盖配置顺序靠后的</li>
+</ul>
+<p><strong>可选依赖</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        &#x3C;!--</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		&#x3C;optional>true&#x3C;/optional></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p>可选依赖指对外隐藏当前所依赖的资源——不透明</p>
+<p><strong>排除依赖</strong></p>
+<p>排除依赖指主动断开依赖的资源，被排除的资源无需指定版本——不需要</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        &#x3C;!--</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">         &#x3C;exclusions></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">         	&#x3C;exclusion></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">         		 &#x3C;groupId>&#x3C;/groupId></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">			    &#x3C;artifactId>&#x3C;/artifactId></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">         	&#x3C;/exclusion></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">         &#x3C;/exclusions></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">denpendency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p><strong>三、依赖范围</strong></p>
+<ul>
+<li>依赖的jar默认情况可以在任何地方使用，可以通过scope标签设定其作用范围</li>
+<li>作用范围
+<ul>
+<li>主程序范围有效(main文件夹范围内)</li>
+<li>测试程序范围有效(test文件夹范围内)</li>
+<li>是否参与打包(package指令范围内)</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/20220411161211.png" alt="20220411161211"></p>
+<p><strong>依赖范围的传递性</strong></p>
+<ul>
+<li>带有依赖范围的资源在进行传递时，作用范围将受到影响</li>
+</ul>
+<p><img src="/img/20220411161121.png" alt="20220411161121"></p>
+<hr>
+<h2 id="maven高级">Maven高级</h2>
+<hr>
+<h2 id="第三章---分模块开发与设计">第三章   分模块开发与设计</h2>
+<hr>
+<h3 id="31模块拆分">3.1模块拆分</h3>
+<hr>
+<p><strong>一、ssm_pojo拆分</strong></p>
+<ul>
+<li>新建模块</li>
+<li>拷贝原始项目中对应的相关内容到ssm_pojo模块中
+<ul>
+<li>实体类(User)</li>
+<li>配置文件(无)</li>
+</ul>
+</li>
+</ul>
+<p><strong>二、ssm_dao拆分</strong></p>
+<ul>
+<li>新建模块</li>
+<li>拷贝原始项目中对于的相关内容到ssm_dao模块中
+<ul>
+<li>数据层接口(UserDao)</li>
+<li>配置文件：保留与数据层相关配置文件
+<ul>
+<li>tips：分页插件在配置中与SqlSessionFactoryBean绑定，需要保留</li>
+</ul>
+</li>
+<li>pom.xml：引入数据层相关坐标即可，删除SpringMVC相关坐标
+<ul>
+<li>Spring</li>
+<li>Mybatis</li>
+<li>Spring整合Mybatis</li>
+<li>MySQL</li>
+<li>Druid</li>
+<li>Pagehelper</li>
+<li>直接依赖ssm_pojo(对ssm_pojo模块执行install指令，将其安装到本地仓库)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>三、ssm_service拆分</strong></p>
+<ul>
+<li>新建模块</li>
+<li>拷贝原始项目中对应的相关内容到ssm_service模块中
+<ul>
+<li>业务层接口与实现类(UserService、UserServicelmpl)</li>
+<li>配置文件:保留与数据层相关配置文件(1个)</li>
+<li>pom.xml: 引入数据层相关坐标即可，删除SpringMVC相关坐标
+<ul>
+<li>spring</li>
+<li>junit</li>
+<li>spring整合junit</li>
+<li>直接依赖ssm_dao (对ssm_dao模块执行install指令，将其安装到本地仓库)</li>
+<li>间接依赖ssm_pojo(由ssm_dao模块负责依赖关系的建立)</li>
+</ul>
+</li>
+<li>修改service模块Spring核心配置文件名，添加模块名称，格式: applicationContext-service.xml</li>
+<li>修改dao模块Spring核心配置文件名，添加模块名称，格式: applicationContext-dao.xml</li>
+<li>修改单元测试引入的配置文件名称，由单个文件修改为多个文件</li>
+</ul>
+</li>
+</ul>
+<p><strong>四、ssm_control拆分</strong></p>
+<ul>
+<li>新建模块(使用webapp模板)</li>
+<li>拷贝原始项目中对应的相关内容到ssm_controller模块中
+<ul>
+<li>表现层控制器类与相关设置类(UserController、异常相关……)</li>
+<li>配置文件:保留与表现层相关配置文件(1个)、服务器相关配置文件(1个)</li>
+<li>pom.xml: 引入数据层相关坐标即可，删除springmvc相关坐标
+<ul>
+<li>Spring</li>
+<li>springmvc</li>
+<li>jackson</li>
+<li>servlet</li>
+<li>tomcat服务器插件</li>
+<li>直接依赖ssm_service (对ssm_service模块执行install指令，将其安装到本地仓库)</li>
+<li>间接依赖ssm_dao、ssm_pojo</li>
+</ul>
+</li>
+<li>修改web.xml配置文件中加载spring环境的配置文件名称，使用*通配，加载所有applicationContext-开始的配置文件</li>
+</ul>
+</li>
+</ul>
+<p><strong>分模块开发</strong></p>
+<ul>
+<li>模块中仅包含当前模块对应的功能类与配置文件</li>
+<li>Spring核心配置根据模块功能不同进行独立制作</li>
+<li>当前模块所依赖的模块通过导入坐标的形式加入当前模块后才可以使用</li>
+<li>web.xml需要加载所有的spring核心配置文件</li>
+</ul>
+<hr>
+<h2 id="第四章---聚合">第四章   聚合</h2>
+<hr>
+<h3 id="41聚合">4.1聚合</h3>
+<hr>
+<ul>
+<li>
+<p>作用：聚合用于快速构建Maven工程，一次性构建多个项目/模块</p>
+</li>
+<li>
+<p>制作方式：</p>
+<ul>
+<li>创建一个空模块，打包类型定义为pom</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">packaging</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>pom&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">packaging</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<ul>
+<li>定义当前模块进行构建操作时关联的其他模块名称</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">modules</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>../ ssm_controller&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>../ ssm_service&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>../ ssm_dao&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>../ssm_pojo&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">module</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/ modules></span></span></code></pre>
+</li>
+<li>
+<p>注意事项：参与聚合操作的模块最终执行顺序与模块间的依赖关系有关，与配置顺序无关</p>
+</li>
+</ul>
+<hr>
+<h2 id="第五章---继承">第五章   继承</h2>
+<hr>
+<h3 id="51继承">5.1继承</h3>
+<hr>
+<ul>
+<li>
+<p>作用：通过继承可以实现在子工程中沿用父工程中的配置</p>
+<ul>
+<li>Maven中的继承与java中的继承相似，在子工程中配置继承关系</li>
+</ul>
+</li>
+<li>
+<p>制作方式</p>
+<ul>
+<li>在子工程中声明其父工程坐标与对应的位置</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--定义该工程的父工程--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">parent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>com.soup&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>ssm&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>1.0-SNAPSHOT&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    &#x3C;!--填写父工程的pom文件--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">relativePath</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>../ssm/pom.xml&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">relativePath</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">parent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<ul>
+<li>在父工程中定义依赖管理</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--声明此处进行依赖管理--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencyManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">	&#x3C;!--具体的依赖--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		&#x3C;!--spring环境--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">			&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.springframework&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">             &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>spring-context&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">             &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>5.1.9.RELEASE&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	    &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencyManagement</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p><strong>继承依赖使用</strong></p>
+<ul>
+<li>在子工程中定义依赖关系，无需声明依赖版本，版本参照父工程中依赖的版本</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">	&#x3C;!--spring环境--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.springframework&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">         &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>spring-context&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependencies</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p><img src="/img/20220413164251.png" alt="20220413164251"></p>
+</li>
+</ul>
+<hr>
+<p><strong>聚合与继承</strong></p>
+<ul>
+<li>
+<p>作用：</p>
+<ul>
+<li>聚合用于快速构建项目</li>
+<li>继承用于快速配置</li>
+</ul>
+</li>
+<li>
+<p>相同点：</p>
+<ul>
+<li>聚合与继承的pom.xml文件打包方式均为pom，可以将两种关系制作到同一个pom文件中</li>
+<li>聚合与继承均属于设计型模块，并无实际的模块内容</li>
+</ul>
+</li>
+<li>
+<p>不同点：</p>
+<ul>
+<li>聚合是在当前模块中配置关系，聚合可以感知到参与聚合的模块有哪些</li>
+<li>继承是在子模块中配置关系，父模块无法感知哪些子模块继承了自己</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="第六章---属性">第六章   属性</h2>
+<hr>
+<p><strong>属性类别</strong></p>
+<p><strong>一、自定义属性</strong></p>
+<ul>
+<li>
+<p>作用</p>
+<ul>
+<li>等同于定义变量，方便统一维护</li>
+</ul>
+</li>
+<li>
+<p>定义格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--定义自定义属性--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">spring.version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>5.1.9.RELEASE&#x3C;/ spring.version>&#x3C;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    junit.version>4.12&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">junit.version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+</li>
+<li>
+<p>调用格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupid</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.springframework&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>spring-context&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>${spring.version}&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+</li>
+</ul>
+<p><strong>二、内置属性</strong></p>
+<ul>
+<li>
+<p>作用</p>
+<ul>
+<li>使用Maven内置属性，快速配置</li>
+</ul>
+</li>
+<li>
+<p>调用格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${basedir}</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${version}</span></span></code></pre>
+</li>
+</ul>
+<p><strong>三、Setting属性</strong></p>
+<ul>
+<li>
+<p>作用</p>
+<ul>
+<li>使用Maven配置文件setting.xml中的标签属性，用于动态配置</li>
+</ul>
+</li>
+<li>
+<p>调用格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${settings.localRepository}</span></span></code></pre>
+</li>
+</ul>
+<p><strong>四、Java系统属性</strong></p>
+<ul>
+<li>
+<p>作用</p>
+<ul>
+<li>读取Java系统属性</li>
+</ul>
+</li>
+<li>
+<p>调用格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${user.home}</span></span></code></pre>
+</li>
+<li>
+<p>系统属性查询方式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mvn help:system</span></span></code></pre>
+</li>
+</ul>
+<p><strong>五、环境变量属性</strong></p>
+<ul>
+<li>
+<p>作用</p>
+<ul>
+<li>使用Maven配置文件setting.xml中的标签属性，用于动态配置</li>
+</ul>
+</li>
+<li>
+<p>调用格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${env.JAVA_Home}</span></span></code></pre>
+</li>
+<li>
+<p>环境变量属性查询方式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mvn help:system</span></span></code></pre>
+</li>
+</ul>
+<hr>
+<h2 id="第七章---版本管理">第七章   版本管理</h2>
+<hr>
+<p><strong>工程版本</strong></p>
+<ul>
+<li>SNAPSHOT(快照版本)
+<ul>
+<li>项目开发过程中，为方便团队成员合作，解决模块间相互依赖和时时更新的问题，开发者对每个模块进行构建的时候，输出的临时性版本叫快照版本（测试阶段版本)</li>
+<li>快照版本会随着开发的进展不断更新</li>
+</ul>
+</li>
+<li>RELEASE(发布版本)
+<ul>
+<li>项目开发到进入阶段里程碑后，向团队外部发布较为稳定的版本，这种版本所对应的构件文件是稳定的，即便进行功能的后续开发，也不会改变当前发布版本内容，这种版本称为发布版本</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/20220413181257.png" alt="20220413181257"></p>
+<hr>
+<h2 id="第八章---资源配置">第八章   资源配置</h2>
+<hr>
+<p><strong>配置文件引用pom属性</strong></p>
+<ul>
+<li>
+<p>作用</p>
+<ul>
+<li>在任意配置文件中加载pom文件中定义的属性</li>
+</ul>
+</li>
+<li>
+<p>调用格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">${jdbc.url}</span></span></code></pre>
+</li>
+<li>
+<p>开启配置文件加载pom属性</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--配置资源文件对应的信息--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">resources</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">resource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">	&#x3C;!--设定配置文件对应的位置目录，支持使用属性动态设定路怪--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>${project.basedir}/src/main/resources&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">directory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">     &#x3C;!--开启对配置文件的资源加载过滤--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">filtering</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>true&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">filtering</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">     &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">resource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">resources</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+</li>
+</ul>
+<hr>
+<h2 id="第九章---多环境开发配置">第九章   多环境开发配置</h2>
+<hr>
+<p><strong>多环境兼容</strong></p>
+<p><img src="/img/20220413182619.png" alt="20220413182619"></p>
+<p><strong>多环境配置</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--创建多环境--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profiles</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">	&#x3C;!--定义具体的环境:生产环境--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		&#x3C;!--定义环境对应的唯一名称--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>pro_env&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		&#x3C;!--定义环玩中专用的属性值--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">			&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">jdbc.ur1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>jdbc:mysql://127.1.1.1:3306/ssm_db&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">jdbc.ur1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		&#x3C;!--设置默认启动--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">activation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">			&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">activeByDefault</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>true&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">activeByDefault</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">activation</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">		&#x3C;!--定义具体的环境:开发环境--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>dev_env&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">id</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">         ....</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">profiles</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p><strong>加载指定环境</strong></p>
+<ul>
+<li>
+<p>作用</p>
+<ul>
+<li>加载指定环境配置</li>
+</ul>
+</li>
+<li>
+<p>调用格式</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mvn 指令 -p 环境定义id</span></span></code></pre>
+</li>
+<li>
+<p>范例</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mvn install -P pro_env</span></span></code></pre>
+</li>
+</ul>
+<hr>
+<h2 id="第十章---跳过测试">第十章   跳过测试</h2>
+<hr>
+<p><strong>一、使用命令跳过测试</strong></p>
+<ul>
+<li>
+<p>命令</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">mvn 指令 -D skipTests</span></span></code></pre>
+</li>
+<li>
+<p>注意事项</p>
+<ul>
+<li>执行的指令生命周期必须包含测试环节</li>
+</ul>
+</li>
+</ul>
+<p><strong>二、使用界面操作跳过测试</strong></p>
+<p><img src="/img/20220413183632.png" alt="20220413183632"></p>
+<p><strong>三、使用配置跳过测试</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>maven-surefire-plugin&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>2.22.1&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">skipTests</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>true&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">skipTests</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--设置跳过测试--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">         &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">includes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--包含指定的测试用例--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">			&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">include</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>**/User*Test.java&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">include</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">         &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">includes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">		&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">excludes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--排除指定的测试用例--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">			&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">exclude</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>**/User*Testcase.java&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">exclude</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">excludes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">configuration</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">plugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<hr>
+<h2 id="第十一章---私服">第十一章   私服</h2>
+<hr>
+<h3 id="111nexus私服">11.1Nexus私服</h3>
+<hr>
+<p><img src="/img/20220413185804.png" alt="20220413185804"></p>
+<p><img src="/img/20220413190041.png" alt="20220413190041"></p>
+<p><strong>仓库的分类</strong></p>
+<ul>
+<li>宿主仓库hosted
+<ul>
+<li>保存无法从中央仓库获取的资源
+<ul>
+<li>自主研发</li>
+<li>第三方非开源文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>代理仓库proxy
+<ul>
+<li>代理远程仓库，通过nexus访问其他公共仓库，例如中央仓库</li>
+</ul>
+</li>
+<li>仓库组group
+<ul>
+<li>将若干个仓库组成一个群组，简化配置</li>
+<li>仓库组不能保存资源，属于设计型仓库</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/20220413201842.png" alt="20220413201842"></p>
+<p><strong>发布到私服</strong></p>
+<p><img src="/img/20220413202405.png" alt="20220413202405"></p><p class="tags"><a href="/tags/Maven/">#Maven</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

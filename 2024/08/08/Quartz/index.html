@@ -1,0 +1,736 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Quartz | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Quartz</h1><p><i><time datetime="2024-08-08T22:07:08.000Z">8 Aug, 2024</time></i></p><h2 id="前置">前置</h2>
+<hr>
+<h3 id="小顶堆和时间轮算法">小顶堆和时间轮算法</h3>
+<hr>
+<p><strong>小顶堆</strong></p>
+<p>完全二叉树：除了最后一层外，其他层节点数必须达到最大，最后一层靠左排列</p>
+<p>堆也是一颗完全二叉树，但是它的元素必须满足每个节点的值都不大于（或不小于）其父节点的值</p>
+<p>定时任务用小顶堆进行：各个节点的值对应job的dilay</p>
+<p><strong>时间轮算法</strong></p>
+<ul>
+<li>链表或者数组实现时间轮：while-true-sleep 遍历数组，每个下标放置一个链表，链表节点放置任务，遍历到了就取出执行
+<ul>
+<li>缺陷：范围小，无法实现复杂的定时任务</li>
+</ul>
+</li>
+<li>round型时间轮：任务上记录一个round，遍历到了就将round减1，为0时取出执行
+<ul>
+<li>缺陷：需要遍历所有的任务，效率较低</li>
+</ul>
+</li>
+<li>分层时间轮：使用多个不同时间维度的轮
+<ul>
+<li>天轮：记录几点执行</li>
+<li>月轮：记录几号执行</li>
+<li>月轮遍历到了，将任务取出放到天轮里面，即可实现几号几点执行</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="第一章-jdk定时器timer使用及原理分析">第一章 JDK定时器timer使用及原理分析</h2>
+<hr>
+<h3 id="11-timer的使用">1.1 timer的使用</h3>
+<hr>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.timer;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Date;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Timer;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.TimerTask;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TimerTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 任务启动</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Timer t </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Timer</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">++</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            FooTimerTask task </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FooTimerTask</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"foo"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            // 任务添加</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            t.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(task, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(), </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FooTimerTask</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> extends</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TimerTask</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String name;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FooTimerTask</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"name: "</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "startTime: "</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            Thread.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">3000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"name: "</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "endTime: "</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (InterruptedException </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            throw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> RuntimeException</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(e);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="12-timer的数据结构和原理分析--存在的问题">1.2 timer的数据结构和原理分析 &#x26;&#x26; 存在的问题</h3>
+<hr>
+<p><strong>Timer</strong></p>
+<ul>
+<li>定时（指定时间执行任务）</li>
+<li>延迟（延迟一段时间执行任务）</li>
+<li>周期性执行任务（每隔一段时间执行任务）</li>
+</ul>
+<p><strong>缺陷：</strong></p>
+<ul>
+<li>Timer在执行所有定时任务时只会创建一个线程，如果某个任务执行时间大于其周期长度，就会导致本次任务还在执行，而下一个周期任务已经需要开始执行了。一个线程内两个任务只能顺序执行，对于之前需要执行但是还没有执行的任务，有两种情况
+<ul>
+<li>当前任务执行完马上执行那些任务（顺序）</li>
+<li>把那些任务丢掉，不去执行</li>
+</ul>
+</li>
+<li>如果TimerTask抛出一个未检查异常，那么Timer线程就会被终止掉，之前已经被调度但尚未执行的TimerTask就不会再执行了，新的任务也不能被调度了</li>
+<li>Timer支持基于绝对时间的调度机制，不支持基于相对时间的调度机制，所以任务的执行对系统时钟变化很敏感</li>
+</ul>
+<p><strong>实现原理</strong></p>
+<p>Timer有两个内部类，TaskQueue和TimerThread，TaskQueue其实就是一个最小堆（按TimerTask下一个任务执行时间点先后排序），存放该Timer的所有TimerTask，而TimerThread就是Timer新开的检查兼执行线程，在run中用一个死循环不断检查是否有任务需要开始执行了，有就执行它（任务还是在这个线程执行）</p>
+<p>Timer实现的关键就是调度方法，也就是TimerThread的run方法：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        mainLoop</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">finally</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // Someone killed this Thread, behave as if Timer cancelled</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        synchronized</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(queue) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            newTasksMayBeScheduled </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> false</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">clear</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();  </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Eliminate obsolete references</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>具体逻辑在mainLoop方法中实现：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> mainLoop</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            TimerTask task;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            boolean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> taskFired;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            synchronized</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(queue) {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">                // Wait for queue to become non-empty</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">isEmpty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x26;&#x26;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> newTasksMayBeScheduled)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">wait</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">isEmpty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                    break</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Queue is empty and will forever remain; die</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">                // Queue nonempty; look at first evt and do the right thing</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> currentTime, executionTime;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                task </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getMin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                synchronized</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(task.lock) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (task.state </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">==</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TimerTask.CANCELLED) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">removeMin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                        continue</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;  </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// No action required, poll queue again</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    currentTime </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    executionTime </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> task.nextExecutionTime;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (taskFired </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (executionTime</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">currentTime)) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                        if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (task.period </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">==</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Non-repeating, remove</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">removeMin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            task.state </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TimerTask.EXECUTED;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">else</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> { </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Repeating task, reschedule</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                            queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">rescheduleMin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                              task.period</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> ?</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> currentTime   </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> task.period</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                                            :</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> executionTime </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> task.period);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                }</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">taskFired) </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Task hasn't yet fired; wait</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    queue.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">wait</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(executionTime </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> currentTime);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (taskFired)  </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// Task fired; run it, holding no locks</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                task.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(InterruptedException </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><code>task = queue.getMin();</code>：取出最先需要执行的那个TimerTask，然后判断executionTime&#x3C;=currentTime，其中executionTime就是该TimerTask下一个周期任务执行的时间点，currentTime为当前时间点，如果说为true，说明该任务需要执行了（可能是一个过时任务，应该在过去某个时间点开始执行，但由于某种原因还没有执行）判断<code>task.period == 0</code>，Timer中period默认为0，表示该TimerTask只会执行一次，不会周期性地不断执行，所以为true就移除掉该TimerTask，然后待会会执行该TimerTask一次，如果<code>task.period</code>不为0，那就分小于0和大于0。</p>
+<ul>
+<li>如果调用的是schedule方法，那么<code>task.period</code>就小于0：</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> schedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(TimerTask task, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> delay, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> period) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (delay </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        throw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> IllegalArgumentException</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Negative delay."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (period </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        throw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> IllegalArgumentException</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Non-positive period."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    sched</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(task, System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">delay, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">period);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<ul>
+<li>如果调用的是scheduleAtFixedRate方法，那么<code>task.period</code>就大于0：</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> scheduleAtFixedRate</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(TimerTask task, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> delay, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> period) {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (delay </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        throw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> IllegalArgumentException</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Negative delay."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (period </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        throw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> IllegalArgumentException</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"Non-positive period."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    sched</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(task, System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">delay, period);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>当<code>period &#x3C; 0</code>时，当前TimerTask下一次开始执行任务的时间就会被设置为<code>currentTime - task.period</code>，可以理解为定时任务被重置，从现在开始，period周期间隔（那么之前预想在这个间隔内 存在的任务执行就没有了）后执行一次任务，这种情况就是Timer的任务可能丢失的问题。</p>
+<p>当<code>period > 0</code>时，当前TimerTask下一次开始执行任务的时间就会被设置为<code>executionTime + task.period</code>，即下一次任务还是按原来的算，如果这时<code>executionTime + task.period</code>还先于currentTime，那么下一个任务就会马上执行，也就是Timer的任务快速调用问题。</p>
+<p><strong>以上是第一种缺陷发生的原因</strong></p>
+<p><strong>以下是第二种缺陷发生的原因</strong></p>
+<p>mainLoop中在死循环只catch了一个InterruptedException，也就是当前线程被中断，Timer的线程是可以执行一段时间，然后被操作系统挂在一边休息，然后又回来执行的。但如果抛出其它异常，那么整个循环就会挂掉。外层的run方法也没有catch任何异常。这时就会造成线程泄露，同时之前已经被调度但尚未执行的TimerTask就不会再执行了，新的任务也不能被调度了。</p>
+<p><strong>解决缺陷</strong></p>
+<p>对于Timer的缺陷，我们可以考虑使用ScheduledThreadPoolExecutor来替代。Timer是基于绝对时间的，对系统时间比较敏感，而ScheduledThreadPoolExecutor则是基于相对时间，Timer是内部单一线程的，而ScheduledThreadPoolExecutor内部是线程池，所以可以支持多个任务并发执行。</p>
+<p><strong>解决问题一：</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ScheduledExecutorTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {  </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  ScheduledExecutorService scheduExec;  </span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> start;  </span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">    ScheduledExecutorTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){  </span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.scheduExec </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  Executors.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newScheduledThreadPool</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);    </span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.start </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }  </span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> timerOne</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        scheduExec.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Runnable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {  </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"timerOne,the time:"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> start));  </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    Thread.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">4000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (InterruptedException </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                    e.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">printStackTrace</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                }  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,TimeUnit.MILLISECONDS);  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }  </span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> timerTwo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        scheduExec.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Runnable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {  </span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"timerTwo,the time:"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> start));  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        },</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,TimeUnit.MILLISECONDS);  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }  </span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ScheduledExecutorTest test </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ScheduledExecutorTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        test.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">timerOne</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        test.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">timerTwo</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }  </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}  </span></span></code></pre>
+<p><strong>运行结果</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>timerOne,the time:1003  </span></span>
+<span class="line"><span>timerTwo,the time:2005  </span></span></code></pre>
+<p><strong>解决问题二：</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ScheduledThreadPoolDemo01</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> InterruptedException {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TimerTask task1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TimerTask</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">                throw</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> RuntimeException</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        final</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TimerTask task2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> TimerTask</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"task2 invoked!"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        };</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ScheduledExecutorService pool </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Executors.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newScheduledThreadPool</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        pool.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(task1, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">100</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, TimeUnit.MILLISECONDS);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        pool.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">scheduleAtFixedRate</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(task2, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, TimeUnit.MILLISECONDS);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><strong>运行结果</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>task2 invoked!  </span></span>
+<span class="line"><span>task2 invoked!  </span></span>
+<span class="line"><span>task2 invoked!  </span></span>
+<span class="line"><span>task2 invoked!  </span></span>
+<span class="line"><span>task2 invoked! </span></span></code></pre>
+<p><strong>埋点：</strong></p>
+<p>这时都是并行执行的，当设置定时job时，假设5s执行一次缓存job，某一次job执行了6s，会在第5s产生一个相同任务与之前的任务并行执行，会不会产生脏数据？？</p>
+<hr>
+<h3 id="13-leader-follower模式">1.3 Leader-Follower模式</h3>
+<hr>
+<p>假设有一堆等待执行的任务（一般是存放在一个队列中排好序），而所有的工作线程只会有一个<strong>leader线程</strong>，其它线程都是<strong>follower线程</strong>，只有<strong>leader线程</strong>能执行任务，而剩下的<strong>follower线程</strong>则处于休眠状态。当<strong>leader线程</strong>拿到任务后，执行任务前，自己会变为<strong>follower线程</strong>，同时会选出一个新的<strong>leader线程</strong>，然后才去执行任务。如果此时有下一个任务，就是这个新的<strong>leader线程</strong>去执行了，并重复这个过程。当之前那个执行任务的线程执行完毕再回来时，如果此时已经没有任务或者已经有其他线程作为<strong>leader线程</strong>那么自己就休眠了，如果此时有任务但没有<strong>leader线程</strong>，那么会重新成为<strong>leader线程</strong>去执行任务。</p>
+<ul>
+<li>避免了没必要的唤醒和阻塞操作，这样会更加有效且节省资源</li>
+</ul>
+<hr>
+<h2 id="第二章-定时任务框架quartz">第二章 定时任务框架quartz</h2>
+<hr>
+<h3 id="21-使用简介">2.1 使用简介</h3>
+<hr>
+<p>Quartz是<code>OpenSymphony</code>开源组织在<code>Job scheduling</code>领域又一个开源项目，完全由Java开发，可以用来执行定时任务，类似于<code>java.util.Timer</code>。但是相较于Timer， Quartz增加了很多功能：</p>
+<ul>
+<li>持久性作业：保持调度定时的状态</li>
+<li>作业管理：对调度作业进行有效的管理</li>
+</ul>
+<hr>
+<h3 id="22-各组件介绍">2.2 各组件介绍</h3>
+<hr>
+<ul>
+<li>**任务Job：**需要实现的任务类，实现execute()方法，执行后完成任务</li>
+<li>**触发器Tigger：**包括SimpleTrigger和CronTrigger</li>
+<li>**调度器Scheduler：**任务调度器，负责基于Trigger触发器，来执行Job任务</li>
+</ul>
+<p><strong>Demo</strong></p>
+<p>一、导包</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!-- 核心包 --></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.quartz-scheduler&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>quartz&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>2.3.0&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!-- 工具包 --></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.quartz-scheduler&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>quartz-jobs&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>2.3.0&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">version</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p>二、新建任务，实现Job接口</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> MyJob</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> implements</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Job</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> execute</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(JobExecutionContext </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">context</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JobExecutionException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"任务被执行了。。。"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>三、main方法，创建调度器、jobDetail实例、trigger实例</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] args) throws Exception {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 1.创建调度器 Scheduler</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    SchedulerFactory factory </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> StdSchedulerFactory</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Scheduler scheduler </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> factory.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getScheduler</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 2.创建JobDetail实例，并与MyJob类绑定(Job执行内容)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    JobDetail job </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JobBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newJob</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(MyJob.class)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIdentity</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"job1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"group1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 3.构建Trigger实例,每隔30s执行一次</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    Trigger trigger </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TriggerBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIdentity</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"trigger1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"group1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">startNow</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">simpleSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                      .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIntervalInSeconds</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">30</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                      .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">repeatForever</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 4.执行，开启调度器</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    scheduler.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">scheduleJob</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(job, trigger);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    scheduler.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">start</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    //主线程睡眠1分钟，然后关闭调度器</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    TimeUnit.MINUTES.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    scheduler.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">shutdown</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><strong>JobDetail</strong></p>
+<p>绑定Job，是一个任务实例，为Job添加了许多扩展参数</p>
+<ul>
+<li>name：任务名称</li>
+<li>group：任务分组，默认分组DEFAULT</li>
+<li>jobClass：任务类，就是上面Demo中的MyJob的路径</li>
+<li>jobDataMap：任务参数信息，JobDetail、Trigger都可以使用JobDataMap来设置一些参数或信息</li>
+</ul>
+<p>每次Scheduler调度执行一个Job的时候，首先会拿到对应的Job，然后创建该Job实例，再去执行Job中execute()的内容，任务执行结束后，关联的Job对象实例会被释放，且会被JVM GC清除。</p>
+<p><strong>为什么设计成JobDetail + Job，不直接使用Job</strong></p>
+<p>JobDetail定义的是任务数据，而真正的执行逻辑在Job中。这是因为任务是有可能并发执行的，如果Scheduler直接使用Job，就会存在对同一个Job实例并发访问的问题，而JobDetail &#x26; Job方式，Scheduler每次执行，都会根据JobDetail创建一个新的Job实例，这样就可以规避并发访问的问题</p>
+<p><strong>Job</strong></p>
+<ul>
+<li>@DisallowConcurrentExecution：禁止并发的执行同一个job定义（JobDetail定义的）的多个实例</li>
+<li>@PersistJobDataAfterExecution：持久化JobDetail中的JobDataMap（对Trigger中的datamap无效），如果一个任务不是持久化的，则当它没有触发器关联它的时候，Quartz会从schedule中删除它</li>
+<li>如果一个任务请求恢复，一般是该任务执行期间发生了系统崩溃或者其他关闭进程的操作，当服务再次启动的时候，会再次执行该任务，此时，JobExecutionContext.isRecovering()会返回true</li>
+</ul>
+<p><strong>JobExecutionContext</strong></p>
+<ul>
+<li>当Scheduler调用一个Job，就会将JobExecutionContext传递给Job的execute()方法</li>
+<li>Job能通过JobExecutionContext对象访问到Quartz运行时候到环境以及Job本身的明细数据</li>
+</ul>
+<p>任务实现的execute()方法，可以通过context参数获取</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> interface</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Job</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> execute</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(JobExecutionContext </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">context</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JobExecutionException;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>在Builder建造过程中，可以使用如下方法：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">usingJobData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"tiggerDataMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"测试传参"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre>
+<p>在execute方法中获取：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">context.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDataMap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"tiggerDataMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">context.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDetail</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDataMap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"tiggerDataMap"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+<p><strong>JobDataMap</strong></p>
+<p>保存任务实例的状态信息</p>
+<ul>
+<li>jobDetail：默认只在Job被添加到调度程序（任务执行计划表）scheduler的时候，存储一次关于该任务的状态信息数据，可以使用注解**@PersistJobDataAfterExecution**注解标明在一个任务执行完毕之后就存储一次</li>
+<li>trigger：任务被多个触发器引用的时候，根据不同的触发时机，可以提供不同的输入条件</li>
+</ul>
+<p>Job状态参数，有状态的job可以理解为多次job调用期间可以持有一些状态信息，这些状态信息存储在JobDataMap中</p>
+<p>而默认无状态的job，每次调用时都会创建一个新的JobDataMap</p>
+<p>示例：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//多次调用 Job 的时候，将参数保留在 JobDataMap</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">PersistJobDataAfterExecution</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> JobStatus</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> implements</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Job</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> execute</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(JobExecutionContext </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">context</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JobExecutionException {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> count </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) context.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDetail</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDataMap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"count"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"当前执行，第"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> count </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "次"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        context.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDetail</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDataMap</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"count"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">++</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">count);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 当前执行，第1次</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// [main] INFO org.quartz.core.QuartzScheduler - Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started.</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 当前执行，第2次</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 当前执行，第3次</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">JobDetail job </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JobBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newJob</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(JobStatus.class)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIdentity</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"statusJob"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"group1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">usingJobData</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"count"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1L</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span></code></pre>
+<p><strong>Trigger</strong></p>
+<p><strong>优先级</strong></p>
+<p>同时触发的trigger之间才会比较优先级，如果trigger是可恢复的，在恢复后再调度时，优先级不变</p>
+<p><strong>定时启动/关闭</strong></p>
+<p>Trigger可以设置任务的开始结束时间，Scheduler会根据参数进行触发</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Calendar instance </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Calendar.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getInstance</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Date startTime </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> instance.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getTime</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">instance.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Calendar.MINUTE, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Date endTime </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> instance.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getTime</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 3.构建Trigger实例</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">Trigger trigger </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TriggerBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIdentity</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"trigger1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"group1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 开始时间</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">startAt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(startTime)</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">    // 结束时间</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">endAt</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(endTime)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span></code></pre>
+<p>在job中也能拿到对应的时间，并进行业务判断</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> execute</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(JobExecutionContext context) throws JobExecutionException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"任务执行。。。"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(context.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getStartTime</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(context.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getEndTime</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><strong>misfire 错过触发</strong></p>
+<p>判断条件：</p>
+<ul>
+<li>Job到达触发时间时没有被执行</li>
+<li>被执行的延迟时间超过了Quartz配置的misfireThreshold阈值</li>
+</ul>
+<p>产生原因：</p>
+<ul>
+<li>当Job到达触发时间时，所有线程都被其他Job占用，没有可用的线程</li>
+<li>在Job需要触发的时间点，schedule停止了（可能是意外停止）</li>
+<li>Job使用了@DisallowConcurrentExecution注解，Job不能并发执行，当达到下一个job执行点的时候，上一个任务还没完成</li>
+<li>Job指定了过去的开始时间，例如当前时间时9点00分00秒，指定开始时间为8点00分00秒</li>
+</ul>
+<p>策略：</p>
+<ul>
+<li>
+<p>默认：<strong>MISFIRE_INSTRUCTION_SMART_POLICY</strong></p>
+</li>
+<li>
+<p><strong>SimpleTrigger</strong></p>
+<ul>
+<li><strong>now*相关的策略</strong>：会立即执行第一个misfire的任务，同时会修改startTime和repeatCount，因此会重新计算finalFireTime，原计划执行时间会被打乱。</li>
+<li><strong>next*相关的策略</strong>：不会立即执行misfire的任务，也不会修改startTime和repeatCount，因此finalFireTime不会被重新计算，misfire也是按照原计划进行执行。</li>
+</ul>
+</li>
+<li>
+<p><strong>CronTrigger</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 所有的misfile任务马上执行</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> -</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 在Trigger中默认选择MISFIRE_INSTRUCTION_FIRE_ONCE_NOW 策略</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> MISFIRE_INSTRUCTION_SMART_POLICY </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 合并部分misfire，正常执行下一个周期的任务。</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> MISFIRE_INSTRUCTION_FIRE_ONCE_NOW </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">// 所有的misfire都不管，执行下一个周期的任务。</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> MISFIRE_INSTRUCTION_DO_NOTHING </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span></code></pre>
+</li>
+</ul>
+<p><strong>SimpleTrigger</strong></p>
+<p>这是比较简单的一类触发器，用它能实现很多基础的应用，使用场景：</p>
+<ul>
+<li>在指定时间段内，执行一次任务</li>
+</ul>
+<p>最基础的Trigger不设置循环，设置开始时间</p>
+<ul>
+<li>在指定时间段内，循环执行任务</li>
+</ul>
+<p>在上一个场景基础上加上循环间隔，可以指定永远循环、运行指定次数</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">TriggerBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(SimpleScheduleBuilder</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                  .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">simpleSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                  .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIntervalInSeconds</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">30</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                  .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">repeatForever</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  //withRepeatCount(count) 是重复次数，实际运行次数为 count+1</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  TriggerBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(SimpleScheduleBuilder</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                  .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">simpleSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                  .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIntervalInSeconds</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">30</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                  .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withRepeatCount</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">5</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">))</span></span></code></pre>
+<ul>
+<li>立即开始，指定时间结束</li>
+</ul>
+<p><strong>CronTrigger</strong></p>
+<p>CronTrigger是基于日历的任务调度器，在实际应用中更加常用</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">TriggerBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(CronScheduleBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">cronSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"* * * * * ?"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">  </span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">  // Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//（1） Seconds Minutes Hours DayofMonth Month DayofWeek Year</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//（2）Seconds Minutes Hours DayofMonth Month DayofWeek</span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">序号</th><th align="center">说明</th><th align="center">是否必填</th><th align="center">允许填写的值</th><th align="center">允许的通配符</th></tr></thead><tbody><tr><td align="center">1</td><td align="center">秒</td><td align="center">是</td><td align="center">0-59</td><td align="center">, - * /</td></tr><tr><td align="center">2</td><td align="center">分</td><td align="center">是</td><td align="center">0-59</td><td align="center">, - * /</td></tr><tr><td align="center">3</td><td align="center">小时</td><td align="center">是</td><td align="center">0-23</td><td align="center">, - * /</td></tr><tr><td align="center">4</td><td align="center">日</td><td align="center">是</td><td align="center">1-31</td><td align="center">, - * ? / L W</td></tr><tr><td align="center">5</td><td align="center">月</td><td align="center">是</td><td align="center">1-12 or JAN-DEC</td><td align="center">, - * /</td></tr><tr><td align="center">6</td><td align="center">周</td><td align="center">是</td><td align="center">1-7 or SUN-SAT</td><td align="center">, - * ? / L #</td></tr><tr><td align="center">7</td><td align="center">年</td><td align="center">否</td><td align="center">empty或1970-2099</td><td align="center">, - * /</td></tr></tbody></table>
+<p>（1）*：**表示匹配该域的任意值。假如在Minutes域使用, 即表示每分钟都会触发事件。</p>
+<p>（2）?：只能用在DayofMonth和DayofWeek两个域。它也匹配域的任意值，但实际不会。因为DayofMonth和DayofWeek会相互影响。例如想在每月的20日触发调度，不管20日到底是星期几，则只能使用如下写法： 13 13 15 20 * ?, 其中最后一位只能用？，而不能使用 **，如果使用 *表示不管星期几都会触发，实际上并不是这样。</p>
+<p>（3）-：表示范围。例如在Minutes域使用5-20，表示从5分到20分钟每分钟触发一次</p>
+<p>（4）/：表示起始时间开始触发，然后每隔固定时间触发一次。例如在Minutes域使用5/20,则意味着5分钟触发一次，而25，45等分别触发一次.</p>
+<p>（5）,：表示列出枚举值。例如：在Minutes域使用5,20，则意味着在5和20分每分钟触发一次。</p>
+<p>（6）L：表示最后，只能出现在DayofWeek和DayofMonth域。如果在DayofWeek域使用5L,意味着在最后的一个星期四触发。</p>
+<p>（7）W:表示有效工作日(周一到周五),只能出现在DayofMonth域，系统将在离指定日期的最近的有效工作日触发事件。例如：在 DayofMonth使用5W，如果5日是星期六，则将在最近的工作日：星期五，即4日触发。如果5日是星期天，则在6日(周一)触发；如果5日在星期一到星期五中的一天，则就在5日触发。另外一点，W的最近寻找不会跨过月份 。</p>
+<p>（8）LW:这两个字符可以连用，表示在某个月最后一个工作日，即最后一个星期五。</p>
+<p>（9）#:用于确定每个月第几个星期几，只能出现在DayofWeek域。例如在4#1，表示某月的第二个星期三。</p>
+<p><strong>并发执行</strong></p>
+<p>上面有并发和非并发的区别，通过 @DisallowConcurrentExecution 注解来实现阻止并发。</p>
+<p>Quartz定时任务默认都是并发执行的，不会等待上一次任务执行完毕，只要间隔时间到就会执行, 如果定时任执行太长，会长时间占用资源，导致其它任务堵塞。</p>
+<p>@DisallowConcurrentExecution 禁止并发执行多个相同定义的JobDetail, 这个注解是加在Job类上的, 但意思并不是不能同时执行多个Job, 而是不能并发执行同一个Job Definition(由JobDetail定义), 但是可以同时执行多个不同的JobDetail。</p>
+<p>举例说明，我们有一个Job类,叫做SayHelloJob, 并在这个Job上加了这个注解, 然后在这个Job上定义了很多个JobDetail, 如sayHelloToJoeJobDetail, sayHelloToMikeJobDetail, 那么当scheduler启动时, 不会并发执行多个sayHelloToJoeJobDetail或者sayHelloToMikeJobDetail, 但可以同时执行sayHelloToJoeJobDetail跟sayHelloToMikeJobDetail</p>
+<p>@PersistJobDataAfterExecution 同样, 也是加在Job上。可以将JobDataMap持久化，表示当正常执行完Job后, JobDataMap中的数据应该被改动, 以被下一次调用时用。</p>
+<p>当使用 @PersistJobDataAfterExecution 注解时, 为了避免并发时, 存储数据造成混乱, 强烈建议把 @DisallowConcurrentExecution 注解也加上。</p>
+<p>测试代码，设定的时间间隔为3秒,但job执行时间是5秒,设置 @DisallowConcurrentExecution以 后程序会等任务执行完毕以后再去执行,否则会在3秒时再启用新的线程执行。</p>
+<p><strong>Schedule</strong></p>
+<p>调度器，基于trigger的设定执行job</p>
+<p>1、SchedulerFactory</p>
+<ul>
+<li>创建Scheduler</li>
+<li>DirectSchedulerFactory：在代码里定制Scheduler参数</li>
+<li>StdSchedulerFactory：读取classpath下的quartz.properties配置来实例化Scheduler</li>
+</ul>
+<p>2、JobStore</p>
+<p>存储运行时的信息，包括Trigger、Scheduler、JobDetail、业务锁等</p>
+<ul>
+<li>RAMJobStore：内存实现，轻量级，速度快，应用重启时相关信息都将丢失</li>
+<li>JobStoreTX：JDBC，事务由Quartz管理，不参与全局事务</li>
+<li>JobStoreCMT：JDBC，使用容器（全局）事务，不会自己去管理事务，在完成数据库操作时，它不会自己提交，由全局事务管理程序，对全局事务进行统一的提交或者回滚</li>
+<li>ClusteredJobStore：集群实现</li>
+<li>TerracottaJobStore：Terracotta中间件</li>
+</ul>
+<hr>
+<h3 id="23-springboot整合quartz">2.3 springboot整合quartz</h3>
+<hr>
+<p><strong>引入依赖</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">   &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.springframework.boot&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>spring-boot-starter-quartz&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p><strong>定义Job类</strong></p>
+<p>继承QuartzJobBean</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.quartz;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.quartz.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.scheduling.quartz.QuartzJobBean;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Date;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@author</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">: tianqi shan</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @create: 2024-08-08 11:24</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @description:</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> **/</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">PersistJobDataAfterExecution</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">DisallowConcurrentExecution</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> QuartzJob</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> extends</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> QuartzJobBean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    protected</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> executeInternal</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(JobExecutionContext </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">jobExecutionContext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JobExecutionException {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            Thread.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">sleep</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">2000</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(jobExecutionContext.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getScheduler</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getSchedulerInstanceId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"taskName = "</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> jobExecutionContext.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getJobDetail</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getKey</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"执行时间："</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Date</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (Exception </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            e.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">printStackTrace</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><strong>配置调度器</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.quartz;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.quartz.Scheduler;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.beans.factory.annotation.Autowired;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.beans.factory.config.YamlPropertiesFactoryBean;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.context.annotation.Bean;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.context.annotation.Configuration;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.core.io.ClassPathResource;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.scheduling.quartz.SchedulerFactoryBean;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> javax.sql.DataSource;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.concurrent.Executor;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@author</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">: tianqi shan</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @create: 2024-08-08 11:33</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @description:</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> **/</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Configuration</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SchedulerConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Autowired</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> DataSource dataSource;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Bean</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Scheduler </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">scheduler</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> schedulerFactoryBean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getScheduler</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Bean</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> SchedulerFactoryBean </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schedulerFactoryBean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        SchedulerFactoryBean factoryBean </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SchedulerFactoryBean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        factoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setSchedulerName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"test-scheduler"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 注入数据源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        factoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setDataSource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(dataSource);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 选项</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        factoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setApplicationContextSchedulerContextKey</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"application"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        factoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setQuartzProperties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">quartzProperties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 读取线程池配置</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        factoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setTaskExecutor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schedulerThreadPool</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> factoryBean;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Bean</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Properties </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">quartzProperties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        YamlPropertiesFactoryBean yamlPropertiesFactoryBean </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> YamlPropertiesFactoryBean</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        yamlPropertiesFactoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setResources</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ClassPathResource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"/spring-quartz.yml"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        yamlPropertiesFactoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">afterPropertiesSet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> yamlPropertiesFactoryBean.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getObject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Bean</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Executor </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">schedulerThreadPool</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ThreadPoolTaskExecutor taskExecutor </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ThreadPoolTaskExecutor</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 核心线程数</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        taskExecutor.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setCorePoolSize</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Runtime.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getRuntime</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">availableProcessors</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 最大线程数</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        taskExecutor.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setMaxPoolSize</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Runtime.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getRuntime</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">availableProcessors</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 容量</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        taskExecutor.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setQueueCapacity</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Runtime.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getRuntime</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">().</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">availableProcessors</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> taskExecutor;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><strong>监听器</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.quartz;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.quartz.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.beans.factory.annotation.Autowired;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.context.ApplicationListener;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.context.event.ContextRefreshedEvent;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.stereotype.Component;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">/**</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">@author</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">: tianqi shan</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @create: 2024-08-08 14:09</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> * @description:</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D"> **/</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Component</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> StartApplicationListener</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> implements</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ApplicationListener</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">ContextRefreshedEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Autowired</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Scheduler scheduler;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> onApplicationEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(ContextRefreshedEvent </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">contextRefreshedEvent</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 开启调度</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // JobDetail有一个类型为JobKey的重要属性key，相当于是该任务的键值，JobDetail注册到任务调度器Schedule中的时候，key值不允许重复。</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 整个任务调度过程中，Quartz都是通过JobKey来唯一识别JobDetail的。试图将重复键值的JobDetail注册到任务调度器中而不指定覆盖的话，是不被允许的。</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // JobKey可以通过JobBuilder的withIdentity方法指定，该方法接收name或name+group参数，从而唯一确定一个任务JobDetail。</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 如果在JobDetail创建过程中不指定JobKey的话，Quartz会通过UUID的方式为该任务生成一个唯一的key值。</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        // 所以，同一个Job实现类（也就是同一个任务），可以通过不同的JobKey值注册到任务调度器中、绑定不同的触发器执行</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        TriggerKey triggerKey </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TriggerKey.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">triggerKey</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"trigger1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"group1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        try</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            Trigger trigger </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> scheduler.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(triggerKey);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            if</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (trigger </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">==</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">                // 触发器</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                trigger </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> TriggerBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newTrigger</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIdentity</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(triggerKey)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(CronScheduleBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">cronSchedule</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"0/10 * * * * ?"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">))</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">startNow</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                        .</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                JobDetail jobDetail </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> JobBuilder.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newJob</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(QuartzJob.class).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">withIdentity</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"job1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"group1"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">).</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">build</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                scheduler.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">scheduleJob</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(jobDetail, trigger);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">                scheduler.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">start</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        } </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">catch</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (SchedulerException </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">e</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            e.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">printStackTrace</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre><p class="tags"><a href="/tags/Quartz/">#Quartz</a><a href="/tags/java/">#Java</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

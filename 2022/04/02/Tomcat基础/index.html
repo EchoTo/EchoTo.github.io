@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Tomcat基础 | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Tomcat基础</h1><p><i><time datetime="2022-04-02T19:01:37.000Z">2 Apr, 2022</time></i></p><h2 id="tomcat基础">Tomcat基础</h2>
+<hr>
+<h2 id="第一章---概述">第一章   概述</h2>
+<hr>
+<ul>
+<li>
+<p>服务器：安装了服务器软件的计算机</p>
+</li>
+<li>
+<p>服务器软件：接收用户的请求，处理请求，做出响应</p>
+</li>
+<li>
+<p>在Web服务器软件中，可以部署web项目，让用户通过浏览器来访问这些项目</p>
+<p><strong>web容器</strong></p>
+</li>
+</ul>
+<p>常见的java相关的web服务器软件：</p>
+<ul>
+<li>webLogic：oracle公司，大型的JavaEE服务器，支持所有的JavaEE规范，是收费的</li>
+<li>webSphere：IBM公司，同上</li>
+<li>JBOSS：JBOSS公司的，同上</li>
+<li>Tomcat：Apache基金组织，中小型的JavaEE服务器，仅仅支持少量的JavaEE规范的servlet/jsp。开源免费</li>
+</ul>
+<p>JavaEE：Java语言在企业级开发中使用的技术规范的总和，一共规定了13项大的规范。</p>
+<hr>
+<h2 id="第二章---使用">第二章   使用</h2>
+<hr>
+<h3 id="21部署项目方式">2.1部署项目方式</h3>
+<hr>
+<p>1.直接将项目放到webapps目录下即可。</p>
+<ul>
+<li>
+<p>localhost/项目目录名称/资源文件名称 --->虚拟目录</p>
+</li>
+<li>
+<p>简化部署：将项目打成一个war包，再将war包放置到webapps目录下，war包会自动解压缩</p>
+</li>
+</ul>
+<p>2.配置conf/ server.xml文件</p>
+<ul>
+<li>在<code>&#x3C;Host></code>标签体中配置<br>
+<code>&#x3C;context docBase="" path=""/></code></li>
+<li>docBase：项目存放的路径</li>
+<li>path：虚拟目录</li>
+</ul>
+<p>3.在<code>conf\catalina\localhost</code>创建任意名称的xml文件。</p>
+<ul>
+<li>在文件中编写<code>&#x3C;context docBase="path"/></code></li>
+<li>虚拟目录：xml文件的名称</li>
+</ul>
+<hr>
+<h3 id="22动态java项目目录结构">2.2动态java项目目录结构</h3>
+<hr>
+<p>---项目的根目录</p>
+<p>---WEB-INF目录：</p>
+<p>​      ---web.xml：web项目的核心配置文件</p>
+<p>​      ---classes目录：放置字节码文件的目录</p>
+<p>​      ---lib目录：放置依赖的jar包</p><p class="tags"><a href="/tags/Tomcat/">#Tomcat</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

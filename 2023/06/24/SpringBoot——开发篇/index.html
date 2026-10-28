@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>SpringBoot——开发篇 | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>SpringBoot——开发篇</h1><p><i><time datetime="2023-06-24T15:06:53.000Z">24 Jun, 2023</time></i></p><h2 id="springboot开发篇">SpringBoot——开发篇</h2>
+<hr>
+<h2 id="第一章-开发">第一章 开发</h2>
+<hr>
+<h3 id="11热部署">1.1热部署</h3>
+<hr>
+<h4 id="手动启动热部署">手动启动热部署</h4>
+<ul>
+<li>开启开发者工具</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.springframework.boot&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>spring-boot-devtools&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">optional</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>true&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">optional</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<ul>
+<li>激活热部署：构建项目 <strong>Ctrl + F9</strong></li>
+</ul>
+<p><strong>关于热部署</strong></p>
+<ul>
+<li>重启(Restart)：自定义开发代码，包含类、页面、配置文件等，加载位置restart类加载器</li>
+<li>重载(ReLoad)：jar包，加载位置base类加载器</li>
+</ul>
+<p>第一次启动有Restart也有ReLoad，热部署只有Restart</p>
+<h4 id="自动启动热部署">自动启动热部署</h4>
+<p>一、勾选Build project automatically</p>
+<p><img src="/img/20230224112421.png" alt="20230224112421"></p>
+<p>二、勾选Allow auto-make to start …</p>
+<p><img src="/img/20230224113030.png" alt="20230224113030"></p>
+<p>激活方式：IDEA失去焦点5秒后启动热部署</p>
+<h4 id="热部署范围配置">热部署范围配置</h4>
+<p>默认不触发重启的目录</p>
+<ul>
+<li>/META-INF/maven</li>
+<li>/META-INF/resources</li>
+<li>/resources</li>
+<li>/static</li>
+<li>/public</li>
+<li>/templates</li>
+</ul>
+<p>通过配置文件配置范围</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">devtools</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">  restart</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    exclude</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">public/**,...</span></span></code></pre>
+<h4 id="关闭热部署">关闭热部署</h4>
+<p><img src="/img/20230301081745.png" alt="20230301081745"></p>
+<p><strong>通过配置文件</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">devtools</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">  restart</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    enabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">false</span></span></code></pre>
+<p>弊端：可能被覆盖</p>
+<p><strong>通过系统配置</strong></p>
+<p>设置高优先级属性禁用热部署</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.boot.SpringApplication;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> org.springframework.boot.autoconfigure.SpringBootApplication;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">SpringBootApplication</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> SpringBoot01DeployApplication</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"spring.devtools.restart,enabled"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"false"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        SpringApplication.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">run</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(SpringBoot01DeployApplication.class, args);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="12配置高级">1.2配置高级</h3>
+<hr>
+<h4 id="configurationproperties">@ConfigurationProperties</h4>
+<ul>
+<li>使用@ConfigurationProperties为第三方bean绑定属性</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Bean</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">ConfigurationProperties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">prefix</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "datasource"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> DruidDataSource </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">dataSource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    DruidDataSource ds </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> DruidDataSource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ds;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">datasource</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">  driverClassName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">com.mysql.cj.jdbc.Driver</span></span></code></pre>
+<p><strong>@EnableConfigurationProperties(ServerConfig.class)</strong></p>
+<p>开启属性绑定，并设置对应的目标</p>
+<p>tips：@EnableConfigurationProperties和@Component不能同时使用，会匹配到两个bean对象</p>
+<h4 id="宽松绑定松散绑定">宽松绑定/松散绑定</h4>
+<p>@ConfigurationProperties绑定属性支持属性名宽松绑定</p>
+<p>绑定前缀名命名规范：仅能使用纯小写字母、数字、下划线作为合法的字符</p>
+<p>@Value不支持</p>
+<h4 id="常用计量单位绑定">常用计量单位绑定</h4>
+<ul>
+<li>SpringBoot支持JDK8提供的时间与空间计量单位</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Component</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Data</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">ConfigurationProperties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">prefix</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "servers"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ServerConfig</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String ipAddress;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> port;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> timeout;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">DurationUnit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(ChronoUnit.MINUTES)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> Duration serverTimeOut;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">DataSizeUnit</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(DataUnit.MEGABYTES)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> DataSize dataSize;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<h4 id="数据校验">数据校验</h4>
+<ul>
+<li>开启数据校验有助于系统安全性，J2EE规范中JSR303规范定义了一组有关数据校验相关的API</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--导入JSR303规范API--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>javax.validation&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>validation-api&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">&#x3C;!--使用hibernate框架提供的校验器做实现类--></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>org.hibernate.validator&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>hibernate-validator&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p>开启 @Validated</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Max</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 8888</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">message</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "最大值不能超过8888"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Min</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">value</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 101</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">message</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "最小值不能低于101"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span></code></pre>
+<p>tips：注意yaml文件中对于数字的定义支持进制书写格式，如需使用字符串请使用引号明确标注</p>
+<hr>
+<h3 id="13测试">1.3测试</h3>
+<hr>
+<p><strong>加载测试专用属性</strong></p>
+<p>properties属性可以为当前测试用例添加临时属性配置</p>
+<p>args属性可以为当前测试用例添加临时命令行参数</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//@SpringBootTest(properties = {"test.prop = testValue1"})</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">SpringBootTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">args</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> =</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"--test.prop = testValue2"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">})</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PropertiesAndArgsTest</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">{</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	@</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Value</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"${test.prop}"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">)</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String msg;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    </span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Test</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> testProperties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(msg);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>如果都开启，args覆盖properties</p>
+<p>加载测试临时属性应用于小范围测试环境</p>
+<p><strong>加载测试专用配置</strong></p>
+<p>使用@Import注解加载当前测试类专用的配置</p>
+<p><strong>测试类中启动web环境</strong></p>
+<p>webEnvironment</p>
+<p>@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)</p>
+<p>随机端口启动</p>
+<p>其他：MOCK，DEFINED_PORT，NONE</p>
+<hr>
+<h3 id="14数据层解决方案">1.4数据层解决方案</h3>
+<hr>
+<p><strong>发送虚拟请求</strong></p>
+<p>开启虚拟MVC调用</p>
+<p>@AutoConfigureMockMvc</p>
+<p><img src="/img/20230623161848.png" alt="20230623161848"></p>
+<p><strong>匹配响应执行状态</strong></p>
+<p><img src="/img/20230623162251.png" alt="20230623162251"></p>
+<p><strong>匹配响应体</strong></p>
+<p><img src="/img/20230623162419.png" alt="20230623162419"></p>
+<p><strong>匹配响应体（json）</strong></p>
+<p><img src="/img/20230623162612.png" alt="20230623162612"></p>
+<p><strong>匹配响应头</strong></p>
+<p><img src="/img/20230623162712.png" alt="20230623162712"></p>
+<p><strong>业务层测试数据回滚</strong></p>
+<p>@Transactional</p>
+<p>想提交事务，再加@Rollback(false)</p>
+<p><strong>测试用例数据设定</strong></p>
+<p><img src="/img/20230624142617.png" alt="20230624142617"></p>
+<hr>
+<h3 id="15数据层解决方案">1.5数据层解决方案</h3>
+<hr>
+<p><strong>SQL</strong></p>
+<p>选型</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Druid + MyBatis-Plus + MySQL</span></span></code></pre>
+<ul>
+<li>数据源：DruidDataSource</li>
+<li>持久化技术：MyBatis-Plus / MyBatis</li>
+<li>数据库：MySQL</li>
+</ul>
+<p><strong>数据源解决方案——HiKari</strong></p>
+<p>SpringBoot提供了三种内嵌的数据源对象</p>
+<ul>
+<li>HiKaiCP：默认内置数据源对象</li>
+<li>Tomcat提供DataSource：HiKaiCP不可用的情况下，且在Web环境中，将使用tomcat服务器配置的数据源对象</li>
+<li>Commons DBCP：HiKaiCP和tomcat数据源均不可用的情况下，将使用dbcp数据源</li>
+</ul>
+<p><strong>内置持久化解决方案——JdbcTemplate</strong></p>
+<p><img src="/img/20230624144225.png" alt="20230624144225"></p>
+<p><strong>内嵌数据库——H2</strong></p>
+<p>SpringBoot提供了三种内嵌的数据库</p>
+<ul>
+<li>H2</li>
+<li>HSQL</li>
+<li>Derby</li>
+</ul>
+<p>都可以在内存里运行，都是用java写的</p>
+<p><img src="/img/20230624144620.png" alt="20230624144620"></p>
+<ul>
+<li>设置当前项目为Web工程，并配置H2管理控制台参数</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">server</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">  port</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> : </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">80</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">spring</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">  h2</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">    console</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">:</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">      path</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">/h2</span></span>
+<span class="line"><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">      enabled</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">true</span></span></code></pre>
+<ul>
+<li>访问用户名sa，默认密码123456</li>
+</ul>
+<p>H2数据库控制台仅用于开发阶段，上线项目务必关闭控制台功能</p>
+<p><strong>NOSQL</strong></p>
+<p><a href="/2022/04/02/Redis/"><strong>Redis</strong></a></p>
+<p>jedis和lettuce(默认)：都是连接redis的客户端</p>
+<p>一、导入jedis坐标</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>redis.clients&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">groupId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    &#x3C;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">>jedis&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">artifactId</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">&#x3C;/</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D">dependency</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">></span></span></code></pre>
+<p>二、配置客户端</p>
+<p>配置client-type: jedis</p>
+<p><img src="/img/20230624150141.png" alt="20230624150141"></p>
+<p><strong>Mongodb</strong></p>
+<p>Mongodb是一个开源、高性能、无模式的文档型数据库，NoSQL数据库产品的一种，是最像关系型数据库的非关系型数据库</p>
+<p>具体内容在微服务及分布式中介绍</p><p class="tags"><a href="/tags/SpringBoot/">#SpringBoot</a><a href="/tags/java/">#java</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

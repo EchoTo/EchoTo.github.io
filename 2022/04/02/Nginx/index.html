@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Nginx | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Nginx</h1><p><i><time datetime="2022-04-02T19:03:52.000Z">2 Apr, 2022</time></i></p><h2 id="nginx">Nginx</h2>
+<hr>
+<h2 id="第一章---概述">第一章   概述</h2>
+<hr>
+<p>Nginx是一款高性能的http服务器/反向代理服务器及电子邮件(IMAP/POP3)代理服务器。</p>
+<p>官方测试nginx能够支撑5万并发连接，并且cup、内存等资源消耗却非常低，运行非常稳定。</p>
+<p><strong>Nginx应用场景</strong></p>
+<ul>
+<li>
+<p>http服务器。Nginx是一个http服务器可以独立的提供http服务。可以做<strong>静态网页服务器</strong></p>
+</li>
+<li>
+<p>虚拟主机。可以实现在一台服务器虚拟出多个网站。例如个人网站使用的虚拟主机。</p>
+</li>
+<li>
+<p>反向代理，负载均衡。当网站的访问量达到一定程度后，单台服务器不能满足用户的请求时，需要用多台服务器集群可以使用nginx做反向代理。并且多台服务器可以平均分担负载，不会因为某台服务器负载高宕机而某台服务器闲置的情况。</p>
+</li>
+</ul>
+<hr>
+<h2 id="第二章---功能">第二章   功能</h2>
+<hr>
+<h3 id="21静态资源部署">2.1静态资源部署</h3>
+<hr>
+<p>修改nginx.conf文件的location里root默认位置：将其指向我们想要访问页面上传服务器后所在目录。</p>
+<hr>
+<h3 id="22虚拟主机">2.2虚拟主机</h3>
+<hr>
+<p>虚拟主机,也叫“网站空间”,就是把一台运行在互联网上的物理服务器划分成多个“虚拟”服务器。虚拟主机技术极大的促进了网络技术的应用和普及。同时虚拟主机的租用服务也成了网络时代的一种新型经济形式。</p>
+<p><img src="/img/20220402181415.png" alt="20220402181415"></p>
+<p>设置多个server通过更改资源目录实现虚拟主机。</p>
+<hr>
+<h3 id="23反向代理负载均衡">2.3反向代理&#x26;负载均衡</h3>
+<hr>
+<p><strong>正向代理</strong></p>
+<p>正向代理类似一个跳板机，代理访问外部资源</p>
+<p>比如我们国内访问谷歌，直接访问访问不到，我们可以通过一个正向代理服务器，请求发到代理服，代理服务器能够访问谷歌，这样由代理去谷歌取到返回数据，再返回给我们，这样我们就能访问谷歌了</p>
+<p><img src="/img/20220402182649.png" alt="20220402182649"></p>
+<p><strong>反向代理</strong></p>
+<p>反向代理〈Reverse Proxy〉方式是指以代理服务器来接受internet上的连接请求，然后将请求转发给内部网络上的服务器,并将从服务器上得到的结果返回给 internet上请求连接的客户端，此时代理服务器对外就表现为一个反向代理服务器。</p>
+<p><img src="/img/20220402182731.png" alt="20220402182731"></p>
+<p><strong>反向代理的作用：</strong></p>
+<p>（1）保证内网的安全，阻止web攻击，大型网站，通常将反向代理作为公网访问地址，Web服务器是内网</p>
+<p>（2）负载均衡，通过反向代理服务器来优化网站的负载</p>
+<hr>
+<p>将案例部署到tomcat中(ROOT目录)，上传到服务器</p>
+<p>在nginx.conf中添加</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">upstream 任意名{</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	server ip:端口;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>在配置文件server中</p>
+<p>注释掉root并且在次添加 proxy_pass  <a href="http://%E4%BB%BB%E6%84%8F%E5%90%8D(%E4%B8%8E%E4%B8%8A%E9%9D%A2%E5%90%8D%E5%AD%97%E4%B8%80%E8%87%B4)">http://任意名(与上面名字一致)</a>;</p>
+<hr>
+<p><strong>负载均衡</strong></p>
+<p>负载均衡建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展网络设备和服务器的带宽、增加吞吐量、加强网各数据处理能力、提高网络的灵活性和可用性。</p>
+<p>负载均衡，英文名称为Load Balance，其意思就是分摊到多个操作单元上进行执行,例如web服务器、FTP服务器、企业关键应用服务器和其它关键任务服务器等，从而共同完成工作任务。</p>
+<p>将tomcat复制n份(别忘了修改各个tomcat端口)</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">upstream 任意名{</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	server ip:端口1 weight = 2;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	server ip:端口2;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">	server ip:端口3;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p>搭建集群后就可以使几个tomcat服务器同时提供服务，默认比例为1，加上weight属性后可以更改，上图为2：1：1</p><p class="tags"><a href="/tags/Nginx/">#Nginx</a><a href="/tags/反向代理/">#反向代理</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

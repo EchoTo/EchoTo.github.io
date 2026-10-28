@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Kafka | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script><script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Kafka</h1><p><i><time datetime="2025-10-10T15:38:09.000Z">10 Oct, 2025</time></i></p><h2 id="kafka">Kafka</h2>
+<hr>
+<h3 id="一软件介绍">一、软件介绍</h3>
+<hr>
+<img src="/img/20251010154925.png" alt="线程与线程之间的数据交互" style="zoom: 85%;">
+<img src="/img/20251010155744.png" alt="进程与进程之间的数据交互" style="zoom: 85%;">
+<p><strong>存在的问题</strong></p>
+<img src="/img/20251010160622.png" alt="线程与线程之间的数据交互" style="zoom: 85%;">
+<p>当一个线程50/s写入，一个线程30/s消费，那么随着时间的累积会造成大量内存消耗，如果把这部分数据写入磁盘中，长期看来，也会造成大量资源消耗浪费，甚至系统不可用</p>
+<img src="/img/20251010165330.png" alt="进程与进程之间的数据交互" style="zoom: 85%;">
+<p>当一个进程需要向多个进程发送数据时，需要发送两份，造成资源浪费，如果数据不同，且指定对象，要增加逻辑和不同标记作为区分，增加进程复杂度，消耗资源，降低系统的反应速度，重复发送也会对系统吞吐量造成影响</p>
+<p><strong>解决方法</strong></p>
+<img src="/img/20251010171229.png" alt="解决方法" style="zoom: 85%;">
+<p>进程之间不直接通讯，增加缓冲区，降低进程之间的耦合性，对数据生产和接收进行调整，使传输过程平稳高效</p>
+<p>接收方也可以根据自己的业务场景动态的从缓冲区中获取自己想要的数据，发送方只考虑向缓冲区中发送数据就可以了</p>
+<p>缓冲区：对数据进行中转和临时存储，并不会对数据进行处理，所以这个第三方软件也被叫做消息中间件</p>
+<hr>
+<h3 id="二jms">二、JMS</h3>
+<hr>
+<img src="/img/20251010194212.png" alt="JMS" style="zoom: 85%;">
+<p><strong>P2P模型</strong></p>
+<p>点对点 point-to-point</p>
+<img src="/img/20251010201005.png" alt="P2P模型" style="zoom: 85%;">
+<p><strong>PS模型</strong></p>
+<p>同组的人只能有一个人消费，不同组的人可以消费</p>
+<img src="/img/20251010203646.png" alt="PS模型" style="zoom: 85%;">
+<p>RabbitMQ、ActiveMQ、RocketMQ、Kafka</p>
+<p><strong>消息中间件对比</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">特性</th><th align="center">ActiveMQ</th><th align="center">RabbitMQ</th><th align="center">RocketMQ</th><th align="center">Kafka</th></tr></thead><tbody><tr><td align="center">单机吞吐量</td><td align="center">万级，比RocketMQ、Kafka低一个数量级</td><td align="center">万级，比RocketMQ、Kafka低一个数量级</td><td align="center">10万级，支持高吞吐</td><td align="center">10万级，支持高吞吐</td></tr><tr><td align="center">Topic数量对吞吐量的影响</td><td align="center"></td><td align="center"></td><td align="center">Topic可以达到几百/几千量级</td><td align="center">Topic可以达到几百量级，如果更多的话，吞吐量会大幅度下降</td></tr><tr><td align="center">时效性</td><td align="center">ms级</td><td align="center">微妙级别，延迟最低</td><td align="center">ms级</td><td align="center">ms级</td></tr><tr><td align="center">可用性</td><td align="center">高、基于主从架构实现高可用</td><td align="center">高，基于主从架构实现高可用</td><td align="center">非常高，分布式架构</td><td align="center">非常高，分布式架构</td></tr><tr><td align="center">消息可靠性</td><td align="center">有较低的概率丢失数据</td><td align="center">基本不丢</td><td align="center">经过参数优化，可以做到0丢失</td><td align="center">经过参数优化，可以做到0丢失</td></tr><tr><td align="center">功能支持</td><td align="center">MQ领域的功能极其完备</td><td align="center">并发能力强，性能极好，延时很低</td><td align="center">MQ功能较为完善，分布式，扩展性好</td><td align="center">功能较为简单，支持简单的MQ功能，在大数据领域被广泛使用</td></tr><tr><td align="center">其他</td><td align="center">很早的软件，社区不是很活跃</td><td align="center">开源，稳定，社区活跃度高</td><td align="center">阿里开发，社区活跃度不高</td><td align="center">开源，高吞吐量，社区活跃度极高</td></tr></tbody></table>
+<hr>
+<h3 id="三kafka组件">三、Kafka组件</h3>
+<hr>
+<img src="/img/20251011112812.png" alt="Kafka组件" style="zoom: 85%;"><p class="tags"><a href="/tags/kafka/">#kafka</a><a href="/tags/大数据/">#大数据</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

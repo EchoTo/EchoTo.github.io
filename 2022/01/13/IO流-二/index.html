@@ -1,0 +1,948 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>IO流(二) | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>IO流(二)</h1><p><i><time datetime="2022-01-13T12:24:22.000Z">13 Jan, 2022</time></i></p><h2 id="第五章属性集">第五章	属性集</h2>
+<hr>
+<h3 id="51概述">5.1概述</h3>
+<p><code>java.util.Properties</code>继承于<code>Hashtable</code>，来表示一个持久的属性集。<code>java.util.Properties集合extends Hashtable&#x3C;k, v> implements Map&#x3C;k , v></code>，它使用键值结构存储数据，<code>Properties</code>集合是一个双列集合, <code>key</code>和<code>value</code>默认都是字符串，该类也被许多Java类使用，比如获取系统属性时，<code>System.getProperties</code>方法返回一个<code>Properties</code>对象。</p>
+<p><code>Properties</code>集合是唯一一个和IO流相结合的集合。</p>
+<ul>
+<li>可以使用Properties集合中的方法store,把集合中的临时数据,持久化写入到硬盘中存储</li>
+<li>可以使用Properties集合中的方法Load,把硬盘中保存的文件(键值对),读取到集合中使用</li>
+</ul>
+<hr>
+<h3 id="52properties类">5.2Properties类</h3>
+<h4 id="基本的储存方法">基本的储存方法</h4>
+<p><strong>Properties集合有一些操作字符串的特有方法</strong></p>
+<ul>
+<li>object setProperty(String key, String value）：调用Hashtable 的方法 put。</li>
+<li>string getProperty(String key)：通过key找到value值,此方法相当于Nap集合中的get(key)方法</li>
+<li>set&#x3C; string> stringPropertyNames()：返回此属性列表中的键集，其中该键及其对应值是字符串。</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo07</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">P</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">roperties;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Iterator;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Scanner;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Set;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Properties properties </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //object setProperty(String key, String value）：调用Hashtable 的方法 put。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小明"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"19"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小林"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"15"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小李"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"20"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(properties);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//{小林=15, 小李=20, 小明=19}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //set&#x3C;string> stringPropertyNames()：返回此属性列表中的键集，其中该键及其对应值是字符串。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Set&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> set </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">stringPropertyNames</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Iterator iterator </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> set.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">iterator</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (iterator.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">hasNext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">print</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(iterator.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//小林小李小明</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//        string getProperty(String key)：通过key找到value值,此方法相当于Nap集合中的get(key)方法</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String s </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小林"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//15</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //如果输入的Key不存在则返回null</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Scanner scanner </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Scanner</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(System.in);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String s1 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(scanner.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(s1);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<h4 id="store方法与load方法">store方法与load方法</h4>
+<p><strong>stroe方法</strong></p>
+<p>可以使用Properties集合中的方法store,把集合中的临时数据,持久化写入到硬盘中存储.</p>
+<ul>
+<li>void store ( outputStream out,String comments)</li>
+<li>void store (iriter wuriter,String comments)</li>
+</ul>
+<p>参数：</p>
+<p>OutputStream out：字节输出流，不能写入中文</p>
+<p>Writer writer：字符输出流，可以写中文</p>
+<p>String comments：注释，用来解释说明保存的文件是做什么用的，不能使用中文，会产生乱码，默认是Unicode编码，一般使用”空字符串”。</p>
+<p>使用步骤:</p>
+<ul>
+<li>创建Properties集合对象,添加数据</li>
+<li>创建字节输出流/字符输出流对象,构造方法中绑定要输出的目的地</li>
+<li>使用Properties集合中的方法store,把集合中的临时数据,持久化写入到硬盘中存储</li>
+<li>释放资源</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo07</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">P</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">roperties;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileWriter;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02PropertiesStore</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建Properties集合对象,添加数据</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Properties properties </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小明"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"19"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小林"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"15"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小李"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"20"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建字节输出流/字符输出流对象,构造方法中绑定要输出的目的地</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        FileWriter fw </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">4.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用Properties集合中的方法store,把集合中的临时数据,持久化写入到硬盘中存储</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">store</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(fw,</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"save data"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        fw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//#save data</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//#Thu Aug 19 17:17:58 CST 2021</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//小林=15</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//小李=20</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//小明=19</span></span></code></pre>
+<p><strong>load方法</strong></p>
+<p>可以使用Properties集合中的方法Load,把硬盘中保存的文件(键值对) ,读取到集合中使用</p>
+<ul>
+<li>void load( inputstream inStream)</li>
+<li>void load ( Reader reader)</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>InputStream instream:字节输入流,不能读取含有中文的键值对</li>
+<li>Reader reader:字符输入流,能读取含有中文的键值对</li>
+</ul>
+<p><strong>使用步骤：</strong></p>
+<ul>
+<li>创建Properties集合对象</li>
+<li>使用Properties集合对象中的方法load读取保存键值对的文件</li>
+<li>遍历Properties集合</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>存储键值对的文件中,键与值默认的连接符号可以使用=或者空格(其他符号)</li>
+<li>存储键值对的文件中,可以使用#进行注释,被注释的键值对不会再被读取</li>
+<li>存储键值对的文件中,键与值默认都是字符串,不用再加引号</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo07</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">P</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">roperties;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileReader;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Properties;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Set;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo03PropertiesLoad</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建Properties集合对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Properties properties </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Properties</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用Properties集合对象中的方法load读取保存键值对的文件</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        FileReader fileReader </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">4.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">load</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(fileReader);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        fileReader.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //遍历Properties集合</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Set&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> set </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">stringPropertyNames</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (String key</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">set) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            String property </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> properties.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getProperty</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(key);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(key</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"="</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">property);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //小林=15</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //小李=20</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //小明=19</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="第六章缓冲流">第六章	缓冲流</h2>
+<hr>
+<h3 id="61概述">6.1概述</h3>
+<p>缓冲流，也叫高效流，是对4个基本的流的增强，按照数据类型分类：</p>
+<ul>
+<li><strong>字节缓冲流：</strong> <code>BufferedInputStream</code>，<code>BufferedOutputStream</code></li>
+<li><strong>字符缓冲流：</strong> <code>BufferedReader</code>，<code>BufferedWriter</code></li>
+</ul>
+<p>缓冲流的基本原理，是在创建流对象时，会创建一个内置的默认大小的缓冲区数组，通过缓冲区读写，减少系统IO次数，从而提高读写效率。</p>
+<img src="/img/202202281835217.png" alt="20210819184022" style="zoom: 50%;">
+<hr>
+<h3 id="62字节缓冲流">6.2字节缓冲流</h3>
+<h4 id="构造方法">构造方法</h4>
+<ul>
+<li><code>public BufferedOutputStream(OutputStream out)</code>：创建一个新的缓冲输出流。</li>
+</ul>
+<p><code>java.io.BufferedOutputStream extends OutputStream</code>                      Bufferedoutputstream:字节缓冲输出流</p>
+<p>继承自父类的共性成员方法:</p>
+<ul>
+<li>public void close() :关闭此输出流并释放与此流相关联的任何系统资源。</li>
+<li>public void flush( ):刷新此输出流并强制任何缓冲的输出字节被写出。</li>
+<li>public void write(byte[ ] b):将b.length字节从指定的字节数组写入此输出流。</li>
+<li>public void write(byte[ ] b， int off, int len):从指定的字节数组写入、len字节，从偏移量off开始输出到此输出流。</li>
+<li>public abstract void write(int b):将指定的字节输出流。</li>
+</ul>
+<p><strong>构造方法：</strong></p>
+<ul>
+<li>BufferedOutputStream(OutputStream out)创建一个新的缓冲输出流，以将数据写入指定的底层输出流。</li>
+<li>BufferedOutputStream(OutputStream out，int size)创建一个新的缓冲输出流，以将具有指定缓冲区大小的数据写入指定的底层输出流。</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>OutputStream out：字节输出流，我们可以传递FileOutputStream，缓冲流会给FileOutputStream增加一个缓冲区，提高FileOutputStream的写入效率</li>
+<li>int size：指定缓冲流内部缓冲流区的大小，不指定默认</li>
+</ul>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建FileOutputStream对象，构造方法中绑定要输出的目的地。</li>
+<li>创建BufferedOutputStream对象，构造方法中传递FileOutputStream对象，提高FileOutputStream对象效率</li>
+<li>使用BufferedOutputStream对象中的方法write，把数据写入到内部缓冲区中</li>
+<li>使用BufferedOutputStream对象中的方法flush，把内部缓冲区的数据，刷新到文件中</li>
+<li>释放资源(会现调用flush方法刷新数据，第4步可以省略)</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">B</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">uffered</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.BufferedOutputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileOutputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01BufferedOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建FileOutputStream对象，构造方法中绑定要输出的目的地。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        FileOutputStream fom </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">5.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建BufferedOutputStream对象，构造方法中传递FileOutputStream对象，提高FileOutputStream对象效率</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedOutputStream bof </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(fom);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用BufferedOutputStream对象中的方法write，把数据写入到内部缓冲区中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bof.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">write</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"我们把数据写入文件中"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getBytes</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//        bof.flush();//调用close方法时默认先调用flush方法刷新数据所以此步骤可以省略</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bof.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<ul>
+<li><code>public BufferedInputStream(InputStream in)</code>：创建一个新的缓冲输入流。</li>
+</ul>
+<p><code>java.io.BufferedInputstream extends Inputstream</code>                         BufferedInputstream :字节缓冲输入流</p>
+<p>继承自父类的共性成员方法:</p>
+<ul>
+<li><code>public void close()</code>：关闭此输入流并释放与此流相关联的任何系统资源。</li>
+<li><code>public abstract int read()</code>：从输入流读取数据的下一个字节。</li>
+<li><code>public int read(byte[] b)</code>：从输入流中读取一些字节数，并将它们存储到字节数组b中。</li>
+</ul>
+<p><strong>构造方法：</strong></p>
+<ul>
+<li>BufferedInputStreom(InputStream in)：创建一个BufferedInputStream并保存其参数，即输入流 in，以便将来使用。</li>
+<li>BufferedInputStream(Inputstream in，int size)：创建具有指定缓冲区大小的 BufferedInputStream并保存其参数，即输入流in，以便将来使用。</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>InputStream in：字节输入流，我们可以传递FileInputStream，缓冲流会给FileInputStream增加一个缓冲区，提高FileInputStream的读取效率</li>
+<li>int size：指定缓冲流内部缓冲流区的大小，不指定默认</li>
+</ul>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建FileInputStream对象，构造方法中绑定要读取的数据源。</li>
+<li>创建BufferedInputStream对象，构造方法中传递FileInputStream对象，提高FileInputStream对象的读取效率</li>
+<li>使用BufferedInputStream对象中的方法read，读取文件</li>
+<li>释放资源</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">B</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">uffered</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.BufferedInputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileInputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02BufferedInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        FileInputStream fis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">5.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedInputStream bis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(fis);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        byte</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] bytes </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> byte</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1024</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">bis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">read</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(bytes))</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!=-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(bytes,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,len));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//关闭bis时fis自动关闭</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<h4 id="效率测试">效率测试</h4>
+<p><strong>文件复制的步骤：</strong></p>
+<ul>
+<li>创建字节缓冲输入流对象,构造方法中传递字节输入流</li>
+<li>创建字节缓冲输出流对象,构造方法中传递字节输出流</li>
+<li>使用字节缓冲输入流对象中的方法read,读取文件</li>
+<li>使用字节缓冲输出流中的方法write,把读取的数据写入到内部缓冲区中</li>
+<li>释放资源(会先把缓冲区中的数据,刷新到文件中)</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo02</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">C</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">opy</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">F</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ile;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01CopeFile</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> s</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建字节缓冲输入流对象,构造方法中传递字节输入流</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedInputStream bis </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1.png"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建字节缓冲输出流对象,构造方法中传递字节输出流</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedOutputStream bos </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"D:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1.png"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用字节缓冲输入流对象中的方法read,读取文件</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        byte</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] bytes </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> byte</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1024</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">];</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">bis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">read</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(bytes))</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!=-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //使用字节缓冲输出流中的方法write,把读取的数据写入到内部缓冲区中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            bos.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">write</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(bytes,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,len);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源(会先把缓冲区中的数据,刷新到文件中)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bos.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bis.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> e </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">currentTimeMillis</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"共耗时："</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">-</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">s)</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"毫秒"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="63字符缓冲流">6.3字符缓冲流</h3>
+<h4 id="构造方法-1">构造方法</h4>
+<ul>
+<li><code>public BufferedWriter(Writer out)</code>：创建一个新的缓冲输出流。</li>
+</ul>
+<p><strong>构造方法：</strong></p>
+<ul>
+<li>Bufferediwriter(writer out）创建一个使用默认大小输出缓冲区的缓冲字符输出流。</li>
+<li>Bufferedwriter(writer out, int sz）创建一个使用给定大小输出缓冲区的新缓冲字符输出流。</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>writer out:字符输出流，我们可以传递Filewriter ,缓冲流会给FiLewriter增加一个缓冲区,提高FiLewriter的写入效率</li>
+<li>int sz:指定缓冲区的大小,不与默认大小</li>
+</ul>
+<h4 id="特有方法"><strong>特有方法：</strong></h4>
+<p>BufferedWriter : <code>public void newLine()：</code>写一行行分隔符,由系统属性定义符号。</p>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建字符缓冲输出流对象,构造方法中传递字符输出流</li>
+<li>调用字符缓冲输出流中的方法write,把数据写入到内存缓冲区中</li>
+<li>调用字符缓冲输出流中的方法flush,把内存缓冲区中的数据,刷新到文件中</li>
+<li>释放资源</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">B</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">uffered</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.BufferedWriter;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileWriter;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo03BufferedWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建字符缓冲输出流对象,构造方法中传递字符输出流</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedWriter bw </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">6.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //调用字符缓冲输出流中的方法write,把数据写入到内存缓冲区中</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; i </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">&#x3C;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF"> 10</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">; i</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">++</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            bw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">write</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"我们把数据写入文件中"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //调用字符缓冲输出流中的方法flush,把内存缓冲区中的数据,刷新到文件中</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//            bw.write("\r\n");</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            bw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newLine</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">flush</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<ul>
+<li><code>public BufferedReader(Reader in)</code>：创建一个新的缓冲输入流。</li>
+</ul>
+<p><strong>构造方法：</strong></p>
+<ul>
+<li><code>BufferedReader(Reader in)：</code>创建一个使用认大小输入缓冲区的缓冲字符输入流。</li>
+<li><code>BufferedReader (Reader in, int sz)：</code>创建一个使用指定大小输入缓冲区的缓冲字符输入流。</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>Reader in：字符输入流，我们可以传递FileReader ,缓冲流会给FiLeReader增加一个缓冲区,提高FiLeReader的读取效率。</li>
+<li>int sz:指定缓冲区的大小,不与默认大小</li>
+</ul>
+<p><strong>特有方法：</strong></p>
+<p>BufferedReader : <code>public string readLine()：</code>读一行文字。</p>
+<p>读取一个文本行。通过下列字符之一即可认为某行已终止:换行(‘\n’)、回车（‘\r’）或回车后直接跟着换行。</p>
+<p>返回:<br>
+包含该行内容的字符串，不包含任何行终止符，如果已到达流末尾，则返回null。</p>
+<p>抛出:<br>
+IOException -如果发生I/o错误。</p>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建字符缓冲输入流对象,构造方法中传递字符输入流</li>
+<li>使用字符缓冲输入流对象中的方法read/readline读取文本</li>
+<li>释放资源</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">B</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">uffered</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.BufferedReader;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileReader;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo04BufferedReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedReader br </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">6.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String line;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((line</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">br.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">readLine</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(line);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<h4 id="特有方法-1">特有方法</h4>
+<p>字符缓冲流的基本方法与普通字符流调用方式一致，不再阐述，我们来看它们具备的特有方法。</p>
+<ul>
+<li>BufferedWriter : <code>public void newLine()：</code>写一行行分隔符,由系统属性定义符号。</li>
+</ul>
+<blockquote>
+<p>println方法调用的就是 <code>public void newLine()：</code></p>
+</blockquote>
+<ul>
+<li>BufferedReader : <code>public string readLine()：</code>读一行文字。</li>
+</ul>
+<hr>
+<h3 id="64练习文本排序">6.4练习：文本排序</h3>
+<p>请将文本信息恢复顺序：</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">3.侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必得裨补阙漏，有所广益。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">8.愿陛下托臣以讨贼兴复之效，不效，则治臣之罪，以告先帝之灵。若无兴德之言，则责攸之、祎、允等之慢，以彰其咎﹔陛下亦宜自谋，以咨锻善道，察纳雅言，深追先帝遗诏，臣不胜受恩感激。</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">4</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> .将军向宠，性行淑均，晓畅军事，试用之于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">2.宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">1.先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">9.今当远离，临表涕零，不知所言。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">6.臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">7.先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐付托不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">5.亲贤臣，远小人，此先汉所以兴隆也;亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。</span></span></code></pre>
+<h4 id="案例分析">案例分析</h4>
+<ul>
+<li>创建一个HashMap集合对象,可以:存储每行文本的序号(1,2,3,.. ) ;value:存储每行的文本</li>
+<li>创建字符缓冲输入流对象,构造方法中绑定字符输入流</li>
+<li>创建字符缓冲输出流对象,构造方法中绑定字符输出流</li>
+<li>使用字符缓冲输入流中的方法readline,逐行读取文本</li>
+<li>对读取到的文本进行切割,获取行中的序号和文本内容</li>
+<li>把切割好的序号和文本的内容存储到HashMap集合中(key序号是有序的,会自动排序1,2,3,4..)</li>
+<li>遍历HashMap集合,获取每一个键值对</li>
+<li>把每一个键值对,拼接为一个文本行</li>
+<li>把拼接好的文本,使用字符缓冲输出流中的方法write,写入到文件中</li>
+<li>释放资源</li>
+</ul>
+<h4 id="案例实现">案例实现</h4>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo01</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">B</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">uffered</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.HashMap;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo05Test</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建一个HashMap集合对象,Key:存储每行文本的序号(1,2,3,.. ) ;value:存储每行的文本</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        HashMap&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> hashMap</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> HashMap&#x3C;>();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建字符缓冲输入流对象,构造方法中绑定字符输入流</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedReader br </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">6.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建字符缓冲输出流对象,构造方法中绑定字符输出流</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        BufferedWriter bw </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> BufferedWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">7.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用字符缓冲输入流中的方法readline,逐行读取文本</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        String line;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((line</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">br.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">readLine</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">null</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //对读取到的文本进行切割,获取行中的序号和文本内容</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">            String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] arr </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> line.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">split</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">."</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //把切割好的序号和文本的内容存储到HashMap集合中(key序号是有序的,会自动排序1,2,3,4..)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            hashMap.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">put</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(arr[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">],arr[</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">]);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //遍历HashMap集合,获取每一个键值对</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        for</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (String key</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">:</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">hashMap.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">keySet</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()) {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            String value </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> hashMap.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">get</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(key);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //把每一个键值对,拼接为一个文本行</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            line</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">key</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"."</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">value;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //把拼接好的文本,使用字符缓冲输出流中的方法write,写入到文件中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            bw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">write</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(line);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            bw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">newLine</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//写换行</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        bw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        br.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="第七章转换流">第七章	转换流</h2>
+<hr>
+<h3 id="71字符编码和字符集">7.1字符编码和字符集</h3>
+<h4 id="字符编码">字符编码</h4>
+<p>计算机中储存的信息都是用二进制数表示的，而我们在屏幕上看到的数字、英文、标点符号、汉字等字符是二进制数转换之后的结果。按照某种规则，将字符存储到计算机中，称为<strong>编码</strong>。反之，将存储在计算机中的二进制数按照某种规则解析显示出来，称为<strong>解码</strong>。比如说，按照A规则存储，同样按照A规则解析，那么就能显示正确的文本符号。反之，按照A规则存储，再按照B规则解析，就会导致乱码现象。</p>
+<p>编码：字符(能看懂的)--->字节(看不懂的)</p>
+<p>解码：字节(看不懂的)--->字符(能看懂的)</p>
+<ul>
+<li><strong>字符编码<code>Character Encoding</code></strong>：就是一套自然语言的字符与二进制数之间的对应规则。</li>
+</ul>
+<p>编码表：生活中文字和计算机中二进制的对应规则。</p>
+<h4 id="字符集">字符集</h4>
+<ul>
+<li><strong>字符集<code>Charset</code></strong>：也叫编码表。是一个系统支持的所有字符的集合，包括各国家文字、标点符号、图形符号、数字等。</li>
+</ul>
+<p>计算机要准确的存储和识别各种字符集符号，需要进行字符编码，一套字符集必然至少有一套字符编码。常见字符集有ASCII字符集、GBK字符集、Unicode字符集等。</p>
+<p><img src="/img/202202281750420.png" alt="20210820082714"></p>
+<p>可见，当指定了<strong>编码</strong>，它所对应的<strong>字符集</strong>自然就制定了，所以<strong>编码</strong>才是我们最终要关心的。</p>
+<ul>
+<li><strong>ASSII字符集：</strong></li>
+</ul>
+<p>1.ASCll ( American Standard Code for Information Interchange，美国信息交换标准代码）是基于拉丁字母的一套电脑编码系统，用于显示现代英语，主要包括控制字符(回车键、退格、换行键等）和可显示字符(英文大小写字符、阿拉伯数字和西文符号)。</p>
+<p>2.基本的ASCII字符集，使用7位( bits )表示一个字符，共128字符。ASCII的扩展字符集使用8位( bits )表示一个字符，共256字符，方便支持欧洲常用字符。</p>
+<ul>
+<li><strong>ISO-8859-1字符集：</strong></li>
+</ul>
+<p>1.拉丁码表，别名Latin-1，用于显示欧洲使用的语言，包括荷兰、丹麦、德语、意大利语、西班牙语等。</p>
+<p>2.ISO-5559-1使用单字节编码，兼容ASCII编码。</p>
+<ul>
+<li><strong>GBxxx字符集：</strong></li>
+</ul>
+<p>1.GB就是国标的意思，是为了显示中文而设计的一套字符集。</p>
+<p>2.GB2312∶简体中文码表。一个小于127的字符的意义与原来相同。但两个大于127的字符连在一起时，就表示一个汉字，这样大约可以组合了包含7000多个简体汉字，此外数学符号、罗马希腊的字母、日文的假名们都编进去了，连在ASCII里本来就有的数字、标点、字母都统统重新编了两个字节长的编码，这就是常说的”全角”字符，而原来在127号以下的那些就叫”半角”字符了。</p>
+<p>3.GBK∶最常用的中文码表。是在GB2312标准基础上的扩展规范，使用了双字节编码方案，共收录了<br>
+21003个汉字，完全兼容GB2312标准，同时支持繁体汉字以及日韩汉字等。</p>
+<p>4.GB18030∶最新的中文码表。收录汉字70244个，采用多字节编码，每个字可以由1个、2个或4个字节组成。支持中国国内少数民族的文字，同时支持繁体汉字以及日韩汉字等。</p>
+<ul>
+<li><strong>Unicode字符集：</strong></li>
+</ul>
+<p>1.Unicode编码系统为表达任意语言的任意字符而设计，是业界的一种标准，也称为统一码、标准万国码。</p>
+<p>2.它最多使用4个字节的数字来表达每个字母、符号，或者文字。有三种编码方案，UTF-8、UTF-16和UTF-32。最为常用的UTF-8编码。</p>
+<p>3.UTF-8编码，可以用来表示Unicode标准中任何字符，它是电子邮件、网页及其他存储或传送文字的应用中，优先采用的编码。互联网工程工作小组(IETF ） 要求所有互联网协议都必须支持UTF-8编码。所以，我们开发Web应用，也要使用UTF-8编码。它使用一至四个字节为每个字符编码，编码规则∶</p>
+<ul>
+<li>128个US-ASCl字符，只需一个字节编码。</li>
+<li>拉丁文等字符，需要二个字节编码。</li>
+<li>大部分常用字(含中文)，使用三个字节编码。</li>
+<li>其他极少使用的Unicode辅助字符，使用四字节编码。</li>
+</ul>
+<hr>
+<h3 id="72编码引出的问题">7.2编码引出的问题</h3>
+<p>在IDEA中，使用<code>FileReader</code>读取项目中的文本文件。由于IDEA的设置，都是默认的UTF-8编码，所以没有任何问题。但是，当读取Windows系统中创建的文本文件时，由于Windows系统的默认是GBK编码，就会出现乱码。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">everse</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileReader;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01FileReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        FileReader fr </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">11.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">fr.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">read</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!=-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">print</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">((</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">char</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) len);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        fr.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="73inputstreamreader类">7.3InputStreamReader类</h3>
+<p><code>java.io.InputStreamReader extends Reader</code></p>
+<p>InputStreamReader：是字节流通向字符流的桥梁:它使用指定的charset读取字节并将其解码为字符。(解码:把看不懂的变成能看懂的)</p>
+<p>继承自父类的共性成员方法:</p>
+<ul>
+<li>int read()：读取单个字符并返回。</li>
+<li>int read ( char[ ] cbuf)：一次读取多个字符,将字符读入数组。</li>
+<li>void close()：关闭该流并释放与之关联的所有资源。</li>
+</ul>
+<h4 id="构造方法-2">构造方法</h4>
+<ul>
+<li>
+<p><code>InputStreamReader(InputStream in)</code>：创建一个使用默认字符集的字符流。</p>
+</li>
+<li>
+<p><code>InputStreamReader(InputStream in,String charsetName)</code>：创建一个指定字符集的字符流。</p>
+</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">InputstreamReader isr </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> InputStreamReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputstream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">( </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"in.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">InputStreamReader isr2 </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> InputStreamReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"in.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"GBK"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+<p><strong>参数：</strong></p>
+<ul>
+<li>InputStream in：字节输入流，用来读取文件中保存的字节</li>
+<li>String charsetName：指定的编码表名称,不区分大小写,可以是utf-8/UTF-8,gbk/GBK…不指定默认使用UTF-8</li>
+</ul>
+<h4 id="指定编码读取">指定编码读取</h4>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建InputStreamReader对象,构造方法中传递字节输入流和指定的编码表名称</li>
+<li>使用InputStreamReader对象中的方法read读取文件</li>
+<li>释放资源</li>
+</ul>
+<blockquote>
+<p>tips：构造方法中指定的编码表名称要和文件的编码相同,否则会发生乱码。</p>
+</blockquote>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">everse</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileInputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.InputStreamReader;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo03InputStreamReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        read_UTF_8</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> read_UTF_8</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建InputStreamReader对象,构造方法中传递字节输入流和指定的编码表名称</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        InputStreamReader isr </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> InputStreamReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"UTF-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用InputStreamReader对象中的方法read读取文件</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">isr.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">read</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!=-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">print</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">((</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">char</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) len);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//你好</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        isr.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="74outputstreamwriter类">7.4OutputStreamWriter类</h3>
+<p><code>java.io.OutputStreamWriter extends Writer</code></p>
+<p>OutputStreamWriter:是字符流通向字节流的桥梁:可使用指定的 charset将要写入流中的字符编码成字节。(编码:把能看懂的变成看不懂)</p>
+<p>继续自父类的共性成员方法:</p>
+<ul>
+<li>void write(int c)写入单个字符。</li>
+<li>void write(char[ ]  cbuf)写入字符数组。</li>
+<li>abstract void write(char[ ] cbuf，int off， int len)写入字符数组的某一部分, off数组的开始索引, len写的字符个数。</li>
+<li>void write ( String str)写入字符串。</li>
+<li>void write( String str，int off， int len)写入字符串的某一部分, off字符串的开始索引, Len写的字符个数。</li>
+<li>void flush ()刷新该流的缓冲。</li>
+<li>void close()关闭此流，但要先刷新它。</li>
+</ul>
+<h4 id="构造方法-3">构造方法</h4>
+<ul>
+<li><code>OutputStreamWriter(OutputStream out)：</code>创建使用黑认字符编码的 OutputStreamWriter。</li>
+<li><code>OutputStreamWriter(OutputStream out，String charsetName)：</code>创建使用指定字符集的OutputStreamWriter。</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>OutputStream out：字节输出流,可以用来写转换之后的字节到文件中</li>
+<li>String charsetName：指定的编码表名称,不区分大小写,可以是utf-8/UTF-8,gbk/GBK…不指定默认使用UTF-8</li>
+</ul>
+<h4 id="指定编码写出">指定编码写出</h4>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建OutputStreamWriter对象,构造方法中传递字节输出流和指定的编码表名称</li>
+<li>使用OutputStreamWriter对象中的方法write,把字符转换为字节存储缓冲区中(编码)</li>
+<li>使用OutputStreamWriter对象中的方法flush,把内存缓冲区中的字节刷新到文件中(使用字节流写字节的过程)</li>
+<li>释放资源</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">everse</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02OutputStreamWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException{</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">        write_UTF_8</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> write_UTF_8</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException{</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建OutputStreamWriter对象,构造方法中传递字节输出流和指定的编码表名称</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        OutputStreamWriter osw </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> OutputStreamWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"UTF-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//不指定默认是UTF-8</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用OutputStreamWriter对象中的方法write,把字符转换为字节存储缓冲区中(编码)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        osw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">write</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"你好"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用OutputStreamWriter对象中的方法flush,把内存缓冲区中的字节刷新到文件中(使用字节流写字节的过程)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        osw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">flush</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        osw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="75练习转换文件编码">7.5练习：转换文件编码</h3>
+<p>将GBK编码的文本文件，转换为UTF-8编码的文本文件。</p>
+<h4 id="案例分析-1">案例分析</h4>
+<ul>
+<li>指定GBK编码的转换流，读取文本文件。</li>
+<li>使用UTF-8编码的转换流，写出文本文件。</li>
+</ul>
+<h4 id="案例实现-1">案例实现</h4>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建InputStreamReader对象，构造方法中传递字节输入流和指定的编码表名称GBK</li>
+<li>创建OutputStreamWriter对象,构造方法中传递字节输出流和指定的编码表名称UTF-8</li>
+<li>使用InputStreamReader对象中的方法read读取文件</li>
+<li>使用OutputStreamWriter对象中的方法write,把读取的数据写入到文件中</li>
+<li>释放资源</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo03</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">R</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">everse</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo04Test</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException{</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建InputStreamReader对象，构造方法中传递字节输入流和指定的编码表名称GBK</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        InputStreamReader isr </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> InputStreamReader</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">11.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"GBK"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建OutputStreamWriter对象,构造方法中传递字节输出流和指定的编码表名称UTF-8</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        OutputStreamWriter osw </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> OutputStreamWriter</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">12.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">),</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"UTF-8"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用InputStreamReader对象中的方法read读取文件</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> len </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">0</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ((len</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">isr.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">read</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">())</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">!=-</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">){</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //使用OutputStreamWriter对象中的方法write,把读取的数据写入到文件中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            osw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">write</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(len);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        osw.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        isr.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="第八章序列化">第八章	序列化</h2>
+<hr>
+<h3 id="81概述">8.1概述</h3>
+<p>Java提供了一种对象<strong>序列化</strong>的机制。用一个字节序列可以表示一个对象，该字节序列包含该<code>对象的数据</code>，<code>对象的类型</code>和<code>对象中存储的属性</code>等信息。字节序列写出到文件之后，相当于文件中<strong>持久保存</strong>了一个对象的信息。</p>
+<p>反之，该字节序列还可以从文件中读取回来，重构对象，对它进行<strong>反序列化</strong>。<code>对象的数据</code>，<code>对象的类型</code>和<code>对象中存储的属性</code>信息，都可以用来在内存中创建对象。</p>
+<img src="/img/202202281835204.png" alt="20210820125126" style="zoom: 67%;">
+<img src="/img/202202281750908.png" alt="20210820125835" style="zoom:67%;">
+<hr>
+<h3 id="82objectoutputstream类">8.2ObjectOutputStream类</h3>
+<p><code>java.io.ObjectOutputStream</code>类，将Java对象的原始数据类型写出到文件，实现对象的持久储存。ObjectOutputStream：对象的序列化流。</p>
+<h4 id="构造方法-4">构造方法</h4>
+<ul>
+<li><code>public 0bjectOutputStream(OutputStream out) </code>:创建一个指定OutputStream的ObjectOutputStream。</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">FileOutputStream fileOut </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"employee.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">ObjectOutputStream out </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ObjectOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(fileOut);</span></span></code></pre>
+<p><strong>参数：</strong></p>
+<ul>
+<li>OutputStream out：字节输出流</li>
+</ul>
+<p><strong>特有的成员方法：</strong></p>
+<ul>
+<li>void writeObject(Object obj)：将指定的对象写入ObjectOutputStream。</li>
+</ul>
+<h4 id="序列化操作">序列化操作</h4>
+<p>1.一个对象要想序列化，必须满足两个条件:</p>
+<ul>
+<li>该类必须实现<code>java.io.Serializable</code>接口，<code>Serializable</code>是一个标记接口(<strong>里面是空的</strong>)，不实现此接口的类将不会使任何状态序列化或反序列化，会抛出<code>NotSerializableException</code> 。</li>
+<li>该类的所有属性必须是可序列化的。如果有一个属性不需要可序列化的，则该属性必须注明是瞬态的，使用<code>transient</code>关键字修饰。</li>
+</ul>
+<p>1.static关键字:静态关键字<br>
+静态优先于非静态加载到内存中(静态优先于对象进入到内存中)被static修饰的成员变量不能被序列化的,序列化的都是对象</p>
+<p>2.transient关键字:瞬态关键字<br>
+被transient修饰成员变量,不能被序列化</p>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建ObjectOutputStream对象,构造方法中传递字节输出流</li>
+<li>使用ObjectOutputStream对象中的方法writeObject,把对象写入到文件中</li>
+<li>释放资源</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo04</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">O</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">bject</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.Serializable;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> implements</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Serializable</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String name;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">, </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name;</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.age </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    @</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Override</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">toString</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> "Person{"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                "name='"</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF"> '</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\'</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                ", age="</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> +</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">                '}'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> String </span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> setName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(String </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">name</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.name </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> name;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> int</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> getAge</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">() {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        return</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> setAge</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">int</span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70"> age</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">        this</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">.age </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> age;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo04</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">O</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">bject</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileOutputStream;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.IOException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.ObjectOutputStream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01ObjectOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建ObjectOutputStream对象,构造方法中传递字节输出流</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ObjectOutputStream oos </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ObjectOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用ObjectOutputStream对象中的方法writeObject,把对象写入到文件中</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        oos.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">writeObject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小明"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">19</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        oos.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h3 id="83objectinputstream类">8.3ObjectInputStream类</h3>
+<p>ObjectInputStream：对象的反序列化流，将之前使用ObjectOutputStream序列化的原始数据恢复为对象。</p>
+<p>作用：把文件中保存的对象，以流的方式读取出来使用。</p>
+<h4 id="构造方法-5">构造方法</h4>
+<ul>
+<li><code>public ObjectInputStream(InputStream in):</code>创建一个指定InputStream的ObjectInputStream。</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>InputStream in：字节输入流</li>
+</ul>
+<p><strong>特有的成员方法：</strong></p>
+<ul>
+<li><code>Object readObject()：</code>从ObjectInputStream读取对象</li>
+</ul>
+<h4 id="反序列化操作1">反序列化操作1</h4>
+<p>如果能找到一个对象的class文件，我们可以进行反序列化操作，调用ObjectInputStream读取对象的方法:</p>
+<ul>
+<li><code>public final Object readObject ()∶</code>读取一个对象。</li>
+</ul>
+<p><strong>使用步骤(重点)</strong></p>
+<ul>
+<li>创建ObjectInputStream对象,构造方法中传递字节输入流</li>
+<li>使用ObjectInputStream对象中的方法readObject读取保存对象的文件</li>
+<li>释放资源</li>
+<li>使用读取出来的对象(打印)</li>
+</ul>
+<blockquote>
+<p>tips：read0bject方法声明抛出了classNotFoundException(class文件找不到异常)当不存在对象的class文件时抛出此异常<br>
+反序列化的前提:</p>
+<ul>
+<li>类必须实现Serializable</li>
+<li>必须存在类对应的class文件</li>
+</ul>
+</blockquote>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo04</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">O</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">bject</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo02ObjectInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException, ClassNotFoundException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建ObjectInputStream对象,构造方法中传递字节输入流</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ObjectInputStream ois</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ObjectInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用ObjectInputStream对象中的方法readObject读取保存对象的文件</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object o </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ois.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">readObject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ois.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用读取出来的对象(打印)</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(o);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//Person{name='小明', age=19}</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Person p</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(Person)o;</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(p.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getName</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">+</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">p.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">getAge</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//小明19</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<p><strong>对于JVM可以反序列化对象，它必须是能够找到class文件的类。如果找不到该类的class文件，则抛出一个ClassNotFoundException异常。</strong></p>
+<h4 id="反序列化操作2">反序列化操作2</h4>
+<p><strong>另外，当JVM反序列化对象时，能找到class文件，但是class文件在序列化对象之后发生了修改，那么反序列化操作也会失败，抛出一个<code>InvalidClassException</code>异常。发生这个异常的原因如下∶</strong></p>
+<ul>
+<li>该类的序列版本号与从流中读取的类描述符的版本号不匹配</li>
+<li>该类包含未知数据类型</li>
+<li>该类没有可访问的无参数构造方法</li>
+</ul>
+<p><code>Serializable</code>接口给需要序列化的类，提供了一个序列版本号。<code>serialVersionUID</code>该版本号的目的在于验证序列化的对象和对应类是否版本匹配。</p>
+<img src="/img/202202281835065.png" alt="20210820135233" style="zoom: 50%;">
+<p>在Person类中添加一个自定义的序列号，序列化之后再对Person类修改时反序列化时就不会抛出<code>InvalidClassException</code>异常。</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">private</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> final</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> long</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> serialVersionUID </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">1L</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//在类里方法外添加</span></span></code></pre>
+<hr>
+<h3 id="84练习序列化集合">8.4练习：序列化集合</h3>
+<ul>
+<li>将存有多个自定义对象的集合序列化操作，保存到<code>list.txt</code>文件中。</li>
+<li>反序列化<code>list.txt</code>，并遍历集合，打印对象信息。</li>
+</ul>
+<h4 id="案例分析-2">案例分析</h4>
+<ul>
+<li>定义一个存储Person对象的ArrayList集合</li>
+<li>往Arraylist集合中存储Person对象</li>
+<li>创建一个序列化流ObjectOutputStream对象</li>
+<li>使用ObjectOutputStream对象中的方法writeObject ,对集合进行序列化</li>
+<li>创建一个反序列化ObjectInputStream对象</li>
+<li>使用ObjectInputStream对象中的方法readObject读取文件中保存的集合</li>
+<li>把Object类型的集合转换为Arraylist类型</li>
+<li>遍历Arraylist集合</li>
+<li>释放资源</li>
+</ul>
+<h4 id="案例实现-2">案例实现</h4>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo04</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">O</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">bject</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">*</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.ArrayList;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.util.Iterator;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo03Test</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> IOException, ClassNotFoundException {</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //定义一个存储Person对象的ArrayList集合</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ArrayList&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> arrayList </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ArrayList&#x3C;>();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //往Arraylist集合中存储Person对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        arrayList.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小明"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">19</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        arrayList.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小李"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">17</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        arrayList.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小林"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">16</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        arrayList.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小刚"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">22</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        arrayList.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小金"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">19</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        arrayList.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">add</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"小吴"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">,</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">18</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建一个序列化流ObjectOutputStream对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ObjectOutputStream oos </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ObjectOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileOutputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">list.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用ObjectOutputStream对象中的方法writeObject ,对集合进行序列化</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        oos.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">writeObject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(arrayList);</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //创建一个反序列化ObjectInputStream对象</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ObjectInputStream ois </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> ObjectInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> FileInputStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">list.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">));</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //使用ObjectInputStream对象中的方法readObject读取文件中保存的集合</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Object o </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> ois.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">readObject</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //把Object类型的集合转换为Arraylist类型</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ArrayList&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> arrayList1</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(ArrayList)o;</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //遍历Arraylist集合</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        Iterator&#x3C;</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">Person</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">> iterator </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">arrayList1.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">iterator</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">        while</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> (iterator.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">hasNext</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">()){</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">            System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(iterator.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">next</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">());</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //Person{name='小明', age=19}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //Person{name='小李', age=17}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //Person{name='小林', age=16}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //Person{name='小刚', age=22}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //Person{name='小金', age=19}</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">            //Person{name='小吴', age=18}</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        }</span></span>
+<span class="line"><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">        //释放资源</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ois.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        oos.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="第九章打印流">第九章	打印流</h2>
+<hr>
+<h3 id="91概述">9.1概述</h3>
+<p>平时我们在控制台打印输出，是调用<code>print</code>方法和<code>println</code>方法完成的，这两个方法都来自于<code>java.io.PrintStream</code>类，该类能够方便地打印各种数据类型的值，是一种便捷的输出方式。</p>
+<hr>
+<h3 id="92printstream类">9.2PrintStream类</h3>
+<p><code>java.io.Printstream:</code>打印流<br>
+PrintStream：为其他输出流添加了功能，使它们能够方便地打印各种数据值表示形式。</p>
+<p>PrintStream特点:</p>
+<ul>
+<li>只负责数据的输出,不负责数据的读取</li>
+<li>与其他输出流不同，PrintStream永远不会抛出IOException</li>
+<li>有特有的方法, print , println<br>
+void print(任意类型的值)<br>
+void println(任意类型的值并换行)</li>
+</ul>
+<h4 id="构造方法-6">构造方法</h4>
+<ul>
+<li>PrintStream(FiLe file):输出的目的地是一个文件</li>
+<li>PrintStream(OutputStream out):输出的目的地是一个字节输出流</li>
+<li>PrintStream(String fileName):输出的目的地是一个文件路径</li>
+</ul>
+<p><code>PrintStream extends OutputStream</code>继承自父类的成员方法:</p>
+<ul>
+<li><code>public void close( ) :</code>关闭此输出流并释放与此流相关联的任何系统资源。</li>
+<li><code>public void flush():</code>刷新此输出流并强制任何缓冲的输出字节被写出。</li>
+<li><code>public void write(byte[] b):</code>将b.length字节从指定的字节数组写入此输出流。</li>
+<li><code>public void write(byte[] b，int off, int len) :</code>从指定的字节数组写入<code>len</code>字节，从偏移量<code>off</code>开始输出到此输出流。</li>
+<li><code>public abstract void write(int b):</code>将指定的字节输出流。</li>
+</ul>
+<blockquote>
+<p>tips：</p>
+<ul>
+<li>如果使用继承自父类的write方法写数据,那么查看数据的时候会查询编码表97->a</li>
+<li>如果使用自己特有的方法print/println方法写数据，写的数据原样输出97->97</li>
+</ul>
+</blockquote>
+<p><strong>代码：</strong></p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">PrintStream ps </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PrintStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"ps.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span></code></pre>
+<h4 id="改变打印流向">改变打印流向</h4>
+<p><code>System.out</code>就是<code>PrintStream</code>类型的，只不过它的流向是系统规定的，打印在控制台上。不过，既然是流对象，我们就可以玩一个”小把戏”，改变它的流向。</p>
+<p>使用<code>System.setOut</code>方法改变输出语句的目的地改为参数中传递的打印流的目的地</p>
+<ul>
+<li>static void setOut (PrintStream out)<br>
+重新分配“标准”输出流。</li>
+</ul>
+<pre class="astro-code astro-code-themes github-light github-dark" style="--shiki-light:#24292e;--shiki-dark:#e1e4e8;--shiki-light-bg:#fff;--shiki-dark-bg:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">package</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> com.priv.demo05</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">P</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">rint</span><span style="--shiki-light:#B31D28;--shiki-light-font-style:italic;--shiki-dark:#FDAEB7;--shiki-dark-font-style:italic">S</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">tream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.FileNotFoundException;</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">import</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> java.io.PrintStream;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> class</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> Demo01PrintStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> {</span></span>
+<span class="line"><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">    public</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> static</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583"> void</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> main</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">String</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">[] </span><span style="--shiki-light:#E36209;--shiki-dark:#FFAB70">args</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">) </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">throws</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8"> FileNotFoundException {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"我是在控制台输出的"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        PrintStream ps </span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">=new</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0"> PrintStream</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"C:</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Users</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">97189</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">Desktop</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">s</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF">\\</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">1.txt"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">setOut</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(ps);</span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D">//把输出语句的自的地改变为打印流的目的地</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        System.out.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">println</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">(</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF">"我在打印流的目的地输出"</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">        ps.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0">close</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">    }</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre><p class="tags"><a href="/tags/IO流/">#IO流</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>Exactly Once语义在Flink中的实现 | 青训营笔记 | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="icon" href="/favicon.ico"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/archives/">Archive</a> </p></nav></header><main><h1>Exactly Once语义在Flink中的实现 | 青训营笔记</h1><p><i><time datetime="2022-08-01T09:50:12.000Z">1 Aug, 2022</time></i></p><h2 id="exactly-once语义在flink中的实现">Exactly Once语义在Flink中的实现</h2>
+<hr>
+<h3 id="11数据流和动态表">1.1数据流和动态表</h3>
+<hr>
+<p><strong>专有名词：</strong></p>
+<ul>
+<li>
+<p>Stream：数据流</p>
+</li>
+<li>
+<p>Dynamic Table：动态表</p>
+</li>
+<li>
+<p>Continuous Queries：连续查询</p>
+</li>
+<li>
+<p>Append-only Stream：Append-only 流（只有 INSERT 消息）</p>
+</li>
+<li>
+<p>Retract Stream：Retract 流（同时包含 INSERT 消息和 DELETE 消息）</p>
+</li>
+<li>
+<p>Upsert Stream：Upsert 流（同时包含 UPSERT 消息和 DELETE 消息）</p>
+</li>
+<li>
+<p>Changelog：包含 INSERT/UPDATE/DELETE 等的数据流</p>
+</li>
+<li>
+<p>State：计算处理逻辑的状态</p>
+</li>
+</ul>
+<p><strong>动态表：随时间不断变化的表</strong>，在任意时刻，可以像查询静态批处理表一样查询它们</p>
+<p><strong>一、传统SQL和流处理</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>特征</th><th>SQL</th><th>流处理</th></tr></thead><tbody><tr><td>处理数据的有界性</td><td>处理的表是有界的</td><td>流是一个无限元组序列</td></tr><tr><td>处理数据的完整性</td><td>执行查询可以访问完整的数据</td><td>执行查询无法访问所有的数据</td></tr><tr><td>执行时间</td><td>批处理查询产生固定大小结果后终止</td><td>查询不断更新结果，永不终止</td></tr></tbody></table>
+<p>实时流的查询特点：</p>
+<ul>
+<li>查询从不终止</li>
+<li>查询结果会不断更新，并且会产生一个新的动态表</li>
+<li>结果的动态表也可转换成输出的实时流</li>
+</ul>
+<p><strong>二、数据流与动态表的转换</strong></p>
+<ul>
+<li>动态表到实时流的转换
+<ul>
+<li>Append-only Stream：Append-only 流（只有 INSERT 消息）</li>
+<li><strong>Retract Stream</strong>：Retract 流（同时包含 INSERT 消息和 DELETE 消息）</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1604b80a4a914de3a369d5d94433768a~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
+<ul>
+<li>Upsert Stream：Upsert 流（同时包含 UPSERT 消息和 DELETE 消息）</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9fd495a37cb348ad87b4f3f5c82a66aa~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
+<ul>
+<li>算子状态
+<ul>
+<li>在流式计算中，会存在有<strong>状态</strong>的计算逻辑（算子），有状态的算子典型处理逻辑如下图所示：</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3749eaf076e24a509110bb8e4eaba03a~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp" alt="img"></p>
+<p>比如，需要计算某个用户在网上的点击量，该用户在网站当前的总点击次数就是算子状态，对于新的输入数据，先判断是否是该用户的点击行为，如果是，则将保留的点击次数（状态）增加一，并将当前累加结果输出。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a01d767f3e2046b4bed880e2e1970064~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp" alt=""></p><p class="tags"><a href="/tags/大数据/">#大数据</a><a href="/tags/Exactly-Once语义在Flink中的实现/">#Exactly Once语义在Flink中的实现</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>
