@@ -1,0 +1,11 @@
+---
+// Easter egg: the original About page, kept as written in 2024. Not linked anywhere.
+import Base from '../../layouts/Base.astro';
+import { Content, frontmatter } from '../../content/about-2024.md';
+---
+
+<Base title={frontmatter.title} noindex>
+  <p><i>写于 2024 年 8 月，毕业那年。</i></p>
+  <h1>{frontmatter.title}</h1>
+  <Content />
+</Base>

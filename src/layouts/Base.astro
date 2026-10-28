@@ -4,9 +4,10 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   mathjax?: boolean;
+  noindex?: boolean;
 }
 
-const { title, mathjax = false } = Astro.props;
+const { title, mathjax = false, noindex = false } = Astro.props;
 const author = 'ShanTianQi';
 const nav = [
   ['Home', '/'],
@@ -22,6 +23,7 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
     <title>{title ? `${title} | ${author}` : author}</title>
     <meta name="author" content={author} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -48,6 +50,10 @@ const nav = [
         © 2022–{new Date().getFullYear()} {author} · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a>
       </span>
     </footer>
+    <script is:inline>
+      // For whoever opens the console
+      console.log('%cʕ•ᴥ•ʔ 凡是过往，皆为序章 → /about/2024/', 'color:#8b6fcb');
+    </script>
     <script>
       // Render ```mermaid blocks (left out of Shiki highlighting); the library is
       // bundled and only downloaded on pages that contain a diagram

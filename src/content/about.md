@@ -1,29 +1,11 @@
 ---
-title: 关于
-date: 2024-08-08 22:46:36
+title: About
 ---
 
-## 凡是过往，皆为序章
+I'm ShanTianQi, a backend engineer in Hangzhou working on autonomous driving and AI. I write Java and Python for a living, and I'm moving toward full-stack and AI application development.
 
-👋2024毕业啦，计算机科学与技术专业
+This blog restarted in October 2026. It's where I write down what I learn and what I build as an engineer working alongside agents. Older posts (2022 – 2026) are in the [archive](/archives/).
 
-🌏在杭州
-
-🌱Java开发工程师
-
-👀不断努力呀，学习最前沿的开发框架，努力工作，去看外面的世界~
-
-📫shantianqi@fabu.ai
-
-------
-
-## 拿到的奖项(2022至今)
-
-----
-
-(2022/8)：2022年首届辽宁省大学生智能技术应用大赛 **省二**
-
-(2022/9)：2022年辽宁省大学生企业云服务开发者大赛 **省一**
-
-(2022/10)：2022一带一路暨金砖国家技能发展与技术创新大赛之工业互联网APP创新应用赛项 **银(国二)**
-
+- GitHub: [TonkyShan](https://github.com/TonkyShan)
+- 𝕏: [@TonkyShan](https://x.com/TonkyShan)
+- [DevCards](https://github.com/TonkyShan/devcards): a macOS desktop card that turns your git history into weekly reports and standup notes
