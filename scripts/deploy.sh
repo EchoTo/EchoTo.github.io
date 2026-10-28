@@ -3,7 +3,7 @@
 # Keeps the branch history in .deploy/ so each push only uploads what changed.
 set -e
 
-REPO=${DEPLOY_REPO:-git@github.com:TonkyShan/EchoTo.github.io.git}
+REPO=${DEPLOY_REPO:-git@github.com:TonkyShan/TonkyShan.github.io.git}
 DIR=.deploy
 
 [ -d dist ] || { echo "dist/ not found, run astro build first" >&2; exit 1; }
