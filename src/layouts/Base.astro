@@ -1,0 +1,71 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  mathjax?: boolean;
+}
+
+const { title, mathjax = false } = Astro.props;
+const author = 'ShanTianQi';
+const nav = [
+  ['Home', '/'],
+  ['Blog', '/blog/'],
+  ['Archive', '/archives/'],
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+    <title>{title ? `${title} | ${author}` : author}</title>
+    <meta name="author" content={author} />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml" title={author} />
+    {mathjax && (
+      <>
+        <script is:inline>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+        <script is:inline async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+      </>
+    )}
+  </head>
+  <body>
+    <header>
+      <a class="title" href="/"><h1>{author}</h1></a>
+      <nav>
+        <p>{nav.map(([name, href]) => <><a href={href}>{name}</a> </>)}</p>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <span>
+        © 2022–{new Date().getFullYear()} {author} · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a>
+      </span>
+    </footer>
+    <script>
+      // Render ```mermaid blocks (left out of Shiki highlighting); the library is
+      // bundled and only downloaded on pages that contain a diagram
+      const blocks = document.querySelectorAll('pre.mermaid, pre > code.language-mermaid');
+      if (blocks.length) {
+        blocks.forEach((el) => {
+          const pre = el.tagName === 'PRE' ? el : el.parentElement!;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = el.textContent;
+          pre.replaceWith(div);
+        });
+        import('mermaid').then(({ default: mermaid }) => {
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+          });
+          mermaid.run();
+        });
+      }
+    </script>
+  </body>
+</html>

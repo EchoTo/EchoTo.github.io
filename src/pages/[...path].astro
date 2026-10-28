@@ -1,0 +1,23 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { formatDate, getPosts, tagUrl, type Post } from '../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { path: post.path }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const { Content } = await render(post);
+const tags = await Promise.all(post.tags.map(async (name) => ({ name, url: await tagUrl(name) })));
+---
+
+<Base title={post.data.title} mathjax={post.data.mathjax}>
+  <h1>{post.data.title}</h1>
+  <p><i><time datetime={post.date.toISOString()}>{formatDate(post.date)}</time></i></p>
+  <Content />
+  {tags.length > 0 && (
+    <p class="tags">{tags.map((tag) => <a href={tag.url}>#{tag.name}</a>)}</p>
+  )}
+</Base>

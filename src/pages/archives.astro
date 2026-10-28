@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts';
+
+const old = (await getPosts()).filter((p) => p.isLegacy);
+---
+
+<Base title="Archive">
+  <p>Posts from the old blog (2022 – 2026).</p>
+  <h3>Notes</h3>
+  <PostList posts={old.filter((p) => !p.isDaily)} />
+  <h3>Daily</h3>
+  <PostList posts={old.filter((p) => p.isDaily)} />
+</Base>

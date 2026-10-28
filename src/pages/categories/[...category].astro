@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getCategories } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  return (await getCategories()).map((g) => ({
+    params: { category: g.url.replace(/^\/categories\/|\/$/g, '') },
+    props: g,
+  }));
+}
+
+const { name, posts } = Astro.props;
+---
+
+<Base title={name}>
+  <h2>{name}</h2>
+  <PostList posts={posts} />
+</Base>

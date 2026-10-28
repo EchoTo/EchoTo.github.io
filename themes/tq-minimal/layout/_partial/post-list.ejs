@@ -1,8 +1,0 @@
-<ul class="blog-posts">
-<% posts.forEach(function (post) { %>
-  <li>
-    <span><i><time datetime="<%= date_xml(post.date) %>"><%= date(post.date, 'D MMM, YYYY') %></time></i></span>
-    <a href="<%- url_for(post.path) %>"><%= post.title %></a>
-  </li>
-<% }) %>
-</ul>

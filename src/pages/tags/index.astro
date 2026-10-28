@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getTags } from '../../lib/posts';
+
+const tags = (await getTags()).sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<Base title="Tags">
+  <h1>Tags</h1>
+  <p class="tags">{tags.map((t) => <a href={t.url}>#{t.name}</a>)}</p>
+</Base>

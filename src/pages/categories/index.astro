@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCategories } from '../../lib/posts';
+
+const categories = (await getCategories()).sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<Base title="Categories">
+  <h1>Categories</h1>
+  <ul>
+    {categories.map((c) => <li><a href={c.url}>{c.name}</a> ({c.posts.length})</li>)}
+  </ul>
+</Base>
