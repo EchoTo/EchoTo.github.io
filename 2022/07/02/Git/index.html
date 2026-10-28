@@ -173,4 +173,7 @@ PPT 链接：<br>
 <p>当然，在涉及网络传输或者Git仓库真的体积很大的时候，Git会有垃圾回收机制gc，不仅会清除无用的object，还会把已有的相似object打包压缩。</p>
 <p><strong>问题3：Git怎么保证历史记录不可篡改？</strong></p>
 <p>通过<a href="https://www.zhihu.com/search?q=SHA1%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95&#x26;search_source=Entity&#x26;hybrid_search_source=Entity&#x26;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A96631135%7D">SHA1哈希算法</a>和哈系树来保证。假设你偷偷修改了历史变更记录上一个文件的内容，那么这个问卷的blob object的SHA1哈希值就变了，与之相关的tree object的SHA1也需要改变，commit的SHA1也要变，这个commit之后的所有commit SHA1值也要跟着改变。又由于Git是分布式系统，即所有人都有一份完整历史的Git仓库，所以所有人都能很轻松的发现存在问题。</p>
-<p>希望大家读完有所收获，下一篇文章会写一些我日常工作中觉得比较实用的Git技巧、经常被问到的问题、以及发生一些事故时的处理方法。</p><p class="tags"><a href="/tags/Git/">#Git</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>
+<p>希望大家读完有所收获，下一篇文章会写一些我日常工作中觉得比较实用的Git技巧、经常被问到的问题、以及发生一些事故时的处理方法。</p><p class="tags"><a href="/tags/Git/">#Git</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script>
+      // For whoever opens the console
+      console.log('%cʕ•ᴥ•ʔ 凡是过往，皆为序章 → /about/2024/', 'color:#8b6fcb');
+    </script><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>
