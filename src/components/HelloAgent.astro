@@ -1,0 +1,213 @@
+---
+// "Hello, World" from 1978 to 2026, played as a tiny terminal animation.
+const transcript = [
+  '1978',
+  'main() {',
+  '    printf("hello, world\\n");',
+  '}',
+  'hello, world',
+  '2026',
+  '> 写个程序，跟世界打个招呼',
+  '● Write(hello.py)',
+  'print("Hello, World!")',
+  '● Bash(python hello.py)',
+  'Hello, World!',
+  'Hello, human. 接下来，我们做点什么？',
+].join('\n');
+---
+
+<figure class="hello-agent" aria-label={transcript}>
+  <div class="screen" aria-hidden="true"></div>
+  <figcaption>
+    <span>1978 → 2026</span>
+    <button type="button" class="replay" hidden>↻ replay</button>
+  </figcaption>
+</figure>
+
+<style>
+  .hello-agent {
+    margin: 2em 0;
+  }
+
+  .screen {
+    --out: #258531;
+    --agent: #c96442;
+    background: var(--code-background-color);
+    color: var(--code-color);
+    border-radius: 3px;
+    padding: 15px;
+    min-height: 15.5em;
+    font-family: monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .screen {
+      --out: #7ee787;
+      --agent: #e8916f;
+    }
+  }
+
+  .screen :global(.line) {
+    min-height: 1.6em;
+  }
+
+  .screen :global(.year) {
+    color: var(--heading-color);
+    font-weight: bold;
+    margin-bottom: 0.4em;
+  }
+
+  .screen :global(.out) {
+    color: var(--out);
+  }
+
+  .screen :global(.prompt) {
+    color: var(--heading-color);
+  }
+
+  .screen :global(.agent) {
+    color: var(--agent);
+  }
+
+  .screen :global(.code) {
+    padding-left: 2ch;
+  }
+
+  .screen :global(.cursor)::after {
+    content: '▍';
+    animation: blink 1s steps(1) infinite;
+  }
+
+  .screen :global(.fade) {
+    animation: fade 0.5s ease-out;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  @keyframes fade {
+    from { opacity: 0; }
+  }
+
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5em;
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 0.7;
+  }
+
+  .replay {
+    font: inherit;
+    color: var(--link-color);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  @media (max-width: 480px) {
+    .screen {
+      font-size: 13px;
+      min-height: 15.5em;
+    }
+  }
+</style>
+
+<script>
+  type Step =
+    | { do: 'type'; cls: string; text: string; speed?: number }
+    | { do: 'show'; cls: string; text: string }
+    | { do: 'wait'; ms: number }
+    | { do: 'clear' }
+    | { do: 'end' };
+
+  const script: Step[] = [
+    { do: 'show', cls: 'year', text: '1978' },
+    { do: 'type', cls: 'code', text: 'main() {\n    printf("hello, world\\n");\n}', speed: 45 },
+    { do: 'wait', ms: 400 },
+    { do: 'show', cls: 'out', text: 'hello, world' },
+    { do: 'wait', ms: 1800 },
+    { do: 'clear' },
+    { do: 'show', cls: 'year', text: '2026' },
+    { do: 'type', cls: 'prompt', text: '> 写个程序，跟世界打个招呼', speed: 90 },
+    { do: 'wait', ms: 700 },
+    { do: 'show', cls: 'agent', text: '● Write(hello.py)' },
+    { do: 'type', cls: 'code', text: 'print("Hello, World!")', speed: 18 },
+    { do: 'wait', ms: 500 },
+    { do: 'show', cls: 'agent', text: '● Bash(python hello.py)' },
+    { do: 'wait', ms: 600 },
+    { do: 'show', cls: 'out', text: 'Hello, World!' },
+    { do: 'wait', ms: 1400 },
+    { do: 'type', cls: 'agent', text: 'Hello, human. 接下来，我们做点什么？', speed: 70 },
+    { do: 'wait', ms: 900 },
+    { do: 'end' },
+  ];
+
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function line(screen: Element, cls: string, text = '') {
+    const el = document.createElement('div');
+    el.className = `line ${cls}`;
+    el.textContent = text;
+    screen.appendChild(el);
+    return el;
+  }
+
+  // Final frame only, for reduced motion: the 2026 half plus the waiting prompt
+  function finalFrame(screen: Element) {
+    screen.replaceChildren();
+    const start = script.findIndex((s) => s.do === 'clear') + 1;
+    for (const step of script.slice(start)) {
+      if (step.do === 'type' || step.do === 'show') line(screen, step.cls, step.text);
+    }
+    line(screen, 'prompt cursor', '> ');
+  }
+
+  async function play(screen: Element, replay: HTMLButtonElement) {
+    replay.hidden = true;
+    screen.replaceChildren();
+    for (const step of script) {
+      if (step.do === 'wait') await sleep(step.ms);
+      else if (step.do === 'clear') screen.replaceChildren();
+      else if (step.do === 'show') line(screen, `${step.cls} fade`, step.text);
+      else if (step.do === 'end') line(screen, 'prompt cursor fade', '> ');
+      else {
+        const el = line(screen, `${step.cls} cursor`);
+        for (const ch of step.text) {
+          el.textContent += ch;
+          await sleep(ch === '\n' ? step.speed! * 4 : step.speed!);
+        }
+        el.classList.remove('cursor');
+      }
+    }
+    replay.hidden = false;
+  }
+
+  document.querySelectorAll('.hello-agent').forEach((fig) => {
+    const screen = fig.querySelector('.screen')!;
+    const replay = fig.querySelector<HTMLButtonElement>('.replay')!;
+    replay.addEventListener('click', () => play(screen, replay));
+    if (reduced) {
+      finalFrame(screen);
+      replay.hidden = false;
+      return;
+    }
+    // Start when the reader scrolls to it
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        io.disconnect();
+        play(screen, replay);
+      }
+    }, { threshold: 0.4 });
+    io.observe(fig);
+  });
+</script>
