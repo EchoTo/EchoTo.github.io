@@ -2,7 +2,7 @@
 title: About
 ---
 
-I'm ShanTianQi, a backend engineer in Hangzhou working on autonomous driving and AI. I write Java and Python for a living, and I'm moving toward full-stack and AI application development.
+I'm ShanTianQi, a software engineer in Hangzhou working on autonomous driving. Most of my code these days is Go and Python on the backend, with Vue on the frontend and some Java along the way. I write most of it together with coding agents, Claude Code and Codex, and I'm increasingly focused on building AI applications.
 
 This blog restarted in October 2026. It's where I write down what I learn and what I build as an engineer working alongside agents. Older posts (2022 – 2026) are in the [archive](/archives/).
 
