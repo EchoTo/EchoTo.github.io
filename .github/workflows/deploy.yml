@@ -1,10 +1,10 @@
 name: Deploy
 
-# Build the Astro site on every push to `source` and publish it to GitHub Pages.
+# Build the Astro site on every push to `main` and publish it to GitHub Pages.
 # Requires Settings → Pages → Source: "GitHub Actions".
 on:
   push:
-    branches: [source]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
