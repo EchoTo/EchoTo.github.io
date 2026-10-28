@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5"><title>AI Reads the Code, Not the Site | ShanTianQi</title><meta name="author" content="ShanTianQi"><link rel="alternate" hreflang="zh-CN" href="https://tonkyshan.cn/2026/10/28/ai-reads-code-not-the-site/"><link rel="alternate" hreflang="en" href="https://tonkyshan.cn/2026/10/28/ai-reads-code-not-the-site/en/"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" href="/rss.xml" title="ShanTianQi"><style>:root{--width:720px;--font-main:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-secondary:Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;--font-scale:1em;--background-color:#fff;--heading-color:#222;--text-color:#444;--link-color:#3273dc;--visited-color:#8b6fcb;--code-background-color:#f2f2f2;--code-color:#222;--blockquote-color:#222}@media (prefers-color-scheme:dark){:root{--background-color:#01242e;--heading-color:#eee;--text-color:#ddd;--link-color:#8cc2dd;--visited-color:#8b6fcb;--code-background-color:#000;--code-color:#ddd;--blockquote-color:#ccc}}body{font-family:var(--font-secondary);font-size:var(--font-scale);max-width:var(--width);text-align:left;background-color:var(--background-color);word-wrap:break-word;overflow-wrap:break-word;color:var(--text-color);margin:auto;padding:20px;line-height:1.5}h1,h2,h3,h4,h5,h6{font-family:var(--font-main);color:var(--heading-color)}a{color:var(--link-color);cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}nav a{margin-right:8px}strong,b{color:var(--heading-color)}time{font-family:monospace;font-size:15px;font-style:normal}main{line-height:1.6}table{width:100%}hr{border:0;border-top:1px dashed}img{max-width:100%}code{background-color:var(--code-background-color);color:var(--code-color);border-radius:3px;padding:2px;font-family:monospace}blockquote{color:var(--code-color);border-left:1px solid #999;padding-left:20px;font-style:italic}footer{text-align:center;padding:25px 0}.title:hover{text-decoration:none}.title h1{font-size:1.5em}pre{border-radius:3px;margin-block:1em;padding:15px;line-height:125%;overflow-x:auto;background-color:var(--code-background-color)!important}pre code{background:0 0;padding:0}.astro-code,.astro-code span{color:var(--shiki-light)}@media (prefers-color-scheme:dark){.astro-code,.astro-code span{color:var(--shiki-dark)}}div.mermaid{text-align:center;margin:1em 0}main table{border-collapse:collapse;display:block;overflow-x:auto}main th,main td{border:1px solid #8080804d;padding:4px 8px}ul.blog-posts{padding:unset;list-style-type:none}ul.blog-posts li{display:flex}ul.blog-posts li span{flex:0 0 130px}ul.blog-posts li a:visited{color:var(--visited-color)}.tags a{margin-right:8px}
+</style></head><body><header><a class="title" href="/"><h1>ShanTianQi</h1></a><nav><p><a href="/">Home</a> <a href="/blog/">Blog</a> <a href="/about/">About</a> </p></nav></header><main><h1>AI Reads the Code, Not the Site</h1><p><i><time datetime="2026-10-28T20:30:00.000Z">28 Oct, 2026</time></i><span class="lang-switch"> · <a href="/2026/10/28/ai-reads-code-not-the-site/" lang="zh-CN">中文</a> · <b>English</b></span></p><p>While tidying up this blog today, I dug out my records of working with AI agents over the past half year: Codex from March to August, 257 sessions; Claude Code from September until now, 156 sessions. A little over 400 in total.</p>
+<p>Before looking, I had a picture of how I use AI. Afterwards, some of it held up and some of it didn’t.</p>
+<h2 id="a-service-that-has-run-for-seven-years">A service that has run for seven years</h2>
+<p>For most of this half year I’ve been doing one thing: rewriting, in Go, a Python service my company has been running since 2019. It handles the data going back and forth between autonomous vehicles at several ports and the cloud.</p>
+<p>The old service is a little over 60,000 lines, built up by the team over more than 6,800 commits. I started the Go version on May 11 this year. Five and a half months later it has over 1,500 commits, 1,135 of them mine, and 120,000 lines of production code.</p>
+<p>About 95% of that was written by AI.</p>
+<p>One number surprised even me: in the old service, test code was a tenth the size of the production code. In the new one there are over 90,000 lines of tests, three quarters of the production code. Writing tests used to be a chore you put off as long as you could. Now the AI mostly writes them along the way.</p>
+<h2 id="where-it-helped-most-wasnt-writing-code">Where it helped most wasn’t writing code</h2>
+<p>In a rewrite like this, I know the main data paths well. The hard part is the details: a field that needs special handling in one case, a branch that only runs under certain conditions. They’re scattered across every corner of the old code, and when a person traces them, something always gets missed.</p>
+<p>Having the AI trace them is very fast, and it rarely gets them wrong.</p>
+<p>So if you ask me where AI added the most value in this rewrite, my answer isn’t “it writes code fast”. It’s “it can read the system”.</p>
+<h2 id="but-it-doesnt-know-the-site">But it doesn’t know the site</h2>
+<p>The service has to support three ports, and each one runs its operations differently.</p>
+<p>Once, the AI wrote port A’s logic into port B. The code itself looked fine. The problem was that this logic had no business being at that port at all.</p>
+<p>That kind of mistake is easy to catch. I knew it was wrong the moment I read what it had just written. But only because I know how those two ports actually operate on site.</p>
+<p>The AI may read the code correctly, but it doesn’t know how data actually moves on site, or what the business logic and the day-to-day operations are. None of that is in the code. It’s in the heads of the people who run the business. If you don’t spell it out, the AI can only guess.</p>
+<p>Some of it is even harder to see. At one port, the Python code running on the production machine wasn’t the same as the code in the repository: there were commits that had never been pushed, and a feature freshly merged in the repository had been reverted on the spot. The Go version, matched against the repository, ended up sending one more step than the site actually did.</p>
+<p>After that, a new rule went into the instructions I give the AI: before comparing against the old code, take a snapshot of what’s actually running on the production machine. Don’t treat the repository as the truth about the site.</p>
+<h2 id="writing-down-what-isnt-in-the-code">Writing down what isn’t in the code</h2>
+<p>If the AI doesn’t know the site, someone has to tell it. My way is to write it down.</p>
+<p>At the root of the project there’s a file for the agent, 167 lines, which it reads at the start of every session. Most of it isn’t about code style; it’s about things outside the code: this repository is really two systems merged into one, so when you change one of them, you don’t touch the other’s modules. Which protocols are live in production and can’t change by a single byte, down to preserving the spelling mistakes in the old code exactly as they are.</p>
+<p>There’s also a log of design decisions, started on the first day of the rewrite, now at 428 entries. Before any significant change, I write down the problem, the decision, the implementation and the caveats, and only then write the code. Those notes are for my future self, and they’re for the AI too.</p>
+<p>There’s one line in those instructions, written by me, that I still think matters most:</p>
+<blockquote>
+<p>AI can speed up a one-to-one translation. It can’t speed up judging whether the translation is right.</p>
+</blockquote>
+<p>So we split “done” into two levels. Code plus unit tests only counts as behaviour frozen. A module only counts as verified once real production data has been replayed through it, the old and new outputs compared byte by byte, and the diff for core modules reviewed by a person. All green tests don’t mean it’s ready to ship.</p>
+<h2 id="two-surprises-in-the-data">Two surprises in the data</h2>
+<p>The first surprise: I’d always assumed the AI was mostly writing code for me.</p>
+<p>But over these two months Claude Code performed more than 15,000 actions, and 88% of them were commands run in the terminal: searching code, reading logs, running scripts, looking at git history, connecting to servers. Actions dedicated to editing files came to only a few hundred.</p>
+<p>Compared with the Codex months:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>What the terminal commands were for</th><th>Codex (Mar–Aug)</th><th>Claude Code (Sep–Oct)</th></tr></thead><tbody><tr><td>Reading and editing files</td><td>44%</td><td>13%</td></tr><tr><td>Running scripts</td><td>2%</td><td>11%</td></tr><tr><td>Connecting to servers</td><td>0.1%</td><td>3.8%</td></tr></tbody></table>
+<p>With Codex, it mostly went round in circles inside the code. With Claude Code, it stepped outside the code more and more and touched the real environment. That’s the same point as above: reading the code isn’t enough to get things right.</p>
+<p>(This is just a correlation I see in the numbers. My own work changed over these months too, so not all of it is down to the tools.)</p>
+<p>The second surprise: one of my impressions of Codex turned out to be wrong.</p>
+<p>I’d always thought Codex was long-winded: a change that only needed a few lines in an existing file, and it would create a whole new file for it. But when I counted, new files were only 10% of its code changes. The vast majority were edits to existing files.</p>
+<p>Maybe those few times just stuck with me. Or maybe it really was long-winded, just not in the form of new files. Either way, how it felt and what the data says aren’t quite the same thing.</p>
+<h2 id="from-say-it-precisely-to-say-it-clearly">From “say it precisely” to “say it clearly”</h2>
+<p>At first the company only gave us Codex. Honestly, it was painful to use, as if it had got dumber: say the same thing, and it often couldn’t work out what I actually wanted.</p>
+<p>In September we got Claude Code, and my usage jumped. With Codex I averaged about ten sessions a week; after the switch, at the busiest, thirty or forty.</p>
+<p>But I think the bigger change isn’t which tool I switched to. It’s the models themselves. Two months ago you had to write a very precise prompt before it knew what you wanted. Now you can be far less precise and it still does the right thing.</p>
+<p>The bar for writing prompts is getting lower. But there’s one thing it still can’t guess: what’s outside the code. What the business is, what the site looks like.</p>
+<p>I used to think an engineer’s value was in writing code. Now that AI writes 95% of my code, I think what’s valuable is knowing what’s outside the code, and being able to explain it clearly.</p><p class="tags"><a href="/tags/AI-Coding/">#AI Coding</a><a href="/tags/Agent/">#Agent</a><a href="/tags/Claude-Code/">#Claude Code</a><a href="/tags/Codex/">#Codex</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script>
+      // For whoever opens the console
+      console.log('%cʕ•ᴥ•ʔ 凡是过往，皆为序章 → /about/2024/', 'color:#8b6fcb');
+    </script><script type="module" src="/_astro/Base.astro_astro_type_script_index_0_lang.CDxXQ5Fl.js"></script></body></html>
