@@ -17,7 +17,19 @@ const posts = defineCollection({
     categories: z.any().optional(),
     permalink: z.string().optional(),
     mathjax: z.boolean().optional(),
+    // Drafts are left out of the build unless SHOW_DRAFTS=1 (local preview)
+    draft: z.boolean().optional(),
   }),
 });
 
-export const collections = { posts };
+// English translations: same file name as the Chinese post they translate
+const postsEn = defineCollection({
+  loader: glob({
+    pattern: '*.{md,mdx}',
+    base: './src/content/posts-en',
+    generateId: ({ entry }) => entry.replace(/\.mdx?$/, ''),
+  }),
+  schema: z.object({ title: z.coerce.string() }),
+});
+
+export const collections = { posts, postsEn };

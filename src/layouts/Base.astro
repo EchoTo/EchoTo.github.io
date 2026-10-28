@@ -5,9 +5,12 @@ interface Props {
   title?: string;
   mathjax?: boolean;
   noindex?: boolean;
+  lang?: string;
+  // Other-language versions of this page, for hreflang
+  alternates?: { lang: string; href: string }[];
 }
 
-const { title, mathjax = false, noindex = false } = Astro.props;
+const { title, mathjax = false, noindex = false, lang = 'zh-CN', alternates = [] } = Astro.props;
 const author = 'ShanTianQi';
 const nav = [
   ['Home', '/'],
@@ -17,13 +20,14 @@ const nav = [
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
     <title>{title ? `${title} | ${author}` : author}</title>
     <meta name="author" content={author} />
     {noindex && <meta name="robots" content="noindex" />}
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={new URL(a.href, Astro.site)} />)}
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

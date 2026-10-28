@@ -1,21 +1,50 @@
 ---
-import { render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { formatDate, getPosts, tagUrl, type Post } from '../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
-  return posts.map((post) => ({ params: { path: post.path }, props: { post } }));
+  const translations = new Map((await getCollection('postsEn')).map((t) => [t.id, t]));
+  return posts.flatMap((post) => {
+    const en = translations.get(post.id);
+    const pages = [{ params: { path: post.path }, props: { post, en, lang: 'zh' as const } }];
+    if (en) pages.push({ params: { path: `${post.path}/en` }, props: { post, en, lang: 'en' as const } });
+    return pages;
+  });
 }
 
-const { post } = Astro.props as { post: Post };
-const { Content } = await render(post);
+const { post, en, lang } = Astro.props as {
+  post: Post;
+  en?: Awaited<ReturnType<typeof getCollection<'postsEn'>>>[number];
+  lang: 'zh' | 'en';
+};
+const entry = lang === 'en' && en ? en : post;
+const title = lang === 'en' && en ? en.data.title : post.data.title;
+const { Content } = await render(entry);
 const tags = await Promise.all(post.tags.map(async (name) => ({ name, url: await tagUrl(name) })));
+const zhUrl = `/${post.path}/`;
+const enUrl = `/${post.path}/en/`;
 ---
 
-<Base title={post.data.title} mathjax={post.data.mathjax}>
-  <h1>{post.data.title}</h1>
-  <p><i><time datetime={post.date.toISOString()}>{formatDate(post.date)}</time></i></p>
+<Base
+  title={title}
+  mathjax={post.data.mathjax}
+  lang={lang === 'en' ? 'en' : 'zh-CN'}
+  alternates={en ? [{ lang: 'zh-CN', href: zhUrl }, { lang: 'en', href: enUrl }] : []}
+>
+  <h1>{title}</h1>
+  <p>
+    <i><time datetime={post.date.toISOString()}>{formatDate(post.date)}</time></i>
+    {en && (
+      <span class="lang-switch">
+        {' · '}
+        {lang === 'zh' ? <b>中文</b> : <a href={zhUrl} lang="zh-CN">中文</a>}
+        {' · '}
+        {lang === 'en' ? <b>English</b> : <a href={enUrl} lang="en">English</a>}
+      </span>
+    )}
+  </p>
   <Content />
   {tags.length > 0 && (
     <p class="tags">{tags.map((tag) => <a href={tag.url}>#{tag.name}</a>)}</p>

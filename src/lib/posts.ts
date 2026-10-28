@@ -98,7 +98,7 @@ let cache: Post[] | undefined;
 
 export async function getPosts(): Promise<Post[]> {
   if (cache) return cache;
-  const entries = await getCollection('posts');
+  const entries = await getCollection('posts', (e) => !e.data.draft || process.env.SHOW_DRAFTS === '1');
   cache = entries
     .map((entry) => {
       const date = wallClock(entry.data.date);
