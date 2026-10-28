@@ -13,7 +13,7 @@ categories: [八股文,面试]
 
 --------
 
-<img src="https://tonkyshan.cn/img/20230707214627.png" alt="20230707214627" style="zoom:67%;" />
+<img src="/img/20230707214627.png" alt="20230707214627" style="zoom:67%;" />
 
 ------------
 
@@ -21,7 +21,7 @@ categories: [八股文,面试]
 
 -----------
 
-<img src="https://tonkyshan.cn/img/QQ截图20230707214902.png" style="zoom:67%;" />
+<img src="/img/QQ截图20230707214902.png" style="zoom:67%;" />
 
 **缓存穿透：**查询一个**不存在**的数据，mysql查询不到的数据也不会写入缓存，就会导致每次请求都查询数据库
 
@@ -33,17 +33,17 @@ categories: [八股文,面试]
 
 **解决方案二：**布隆过滤器
 
-<img src="https://tonkyshan.cn/img/20230707215302.png" alt="20230707215302" style="zoom:67%;" />
+<img src="/img/20230707215302.png" alt="20230707215302" style="zoom:67%;" />
 
 **布隆过滤器**
 
 **bitmap(位图)：**相当于是一个以**(bit)位**为单位的数组，数组中每个单元只能存储二进制数**0或1**
 
-<img src="https://tonkyshan.cn/img/20230707215625.png" alt="20230707215625" style="zoom:67%;" />
+<img src="/img/20230707215625.png" alt="20230707215625" style="zoom:67%;" />
 
 误判现象
 
-<img src="https://tonkyshan.cn/img/20230707215734.png" alt="20230707215734" style="zoom:67%;" />
+<img src="/img/20230707215734.png" alt="20230707215734" style="zoom:67%;" />
 
 布隆过滤器的实现方案：Redisson和Guava
 
@@ -59,11 +59,11 @@ categories: [八股文,面试]
 
 **缓存击穿：**给某一个key设置了过期时间，当key过期的时候，恰好这个时间点对这个key有大量的并发请求过来，这些并发请求可能会瞬间把DB压垮
 
-<img src="https://tonkyshan.cn/img/20230707220432.png" alt="20230707220432" style="zoom:80%;" />
+<img src="/img/20230707220432.png" alt="20230707220432" style="zoom:80%;" />
 
 **解决方案一：互斥锁**
 
-<img src="https://tonkyshan.cn/img/20230707220622.png" alt="20230707220622" style="zoom: 80%;" />
+<img src="/img/20230707220622.png" alt="20230707220622" style="zoom: 80%;" />
 
 分布式锁
 
@@ -71,7 +71,7 @@ categories: [八股文,面试]
 
 **解决方案二：逻辑过期**
 
-<img src="https://tonkyshan.cn/img/20230707220800.png" alt="20230707220800" style="zoom:67%;" />
+<img src="/img/20230707220800.png" alt="20230707220800" style="zoom:67%;" />
 
 高可用、性能优、不能保证数据的绝对一致
 
@@ -83,7 +83,7 @@ categories: [八股文,面试]
 
 **缓存雪崩**是指在同一时段大量的缓存key同时失效或者Redis服务宕机，导致大量请求到达数据库，带来巨大压力
 
-<img src="https://tonkyshan.cn/img/20230707221156.png" alt="20230707221156" style="zoom:80%;" />
+<img src="/img/20230707221156.png" alt="20230707221156" style="zoom:80%;" />
 
 解决方案：
 
@@ -100,16 +100,16 @@ categories: [八股文,面试]
 
 **双写一致性：**当修改了数据库的数据也要同时更新缓存的数据，缓存和数据库的数据要保持一致
 
-<img src="https://tonkyshan.cn/img/20230707221836.png" alt="20230707221836" style="zoom:67%;" />
+<img src="/img/20230707221836.png" alt="20230707221836" style="zoom:67%;" />
 
 * 读操作：缓存命中，直接返回；缓存未命中，查询数据库，写入缓存，设定超时时间
 * 写操作：**延迟双删**
 
-<img src="https://tonkyshan.cn/img/20230707222216.png" alt="20230707222216" style="zoom: 67%;" />
+<img src="/img/20230707222216.png" alt="20230707222216" style="zoom: 67%;" />
 
 先删除缓存或者先修改数据库都会出现脏数据，而延时双删可以有效避免脏数据的产生
 
-<img src="https://tonkyshan.cn/img/20230707222247.png" alt="20230707222247" style="zoom:67%;" />
+<img src="/img/20230707222247.png" alt="20230707222247" style="zoom:67%;" />
 
 * 也有脏数据的风险
 
@@ -117,7 +117,7 @@ categories: [八股文,面试]
 
 一、分布式锁
 
-<img src="https://tonkyshan.cn/img/20230707222545.png" alt="20230707222545" style="zoom:67%;" />
+<img src="/img/20230707222545.png" alt="20230707222545" style="zoom:67%;" />
 
 性能比较低
 
@@ -126,17 +126,17 @@ categories: [八股文,面试]
 * 共享锁：读锁readLock，加锁之后，其他线程可以共享读操作
 * 排他锁：也叫独占锁writeLock，加锁之后，阻塞其他线程读写操作
 
-![20230707222816](https://tonkyshan.cn/img/20230707222816.png)
+![20230707222816](/img/20230707222816.png)
 
 强一致、但性能低
 
 三、异步通知保证数据的最终一致性
 
-<img src="https://tonkyshan.cn/img/20230707222959.png" alt="20230707222959" style="zoom: 67%;" />
+<img src="/img/20230707222959.png" alt="20230707222959" style="zoom: 67%;" />
 
 基于Canal的异步通知：
 
-<img src="https://tonkyshan.cn/img/20230707223028.png" alt="20230707223028" style="zoom:67%;" />
+<img src="/img/20230707223028.png" alt="20230707223028" style="zoom:67%;" />
 
 二进制日志(BINLOG)记录了所有的DDL(数据定义语言)语句和DML(数据操纵语言)语句，但不包括数据查询(SELECT/SHOW)语句
 
@@ -152,7 +152,7 @@ categories: [八股文,面试]
 
 RDB全称Redis Database Backup file(Redis数据备份文件)，也被叫做Redis数据快照，简单来说就是把内存中的数据都记录到磁盘中，当Redis实例故障重启后，从磁盘读取快照文件，恢复数据
 
-<img src="https://tonkyshan.cn/img/20230708200847.png" alt="20230708200847" style="zoom:67%;" />
+<img src="/img/20230708200847.png" alt="20230708200847" style="zoom:67%;" />
 
 Redis内部有触发RDB的机制，可以在redis.conf文件中找到
 
@@ -171,13 +171,13 @@ fork采用的是copy-on-write技术：
 * 当主进程执行读操作时，访问共享内存
 * 当主进程执行写操作时，则会拷贝一份数据，执行写操作
 
-![20230708201552](https://tonkyshan.cn/img/20230708201552.png)
+![20230708201552](/img/20230708201552.png)
 
 **AOF**
 
 AOF全称为Append Only File(追加文件)。Redis处理的每一个写命令都会记录在AOF文件，可以看做是命令日志文件
 
-<img src="https://tonkyshan.cn/img/20230708202354.png" alt="20230708202354" style="zoom:67%;" />
+<img src="/img/20230708202354.png" alt="20230708202354" style="zoom:67%;" />
 
 AOF默认是关闭的，需要修改redis.conf配置文件来开启AOF
 
@@ -199,11 +199,11 @@ appendfsync everysec
 appendfsync no
 ```
 
-![20230708202906](https://tonkyshan.cn/img/20230708202906.png)
+![20230708202906](/img/20230708202906.png)
 
 因为是记录命令，AOF文件会比RDB文件大很多。而且AOF会记录对同一个Key的多次写操作，但只有最后一次写操作才有意义。通过执行**bgrewriteaof**命令，可以让AOF文件执行重写功能，用最少的命令达到相同效果
 
-![20230708203136](https://tonkyshan.cn/img/20230708203136.png)
+![20230708203136](/img/20230708203136.png)
 
 Redis也会在触发阈值时自动去重写AOF文件。阈值也可以在redis.conf中配置
 
@@ -218,7 +218,7 @@ auto-aof-rewrite-min-size 64mb
 
 RDB和AOF各有自己的优缺点，如果对数据安全性要求较高，在实际开发中往往会**结合**两者来使用
 
-<img src="https://tonkyshan.cn/img/20230708203426.png" alt="20230708203426" style="zoom:67%;" />
+<img src="/img/20230708203426.png" alt="20230708203426" style="zoom:67%;" />
 
 --------------
 
@@ -270,7 +270,7 @@ Redis支持8种不同策略来选择要删除的key：
 * allkeys-lfu：对全体key，基于LFU算法进行淘汰
 * volatile-lfu：对设置了TTL的key，基于LFU算法进行淘汰
 
-<img src="https://tonkyshan.cn/img/20230708215447.png" alt="20230708215447" style="zoom: 50%;" />
+<img src="/img/20230708215447.png" alt="20230708215447" style="zoom: 50%;" />
 
 建议：
 
@@ -289,27 +289,27 @@ Redis支持8种不同策略来选择要删除的key：
 
 抢卷场景
 
-<img src="https://tonkyshan.cn/img/20230708220456.png" alt="20230708220456" style="zoom:67%;" />
+<img src="/img/20230708220456.png" alt="20230708220456" style="zoom:67%;" />
 
 正常执行过程
 
-<img src="https://tonkyshan.cn/img/20230708220524.png" alt="20230708220524" style="zoom:67%;" />
+<img src="/img/20230708220524.png" alt="20230708220524" style="zoom:67%;" />
 
 异常模式
 
-<img src="https://tonkyshan.cn/img/20230708220555.png" alt="20230708220555" style="zoom:67%;" />
+<img src="/img/20230708220555.png" alt="20230708220555" style="zoom:67%;" />
 
 解决(加锁，本地互斥锁，单台服务器)：
 
-<img src="https://tonkyshan.cn/img/20230708220650.png" alt="20230708220650" style="zoom:67%;" />
+<img src="/img/20230708220650.png" alt="20230708220650" style="zoom:67%;" />
 
 分布式就会出问题
 
-<img src="https://tonkyshan.cn/img/20230708220808.png" alt="20230708220808" style="zoom:67%;" />
+<img src="/img/20230708220808.png" alt="20230708220808" style="zoom:67%;" />
 
 解决：加分布式锁
 
-<img src="https://tonkyshan.cn/img/20230708220919.png" alt="20230708220919" style="zoom:67%;" />
+<img src="/img/20230708220919.png" alt="20230708220919" style="zoom:67%;" />
 
 **二、实现原理(setnx、redisson)**
 
@@ -329,7 +329,7 @@ SET lock value NX EX 10
 DEL key
 ```
 
-<img src="https://tonkyshan.cn/img/20230708221825.png" alt="20230708221825" style="zoom: 80%;" />
+<img src="/img/20230708221825.png" alt="20230708221825" style="zoom: 80%;" />
 
 Redis实现分布式锁如何合理的控制锁的有效时长？
 
@@ -338,7 +338,7 @@ Redis实现分布式锁如何合理的控制锁的有效时长？
 
 **redisson**
 
-<img src="https://tonkyshan.cn/img/20230708222313.png" alt="20230708222313" style="zoom:67%;" />
+<img src="/img/20230708222313.png" alt="20230708222313" style="zoom:67%;" />
 
 redisson实现的分布式锁，底层是**setnx和lua脚本(保证原子性)**
 
@@ -346,17 +346,17 @@ Redis缓存中的重试机制，当while循环一定次数时，还没有拿到�
 
 在redisson的分布式锁中，提供了一个WatchDog，一个线程获取锁成功后，WatchDog会给持有锁的线程续期(默认是每隔10s续期一次)
 
-![20230708222541](https://tonkyshan.cn/img/20230708222541.png)
+![20230708222541](/img/20230708222541.png)
 
 **redisson——可重入**
 
-<img src="https://tonkyshan.cn/img/20230708222728.png" alt="20230708222728" style="zoom:67%;" />
+<img src="/img/20230708222728.png" alt="20230708222728" style="zoom:67%;" />
 
 可重入，多个锁重入需要判断是否是当前线程，在redis中进行存储的时候使用的**hash结构**，来存储**线程信息和重入的次数**
 
 **redisson——主从一致性**
 
-<img src="https://tonkyshan.cn/img/20230708222945.png" alt="20230708222945" style="zoom:67%;" />
+<img src="/img/20230708222945.png" alt="20230708222945" style="zoom:67%;" />
 
 当一个线程访问主节点时，主节点获取锁后突然宕机，此时会从从节点中选择一个作为主节点，以后的线程可以访问这个节点，这个新的主节点也会获取锁，此时，两个线程同时持有一把锁，会产生脏数据
 
@@ -366,7 +366,7 @@ RedLock(红锁)：不能只在一个redis实例上创建锁，应该是在多个
 
 例：有三个redis节点，3 / 2 + 1 = 2.5， 加锁的redis实例应该>=2(超过一半)
 
-<img src="https://tonkyshan.cn/img/20230708223506.png" alt="20230708223506" style="zoom:67%;" />
+<img src="/img/20230708223506.png" alt="20230708223506" style="zoom:67%;" />
 
 Redisson锁能解决主从数据一致的问题吗？
 
@@ -382,11 +382,11 @@ Redisson锁能解决主从数据一致的问题吗？
 
 单节点的Redis的并发能力是有上限的，要进一步提高Redis的并发能力，就需要搭建主从集群，实现读写分离
 
-<img src="https://tonkyshan.cn/img/20230708225202.png" alt="20230708225202" style="zoom:67%;" />
+<img src="/img/20230708225202.png" alt="20230708225202" style="zoom:67%;" />
 
 主从**全量同步**
 
-<img src="https://tonkyshan.cn/img/20230708225530.png" alt="20230708225530" style="zoom: 67%;" />
+<img src="/img/20230708225530.png" alt="20230708225530" style="zoom: 67%;" />
 
 1、从节点请求主节点同步数据(replication id、offset)
 
@@ -400,9 +400,9 @@ Redisson锁能解决主从数据一致的问题吗？
 
 主从**增量同步** (slave重启或后期数据变化)
 
-<img src="https://tonkyshan.cn/img/20230708225741.png" alt="20230708225741" style="zoom: 80%;" />
+<img src="/img/20230708225741.png" alt="20230708225741" style="zoom: 80%;" />
 
-<img src="https://tonkyshan.cn/img/20230708225807.png" style="zoom: 80%;" />
+<img src="/img/20230708225807.png" style="zoom: 80%;" />
 
 1、从节点请求主节点同步数据，主节点判断是不是第一次请求，不是第一次请求就获取从节点的offset值
 
@@ -416,7 +416,7 @@ Redis提供了哨兵(Sentinel)机制来实现主从集群的自动故障恢复�
 * **自动故障恢复**：如果master故障，Sentinel会将一个slave提升为master。当故障实例恢复后，也以新的master为主
 * **通知**：Sentinel充当Redis客户端的服务发现来源，当集群发生故障转移时，会将最新信息推送给Redis的客户端
 
-<img src="https://tonkyshan.cn/img/20230708230504.png" alt="20230708230504" style="zoom: 80%;" />
+<img src="/img/20230708230504.png" alt="20230708230504" style="zoom: 80%;" />
 
 **服务状态监控**
 
@@ -432,15 +432,15 @@ Sentinel基于心跳机制监测服务状态，每隔1秒向集群的每个实�
 * **如果slave-priority一样，则判断slave节点的offset值，越大优先级越高**
 * 最后是判断slave节点的运行id大小，越小优先级越高
 
-<img src="https://tonkyshan.cn/img/20230708232922.png" alt="20230708232922" style="zoom: 80%;" />
+<img src="/img/20230708232922.png" alt="20230708232922" style="zoom: 80%;" />
 
 **redis集群(哨兵模式)脑裂**
 
-<img src="https://tonkyshan.cn/img/20230708233052.png" alt="20230708233052" style="zoom:67%;" />
+<img src="/img/20230708233052.png" alt="20230708233052" style="zoom:67%;" />
 
 脑裂：出现多个master
 
-<img src="https://tonkyshan.cn/img/20230708233153.png" alt="20230708233153" style="zoom: 67%;" />
+<img src="/img/20230708233153.png" alt="20230708233153" style="zoom: 67%;" />
 
 当网络恢复后，原master会被降级为slave，这时再从新master同步数据，就会导致数据丢失
 
@@ -468,13 +468,13 @@ min-replicas-max-lag 5 表示数据复制和同步的延迟不能超过5秒
 * master之间通过ping监测彼此健康状态
 * 客户端请求可以访问集群任意节点，最终都会被转发到正确节点
 
-<img src="https://tonkyshan.cn/img/20230708234355.png" alt="20230708234355" style="zoom: 80%;" />
+<img src="/img/20230708234355.png" alt="20230708234355" style="zoom: 80%;" />
 
 **Redis分片集群数据的存储和读取**
 
 Redis分片集群引入了哈希槽的概念，Redis集群有16384个哈希槽，每个key通过CRC16校验后对16384取模来决定放置哪个槽，集群的每个节点负责一部分hash槽
 
-<img src="https://tonkyshan.cn/img/20230708234901.png" alt="20230708234901" style="zoom: 67%;" />
+<img src="/img/20230708234901.png" alt="20230708234901" style="zoom: 67%;" />
 
 * Redis分片集群引入了哈希槽的概念，Redis集群有16384个哈希槽
 * 将16384个插槽分配到不同的实例
@@ -509,18 +509,18 @@ Linux系统中的一个进程使用的内存情况划分两部分：**内核空�
 
 **内核空间**可以执行特权命令(Ring0)，调用一切系统资源
 
-<img src="https://tonkyshan.cn/img/20230709121701.png" alt="20230709121701" style="zoom: 80%;" />
+<img src="/img/20230709121701.png" alt="20230709121701" style="zoom: 80%;" />
 
 Linux系统为了提高IO效率，会在用户空间和内核空间都加入缓冲区：
 
 * 写数据时，要把用户缓冲数据拷贝到内核缓冲区，然后写入设备
 * 读数据时，要从设备读数据到内核缓冲区，然后拷贝到用户缓冲区
 
-<img src="https://tonkyshan.cn/img/20230709122109.png" alt="20230709122109" style="zoom: 80%;" />
+<img src="/img/20230709122109.png" alt="20230709122109" style="zoom: 80%;" />
 
-<img src="https://tonkyshan.cn/img/20230709122340.png" alt="20230709122340" style="zoom: 80%;" />
+<img src="/img/20230709122340.png" alt="20230709122340" style="zoom: 80%;" />
 
-<img src="https://tonkyshan.cn/img/20230709122506.png" alt="20230709122506" style="zoom:80%;" />
+<img src="/img/20230709122506.png" alt="20230709122506" style="zoom:80%;" />
 
 **IO多路复用**
 
@@ -541,7 +541,7 @@ Linux系统为了提高IO效率，会在用户空间和内核空间都加入缓�
 
 Redis通过IO多路复用来提高网络性能，并且支持各种不同的多路复用实现，并且将这些实现进行封装，提供了统一的高性能事件库
 
-<img src="https://tonkyshan.cn/img/20230709124731.png" alt="20230709124731" style="zoom:80%;" />
+<img src="/img/20230709124731.png" alt="20230709124731" style="zoom:80%;" />
 
 就是使用I/O多路复用结合事件的处理器来应对多个Socket的请求
 
@@ -584,7 +584,7 @@ long_query_time=2
 
 配置完毕后，通过以下指令重新启动MySQL服务器进行测试，查看慢日志中记录的信息
 
-![](https://tonkyshan.cn/img/20230709202157.png)
+![](/img/20230709202157.png)
 
 -------
 
@@ -600,7 +600,7 @@ SQL执行计划(找到慢的原因)
 
 可以采用**EXPLAIN**或者**DESC**命令获取MySQL如何执行SELECT语句的信息
 
-![20230709202647](https://tonkyshan.cn/img/20230709202647.png)
+![20230709202647](/img/20230709202647.png)
 
 1、possible_keys 当前sql可能会使用到的索引
 
@@ -612,7 +612,7 @@ SQL执行计划(找到慢的原因)
 
 4、Extra 额外的优化建议
 
-![20230709203453](https://tonkyshan.cn/img/20230709203453.png)
+![20230709203453](/img/20230709203453.png)
 
 5、type这条sql的连接的类型，性能由好到差为NULL，system，const，eq_ref，ref，range，index，all
 
@@ -637,7 +637,7 @@ SQL执行计划(找到慢的原因)
 
 **一、B+树**
 
-![20230709211424](https://tonkyshan.cn/img/20230709211424.png)
+![20230709211424](/img/20230709211424.png)
 
 时间复杂度：
 
@@ -649,11 +649,11 @@ B-Tree，B树是一种多叉路平衡查找树，相对于二叉树，B树每个
 
 以一颗最大度数(max-degree)为5(5阶)的b-tree为例，那么这个B树每个节点最多存储4个key
 
-![20230709211904](https://tonkyshan.cn/img/20230709211904.png)
+![20230709211904](/img/20230709211904.png)
 
 B+Tree是在BTree基础上的一种优化，使其更适合实现外存储索引结构，InnoDB存储引擎就是用B+Tree实现其索引结构
 
-![20230709212157](https://tonkyshan.cn/img/20230709212157.png)
+![20230709212157](/img/20230709212157.png)
 
 B树与B+树对比：
 
@@ -688,7 +688,7 @@ MySQL的InnoDB引擎采用的是B+树的数据结构来存储索引
 * 如果不存在主键，将使用第一个唯一(UNIQUE)索引作为聚集索引
 * 如果表没有主键，或没有合适的唯一索引，则InnoDB会自动生成一个rowid作为隐藏的聚集索引
 
-![20230709223919](https://tonkyshan.cn/img/20230709223919.png)
+![20230709223919](/img/20230709223919.png)
 
 * 聚簇索引(聚集索引)：数据与索引放到一块，B+树的叶子节点保存了整行数据，有且只有一个
 * 非聚簇索引(二级索引)：数据又索引分开存储，B+树的叶子节点保存对应的主键，可以有多个
@@ -701,13 +701,13 @@ MySQL的InnoDB引擎采用的是B+树的数据结构来存储索引
 
 **覆盖索引**是指查询使用了索引，并且需要返回的列，在该索引中已经全部能够找到。(不需要回表查询)
 
-![20230709225457](https://tonkyshan.cn/img/20230709225457.png)
+![20230709225457](/img/20230709225457.png)
 
 **MySQL超大分页**
 
 在数据量比较大时，如果进行limit分页查询，在查询时，越往后，分页查询效率越低
 
-![20230709230234](https://tonkyshan.cn/img/20230709230234.png)
+![20230709230234](/img/20230709230234.png)
 
 因为，在分页查询时，如果执行limit 9000000，10，此时需要MySQL排序前9000010记录，仅仅返回9000000-9000010的记录，其他记录丢弃，查询排序的代价非常大。
 
@@ -781,7 +781,7 @@ MySQL超大分页
 
 如果数据库的使用场景读的操作比较多的时候，为了避免写的操作所造成的性能影响，可以采用读写分离的架构。读写分离解决的是，数据库的写入，影响了查询的效率
 
-<img src="https://tonkyshan.cn/img/20230710200058.png" alt="20230710200058" style="zoom:67%;" />
+<img src="/img/20230710200058.png" alt="20230710200058" style="zoom:67%;" />
 
 -----
 
@@ -808,9 +808,9 @@ MySQL超大分页
 
 隔离级别：读未提交、读已提交、**可重复读**、串行化
 
-<img src="https://tonkyshan.cn/img/20230710201550.png" alt="20230710201550" style="zoom: 67%;" />
+<img src="/img/20230710201550.png" alt="20230710201550" style="zoom: 67%;" />
 
-<img src="https://tonkyshan.cn/img/20230710201812.png" alt="20230710201812" style="zoom:67%;" />
+<img src="/img/20230710201812.png" alt="20230710201812" style="zoom:67%;" />
 
 x：可以解决
 
@@ -829,7 +829,7 @@ x：可以解决
 
 该日志文件由两部分组成：重做日志缓冲(redo log buffer)以及重做日志文件(redo log file)，前者是在内存中，后者在磁盘中。当事务提交之后会把所有修改信息都存到该日志文件中，用于在刷新脏页到磁盘，发生错误时，进行数据恢复使用。
 
-<img src="https://tonkyshan.cn/img/20230710203246.png" alt="20230710203246" style="zoom: 80%;" />
+<img src="/img/20230710203246.png" alt="20230710203246" style="zoom: 80%;" />
 
 **undo log**
 
@@ -858,11 +858,11 @@ x：可以解决
 
  MVCC的具体实现，主要依赖于数据库记录中的**隐藏字段，undo log日志，readView**
 
-<img src="https://tonkyshan.cn/img/20230710225613.png" alt="20230710225613" style="zoom: 80%;" />
+<img src="/img/20230710225613.png" alt="20230710225613" style="zoom: 80%;" />
 
 **隐藏字段**
 
-<img src="https://tonkyshan.cn/img/20230710225822.png" alt="20230710225822" style="zoom:67%;" />
+<img src="/img/20230710225822.png" alt="20230710225822" style="zoom:67%;" />
 
 **undo log**
 
@@ -874,7 +874,7 @@ x：可以解决
 
 **undo log版本链**
 
-![20230710230623](https://tonkyshan.cn/img/20230710230623.png)
+![20230710230623](/img/20230710230623.png)
 
 不同事务或相同事务对同一条记录进行修改，会导致该记录的undo log生成一条记录版本链表，链表的头部是最新的旧纪录，链表尾部是最早的旧纪录
 
@@ -893,16 +893,16 @@ ReadView(读视图)是**快照读**SQL执行时MVCC提取数据的依据，记�
 * Read Committed：每次select，都生成一个快照读
 * Repeatable Read：开启事务后第一个select语句才是快照读的地方
 
-![20230710231443](https://tonkyshan.cn/img/20230710231443.png)
+![20230710231443](/img/20230710231443.png)
 
-![20230710231529](https://tonkyshan.cn/img/20230710231529.png)
+![20230710231529](/img/20230710231529.png)
 
 不同的隔离级别，生成ReadView的时机不同：
 
 * READ COMMOTTED：在事务中每一次执行快照读生成ReadView
 * REPEATABLE READ：仅在事务中第一次执行快照读时生成ReadView，后续复用该ReadView
 
-![20230710232152](https://tonkyshan.cn/img/20230710232152.png)
+![20230710232152](/img/20230710232152.png)
 
 **二、主从同步原理**
 
@@ -910,7 +910,7 @@ MySQL主从复制的核心就是二进制日志
 
 二进制日志(BINLOG)记录了所有的DDL(数据定义语言)语句和DML(数据操纵语言)语句，但不包括数据查询(SELECT、SHOW)语句
 
-![20230710232431](https://tonkyshan.cn/img/20230710232431.png)
+![20230710232431](/img/20230710232431.png)
 
 MySQL主从复制的核心就是二进制日志binlog(DDL和DML)
 
@@ -926,13 +926,13 @@ MySQL主从复制的核心就是二进制日志binlog(DDL和DML)
 * 优化已解决不了性能问题(主从读写分离、查询索引...)
 * IO瓶颈(磁盘IO，网络IO)，CPU瓶颈(聚合查询、连接数太多)
 
-![20230710232955](https://tonkyshan.cn/img/20230710232955.png)
+![20230710232955](/img/20230710232955.png)
 
 **垂直分库**
 
 以表为依据，根据业务将不同表拆分到不同库中
 
-![20230710233135](https://tonkyshan.cn/img/20230710233135.png)
+![20230710233135](/img/20230710233135.png)
 
 * 按业务对数据分级管理、维护、监控、扩展
 * 在高并发下，提高磁盘IO和数据量连接数
@@ -946,7 +946,7 @@ MySQL主从复制的核心就是二进制日志binlog(DDL和DML)
 * 把不常用的字段单独放在一张表
 * 把text，blob等大字段拆分出来放在附表中
 
-<img src="https://tonkyshan.cn/img/20230710233411.png" alt="20230710233411" style="zoom:80%;" />
+<img src="/img/20230710233411.png" alt="20230710233411" style="zoom:80%;" />
 
 * 冷热数据分离
 * 减少IO过渡争抢，两表互不影响
@@ -960,7 +960,7 @@ MySQL主从复制的核心就是二进制日志binlog(DDL和DML)
 * 根据id节点取模
 * 按id也就是范围路由，节点1(1-100万)，节点2(100万-200万)
 
-<img src="https://tonkyshan.cn/img/20230710233618.png" alt="20230710233618" style="zoom:80%;" />
+<img src="/img/20230710233618.png" alt="20230710233618" style="zoom:80%;" />
 
 * 解决了单库大数量，高并发的性能瓶颈问题
 * 提高了系统的稳定性和可用性
@@ -969,16 +969,16 @@ MySQL主从复制的核心就是二进制日志binlog(DDL和DML)
 
 将一个表的数据拆分到多个表中(可以在同一个库内)
 
-<img src="https://tonkyshan.cn/img/20230710233750.png" alt="20230710233750" style="zoom:80%;" />
+<img src="/img/20230710233750.png" alt="20230710233750" style="zoom:80%;" />
 
 * 优化单一表数据量过大而产生的性能问题
 * 避免IO争抢并减少缩表的几率
 
 **策略**
 
-<img src="https://tonkyshan.cn/img/20230710233953.png" alt="20230710233953" style="zoom:67%;" />
+<img src="/img/20230710233953.png" alt="20230710233953" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/20230710234028.png" alt="20230710234028" style="zoom:67%;" />
+<img src="/img/20230710234028.png" alt="20230710234028" style="zoom:67%;" />
 
 ----------
 
@@ -1003,7 +1003,7 @@ public class UserServiceIpml implements UserService{
 * singleton：bean在每个Spring IOC容器中只有一个实例
 * prototype：一个bean的定义可以有多个实例
 
-![20230711201458](https://tonkyshan.cn/img/20230711201458.png)
+![20230711201458](/img/20230711201458.png)
 
 解答：
 
@@ -1025,9 +1025,9 @@ AOP称为面向切面编程，用于将那些与业务无关，但却对多个�
 
 **记录操作日志思路**
 
-<img src="https://tonkyshan.cn/img/20230711202310.png" alt="20230711202310" style="zoom:80%;" />
+<img src="/img/20230711202310.png" alt="20230711202310" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230711203138.png" alt="20230711203138" style="zoom:80%;" />
+<img src="/img/20230711203138.png" alt="20230711203138" style="zoom:80%;" />
 
 **Spring中的事务是如何实现的？**
 
@@ -1036,21 +1036,21 @@ Spring支持编程式事务管理和声明式事务管理两种方式
 * 编程式事务管理：需使用TransactionTemplate来进行实现，对业务代码有侵入性，项目中很少使用
 * 声明式事务管理：声明式事务管理建立在AOP之上，其本质是通过AOP功能，对方法前后进行拦截，将事务处理的功能编织到拦截的方法中，也就是在目标方法开始前加入一个事务，在执行完目标方法之后根据执行情况提交或回滚事务
 
-<img src="https://tonkyshan.cn/img/20230711203602.png" alt="20230711203602" style="zoom:80%;" />
+<img src="/img/20230711203602.png" alt="20230711203602" style="zoom:80%;" />
 
 **事务失效的场景**
 
 * 异常捕获处理
 
-<img src="https://tonkyshan.cn/img/20230711204036.png" alt="20230711204036" style="zoom: 67%;" />
+<img src="/img/20230711204036.png" alt="20230711204036" style="zoom: 67%;" />
 
 * 抛出检查异常
 
-<img src="https://tonkyshan.cn/img/20230711204203.png" alt="20230711204203" style="zoom: 67%;" />
+<img src="/img/20230711204203.png" alt="20230711204203" style="zoom: 67%;" />
 
 * 非public方法
 
-<img src="https://tonkyshan.cn/img/20230711204311.png" alt="20230711204311" style="zoom:67%;" />
+<img src="/img/20230711204311.png" alt="20230711204311" style="zoom:67%;" />
 
 **三、bean的声明周期**
 
@@ -1064,7 +1064,7 @@ Spring容器在进行实例化时，会将xml配置的`<bean>`的信息封装成
 * scope：作用域
 * lazyInit：延迟初始化
 
-![20230711205453](https://tonkyshan.cn/img/20230711205453.png)
+![20230711205453](/img/20230711205453.png)
 
 1、通过BeanDefinition获取bean的定义信息
 
@@ -1084,29 +1084,29 @@ Spring容器在进行实例化时，会将xml配置的`<bean>`的信息封装成
 
 **四、Spring的循环引用**
 
-<img src="https://tonkyshan.cn/img/20230711210349.png" alt="20230711210349" style="zoom:67%;" />
+<img src="/img/20230711210349.png" alt="20230711210349" style="zoom:67%;" />
 
 **循环依赖**
 
-<img src="https://tonkyshan.cn/img/20230711210450.png" alt="20230711210450" style="zoom:67%;" />
+<img src="/img/20230711210450.png" alt="20230711210450" style="zoom:67%;" />
 
 Spring解决循环依赖是通过三级缓存，对应的三级缓存如下：
 
-<img src="https://tonkyshan.cn/img/20230711210657.png" alt="20230711210657" style="zoom: 80%;" />
+<img src="/img/20230711210657.png" alt="20230711210657" style="zoom: 80%;" />
 
 一级缓存作用：限制bean在beanFactory中只存一份，即实现singleton scope，解决不了循环依赖
 
 如果想打破循环依赖，就需要一个中间人的参与，这个中间人就是二级缓存
 
-<img src="https://tonkyshan.cn/img/20230711210935.png" alt="20230711210935" style="zoom:67%;" />
+<img src="/img/20230711210935.png" alt="20230711210935" style="zoom:67%;" />
 
 二级缓存可以解决一般对象的循环依赖问题，但是不能解决代理对象的循环依赖问题
 
-<img src="https://tonkyshan.cn/img/20230711211216.png" alt="20230711211216" style="zoom:67%;" />
+<img src="/img/20230711211216.png" alt="20230711211216" style="zoom:67%;" />
 
 构造方法出现循环依赖问题怎么解决？
 
-<img src="https://tonkyshan.cn/img/20230711211319.png" alt="20230711211319" style="zoom:67%;" />
+<img src="/img/20230711211319.png" alt="20230711211319" style="zoom:67%;" />
 
 问题答案：
 
@@ -1135,7 +1135,7 @@ Spring解决循环依赖是通过三级缓存，对应的三级缓存如下：
 
 **视图阶段(老旧JSP等)**
 
-<img src="https://tonkyshan.cn/img/20230711221516.png" alt="20230711221516" style="zoom:80%;" />
+<img src="/img/20230711221516.png" alt="20230711221516" style="zoom:80%;" />
 
 * 用户发送出请求到前端控制器DispatcherServlet
 * DispatcherServlet收到请求后调用HandlerMapping(处理器映射器)
@@ -1151,7 +1151,7 @@ Spring解决循环依赖是通过三级缓存，对应的三级缓存如下：
 
 **前后端分离阶段(接口开发，异步)**
 
-<img src="https://tonkyshan.cn/img/20230711221644.png" alt="20230711221644" style="zoom:80%;" />
+<img src="/img/20230711221644.png" alt="20230711221644" style="zoom:80%;" />
 
 * 用户发送出请求到前端控制器dispatcherServlet
 * DispatcherServlet收到请求调用HandlerMapping(处理器映射器)
@@ -1169,15 +1169,15 @@ Spring解决循环依赖是通过三级缓存，对应的三级缓存如下：
 
 **一、自动配置原理**
 
-![20230711223035](https://tonkyshan.cn/img/20230711223035.png)
+![20230711223035](/img/20230711223035.png)
 
 * **@SpringBootConfiguration：**该注解与@Configuration注解作用相同，用来声明当前也是一个配置类
 * **@ComponentScan：**组件扫描，默认扫描当前引导类所在包及其子包
 * **@EnableAutoConfiguration：**SpringBoot实现自动化配置的核心注解
 
-![20230711223356](https://tonkyshan.cn/img/20230711223356.png)
+![20230711223356](/img/20230711223356.png)
 
-![20230711223524](https://tonkyshan.cn/img/20230711223524.png)
+![20230711223524](/img/20230711223524.png)
 
 1、在SpringBoot项目中的引导类上有一个注解@SpringBootApplication，这个注解是对三个注解进行了封装，分别是：
 
@@ -1193,15 +1193,15 @@ Spring解决循环依赖是通过三级缓存，对应的三级缓存如下：
 
 Spring中：
 
-<img src="https://tonkyshan.cn/img/20230711224503.png" alt="20230711224503" style="zoom:80%;" />
+<img src="/img/20230711224503.png" alt="20230711224503" style="zoom:80%;" />
 
 SpringMVC中：
 
-<img src="https://tonkyshan.cn/img/20230711224604.png" alt="20230711224604" style="zoom:80%;" />
+<img src="/img/20230711224604.png" alt="20230711224604" style="zoom:80%;" />
 
 SpringBoot中：
 
-<img src="https://tonkyshan.cn/img/20230711224717.png" alt="20230711224717" style="zoom:80%;" />
+<img src="/img/20230711224717.png" alt="20230711224717" style="zoom:80%;" />
 
 ---------
 
@@ -1211,7 +1211,7 @@ SpringBoot中：
 
 **一、Mybatis执行流程**
 
-<img src="https://tonkyshan.cn/img/20230711225108.png" alt="20230711225108" style="zoom:80%;" />
+<img src="/img/20230711225108.png" alt="20230711225108" style="zoom:80%;" />
 
 1、读取MyBatis配置文件：mybatis-config.xml加载运行环境和映射文件
 
@@ -1231,7 +1231,7 @@ SpringBoot中：
 
 支持，默认不开启
 
-![20230711225637](https://tonkyshan.cn/img/20230711225637.png)
+![20230711225637](/img/20230711225637.png)
 
 **立即加载：**查询用户时候，把用户所属订单数据也查询出来
 
@@ -1239,11 +1239,11 @@ SpringBoot中：
 
 某个映射文件设置懒加载：fetchType = "lazy"
 
-<img src="https://tonkyshan.cn/img/20230711230006.png" alt="20230711230006" style="zoom:80%;" />
+<img src="/img/20230711230006.png" alt="20230711230006" style="zoom:80%;" />
 
 全局设置延迟加载(在mybatis配置文件中设置)：lazyLoadingEnabled true
 
-![20230711230230](https://tonkyshan.cn/img/20230711230230.png)
+![20230711230230](/img/20230711230230.png)
 
 **延迟加载底层原理**
 
@@ -1253,7 +1253,7 @@ SpringBoot中：
 
 3、获取数据后，调用set方法设置属性值，再继续查询目标方法，就有值了
 
-<img src="https://tonkyshan.cn/img/20230711230433.png" alt="20230711230433" style="zoom:80%;" />
+<img src="/img/20230711230433.png" alt="20230711230433" style="zoom:80%;" />
 
 **三、Mybatis的一级、二级缓存**
 
@@ -1263,9 +1263,9 @@ SpringBoot中：
 
 基于PerpetualCache的HashMap本地缓存，其存储作用域为Session，当Session进行flush或close之后，该Session中的所有Cache就将清空，默认打开一级缓存
 
-<img src="https://tonkyshan.cn/img/20230711231426.png" alt="20230711231426" style="zoom:80%;" />
+<img src="/img/20230711231426.png" alt="20230711231426" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230711231545.png" alt="20230711231545" style="zoom:80%;" />
+<img src="/img/20230711231545.png" alt="20230711231545" style="zoom:80%;" />
 
 **二级缓存：**作用域是namespace和mapper的作用域，不依赖于session
 
@@ -1305,9 +1305,9 @@ SpringBoot中：
 
 **一、SpringCloud5大组件**
 
-<img src="https://tonkyshan.cn/img/20230730191019.png" alt="20230730191019" style="zoom:80%;" />
+<img src="/img/20230730191019.png" alt="20230730191019" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230730191344.png" alt="20230730191344" style="zoom:80%;" />
+<img src="/img/20230730191344.png" alt="20230730191344" style="zoom:80%;" />
 
 ----------
 
@@ -1325,9 +1325,9 @@ SpringBoot中：
 
 **二、Nacos和Eureka的区别**
 
-<img src="https://tonkyshan.cn/img/20230730192507.png" alt="20230730192507" style="zoom:70%;" />
+<img src="/img/20230730192507.png" alt="20230730192507" style="zoom:70%;" />
 
-<img src="https://tonkyshan.cn/img/20230730193152.png" alt="20230730193152" style="zoom:67%;" />
+<img src="/img/20230730193152.png" alt="20230730193152" style="zoom:67%;" />
 
 * 共同点
 
@@ -1355,19 +1355,19 @@ SpringBoot中：
 
 **一、Ribbon负载均衡的流程**
 
-<img src="https://tonkyshan.cn/img/20230730193632.png" alt="20230730193632" style="zoom:72%;" />
+<img src="/img/20230730193632.png" alt="20230730193632" style="zoom:72%;" />
 
 **二、Ribbon负载均衡策略有哪些？**
 
-<img src="https://tonkyshan.cn/img/20230730193948.png" alt="20230730193948" style="zoom:80%;" />
+<img src="/img/20230730193948.png" alt="20230730193948" style="zoom:80%;" />
 
 **三、自定义负载均衡策略怎么实现？**
 
 可以自己创建类实现IRule接口，然后再通过配置类或者配置文件配置即可，通过定义IRule实现可以修改负载均衡规则，有两种方式：
 
-<img src="https://tonkyshan.cn/img/20230730194240.png" alt="20230730194240" style="zoom:80%;" />
+<img src="/img/20230730194240.png" alt="20230730194240" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230730194310.png" alt="20230730194310" style="zoom:80%;" />
+<img src="/img/20230730194310.png" alt="20230730194310" style="zoom:80%;" />
 
 --------
 
@@ -1377,7 +1377,7 @@ SpringBoot中：
 
 **一、什么是服务雪崩，怎么解决？**
 
-<img src="https://tonkyshan.cn/img/20230730194442.png" alt="20230730194442" style="zoom:80%;" />
+<img src="/img/20230730194442.png" alt="20230730194442" style="zoom:80%;" />
 
 预防：限流
 
@@ -1387,17 +1387,17 @@ SpringBoot中：
 
 服务降级是服务自我保护的一种方式，或者保护下游服务的一种方式，用于确保服务不会受请求突增影响变得不可用，确保服务不会崩溃
 
-<img src="https://tonkyshan.cn/img/20230730194836.png" alt="20230730194836" style="zoom:80%;" />
+<img src="/img/20230730194836.png" alt="20230730194836" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230730194945.png" alt="20230730194945" style="zoom:80%;" />
+<img src="/img/20230730194945.png" alt="20230730194945" style="zoom:80%;" />
 
 **服务熔断**
 
 Hystrix熔断机制，用于监控微服务调用情况，默认是关闭的，如果需要开启需要在引导类上添加注解：**@EnableCircuitBreaker**，如果检测**到10秒内请求的失败率超过50%**，就触发熔断机制，之后**每隔5秒**重新尝试请求微服务，如果微服务不能响应，继续走熔断机制。如果微服务可达，则关闭熔断机制，恢复正常请求。
 
-<img src="https://tonkyshan.cn/img/20230730195355.png" alt="20230730195355" style="zoom:80%;" />
+<img src="/img/20230730195355.png" alt="20230730195355" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230730195420.png" alt="20230730195420" style="zoom:80%;" />
+<img src="/img/20230730195420.png" alt="20230730195420" style="zoom:80%;" />
 
 -------
 
@@ -1412,7 +1412,7 @@ Hystrix熔断机制，用于监控微服务调用情况，默认是关闭的，�
 * 服务关系
 * 服务告警
 
-<img src="https://tonkyshan.cn/img/20230730211807.png" alt="20230730211807" style="zoom:80%;" />
+<img src="/img/20230730211807.png" alt="20230730211807" style="zoom:80%;" />
 
 * Springboot-admin
 * prometheus + Grafana
@@ -1423,13 +1423,13 @@ Hystrix熔断机制，用于监控微服务调用情况，默认是关闭的，�
 
 一个分布式系统的应用程序性监控工具(**A**pplication **P**erformance **M**anagment)，提供了完善的链路追踪能力，apache的的顶级项目(前华为产品经理吴晟主导开源)
 
-<img src="https://tonkyshan.cn/img/20230730212206.png" alt="20230730212206" style="zoom:80%;" />
+<img src="/img/20230730212206.png" alt="20230730212206" style="zoom:80%;" />
 
 * 服务(service)：业务资源应用系统(微服务)
 * 端点(endpoint)：应用系统对外暴露的功能接口(接口)
 * 实例(instance)：物理机
 
-<img src="https://tonkyshan.cn/img/20230730212815.png" alt="20230730212815" style="zoom: 80%;" />
+<img src="/img/20230730212815.png" alt="20230730212815" style="zoom: 80%;" />
 
 ---
 
@@ -1447,21 +1447,21 @@ Hystrix熔断机制，用于监控微服务调用情况，默认是关闭的，�
 
 2、防止用于恶意刷接口
 
-<img src="https://tonkyshan.cn/img/20230801205128.png" alt="20230801205128" style="zoom:80%;" />
+<img src="/img/20230801205128.png" alt="20230801205128" style="zoom:80%;" />
 
 限流的实现方式：
 
 **一、Tomcat**：可以设置最大连接数(单项目推荐，分布式不推荐)
 
-<img src="https://tonkyshan.cn/img/20230801205318.png" alt="20230801205318" style="zoom:80%;" />
+<img src="/img/20230801205318.png" alt="20230801205318" style="zoom:80%;" />
 
 **二、Nginx：漏桶算法**(了解原理即可)
 
 1、控制速率(突发流量)
 
-<img src="https://tonkyshan.cn/img/20230801205614.png" alt="20230801205614" style="zoom:67%;" />
+<img src="/img/20230801205614.png" alt="20230801205614" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/20230801205528.png" alt="20230801205528" style="zoom:98%;" />
+<img src="/img/20230801205528.png" alt="20230801205528" style="zoom:98%;" />
 
 * 语法：limit_req_zone key zone rate
 * key：定义限流对象，binary_remote_addr就是一种key，基于客户端ip限流
@@ -1472,7 +1472,7 @@ Hystrix熔断机制，用于监控微服务调用情况，默认是关闭的，�
 
 2、控制并发连接数
 
-<img src="https://tonkyshan.cn/img/20230801210101.png" alt="20230801210101" style="zoom:98%;" />
+<img src="/img/20230801210101.png" alt="20230801210101" style="zoom:98%;" />
 
 * limit_conn perip 20：对应的key是$binary_remote_addr，表示限制单个IP同时最多能持有20个连接
 * limit_conn perserver 100：对应的key是$server_name，表示虚拟主机(server)同时能处理并发连接的总数
@@ -1481,9 +1481,9 @@ Hystrix熔断机制，用于监控微服务调用情况，默认是关闭的，�
 
 yml配置文件中，微服务路由设置添加局部过滤器RequestRateLimiter
 
-<img src="https://tonkyshan.cn/img/20230801214042.png" alt="20230801214042" style="zoom:98%;" />
+<img src="/img/20230801214042.png" alt="20230801214042" style="zoom:98%;" />
 
-<img src="https://tonkyshan.cn/img/20230801214142.png" alt="20230801214142" style="zoom:80%;" />
+<img src="/img/20230801214142.png" alt="20230801214142" style="zoom:80%;" />
 
 * key-resolver：定义限流对象(ip，路径，参数)，需代码实现，使用spel表达式获取
 * replenishRate：令牌桶每秒填充平均速率
@@ -1491,7 +1491,7 @@ yml配置文件中，微服务路由设置添加局部过滤器RequestRateLimite
 
 **四、自定义拦截器**
 
-<img src="https://tonkyshan.cn/img/20230801214509.png" alt="20230801214509" style="zoom:80%;" />
+<img src="/img/20230801214509.png" alt="20230801214509" style="zoom:80%;" />
 
 -----
 
@@ -1509,7 +1509,7 @@ yml配置文件中，微服务路由设置添加局部过滤器RequestRateLimite
 * Availability(可用性)
 * Partiton tolerance(分区容错性)
 
-<img src="https://tonkyshan.cn/img/20230802205039.png" alt="20230802205039" style="zoom:80%;" />
+<img src="/img/20230802205039.png" alt="20230802205039" style="zoom:80%;" />
 
 Eric Brewer说，分布式系统无法同时满足这三个指标。这个结论就叫做CAP定理
 
@@ -1517,13 +1517,13 @@ Eric Brewer说，分布式系统无法同时满足这三个指标。这个结论
 
 用户访问分布式系统中的任意节点，得到的数据必须一致
 
-<img src="https://tonkyshan.cn/img/20230802205503.png" alt="20230802205503" style="zoom:80%;" />
+<img src="/img/20230802205503.png" alt="20230802205503" style="zoom:80%;" />
 
 **2、Availability(可用性)**
 
 用户访问集群中的任意健康节点，必须能得到响应，而不是超时或拒绝
 
-<img src="https://tonkyshan.cn/img/20230802205604.png" alt="20230802205604" style="zoom:80%;" />
+<img src="/img/20230802205604.png" alt="20230802205604" style="zoom:80%;" />
 
 **3、Partiton tolerance(分区容错性)**
 
@@ -1531,7 +1531,7 @@ Partiton (分区)：因为网络故障或其它原因导致分布式系统中的
 
 tolerance(容错)：在集群出现分区时，整个系统也要持续对外提供服务
 
-<img src="https://tonkyshan.cn/img/20230802205847.png" alt="20230802205847" style="zoom:80%;" />
+<img src="/img/20230802205847.png" alt="20230802205847" style="zoom:80%;" />
 
 结论：
 
@@ -1547,9 +1547,9 @@ BASE理论是对CAP的一种解决思路，包括三个思想：
 * **S**oft State (软状态)：在一定时间内，允许出现中间状态，比如临时的不一致状态
 * **E**ventually Consistent (最终一致性)：虽然无法保证强一致性，但是在软状态结束后，最终达到数据一致
 
-<img src="https://tonkyshan.cn/img/20230802211205.png" alt="20230802211205" style="zoom:80%;" />
+<img src="/img/20230802211205.png" alt="20230802211205" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230802211227.png" alt="20230802211227" style="zoom:80%;" />
+<img src="/img/20230802211227.png" alt="20230802211227" style="zoom:80%;" />
 
 -------
 
@@ -1567,25 +1567,25 @@ Seata事务管理中有三个重要的角色
 * **TM(Transaction Manager) - 事务管理者：**定义全局事务的范围，开始全局事务、提交或回滚全局事务
 * **RM(Resource Manager) - 资源管理器：**管理分支事务处理的资源，与TC交谈以注册事务和报告分支事务的状态，并驱动分支事务提交或回滚。
 
-<img src="https://tonkyshan.cn/img/20230802213456.png" alt="20230802213456" style="zoom:80%;" />
+<img src="/img/20230802213456.png" alt="20230802213456" style="zoom:80%;" />
 
 **XA模式**
 
-<img src="https://tonkyshan.cn/img/20230802213618.png" alt="20230802213618" style="zoom:80%;" />
+<img src="/img/20230802213618.png" alt="20230802213618" style="zoom:80%;" />
 
 **AT模式**
 
-<img src="https://tonkyshan.cn/img/20230802213738.png" alt="20230802213738" style="zoom:80%;" />
+<img src="/img/20230802213738.png" alt="20230802213738" style="zoom:80%;" />
 
 **TCC模式**
 
-<img src="https://tonkyshan.cn/img/20230802213923.png" alt="20230802213923" style="zoom:80%;" />
+<img src="/img/20230802213923.png" alt="20230802213923" style="zoom:80%;" />
 
 **2、MQ**
 
-<img src="https://tonkyshan.cn/img/20230802214023.png" alt="20230802214023" style="zoom:80%;" />
+<img src="/img/20230802214023.png" alt="20230802214023" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230802214052.png" alt="20230802214052" style="zoom:80%;" />
+<img src="/img/20230802214052.png" alt="20230802214052" style="zoom:80%;" />
 
 ------
 
@@ -1605,7 +1605,7 @@ Seata事务管理中有三个重要的角色
 
 基于RESTful API的角度对部分常见类型请求的幂等性特点进行分析
 
-<img src="https://tonkyshan.cn/img/20230802220035.png" alt="20230802220035" style="zoom:80%;" />
+<img src="/img/20230802220035.png" alt="20230802220035" style="zoom:80%;" />
 
 解决方案
 
@@ -1615,13 +1615,13 @@ Seata事务管理中有三个重要的角色
 
 **token + redis**
 
-<img src="https://tonkyshan.cn/img/20230802220406.png" alt="20230802220406" style="zoom: 72%;" />
+<img src="/img/20230802220406.png" alt="20230802220406" style="zoom: 72%;" />
 
 **分布式锁**
 
-<img src="https://tonkyshan.cn/img/20230802220451.png" alt="20230802220451" style="zoom:76%;" />
+<img src="/img/20230802220451.png" alt="20230802220451" style="zoom:76%;" />
 
-<img src="https://tonkyshan.cn/img/20230802220525.png" alt="20230802220525" style="zoom:80%;" />
+<img src="/img/20230802220525.png" alt="20230802220525" style="zoom:80%;" />
 
 ---------
 
@@ -1640,7 +1640,7 @@ xxl-job解决的问题：
 
 **一、xxl-job路由策略有哪些？**记住三个即可
 
-<img src="https://tonkyshan.cn/img/20230802220929.png" alt="20230802220929" style="zoom:80%;" />
+<img src="/img/20230802220929.png" alt="20230802220929" style="zoom:80%;" />
 
 **二、xxl-job任务执行失败怎么解决？**
 
@@ -1650,9 +1650,9 @@ xxl-job解决的问题：
 
 执行器集群部署时，任务路由策略选择**分片广播**情况下，**一次任务**调度将会广播触发对应集群中所有执行器执行一次任务
 
-<img src="https://tonkyshan.cn/img/20230802223502.png" alt="20230802223502" style="zoom:80%;" />
+<img src="/img/20230802223502.png" alt="20230802223502" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230802223524.png" alt="20230802223524" style="zoom:80%;" />
+<img src="/img/20230802223524.png" alt="20230802223524" style="zoom:80%;" />
 
 -----
 
@@ -1670,13 +1670,13 @@ xxl-job解决的问题：
 * 削峰填谷
 * ...
 
-<img src="https://tonkyshan.cn/img/20230806232325.png" alt="20230806232325" style="zoom:70%;" />
+<img src="/img/20230806232325.png" alt="20230806232325" style="zoom:70%;" />
 
 **生产者确认机制**
 
 RabbitMQ提供了publisher confirm机制来避免消息发送到MQ过程中丢失，消息发送到MQ以后，会返回一个结果给发送者，表示消息是否处理成功。
 
-<img src="https://tonkyshan.cn/img/20230806233138.png" alt="20230806233138" style="zoom:80%;" />
+<img src="/img/20230806233138.png" alt="20230806233138" style="zoom:80%;" />
 
 消息失败之后如何处理？
 
@@ -1690,15 +1690,15 @@ MQ默认是内存存储消息，开启持久化功能可以确保缓存在MQ中�
 
 1、交换机持久化
 
-<img src="https://tonkyshan.cn/img/20230806233517.png" alt="20230806233517" style="zoom:80%;" />
+<img src="/img/20230806233517.png" alt="20230806233517" style="zoom:80%;" />
 
 2、队列持久化
 
-<img src="https://tonkyshan.cn/img/20230806233524.png" alt="20230806233524" style="zoom:80%;" />
+<img src="/img/20230806233524.png" alt="20230806233524" style="zoom:80%;" />
 
 3、消息持久化，SpringAMQP中的消息默认是持久的，可以通过MessageProperties中的DeliveryMode来指定
 
-<img src="https://tonkyshan.cn/img/20230806233532.png" alt="20230806233532" style="zoom:80%;" />
+<img src="/img/20230806233532.png" alt="20230806233532" style="zoom:80%;" />
 
 **消费者确认**
 
@@ -1708,9 +1708,9 @@ RabbitMQ支持消费者确认机制，即：消费者处理消息后可以向MQ�
 * auto：自动ack，由spring检测listener代码是否出现异常，没有异常则返回ack；抛出异常则返回nack
 * none：关闭ack，MQ假定消费者获取消息后会成功处理，因此消息投递后立即被删除
 
-<img src="https://tonkyshan.cn/img/20230806234141.png" alt="20230806234141" style="zoom:80%;" />
+<img src="/img/20230806234141.png" alt="20230806234141" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230806234202.png" alt="20230806234202" style="zoom:80%;" />
+<img src="/img/20230806234202.png" alt="20230806234202" style="zoom:80%;" />
 
 **二、RabbitMQ消息的重复消费问题如何解决**
 
@@ -1719,7 +1719,7 @@ RabbitMQ支持消费者确认机制，即：消费者处理消息后可以向MQ�
 * 网络抖动
 * 消费者挂了
 
-<img src="https://tonkyshan.cn/img/20230806234406.png" alt="20230806234406" style="zoom:80%;" />
+<img src="/img/20230806234406.png" alt="20230806234406" style="zoom:80%;" />
 
 解决方案：
 
@@ -1743,9 +1743,9 @@ RabbitMQ支持消费者确认机制，即：消费者处理消息后可以向MQ�
 
 如果该队列配置了dead-letter-exchange属性，指定了一个交换机，那么队列中的死信就会投递到这个交换机中，而这个交换机称为**死信交换机**(Dead Letter Exchange，简称DLX)
 
-<img src="https://tonkyshan.cn/img/20230806235236.png" alt="20230806235236" style="zoom:80%;" />
+<img src="/img/20230806235236.png" alt="20230806235236" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230806235248.png" alt="20230806235248" style="zoom:80%;" />
+<img src="/img/20230806235248.png" alt="20230806235248" style="zoom:80%;" />
 
 **②TTL**
 
@@ -1754,9 +1754,9 @@ TTL，也就是Time-To-Live，如果一个队列中的消息TTL结束仍未消�
 * 消息所在的队列设置了存活时间
 * 消息本身设置了存活时间
 
-<img src="https://tonkyshan.cn/img/20230806235530.png" alt="20230806235530" style="zoom: 80%;" />
+<img src="/img/20230806235530.png" alt="20230806235530" style="zoom: 80%;" />
 
-<img src="https://tonkyshan.cn/img/20230806235541.png" alt="20230806235541" style="zoom:80%;" />
+<img src="/img/20230806235541.png" alt="20230806235541" style="zoom:80%;" />
 
 **延迟队列插件**
 
@@ -1764,11 +1764,11 @@ DelayExchange插件，需要安装在RabbitMQ中
 
 DelayExchange的本质还是官方的三种交换机，只是添加了延迟功能，因此使用时只需要声明一个交换机，交换机的类型可以是任意类型，然后设定delayed属性为true即可
 
-<img src="https://tonkyshan.cn/img/20230806235809.png" alt="20230806235809" style="zoom:80%;" />
+<img src="/img/20230806235809.png" alt="20230806235809" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230806235824.png" alt="20230806235824" style="zoom:80%;" />
+<img src="/img/20230806235824.png" alt="20230806235824" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230806235854.png" alt="20230806235854" style="zoom:80%;" />
+<img src="/img/20230806235854.png" alt="20230806235854" style="zoom:80%;" />
 
 **四、RabbitMQ如果有100万消息堆积在MQ，如何解决(消息堆积怎么解决)**
 
@@ -1788,9 +1788,9 @@ DelayExchange的本质还是官方的三种交换机，只是添加了延迟功�
 * 消费者要消费消息时才会从磁盘中读取并加载到内存
 * 支持数百万条消息的存储
 
-<img src="https://tonkyshan.cn/img/20230807000259.png" alt="20230807000259" style="zoom:80%;" />
+<img src="/img/20230807000259.png" alt="20230807000259" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230807000356.png" alt="20230807000356" style="zoom:80%;" />
+<img src="/img/20230807000356.png" alt="20230807000356" style="zoom:80%;" />
 
 **五、RabbitMQ的高可用机制**
 
@@ -1801,7 +1801,7 @@ DelayExchange的本质还是官方的三种交换机，只是添加了延迟功�
 
 普通集群，或者叫标准集群(class cluster)，具备下列特征
 
-<img src="https://tonkyshan.cn/img/20230807000652.png" alt="20230807000652" style="zoom:80%;" />
+<img src="/img/20230807000652.png" alt="20230807000652" style="zoom:80%;" />
 
 * 会在集群的各个节点间共享部分数据，包括：交换机，队列元信息。不包含队列中的消息
 * 当访问集群某节点时，如果队列不在该节点，会从数据所在节点传递到当前节点并返回
@@ -1817,7 +1817,7 @@ DelayExchange的本质还是官方的三种交换机，只是添加了延迟功�
 * 所有操作都是主节点完成，然后同步给镜像节点
 * 主节点宕机后，镜像节点会代替成为新的主节点
 
-<img src="https://tonkyshan.cn/img/20230807001133.png" alt="20230807001133" style="zoom:80%;" />
+<img src="/img/20230807001133.png" alt="20230807001133" style="zoom:80%;" />
 
 **3、仲裁队列**
 
@@ -1827,9 +1827,9 @@ DelayExchange的本质还是官方的三种交换机，只是添加了延迟功�
 * 使用非常简单，没有复杂的配置
 * 主从同步基于Raft协议，强一致
 
-<img src="https://tonkyshan.cn/img/20230807001328.png" alt="20230807001328" style="zoom:80%;" />
+<img src="/img/20230807001328.png" alt="20230807001328" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230807001354.png" alt="20230807001354" style="zoom:80%;" />
+<img src="/img/20230807001354.png" alt="20230807001354" style="zoom:80%;" />
 
 ---
 
@@ -1845,44 +1845,44 @@ DelayExchange的本质还是官方的三种交换机，只是添加了延迟功�
 * 消息在Brocker中存储丢失
 * 消费者从Brocker接收消息丢失
 
-<img src="https://tonkyshan.cn/img/20230821195643.png" alt="20230821195643" style="zoom:80%;" />
+<img src="/img/20230821195643.png" alt="20230821195643" style="zoom:80%;" />
 
 **1、生产者发送消息到Brocker丢失**
 
 * 设置异步发送
 
-<img src="https://tonkyshan.cn/img/20230824140334.png" alt="20230824140334" style="zoom:80%;" />
+<img src="/img/20230824140334.png" alt="20230824140334" style="zoom:80%;" />
 
 * 消息重试
 
-<img src="https://tonkyshan.cn/img/20230824140422.png" alt="20230824140422" style="zoom:80%;" />
+<img src="/img/20230824140422.png" alt="20230824140422" style="zoom:80%;" />
 
 **2、消息在Brocker中存储丢失**
 
 * 发送确认机制acks
 
-<img src="https://tonkyshan.cn/img/20230824140539.png" alt="20230824140539" style="zoom:80%;" />
+<img src="/img/20230824140539.png" alt="20230824140539" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230824140529.png" alt="20230824140529" style="zoom:80%;" />
+<img src="/img/20230824140529.png" alt="20230824140529" style="zoom:80%;" />
 
 **3、消费者从Brocker接收消息丢失**
 
-<img src="https://tonkyshan.cn/img/20230824140641.png" alt="20230824140641" style="zoom:80%;" />
+<img src="/img/20230824140641.png" alt="20230824140641" style="zoom:80%;" />
 
 * Kafka中的分区机制指的是将每个主题划分成多个分区(Partition)
 * topic分区中消息只能由消费者组中的唯一一个消费者处理，不同的分区分配给不同的消费者(同一个消费者组)
 
-<img src="https://tonkyshan.cn/img/20230824141634.png" alt="20230824141634" style="zoom:80%;" />
+<img src="/img/20230824141634.png" alt="20230824141634" style="zoom:80%;" />
 
 重平衡：当消费者组内某一个消费者宕机了，就会把实例分配给组内其它消费者，这个重新分配的过程就是重平衡
 
-<img src="https://tonkyshan.cn/img/20230824141806.png" alt="20230824141806" style="zoom:80%;" />
+<img src="/img/20230824141806.png" alt="20230824141806" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230824141829.png" alt="20230824141829" style="zoom:80%;" />
+<img src="/img/20230824141829.png" alt="20230824141829" style="zoom:80%;" />
 
 try代码块里设置异步提交，在finally里设置同步提交
 
-<img src="https://tonkyshan.cn/img/20230824142118.png" alt="20230824142118" style="zoom:80%;" />
+<img src="/img/20230824142118.png" alt="20230824142118" style="zoom:80%;" />
 
 **二、Kafka是如何保证消费的顺序性**
 
@@ -1891,31 +1891,31 @@ try代码块里设置异步提交，在finally里设置同步提交
 * 即时消息中的单对单聊天和群聊，保证发送方消息发送顺序与接收方的顺序一致
 * 充值转账两个渠道在同一个时间进行余额变更，短信通知必须要有顺序
 
-<img src="https://tonkyshan.cn/img/20230824143355.png" alt="20230824143355" style="zoom:80%;" />
+<img src="/img/20230824143355.png" alt="20230824143355" style="zoom:80%;" />
 
 topic分区中消息只能由消费者组中的唯一一个消费者处理，所以消息肯定是按照先后顺序进行处理的、但是它也仅仅是保证Topic的一个分区顺序处理，不能保证跨分区的消息先后处理顺序。所以，如果想要顺序的处理Topic的所有消息，难就只提供一个分区。
 
-<img src="https://tonkyshan.cn/img/20230824144443.png" alt="20230824144443" style="zoom:80%;" />
+<img src="/img/20230824144443.png" alt="20230824144443" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230824144512.png" alt="20230824144512" style="zoom:80%;" />
+<img src="/img/20230824144512.png" alt="20230824144512" style="zoom:80%;" />
 
 **三、Kafka的高可用机制**
 
 **1、集群模式**
 
-<img src="https://tonkyshan.cn/img/20230824144848.png" alt="20230824144848" style="zoom:80%;" />
+<img src="/img/20230824144848.png" alt="20230824144848" style="zoom:80%;" />
 
 * Kafka的服务器端由被称为Broker的服务进程构成，即一个Kafka集群由多个Broker组成
 * 这样如果集群中某一台机器宕机，其它机器上的Broker也依然能够对外提供服务，这其实就是Kafka提供高可用的手段之一
 
 **2、分区备份机制**
 
-<img src="https://tonkyshan.cn/img/20230824145204.png" alt="20230824145204" style="zoom:80%;" />
+<img src="/img/20230824145204.png" alt="20230824145204" style="zoom:80%;" />
 
 * 一个topic有多个分区，每个分区有多个副本，其中有一个leader，其余的是follower，副本存储在不同的broker中
 * 所有的分区副本的内容都是相同的，如果leader发生故障时，会自动将其中一个follower提升为leader
 
-<img src="https://tonkyshan.cn/img/20230824151212.png" alt="20230824151212" style="zoom:80%;" />
+<img src="/img/20230824151212.png" alt="20230824151212" style="zoom:80%;" />
 
 ISR(in-sync replica)需要同步复制保存的follower
 
@@ -1925,13 +1925,13 @@ ISR(in-sync replica)需要同步复制保存的follower
 
 第二：如果ISR列表中的follower都不行了，就只能从其他follower中选取
 
-<img src="https://tonkyshan.cn/img/20230824151445.png" alt="20230824151445" style="zoom:80%;" />
+<img src="/img/20230824151445.png" alt="20230824151445" style="zoom:80%;" />
 
 **四、Kafka数据清理机制**
 
 **1、Kafka文件存储机制**
 
-<img src="https://tonkyshan.cn/img/20230824151853.png" alt="20230824151853" style="zoom:80%;" />
+<img src="/img/20230824151853.png" alt="20230824151853" style="zoom:80%;" />
 
 **2、数据清理机制**
 
@@ -1939,15 +1939,15 @@ ISR(in-sync replica)需要同步复制保存的follower
 
 1、根据消息的保留时间，当消息在Kafka中保存的时间超过了指定的时间，就会触发清理过程
 
-<img src="https://tonkyshan.cn/img/20230824152005.png" alt="20230824152005" style="zoom:80%;" />
+<img src="/img/20230824152005.png" alt="20230824152005" style="zoom:80%;" />
 
 默认168个小时，七天
 
 2、根据topic存储的数据大小，当topic所占的日志文件大小大于一定的阈值，则开始删除最久的消息。需手动开启
 
-<img src="https://tonkyshan.cn/img/20230824152129.png" alt="20230824152129" style="zoom:80%;" />
+<img src="/img/20230824152129.png" alt="20230824152129" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230824152155.png" alt="20230824152155" style="zoom:80%;" />
+<img src="/img/20230824152155.png" alt="20230824152155" style="zoom:80%;" />
 
 **五、Kafka中实现高性能的设计**
 
@@ -1962,13 +1962,13 @@ ISR(in-sync replica)需要同步复制保存的follower
 
 以前：需要拷贝四次
 
-<img src="https://tonkyshan.cn/img/20230824152832.png" alt="20230824152832" style="zoom:80%;" />
+<img src="/img/20230824152832.png" alt="20230824152832" style="zoom:80%;" />
 
 零拷贝：需要拷贝两次
 
-<img src="https://tonkyshan.cn/img/20230824152901.png" alt="20230824152901" style="zoom:80%;" />
+<img src="/img/20230824152901.png" alt="20230824152901" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230824152938.png" alt="20230824152938" style="zoom:80%;" />
+<img src="/img/20230824152938.png" alt="20230824152938" style="zoom:80%;" />
 
 -------
 
@@ -1976,7 +1976,7 @@ ISR(in-sync replica)需要同步复制保存的follower
 
 --------
 
-![20230712215405](https://tonkyshan.cn/img/20230712215405.png)
+![20230712215405](/img/20230712215405.png)
 
 ----
 
@@ -1992,17 +1992,17 @@ ISR(in-sync replica)需要同步复制保存的follower
 * T(n)与代码的执行次数成正比(代码行数越多，执行时间越长)
 * 当n很大时，公式中的**低阶、常量、系数**三部分并不左右其增长趋势，因此可以忽略。我们只需要记录一个最大的量级就可以了
 
-<img src="https://tonkyshan.cn/img/20230712220059.png" alt="20230712220059" style="zoom:80%;" />
+<img src="/img/20230712220059.png" alt="20230712220059" style="zoom:80%;" />
 
 **常对幂指阶**
 
-<img src="https://tonkyshan.cn/img/20230712220558.png" alt="20230712220558" style="zoom:80%;" />
+<img src="/img/20230712220558.png" alt="20230712220558" style="zoom:80%;" />
 
 **空间复杂度**
 
 空间复杂度全称是**渐进空间复杂度**，表示算法占用的额外**存储空间**与**数据规模之间**的增长**关系**
 
-<img src="https://tonkyshan.cn/img/20230712224229.png" alt="20230712224229" style="zoom:80%;" />
+<img src="/img/20230712224229.png" alt="20230712224229" style="zoom:80%;" />
 
 ------
 
@@ -2014,7 +2014,7 @@ ISR(in-sync replica)需要同步复制保存的follower
 
 数组(Array)是一种用**连续的内存空间**存储**相同数据类型**数据的线性数据结构
 
-<img src="https://tonkyshan.cn/img/20230712224543.png" alt="20230712224543" style="zoom:80%;" />
+<img src="/img/20230712224543.png" alt="20230712224543" style="zoom:80%;" />
 
 寻址公式：a[i] = baseAddress + i * dataTypeSize
 
@@ -2053,21 +2053,21 @@ O(1)
 
 **成员变量**
 
-<img src="https://tonkyshan.cn/img/20230712231140.png" alt="20230712231140" style="zoom:80%;" />
+<img src="/img/20230712231140.png" alt="20230712231140" style="zoom:80%;" />
 
 **构造方法**
 
-<img src="https://tonkyshan.cn/img/20230712231430.png" alt="20230712231430" style="zoom:80%;" />
+<img src="/img/20230712231430.png" alt="20230712231430" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230712231535.png" alt="20230712231535" style="zoom:80%;" />
+<img src="/img/20230712231535.png" alt="20230712231535" style="zoom:80%;" />
 
 **添加和扩容操作(第1次添加数据)**
 
-![20230712231958](https://tonkyshan.cn/img/20230712231958.png)
+![20230712231958](/img/20230712231958.png)
 
-![20230712232104](https://tonkyshan.cn/img/20230712232104.png)
+![20230712232104](/img/20230712232104.png)
 
-![20230712232212](https://tonkyshan.cn/img/20230712232212.png)
+![20230712232212](/img/20230712232212.png)
 
 第一次添加数据时初始化默认长度是10，当位置不够时，增加1.5倍(右移1位，除2，再加上原来的长度)
 
@@ -2082,7 +2082,7 @@ O(1)
   * 确保新增的数据有地方存储之后，则将新元素添加到位于size的位置上
   * 返回添加成功的布尔值
 
-<img src="https://tonkyshan.cn/img/20230712233341.png" alt="20230712233341" style="zoom:80%;" />
+<img src="/img/20230712233341.png" alt="20230712233341" style="zoom:80%;" />
 
 **3、实现数组和List之间的转换**
 
@@ -2090,13 +2090,13 @@ O(1)
 
 List转数组：使用List的toArray方法。无参toArray方法返回Object数组，传入初始化长度的数组对象，返回该对象数组
 
-<img src="https://tonkyshan.cn/img/20230712233527.png" alt="20230712233527" style="zoom:80%;" />
+<img src="/img/20230712233527.png" alt="20230712233527" style="zoom:80%;" />
 
 用Arrays.asList转List后，如果修改数组内容，list会受影响，因为它的底层使用的Arrays类中的一个内部类ArrayList来构造的集合，在这个集合的构造器中，把我们传入的这个集合进行了包装而已，最终指向的是同一个地址
 
 List用toArray转数组后，如果修改List内容，数组不受影响，当调用了toArray以后，在底层是它是进行了数组的拷贝，跟原来的元素就没有关系了，所以即使list修改了以后，数组也不会受到影响
 
-<img src="https://tonkyshan.cn/img/20230712234005.png" alt="20230712234005" style="zoom:80%;" />
+<img src="/img/20230712234005.png" alt="20230712234005" style="zoom:80%;" />
 
 **三、LinkedList**
 
@@ -2106,9 +2106,9 @@ List用toArray转数组后，如果修改List内容，数组不受影响，当�
 
 单向链表：每个结点包括两部分：一个是存储数据元素的数据域，另一个是存储下一个结点地址的指针域。记录下一个结点地址的指针叫作**后继指针next**
 
-![20230713202750](https://tonkyshan.cn/img/20230713202750.png)
+![20230713202750](/img/20230713202750.png)
 
-![20230713202758](https://tonkyshan.cn/img/20230713202758.png)
+![20230713202758](/img/20230713202758.png)
 
 查询操作
 
@@ -2124,9 +2124,9 @@ List用toArray转数组后，如果修改List内容，数组不受影响，当�
 
 每个结点不止有一个后继指针next指向后面的结点，有一个前驱指针prev指向前面的结点
 
-![20230713203321](https://tonkyshan.cn/img/20230713203321.png)
+![20230713203321](/img/20230713203321.png)
 
-![20230713203642](https://tonkyshan.cn/img/20230713203642.png)
+![20230713203642](/img/20230713203642.png)
 
 查询操作
 
@@ -2190,7 +2190,7 @@ List用toArray转数组后，如果修改List内容，数组不受影响，当�
 
 用链式存储的树的节点可定义如下：
 
-![20230715224552](https://tonkyshan.cn/img/20230715224552.png)
+![20230715224552](/img/20230715224552.png)
 
 二叉树分类
 
@@ -2203,7 +2203,7 @@ List用toArray转数组后，如果修改List内容，数组不受影响，当�
 
 (Binary Search Tree, BST)又名二叉查找树，有序二叉树或者排序二叉树，是二叉树中比较常用的一种类型，二叉查找树要求，在树中的任意一个节点，其左子树中的每个节点的值，都要小于这个节点的值，而右子树节点的值都大于这个节点的值。(没有键值相等的节点)
 
-![20230715225835](https://tonkyshan.cn/img/20230715225835.png)
+![20230715225835](/img/20230715225835.png)
 
 时间复杂度
 
@@ -2223,7 +2223,7 @@ List用toArray转数组后，如果修改List内容，数组不受影响，当�
 * 红黑树中红色节点的子节点都是黑色
 * 从任一节点到叶子节点的所有路径都包含相同数目的黑色节点
 
-<img src="https://tonkyshan.cn/img/20230715230330.png" alt="20230715230330" style="zoom:80%;" />
+<img src="/img/20230715230330.png" alt="20230715230330" style="zoom:80%;" />
 
 在添加或删除节点的时候，如果不符合这些性质会发生旋转，以达到所有的性质(保证平衡)
 
@@ -2299,16 +2299,16 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 常见属性
 
-<img src="https://tonkyshan.cn/img/20230718203342.png" alt="20230718203342" style="zoom:80%;" />
+<img src="/img/20230718203342.png" alt="20230718203342" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230718203459.png" alt="20230718203459" style="zoom:80%;" />
+<img src="/img/20230718203459.png" alt="20230718203459" style="zoom:80%;" />
 
 * HashMap是懒惰加载，在创建对象时并没有初始化数组
 * 在无参的构造方法中，设置了默认的加载因子是0.75
 
 添加数据流程图
 
-<img src="https://tonkyshan.cn/img/20230718203840.png" alt="20230718203840" style="zoom:80%;" />
+<img src="/img/20230718203840.png" alt="20230718203840" style="zoom:80%;" />
 
 1、判断键值对数组table是否为空或为null，否则执行resize()进行扩容(初始化)
 
@@ -2326,7 +2326,7 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 **HashMap的扩容机制**
 
-<img src="https://tonkyshan.cn/img/20230718205055.png" alt="20230718205055" style="zoom:80%;" />
+<img src="/img/20230718205055.png" alt="20230718205055" style="zoom:80%;" />
 
 * 在添加元素或初始化的时候需要调用resize方法进行扩容，第一次添加数据初始化长度为16，以后每次扩容都是达到了扩容阈值(数组长度*0.75)
 * 每次扩容，都是扩容之前容量的2倍
@@ -2337,7 +2337,7 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 **hashMap的寻址算法**
 
-<img src="https://tonkyshan.cn/img/20230718211157.png" alt="20230718211157" style="zoom:80%;" />
+<img src="/img/20230718211157.png" alt="20230718211157" style="zoom:80%;" />
 
 数组长度为什么必须是2的n次幂？
 
@@ -2351,9 +2351,9 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 在数组进行扩容的时候，因为链表是**头插法**，在进行数据迁移的过程中，有可能导致死循环
 
-<img src="https://tonkyshan.cn/img/20230718211759.png" alt="20230718211759" style="zoom:80%;" />
+<img src="/img/20230718211759.png" alt="20230718211759" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230718211955.png" alt="20230718211955" style="zoom:80%;" />
+<img src="/img/20230718211955.png" alt="20230718211955" style="zoom:80%;" />
 
 比如说，现在有两个线程
 
@@ -2389,7 +2389,7 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 一个线程就是一个指令流，将指令流中的一条条指令以一定的顺序交给CPU执行，一个进程之内可以分为一到多个线程
 
-<img src="https://tonkyshan.cn/img/20230718213041.png" alt="20230718213041" style="zoom: 80%;" />
+<img src="/img/20230718213041.png" alt="20230718213041" style="zoom: 80%;" />
 
 对比
 
@@ -2416,19 +2416,19 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 1、继承Thread类
 
-<img src="https://tonkyshan.cn/img/20230718214237.png" alt="20230718214237" style="zoom:80%;" />
+<img src="/img/20230718214237.png" alt="20230718214237" style="zoom:80%;" />
 
 2、实现runnable接口
 
-<img src="https://tonkyshan.cn/img/20230718214301.png" alt="20230718214301" style="zoom:80%;" />
+<img src="/img/20230718214301.png" alt="20230718214301" style="zoom:80%;" />
 
 3、实现Callable接口
 
-<img src="https://tonkyshan.cn/img/20230718214344.png" alt="20230718214344" style="zoom: 67%;" />
+<img src="/img/20230718214344.png" alt="20230718214344" style="zoom: 67%;" />
 
 4、线程池创建线程
 
-<img src="https://tonkyshan.cn/img/20230718214412.png" alt="20230718214412" style="zoom:80%;" />
+<img src="/img/20230718214412.png" alt="20230718214412" style="zoom:80%;" />
 
 runnable和callable的区别？
 
@@ -2446,9 +2446,9 @@ run()：封装了要被线程执行的代码，可以被调用多次
 
 线程的状态可以参考JDK中的Thread类中的枚举State
 
-<img src="https://tonkyshan.cn/img/20230718215053.png" alt="20230718215053" style="zoom:80%;" />
+<img src="/img/20230718215053.png" alt="20230718215053" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230718215345.png" alt="20230718215345" style="zoom: 67%;" />
+<img src="/img/20230718215345.png" alt="20230718215345" style="zoom: 67%;" />
 
 1、线程包括哪些状态
 
@@ -2470,7 +2470,7 @@ sleep(0)：调用sleep（0）可以释放cpu时间，让线程马上重新回到
 
 可以使用线程中的join方法解决
 
-<img src="https://tonkyshan.cn/img/20230718221038.png" alt="20230718221038" style="zoom: 67%;" />
+<img src="/img/20230718221038.png" alt="20230718221038" style="zoom: 67%;" />
 
 **六、notify()和notifyAll()有什么区别**
 
@@ -2521,13 +2521,13 @@ sleep(0)：调用sleep（0）可以释放cpu时间，让线程马上重新回到
 
 Synchronized【对象锁】采用互斥的方式让同一时刻至多只有一个线程能持有【对象锁】，其它线程再想获取这个【对象锁】时就会阻塞住。
 
-<img src="https://tonkyshan.cn/img/20230719201959.png" alt="20230719201959" style="zoom:80%;" />
+<img src="/img/20230719201959.png" alt="20230719201959" style="zoom:80%;" />
 
 **Monitor**
 
 Monitor被翻译为监视器，是由jvm提供，C++语言实现
 
-<img src="https://tonkyshan.cn/img/20230719202356.png" alt="20230719202356" style="zoom: 67%;" />
+<img src="/img/20230719202356.png" alt="20230719202356" style="zoom: 67%;" />
 
 * Owner：存储当前获取锁的线程的，只能有一个线程可以获取
 * EntryList：关联没有抢到锁的线程，处于Blocked状态的线程
@@ -2555,11 +2555,11 @@ Monitor实现的锁属于重量级锁，里面设计到了用户态和内核态�
 
 在HotSpot虚拟机中，对象在内存中存储的布局可以分为3块区域：对象头(Header)、实例数据(Instance Data)和对齐填充
 
-<img src="https://tonkyshan.cn/img/20230719203707.png" alt="20230719203707" style="zoom: 80%;" />
+<img src="/img/20230719203707.png" alt="20230719203707" style="zoom: 80%;" />
 
 **MarkWord**
 
-<img src="https://tonkyshan.cn/img/20230719204032.png" alt="20230719204032" style="zoom:80%;" />
+<img src="/img/20230719204032.png" alt="20230719204032" style="zoom:80%;" />
 
 **轻量级锁**
 
@@ -2575,11 +2575,11 @@ Monitor实现的锁属于重量级锁，里面设计到了用户态和内核态�
 
 4、如果CAS修改失败，说明发生了竞争，需要膨胀为重量级锁
 
-<img src="https://tonkyshan.cn/img/20230719204829.png" alt="20230719204829" style="zoom:80%;" />
+<img src="/img/20230719204829.png" alt="20230719204829" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230719204840.png" alt="20230719204840" style="zoom:80%;" />
+<img src="/img/20230719204840.png" alt="20230719204840" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230719204921.png" alt="20230719204921" style="zoom:80%;" />
+<img src="/img/20230719204921.png" alt="20230719204921" style="zoom:80%;" />
 
 解锁过程
 
@@ -2589,9 +2589,9 @@ Monitor实现的锁属于重量级锁，里面设计到了用户态和内核态�
 
 3、如果Lock Record的Mark Word不为null，则利用CSA指令将对象头的mark word恢复成无锁状态。如果失败则碰撞为重量级锁
 
-<img src="https://tonkyshan.cn/img/20230719204933.png" alt="20230719204933" style="zoom:80%;" />
+<img src="/img/20230719204933.png" alt="20230719204933" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230719204947.png" alt="20230719204947" style="zoom:80%;" />
+<img src="/img/20230719204947.png" alt="20230719204947" style="zoom:80%;" />
 
 **偏向锁**
 
@@ -2599,15 +2599,15 @@ Monitor实现的锁属于重量级锁，里面设计到了用户态和内核态�
 
 Java6中引入了偏向锁来做进一步优化，只有第一次使用CAS将线程ID设置到对象头的Mark Word头，之后发现这个线程ID是自己的就表示没有竞争，不用重新CAS，以后只要不发生竞争，这个对象就归该线程所有
 
-<img src="https://tonkyshan.cn/img/20230719210024.png" alt="20230719210024" style="zoom:80%;" />
+<img src="/img/20230719210024.png" alt="20230719210024" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230719210033.png" alt="20230719210033" style="zoom:80%;" />
+<img src="/img/20230719210033.png" alt="20230719210033" style="zoom:80%;" />
 
 **对比**
 
 Java中的synchronized有偏向锁、轻量级锁、重量级锁三种形式，分别对应了锁只被一个线程持有、不同线程交替持有锁、多线程竞争锁三种。
 
-<img src="https://tonkyshan.cn/img/20230719210239.png" alt="20230719210239" style="zoom:80%;" />
+<img src="/img/20230719210239.png" alt="20230719210239" style="zoom:80%;" />
 
 **一旦锁发生了竞争，都会升级为重量级锁**
 
@@ -2619,7 +2619,7 @@ JMM把内存分为两块，一块是私有线程的工作区域(工作内存)，
 
 线程跟线程之间是相互隔离，线程跟线程交互需要通过主内存
 
-<img src="https://tonkyshan.cn/img/20230719223618.png" alt="20230719223618" style="zoom:80%;" />
+<img src="/img/20230719223618.png" alt="20230719223618" style="zoom:80%;" />
 
 **三、CAS**
 
@@ -2630,11 +2630,11 @@ CAS：Compare And Swap(比较再交换)，它体现的一种乐观锁的思想�
 * AbstractQueuedSynchronizer(AQS框架)
 * AtomicXXX类
 
-<img src="https://tonkyshan.cn/img/20230719224417.png" alt="20230719224417" style="zoom:80%;" />
+<img src="/img/20230719224417.png" alt="20230719224417" style="zoom:80%;" />
 
 CAS底层依赖于一个Unsafe类来直接调用操作系统底层的CSA指令
 
-<img src="https://tonkyshan.cn/img/20230719224606.png" alt="20230719224606" style="zoom:80%;" />
+<img src="/img/20230719224606.png" alt="20230719224606" style="zoom:80%;" />
 
 **乐观锁和悲观锁**
 
@@ -2650,13 +2650,13 @@ synchronized基于悲观锁，最悲观的估计，防止其它线程来修改�
 
 用volatile修饰共享变量，能够防止编译器等优化发生，让一个线程对共享变量的修改对另一个线程可见
 
-<img src="https://tonkyshan.cn/img/20230719225435.png" alt="20230719225435" style="zoom:80%;" />
+<img src="/img/20230719225435.png" alt="20230719225435" style="zoom:80%;" />
 
 线程一打印正常，线程二打印true，但是线程三一直不结束
 
 原因：主要因为在JVM虚拟机种有一个JIT(即时编译器)给代码做了优化
 
-<img src="https://tonkyshan.cn/img/20230719225608.png" alt="20230719225608" style="zoom:80%;" />
+<img src="/img/20230719225608.png" alt="20230719225608" style="zoom:80%;" />
 
 解决方案一：在程序运行的时候加入vm参数**-Xint**表示禁用即时编译器，不推荐，其它程序还要使用
 
@@ -2666,13 +2666,13 @@ synchronized基于悲观锁，最悲观的估计，防止其它线程来修改�
 
 用volatile修饰共享变量会在读、写共享变量时加入不同的屏障，阻止其他读写操作越过屏障，从而达到阻止重排序的效果
 
-<img src="https://tonkyshan.cn/img/20230719230200.png" alt="20230719230200" style="zoom:80%;" />
+<img src="/img/20230719230200.png" alt="20230719230200" style="zoom:80%;" />
 
 注解**@Actory**保证方法内的代码在同一个线程下进行
 
-<img src="https://tonkyshan.cn/img/20230719230611.png" alt="20230719230611" style="zoom:80%;" />
+<img src="/img/20230719230611.png" alt="20230719230611" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230719230644.png" alt="20230719230644" style="zoom:80%;" />
+<img src="/img/20230719230644.png" alt="20230719230644" style="zoom:80%;" />
 
 使用技巧：
 
@@ -2685,7 +2685,7 @@ synchronized基于悲观锁，最悲观的估计，防止其它线程来修改�
 
 AQS与Synchronized的区别
 
-<img src="https://tonkyshan.cn/img/20230719231057.png" alt="20230719231057" style="zoom:80%;" />
+<img src="/img/20230719231057.png" alt="20230719231057" style="zoom:80%;" />
 
 AQS常见的实现类
 
@@ -2699,7 +2699,7 @@ AQS内部维护了一个先进先出的双向队列，队列中存储排队的�
 
 在AQS内部还有一个属性state，这个state就相当于是一个资源，默认是0(无锁状态)，如果队列中的一个线程修改成功了state为1，则当前线程就相当于获取了资源
 
-<img src="https://tonkyshan.cn/img/20230719231342.png" alt="20230719231342" style="zoom: 80%;" />
+<img src="/img/20230719231342.png" alt="20230719231342" style="zoom: 80%;" />
 
 **多个线程同时去抢资源，如果保证原子性？**
 
@@ -2709,11 +2709,11 @@ CAS设置state状态，保证操作的原子性
 
 都可以实现
 
-<img src="https://tonkyshan.cn/img/20230719231619.png" alt="20230719231619" style="zoom:67%;" />
+<img src="/img/20230719231619.png" alt="20230719231619" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/20230719231626.png" alt="20230719231626" style="zoom:67%;" />
+<img src="/img/20230719231626.png" alt="20230719231626" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/20230719231633.png" alt="20230719231633" style="zoom:67%;" />
+<img src="/img/20230719231633.png" alt="20230719231633" style="zoom:67%;" />
 
 线程0结束后，把state状态改为0，此时唤醒队列中的head线程1，这时又来了一个不在队列中的线程5，恰巧线程5修改了state的状态(0 -> 1)，此时就是非公平锁
 
@@ -2729,15 +2729,15 @@ ReentrantLock翻译过来是可重入锁，相对于synchronized
 * 支持多个条件变量
 * 与synchronized一样，都支持重入
 
-<img src="https://tonkyshan.cn/img/20230719232510.png" alt="20230719232510" style="zoom:80%;" />
+<img src="/img/20230719232510.png" alt="20230719232510" style="zoom:80%;" />
 
 ReentrantLock主要利用**CAS + AQS队列**来实现，它支持公平锁和非公平锁，两者的实现类似
 
 构造方法接受一个可选的公平参数(默认非公平锁)，当设置为true时，表示公平锁，否则为非公平锁。公平锁的效率往往没有非公平锁的效率高，在许多线程访问的情况下，公平锁表现出较低的吞吐量。
 
-<img src="https://tonkyshan.cn/img/20230719232849.png" alt="20230719232849" style="zoom:80%;" />
+<img src="/img/20230719232849.png" alt="20230719232849" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230719232947.png" alt="20230719232947" style="zoom:80%;" />
+<img src="/img/20230719232947.png" alt="20230719232947" style="zoom:80%;" />
 
 * 线程来抢锁后使用CAS的方式修改state状态，修改状态成功为1，则让exclusiveOwnerThread属性指向当前线程，获取锁成功
 * 加入修改状态失败，则会进入双向队列中等待，head指向双向队列头部，tail指向双向队列尾部
@@ -2772,9 +2772,9 @@ Lock有适合不同场景的实现，如ReentrantLock，ReentrantReadWriteLock(�
 
 死锁：一个线程需要同时获取多把锁，这是就容易发生死锁
 
-<img src="https://tonkyshan.cn/img/20230720222218.png" alt="20230720222218" style="zoom:80%;" />
+<img src="/img/20230720222218.png" alt="20230720222218" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230720222240.png" alt="20230720222240" style="zoom:80%;" />
+<img src="/img/20230720222240.png" alt="20230720222240" style="zoom:80%;" />
 
 此时程序并没有结束，这种现象就是死锁现象，线程t1持有A的锁等待获取B锁，线程t2持有B的锁等待获取A的锁
 
@@ -2787,9 +2787,9 @@ Lock有适合不同场景的实现，如ReentrantLock，ReentrantReadWriteLock(�
 
 输入jps后，会显示这个死锁进程的id，然后输入jstack -l id
 
-<img src="https://tonkyshan.cn/img/20230720222741.png" alt="20230720222741" style="zoom:80%;" />
+<img src="/img/20230720222741.png" alt="20230720222741" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230720222723.png" alt="20230720222723" style="zoom:80%;" />
+<img src="/img/20230720222723.png" alt="20230720222723" style="zoom:80%;" />
 
 可视化工具：
 
@@ -2812,11 +2812,11 @@ ConcurrentHashMap是一种线程安全的高效Map集合
 
 jdk1.7
 
-<img src="https://tonkyshan.cn/img/20230720223418.png" alt="20230720223418" style="zoom:80%;" />
+<img src="/img/20230720223418.png" alt="20230720223418" style="zoom:80%;" />
 
 put操作
 
-<img src="https://tonkyshan.cn/img/20230720223518.png" alt="20230720223518" style="zoom: 67%;" />
+<img src="/img/20230720223518.png" alt="20230720223518" style="zoom: 67%;" />
 
 jdk1.8
 
@@ -2825,7 +2825,7 @@ jdk1.8
 * CAS控制数组节点的添加
 * synchronized只锁定当前链表或红黑树的首节点，只要hash不冲突，就不会产生并发的问题，效率得到提升
 
-<img src="https://tonkyshan.cn/img/20230720223833.png" alt="20230720223833" style="zoom:80%;" />
+<img src="/img/20230720223833.png" alt="20230720223833" style="zoom:80%;" />
 
 **十、导致并发程序出现问题的根本原因/Java程序中怎么保证多线程的执行安全**
 
@@ -2870,7 +2870,7 @@ Java并发编程三大特性：原子性，可见性，有序性
 
 **一、线程池的执行原理(线程池的核心参数)**
 
-<img src="https://tonkyshan.cn/img/20230722165454.png" alt="20230722165454" style="zoom:80%;" />
+<img src="/img/20230722165454.png" alt="20230722165454" style="zoom:80%;" />
 
 * corePoolSize：核心线程数目
 * maximumPoolSize：最大线程数目 = (核心线程 + 救急线程的最大数目)
@@ -2880,7 +2880,7 @@ Java并发编程三大特性：原子性，可见性，有序性
 * threadFactory：线程工厂，可以定制线程对象的创建，例如设置线程名字，是否守护线程等
 * handler：拒绝策略，当前所有线程都在繁忙，workQueue也放满时，会触发拒绝策略
 
-<img src="https://tonkyshan.cn/img/20230722170159.png" alt="20230722170159" style="zoom: 67%;" />
+<img src="/img/20230722170159.png" alt="20230722170159" style="zoom: 67%;" />
 
 **二、线程池中有哪些常见的阻塞队列**
 
@@ -2896,7 +2896,7 @@ workQueue：当没有空闲核心线程时，新来任务会加入到此队列�
 
 ArrayBlockingQueue和LinkedBlockingQueue的区别
 
-<img src="https://tonkyshan.cn/img/20230722171420.png" alt="20230722171420" style="zoom: 67%;" />
+<img src="/img/20230722171420.png" alt="20230722171420" style="zoom: 67%;" />
 
 无界：最大为Integer的最大值
 
@@ -2910,9 +2910,9 @@ ArrayBlockingQueue和LinkedBlockingQueue的区别
 
 一般来说：计算型代码，Bitmap转换，Gson转换等                    **核心线程数大小设置为CPU核数 + 1**
 
-<img src="https://tonkyshan.cn/img/20230722171926.png" alt="20230722171926" style="zoom:80%;" />
+<img src="/img/20230722171926.png" alt="20230722171926" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230722172059.png" alt="20230722172059" style="zoom:80%;" />
+<img src="/img/20230722172059.png" alt="20230722172059" style="zoom:80%;" />
 
 **四、线程池的种类有哪些**
 
@@ -2922,7 +2922,7 @@ ArrayBlockingQueue和LinkedBlockingQueue的区别
 
 创建使用固定线程数的线程池——**适用于任务量已知，相对耗时的任务**
 
-<img src="https://tonkyshan.cn/img/20230722181532.png" alt="20230722181532" style="zoom:80%;" />
+<img src="/img/20230722181532.png" alt="20230722181532" style="zoom:80%;" />
 
 * 核心线程数与最大线程数一样，没有救急线程
 * 阻塞队列是LinkedBlockedQueue，最大容量为Integer.MAX_VALUE
@@ -2931,7 +2931,7 @@ ArrayBlockingQueue和LinkedBlockingQueue的区别
 
 单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO)执行——**适用于按照顺序执行的任务**
 
-<img src="https://tonkyshan.cn/img/20230722182217.png" alt="20230722182217" style="zoom:80%;" />
+<img src="/img/20230722182217.png" alt="20230722182217" style="zoom:80%;" />
 
 * 核心线程数和最大线程数都是1
 * 阻塞队列是LinkedBlockingQueue，最大容量为Integer.MAX_VALUE
@@ -2940,7 +2940,7 @@ ArrayBlockingQueue和LinkedBlockingQueue的区别
 
 可缓存线程池——**适合任务数比较密集，但每个任务执行时间较短的情况**
 
-<img src="https://tonkyshan.cn/img/20230722182628.png" alt="20230722182628" style="zoom:80%;" />
+<img src="/img/20230722182628.png" alt="20230722182628" style="zoom:80%;" />
 
 * 核心线程数为0
 * 最大线程数是Integer.MAX_VALUE
@@ -2950,11 +2950,11 @@ ArrayBlockingQueue和LinkedBlockingQueue的区别
 
 提供了“延迟”和“周期执行”功能的ThreadPoolExecutor
 
-<img src="https://tonkyshan.cn/img/20230722183008.png" alt="20230722183008" style="zoom:80%;" />
+<img src="/img/20230722183008.png" alt="20230722183008" style="zoom:80%;" />
 
 **五、为什么不建议用Executors创建线程池**
 
-<img src="https://tonkyshan.cn/img/20230722183524.png" alt="20230722183524" style="zoom:80%;" />
+<img src="/img/20230722183524.png" alt="20230722183524" style="zoom:80%;" />
 
 -----------
 
@@ -2970,27 +2970,27 @@ CountDownLatch(闭锁、倒计时锁)用来进行线程同步协作，等待所�
 * await()用来等待计数归零
 * countDown()用来让计数减一
 
-<img src="https://tonkyshan.cn/img/20230722223331.png" alt="20230722223331" style="zoom:80%;" />
+<img src="/img/20230722223331.png" alt="20230722223331" style="zoom:80%;" />
 
 **使用场景一：es数据批量导入**
 
 在我们项目上线之前，我们需要把数据库中的数据一次性同步到es索引库中，但是当时的数据好像是1000万左右，一次性读取数据肯定不行(oom异常)，当时我就想到可以使用线程池的方式导入，利用CountDownLatch来控制，就能避免一次性加载过多，防止内存溢出
 
-<img src="https://tonkyshan.cn/img/20230722231132.png" alt="20230722231132" style="zoom: 67%;" />
+<img src="/img/20230722231132.png" alt="20230722231132" style="zoom: 67%;" />
 
-<img src="https://tonkyshan.cn/img/20230722231232.png" alt="20230722231232" style="zoom:67%;" />
+<img src="/img/20230722231232.png" alt="20230722231232" style="zoom:67%;" />
 
 **使用场景二：数据汇总**
 
 在一个电商网站中，用户下单之后，需要查询数据，数据包含了三部分：订单信息，包含的商品，物流信息，这三块信息都在不同的微服务中进行实现的，我们如何完成这个业务呢？
 
-<img src="https://tonkyshan.cn/img/20230722232205.png" alt="20230722232205" style="zoom: 80%;" />
+<img src="/img/20230722232205.png" alt="20230722232205" style="zoom: 80%;" />
 
 在实际开发的过程中，难免需要调用多个接口来汇总数据，如果所有接口(或部分接口)没有依赖关系，就可以使用线程池+future来提升性能
 
 **使用场景三：异步调用**
 
-<img src="https://tonkyshan.cn/img/20230722232650.png" alt="20230722232650" style="zoom:80%;" />
+<img src="/img/20230722232650.png" alt="20230722232650" style="zoom:80%;" />
 
 为了避免下一级方法(保存历史记录)影响上一级方法(查询结果)(性能考虑)，可使用异步线程调用下一个方法(前提：上一级方法不需要下一级方法返回值)，可以提升方法响应时间
 
@@ -3000,7 +3000,7 @@ Semaphore：信号量，是JUC包下的一个工具类，底层是AQS，我们�
 
 使用场景：通常用于那些资源有明确访问数量限制的场景，常用于限流
 
-<img src="https://tonkyshan.cn/img/20230722233445.png" alt="20230722233445" style="zoom:80%;" />
+<img src="/img/20230722233445.png" alt="20230722233445" style="zoom:80%;" />
 
 Semaphore使用步骤
 
@@ -3016,21 +3016,21 @@ ThreadLocal是多线程中对于解决线程安全的一个操作类，它会**�
 
 **ThreadLocal基本使用**
 
-<img src="https://tonkyshan.cn/img/20230722234920.png" alt="20230722234920" style="zoom:80%;" />
+<img src="/img/20230722234920.png" alt="20230722234920" style="zoom:80%;" />
 
 **ThreadLocal实现原理&源码解析**
 
 ThreadLocal本质来说就是一个线程内部存储类，从而让多个线程只操作自己内部的值，从而实现线程数据隔离
 
-<img src="https://tonkyshan.cn/img/20230722235106.png" alt="20230722235106" style="zoom:80%;" />
+<img src="/img/20230722235106.png" alt="20230722235106" style="zoom:80%;" />
 
 set方法
 
-<img src="https://tonkyshan.cn/img/20230722235228.png" alt="20230722235228" style="zoom: 75%;" />
+<img src="/img/20230722235228.png" alt="20230722235228" style="zoom: 75%;" />
 
 get方法/remove方法
 
-<img src="https://tonkyshan.cn/img/20230722235250.png" alt="20230722235250" style="zoom:80%;" />
+<img src="/img/20230722235250.png" alt="20230722235250" style="zoom:80%;" />
 
 **ThreadLocal内存泄漏的问题**
 
@@ -3051,9 +3051,9 @@ WeakReference weakReference = new WeakReference(user);
 
 每一个Thread维护一个ThreadLocalMap，在ThreadLocalMap中的Entry对象继承了WeakReference。其中Key为使用**弱引用**的ThreadLocal实例，value为线程变量的副本
 
-<img src="https://tonkyshan.cn/img/20230722235952.png" alt="20230722235952" style="zoom:80%;" />
+<img src="/img/20230722235952.png" alt="20230722235952" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230723000219.png" alt="20230723000219" style="zoom: 80%;" />
+<img src="/img/20230723000219.png" alt="20230723000219" style="zoom: 80%;" />
 
 -----------------
 
@@ -3068,13 +3068,13 @@ WeakReference weakReference = new WeakReference(user);
 * 一次编写，到处运行
 * 自动内存管理，垃圾回收机制
 
-<img src="https://tonkyshan.cn/img/20230723123729.png" alt="20230723123729" style="zoom:80%;" />
+<img src="/img/20230723123729.png" alt="20230723123729" style="zoom:80%;" />
 
 运行流程
 
-<img src="https://tonkyshan.cn/img/20230723123857.png" alt="20230723123857" style="zoom:80%;" />
+<img src="/img/20230723123857.png" alt="20230723123857" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230723124040.png" alt="20230723124040" style="zoom:80%;" />
+<img src="/img/20230723124040.png" alt="20230723124040" style="zoom:80%;" />
 
 ---------
 
@@ -3096,7 +3096,7 @@ javap -v xx.class //打印堆栈大小，局部变量的数量和方法的参数
 
 **线程共享的区域：**主要用来保存**对象实例，数组**等，当堆中没有内存空间可分配给实例，也无法再扩展时，则抛出OutOfMemoryError(**OOM**)(内存溢出)异常
 
-<img src="https://tonkyshan.cn/img/20230724193129.png" alt="20230724193129" style="zoom:80%;" />
+<img src="/img/20230724193129.png" alt="20230724193129" style="zoom:80%;" />
 
 **年轻代**被划分为三部分，Eden区和两个大小严格相同的Survivor(幸存者)区，根据JVM的策略，在经过几次垃圾收集后，仍然存活于Survivor的对象将被移动到老年代区间
 
@@ -3106,9 +3106,9 @@ javap -v xx.class //打印堆栈大小，局部变量的数量和方法的参数
 
 **java7和java8的JVM内存结构的区别**
 
-<img src="https://tonkyshan.cn/img/20230724213217.png" alt="20230724213217" style="zoom:80%;" />
+<img src="/img/20230724213217.png" alt="20230724213217" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230724213324.png" alt="20230724213324" style="zoom:80%;" />
+<img src="/img/20230724213324.png" alt="20230724213324" style="zoom:80%;" />
 
 **三、什么是虚拟机栈**
 
@@ -3118,7 +3118,7 @@ Java Virtual machine Stacks(java虚拟机栈)
 * 每个栈由多个栈帧(frame)组成，对应着每次方法调用时所占用的内存
 * 每个线程只能有一个活动栈帧，对应着当前正在执行的那个方法
 
-<img src="https://tonkyshan.cn/img/20230724213851.png" alt="20230724213851" style="zoom:80%;" />
+<img src="/img/20230724213851.png" alt="20230724213851" style="zoom:80%;" />
 
 **1、垃圾回收是否涉及栈内存？**
 
@@ -3135,14 +3135,14 @@ Java Virtual machine Stacks(java虚拟机栈)
 * 如果方法内局部变量没有逃离方法的作用范围，它是线程安全的
 * 如果是局部变量引用了对象，并逃离方法的作用范围，需要考虑线程安全
 
-<img src="https://tonkyshan.cn/img/20230724214355.png" alt="20230724214355" style="zoom:80%;" />
+<img src="/img/20230724214355.png" alt="20230724214355" style="zoom:80%;" />
 
 **四、栈内存溢出(OOM)情况**
 
 * 栈帧过多导致栈内存溢出，典型：递归调用
 * 栈帧过大导致栈内存溢出
 
-<img src="https://tonkyshan.cn/img/20230724214624.png" alt="20230724214624" style="zoom:80%;" />
+<img src="/img/20230724214624.png" alt="20230724214624" style="zoom:80%;" />
 
 **五、栈和堆的区别**
 
@@ -3159,23 +3159,23 @@ Java Virtual machine Stacks(java虚拟机栈)
 * 虚拟机启动的时候创建，关闭虚拟机时释放
 * 如果方法区域中的内存无法满足分配请求，则会抛出**OutOfMemoryError：Metaspace**
 
-<img src="https://tonkyshan.cn/img/20230724215710.png" alt="20230724215710" style="zoom:80%;" />
+<img src="/img/20230724215710.png" alt="20230724215710" style="zoom:80%;" />
 
 **常量池**
 
 可以看作是一张表，虚拟机指令根据这张常量表找到要执行的类名，方法名，参数类型，字面量等信息
 
-<img src="https://tonkyshan.cn/img/20230724220022.png" alt="20230724220022" style="zoom: 80%;" />
+<img src="/img/20230724220022.png" alt="20230724220022" style="zoom: 80%;" />
 
-<img src="https://tonkyshan.cn/img/20230724220313.png" alt="20230724220313" style="zoom:80%;" />
+<img src="/img/20230724220313.png" alt="20230724220313" style="zoom:80%;" />
 
 **运行时常量池**
 
 常量池是**`*.class`**文件中的，当该类被加载，它的常量池信息就会**放入运行时常量池**，并把里面的**符合地址变为真实地址**
 
-<img src="https://tonkyshan.cn/img/20230724220539.png" alt="20230724220539" style="zoom:80%;" />
+<img src="/img/20230724220539.png" alt="20230724220539" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230724220610.png" alt="20230724220610" style="zoom:80%;" />
+<img src="/img/20230724220610.png" alt="20230724220610" style="zoom:80%;" />
 
 **七、直接内存**
 
@@ -3183,13 +3183,13 @@ Java Virtual machine Stacks(java虚拟机栈)
 
 举例：Java代码完成文件拷贝
 
-<img src="https://tonkyshan.cn/img/20230724220918.png" alt="20230724220918" style="zoom:80%;" />
+<img src="/img/20230724220918.png" alt="20230724220918" style="zoom:80%;" />
 
 
 
-<img src="https://tonkyshan.cn/img/20230724221043.png" alt="20230724221043" style="zoom: 67%;" />
+<img src="/img/20230724221043.png" alt="20230724221043" style="zoom: 67%;" />
 
-<img src="https://tonkyshan.cn/img/20230724221206.png" alt="20230724221206" style="zoom:67%;" />
+<img src="/img/20230724221206.png" alt="20230724221206" style="zoom:67%;" />
 
 --------
 
@@ -3201,7 +3201,7 @@ Java Virtual machine Stacks(java虚拟机栈)
 
 JVM只会运行二进制文件，类加载器的作用就是将**字节码文件加载到JVM中**，从而让Java程序能够启动起来
 
-<img src="https://tonkyshan.cn/img/20230724221814.png" alt="20230724221814" style="zoom:80%;" />
+<img src="/img/20230724221814.png" alt="20230724221814" style="zoom:80%;" />
 
 * 启动类加载器(BootStarp ClassLoader)：加载JAVA_HOME/jre/lib目录下的库
 * 扩展类加载器(ExtClassLoader)：主要加载JAVA_HOME/jre/lib/ext目录中的类
@@ -3217,13 +3217,13 @@ JVM只会运行二进制文件，类加载器的作用就是将**字节码文件
 * 通过双亲委派机制可以避免某一个类被重复加载，当父类已经加载后则无需重复加载，保证唯一性
 * 为了安全，保证类库API不会被修改
 
-<img src="https://tonkyshan.cn/img/20230724222826.png" alt="20230724222826" style="zoom: 67%;" />
+<img src="/img/20230724222826.png" alt="20230724222826" style="zoom: 67%;" />
 
 **三、类装载的执行过程**
 
 类从加载到虚拟机中开始，直到卸载为止，它的整个生命周期包括了：加载、验证、准备、解析、初始化、使用和卸载这7个阶段，其中，验证、准备和解析这三个部分统称为连接(linking)
 
-<img src="https://tonkyshan.cn/img/20230724223113.png" alt="20230724223113" style="zoom:80%;" />
+<img src="/img/20230724223113.png" alt="20230724223113" style="zoom:80%;" />
 
 **1、加载**
 
@@ -3231,7 +3231,7 @@ JVM只会运行二进制文件，类加载器的作用就是将**字节码文件
 * 解析类的二进制数据流为方法区内的数据结构(Java类模型)
 * 创建java.lang.Class类的实例，表示该模型，作为方法区这个类的各种数据的访问入口
 
-<img src="https://tonkyshan.cn/img/20230724223350.png" alt="20230724223350" style="zoom: 80%;" />
+<img src="/img/20230724223350.png" alt="20230724223350" style="zoom: 80%;" />
 
 **2、验证**
 
@@ -3246,7 +3246,7 @@ JVM只会运行二进制文件，类加载器的作用就是将**字节码文件
 
 最后一项：Class文件在其常量池会通过字符串记录自己将要使用的其他类或者方法，检查它们是否存在
 
-<img src="https://tonkyshan.cn/img/20230724223644.png" alt="20230724223644" style="zoom:80%;" />
+<img src="/img/20230724223644.png" alt="20230724223644" style="zoom:80%;" />
 
 **3、准备**
 
@@ -3256,7 +3256,7 @@ JVM只会运行二进制文件，类加载器的作用就是将**字节码文件
 * static变量是final的基本数据类型，以及字符串常量，值已确定，赋值在准备阶段完成
 * static变量是final的引用类型，那么赋值也会在初始化阶段完成
 
-<img src="https://tonkyshan.cn/img/20230724223926.png" style="zoom:80%;" />
+<img src="/img/20230724223926.png" style="zoom:80%;" />
 
 **4、解析**
 
@@ -3264,9 +3264,9 @@ JVM只会运行二进制文件，类加载器的作用就是将**字节码文件
 
 比如：方法中调用了其他方法，方法名可以理解为符号引用，而直接引用就是使用指针直接指向方法
 
-<img src="https://tonkyshan.cn/img/20230724224134.png" alt="20230724224134" style="zoom:80%;" />
+<img src="/img/20230724224134.png" alt="20230724224134" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230724224149.png" alt="20230724224149" style="zoom:80%;" />
+<img src="/img/20230724224149.png" alt="20230724224149" style="zoom:80%;" />
 
 #1，#2就是符号引用，找到java/io/PrintStream这个类，println这个方法就是直接引用
 
@@ -3304,15 +3304,15 @@ JVM开始从入口方法开始执行用户的程序代码
 
 有缺点：当对象间出现了循环引用的话，则引用计数法就会失效
 
-<img src="https://tonkyshan.cn/img/20230726221516.png" alt="20230726221516" style="zoom:67%;" />
+<img src="/img/20230726221516.png" alt="20230726221516" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/20230726221529.png" alt="20230726221529" style="zoom:67%;" />
+<img src="/img/20230726221529.png" alt="20230726221529" style="zoom:67%;" />
 
 **可达性分析算法**
 
 现在的虚拟机采用的都是通过可达性分析算法来确定哪些内容是垃圾
 
-<img src="https://tonkyshan.cn/img/20230726221653.png" alt="20230726221653" style="zoom:80%;" />
+<img src="/img/20230726221653.png" alt="20230726221653" style="zoom:80%;" />
 
 X,Y这两个节点是可回收的
 
@@ -3326,7 +3326,7 @@ X,Y这两个节点是可回收的
 * 方法区中常量引用的对象
 * 本地方法栈中JNI(即一般说的Native方法)引用的对象
 
-<img src="https://tonkyshan.cn/img/20230726222050.png" alt="20230726222050" style="zoom:80%;" />
+<img src="/img/20230726222050.png" alt="20230726222050" style="zoom:80%;" />
 
 **二、JVM垃圾回收算法有哪些？**
 
@@ -3337,17 +3337,17 @@ X,Y这两个节点是可回收的
 * 根据可达性分析算法得出的垃圾进行标记
 * 对这些标记为可回收的内容进行垃圾回收
 
-<img src="https://tonkyshan.cn/img/20230726222640.png" alt="20230726222640" style="zoom:80%;" />
+<img src="/img/20230726222640.png" alt="20230726222640" style="zoom:80%;" />
 
 **2、标记整理算法**
 
-<img src="https://tonkyshan.cn/img/20230726222714.png" alt="20230726222714" style="zoom:80%;" />
+<img src="/img/20230726222714.png" alt="20230726222714" style="zoom:80%;" />
 
 优缺点同标记清除算法，解决了标记清除算法的碎片化的问题，同时，标记整理算法多了一步，对象移动内存位置的步骤，其效率也有一定的影响
 
 **3、复制算法**
 
-<img src="https://tonkyshan.cn/img/20230726222926.png" alt="20230726222926" style="zoom:80%;" />
+<img src="/img/20230726222926.png" alt="20230726222926" style="zoom:80%;" />
 
 优点：
 
@@ -3358,7 +3358,7 @@ X,Y这两个节点是可回收的
 
 * 分配的2块内存空间，在同一时刻，只能使用一半，内存的使用率低
 
-<img src="https://tonkyshan.cn/img/20230726223122.png" alt="20230726223122" style="zoom:80%;" />
+<img src="/img/20230726223122.png" alt="20230726223122" style="zoom:80%;" />
 
 **三、JVM中的分代回收**
 
@@ -3366,7 +3366,7 @@ X,Y这两个节点是可回收的
 
 在java8中，堆被分为了两份：**新生代和老年代【1:2】**
 
-<img src="https://tonkyshan.cn/img/20230726223319.png" alt="20230726223319" style="zoom:80%;" />
+<img src="/img/20230726223319.png" alt="20230726223319" style="zoom:80%;" />
 
 对于新生代，内存又被分成了三个区域
 
@@ -3405,7 +3405,7 @@ X,Y这两个节点是可回收的
 
 垃圾回收时，只有一个线程在工作，并且java应用中的所有线程都要暂停(STW)，等待垃圾回收的完成
 
-<img src="https://tonkyshan.cn/img/20230726224919.png" alt="20230726224919" style="zoom:80%;" />
+<img src="/img/20230726224919.png" alt="20230726224919" style="zoom:80%;" />
 
 **2、并行垃圾收集器**
 
@@ -3416,15 +3416,15 @@ X,Y这两个节点是可回收的
 
 垃圾回收时，多个线程在工作，并且java应用中的所有线程都要暂停(STW)，等待垃圾回收的完成
 
-<img src="https://tonkyshan.cn/img/20230726225133.png" alt="20230726225133" style="zoom:80%;" />
+<img src="/img/20230726225133.png" alt="20230726225133" style="zoom:80%;" />
 
 **3、CMS(并发)垃圾收集器**
 
 CMS全称Concurrent Mark Sweep，是一款**并发**的、使用**标记-清除**算法的垃圾回收器，该回收器是**针对老年代垃圾回收的**，是一款以获取最短回收停顿时间为目标的收集器，停顿时间段，用户体验就好。其最大的特点是在进行垃圾回收时，应用仍然能正常运行。
 
-<img src="https://tonkyshan.cn/img/20230726225542.png" alt="20230726225542" style="zoom:80%;" />
+<img src="/img/20230726225542.png" alt="20230726225542" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230726225611.png" alt="20230726225611" style="zoom:80%;" />
+<img src="/img/20230726225611.png" alt="20230726225611" style="zoom:80%;" />
 
 初始标记：只会标记GC Roots
 
@@ -3445,7 +3445,7 @@ CMS全称Concurrent Mark Sweep，是一款**并发**的、使用**标记-清除*
 * 分成三个阶段：新生代回收，并发标记，混合收集
 * 如果并发失败(即回收速度赶不上创建新对象速度)，会触发Full GC
 
-<img src="https://tonkyshan.cn/img/20230726230210.png" alt="20230726230210" style="zoom:80%;" />
+<img src="/img/20230726230210.png" alt="20230726230210" style="zoom:80%;" />
 
 **1、Young Collection 年轻代垃圾回收**
 
@@ -3466,7 +3466,7 @@ CMS全称Concurrent Mark Sweep，是一款**并发**的、使用**标记-清除*
 * 混合收集阶段，参与复制的有eden、survivor、old
 * 复制完成，内存得到释放，进入下一轮的新生代回收、并发标记、混合收集
 
-<img src="https://tonkyshan.cn/img/20230726231514.png" alt="20230726231514" style="zoom:80%;" />
+<img src="/img/20230726231514.png" alt="20230726231514" style="zoom:80%;" />
 
 **六、强引用、软引用、弱引用、虚引用的区别**
 
@@ -3474,29 +3474,29 @@ CMS全称Concurrent Mark Sweep，是一款**并发**的、使用**标记-清除*
 
 只有所有GC Roots对象都不通过【强引用】引用该对象，该对象才能被垃圾回收
 
-<img src="https://tonkyshan.cn/img/20230726231712.png" alt="20230726231712" style="zoom:80%;" />
+<img src="/img/20230726231712.png" alt="20230726231712" style="zoom:80%;" />
 
 **2、软引用**
 
 仅有软引用引用该对象时，在垃圾回收后，内存仍不足时会再次触发垃圾回收
 
-<img src="https://tonkyshan.cn/img/20230726231827.png" alt="20230726231827" style="zoom:80%;" />
+<img src="/img/20230726231827.png" alt="20230726231827" style="zoom:80%;" />
 
 **3、弱引用**
 
 仅有弱引用引用该对象时，在垃圾回收时，无论内存是否充足，都会回收弱引用对象
 
-<img src="https://tonkyshan.cn/img/20230726231935.png" alt="20230726231935" style="zoom:80%;" />
+<img src="/img/20230726231935.png" alt="20230726231935" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230726231955.png" alt="20230726231955" style="zoom:80%;" />
+<img src="/img/20230726231955.png" alt="20230726231955" style="zoom:80%;" />
 
 **4、虚引用**
 
 必须配合引用队列使用，被引用对象回收时，会将虚引用入队，由Reference Handler线程调用虚引用相关方法释放直接内存
 
-<img src="https://tonkyshan.cn/img/20230726232247.png" alt="20230726232247" style="zoom:80%;" />
+<img src="/img/20230726232247.png" alt="20230726232247" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230726232305.png" alt="20230726232305" style="zoom:80%;" />
+<img src="/img/20230726232305.png" alt="20230726232305" style="zoom:80%;" />
 
 ----
 
@@ -3510,13 +3510,13 @@ CMS全称Concurrent Mark Sweep，是一款**并发**的、使用**标记-清除*
 
 修改TOMCAT_HOME/bin/catalina.sh文件(Linux下)windows下是catalina.bat文件   （卡塔琳娜）
 
-<img src="https://tonkyshan.cn/img/20230727220445.png" alt="20230727220445" style="zoom:80%;" />
+<img src="/img/20230727220445.png" alt="20230727220445" style="zoom:80%;" />
 
 **2、jar包部署在启动参数设置**
 
 通常在linux系统下直接加参数启动springboot项目
 
-<img src="https://tonkyshan.cn/img/20230727220815.png" alt="20230727220815" style="zoom:80%;" />
+<img src="/img/20230727220815.png" alt="20230727220815" style="zoom:80%;" />
 
 nohup：用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行
 
@@ -3530,7 +3530,7 @@ nohup：用于在系统后台不挂断地运行命令，退出终端不会影响
 
 设置堆的初始大小和最大大小，为了防止垃圾收集器在初始大小、最大大小之间收缩堆而产生额外的时间，通常把最大，初始大小设置为相同的值。
 
-<img src="https://tonkyshan.cn/img/20230727221509.png" alt="20230727221509" style="zoom:80%;" />
+<img src="/img/20230727221509.png" alt="20230727221509" style="zoom:80%;" />
 
 堆空间设置多少合适？
 
@@ -3543,17 +3543,17 @@ nohup：用于在系统后台不挂断地运行命令，退出终端不会影响
 
 虚拟机栈的设置：每个线程默认会开启1M的内存，用于存放栈帧，调用参数，局部变量等，但一般256k就够用，通常减少每个线程的堆栈，可以产生更多的线程，但这实际上还受限于操作系统。
 
-<img src="https://tonkyshan.cn/img/20230727222019.png" alt="20230727222019" style="zoom:80%;" />
+<img src="/img/20230727222019.png" alt="20230727222019" style="zoom:80%;" />
 
 **3、年轻代中Eden区和两个Survivor区的大小比例**
 
 设置年轻代中Eden区和两个Survivor区的大小比例，该值如果不设置，默认比例为8:1:1。通过增大Eden区的大小，来减少YGC发生的次数，但有时我们发现，虽然次数减少了，但Eden区满的时候，由于占用的空间较大，导致释放缓慢，此时STW的时间较长，因此需要按照程序情况去调优。
 
-<img src="https://tonkyshan.cn/img/20230727222259.png" alt="20230727222259" style="zoom:80%;" />
+<img src="/img/20230727222259.png" alt="20230727222259" style="zoom:80%;" />
 
 **5、年轻代晋升老年代阈值**
 
-<img src="https://tonkyshan.cn/img/20230727222329.png" alt="20230727222329" style="zoom:80%;" />
+<img src="/img/20230727222329.png" alt="20230727222329" style="zoom:80%;" />
 
 * 默认为15
 * 取值范围0-15
@@ -3562,7 +3562,7 @@ nohup：用于在系统后台不挂断地运行命令，退出终端不会影响
 
 通过增大吞吐量提高系统性能，可以通过设置并行垃圾回收收集器
 
-<img src="https://tonkyshan.cn/img/20230727222656.png" alt="20230727222656" style="zoom:80%;" />
+<img src="/img/20230727222656.png" alt="20230727222656" style="zoom:80%;" />
 
 **三、JVM调优工具**
 
@@ -3570,22 +3570,22 @@ nohup：用于在系统后台不挂断地运行命令，退出终端不会影响
 
 * **jps  进程状态信息**
 
-<img src="https://tonkyshan.cn/img/20230727223338.png" alt="20230727223338" style="zoom:80%;" />
+<img src="/img/20230727223338.png" alt="20230727223338" style="zoom:80%;" />
 
 * **jstack  查看java进程内线程的堆栈信息**
 
-<img src="https://tonkyshan.cn/img/20230727223402.png" alt="20230727223402" style="zoom:80%;" />
+<img src="/img/20230727223402.png" alt="20230727223402" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230727223438.png" alt="20230727223438" style="zoom:80%;" />
+<img src="/img/20230727223438.png" alt="20230727223438" style="zoom:80%;" />
 
 * **jmap  查看堆转信息**
 
-<img src="https://tonkyshan.cn/img/20230727223621.png" alt="20230727223621" style="zoom:80%;" />
+<img src="/img/20230727223621.png" alt="20230727223621" style="zoom:80%;" />
 
 * format=b表示以hprof二进制格式转储java堆的内存
 * `file-<filename>`用于指定快照dump文件的文件名
 
-<img src="https://tonkyshan.cn/img/20230727225302.png" alt="20230727225302" style="zoom: 80%;" />
+<img src="/img/20230727225302.png" alt="20230727225302" style="zoom: 80%;" />
 
 * **jhat  堆转储快照分析工具**
 
@@ -3593,7 +3593,7 @@ nohup：用于在系统后台不挂断地运行命令，退出终端不会影响
 
 是JVM统计监测工具，可以用来显示垃圾回收信息，类加载信息，新生代统计信息等。
 
-<img src="https://tonkyshan.cn/img/20230727225445.png" alt="20230727225445" style="zoom:80%;" />
+<img src="/img/20230727225445.png" alt="20230727225445" style="zoom:80%;" />
 
 - SO：survivor区
 - S1：survivor区
@@ -3622,36 +3622,36 @@ java安装目录bin目录下  直接启动jconsole.exe就行
 
 **四、Java内存泄漏的排查思路**
 
-<img src="https://tonkyshan.cn/img/20230727230500.png" alt="20230727230500" style="zoom:80%;" />
+<img src="/img/20230727230500.png" alt="20230727230500" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20230727230604.png" alt="20230727230604" style="zoom:80%;" />
+<img src="/img/20230727230604.png" alt="20230727230604" style="zoom:80%;" />
 
 **1、获取堆内存快照dump**
 
-<img src="https://tonkyshan.cn/img/20230727230732.png" alt="20230727230732" style="zoom:80%;" />
+<img src="/img/20230727230732.png" alt="20230727230732" style="zoom:80%;" />
 
 **2、VisualVM去分析dump文件**
 
-<img src="https://tonkyshan.cn/img/20230727230906.png" style="zoom:80%;" />
+<img src="/img/20230727230906.png" style="zoom:80%;" />
 
 **3、通过查看堆信息的情况，定位内存溢出问题**
 
-<img src="https://tonkyshan.cn/img/20230727230913.png" alt="20230727230913" style="zoom:80%;" />
+<img src="/img/20230727230913.png" alt="20230727230913" style="zoom:80%;" />
 
 **五、CPU飙高排查方案与思路**
 
 1、使用top命令查看占用cpu的情况
 
-<img src="https://tonkyshan.cn/img/20230727231020.png" alt="20230727231020" style="zoom:80%;" />
+<img src="/img/20230727231020.png" alt="20230727231020" style="zoom:80%;" />
 
 2、通过top命令查看后，可以查看是哪一个进程占用cpu较高，上图所示的进程为：40940
 
 3、查看进程中的线程信息
 
-<img src="https://tonkyshan.cn/img/20230727231558.png" alt="20230727231558" style="zoom:80%;" />
+<img src="/img/20230727231558.png" alt="20230727231558" style="zoom:80%;" />
 
 通过以上分析，在进程40940中的线程40950占用cpu较高
 
 4、可以根据线程id找到有问题的线程，进一步定位到问题代码的源码行号
 
-<img src="https://tonkyshan.cn/img/20230727231749.png" alt="20230727231749" style="zoom:80%;" />
+<img src="/img/20230727231749.png" alt="20230727231749" style="zoom:80%;" />

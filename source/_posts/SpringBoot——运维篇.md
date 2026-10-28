@@ -48,9 +48,9 @@ java -jar springboot.jar
 </build>
 ```
 
-![20230207133844](https://tonkyshan.cn/img/20230207133844.png)
+![20230207133844](/img/20230207133844.png)
 
-![20230207134022](https://tonkyshan.cn/img/20230207134022.png)
+![20230207134022](/img/20230207134022.png)
 
 * Windows端口被占用
 
@@ -91,11 +91,11 @@ taskkill -f -t -im "进程名称"
 
 * 携带多个属性启动SpringBoot，属性间使用空格分隔
 
-![20230221144505](https://tonkyshan.cn/img/20230221144505.png)
+![20230221144505](/img/20230221144505.png)
 
 * 带属性启动SpringBoot程序，为程序添加运行属性
 
-![20230221145332](https://tonkyshan.cn/img/20230221145332.png)
+![20230221145332](/img/20230221145332.png)
 
 * 通过编程
 
@@ -130,7 +130,7 @@ public static void main(String[] args) {
 
 * 通过启动参数加载配置文件
 
-![20230221152853](https://tonkyshan.cn/img/20230221152853.png)
+![20230221152853](/img/20230221152853.png)
 
 * 通过启动参数加载指定文件路径下的配置文件
 
@@ -422,7 +422,7 @@ public class BookController extends BaseClass{
 
 #### 日志输出格式配置
 
-![20230223145602](https://tonkyshan.cn/img/20230223145602.png)
+![20230223145602](/img/20230223145602.png)
 
 * PID：进程ID，用于表明当前操作所处的进程，当多服务同时记录日志时，该值可用于协助程序员调试程序
 * 所属类/接口名：当前显示信息为SpingBoot重写后的信息，名称过长时，简化包名书写为首字母，甚至直接删除

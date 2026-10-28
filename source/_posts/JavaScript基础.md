@@ -344,7 +344,7 @@ getTime()：//获取毫秒值。返回当前日期对象描述的时间到1970�
 
 * PI
 
-![20220315140632](https://tonkyshan.cn/img/202203151406411.png)
+![20220315140632](/img/202203151406411.png)
 
 ------
 
@@ -724,7 +724,7 @@ innerHTML
 
 **DOM树**
 
-![ct_htmltree](https://tonkyshan.cn/img/202203172051609.gif)
+![ct_htmltree](/img/202203172051609.gif)
 
 2.W3C DOM 标准被分为3个不同的部分：
 

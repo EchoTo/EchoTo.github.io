@@ -18,11 +18,11 @@ categories: [SSM,java]
 
 **Spring全家桶**
 
-![20220617194846](https://tonkyshan.cn/img/20220617194846.png)
+![20220617194846](/img/20220617194846.png)
 
 **发展史**
 
-![20220617195507](https://tonkyshan.cn/img/20220617195507.png)
+![20220617195507](/img/20220617195507.png)
 
 ------
 
@@ -40,11 +40,11 @@ Spring Framework是Spring生态圈中最基础的项目，是其他项目的根�
 * Web：Web开发
 * Test：单元测试与集成测试
 
-<img src="https://tonkyshan.cn/img/20220617200429.png" alt="20220617200429" style="zoom: 67%;" />
+<img src="/img/20220617200429.png" alt="20220617200429" style="zoom: 67%;" />
 
 学习路线：
 
-![20220620090533](https://tonkyshan.cn/img/20220620090533.png)
+![20220620090533](/img/20220620090533.png)
 
 -----
 
@@ -64,11 +64,11 @@ Spring Framework是Spring生态圈中最基础的项目，是其他项目的根�
 
 之前实现：
 
-![20220620092220](https://tonkyshan.cn/img/20220620092220.png)
+![20220620092220](/img/20220620092220.png)
 
 现在实现：
 
-![20220620092321](https://tonkyshan.cn/img/20220620092321.png)
+![20220620092321](/img/20220620092321.png)
 
 目标：**充分解耦**
 
@@ -83,7 +83,7 @@ Spring Framework是Spring生态圈中最基础的项目，是其他项目的根�
 
 入门案例
 
-![20220620094128](https://tonkyshan.cn/img/20220620094128.png)
+![20220620094128](/img/20220620094128.png)
 
 1.导入Spring坐标
 
@@ -162,7 +162,7 @@ public class App2 {
 
 入门案例
 
-![20220620200853](https://tonkyshan.cn/img/20220620200853.png)
+![20220620200853](/img/20220620200853.png)
 
 1.删除使用new的形式创建对象的代码
 
@@ -747,7 +747,7 @@ BookDao bookDao = ctx.getBean(BookDao.class);
 
 **三、容器类层次结构**
 
-![20220706134822](https://tonkyshan.cn/img/20220706134822.png)
+![20220706134822](/img/20220706134822.png)
 
 **四、BeanFactory**
 
@@ -772,15 +772,15 @@ bookDao.save();
 
 **一、容器相关**
 
-![20220706135644](https://tonkyshan.cn/img/20220706135644.png)
+![20220706135644](/img/20220706135644.png)
 
 **二、bean相关**
 
-![20220706135533](https://tonkyshan.cn/img/20220706135533.png)
+![20220706135533](/img/20220706135533.png)
 
 **三、依赖注入相关**
 
-![20220706135629](https://tonkyshan.cn/img/20220706135629.png)
+![20220706135629](/img/20220706135629.png)
 
 ------
 
@@ -820,7 +820,7 @@ Spring3.0升级了纯注解开发模式，使用Java类替代配置文件，开�
 
 * Java类替代Spring核心配置文件
 
-![20220710174402](https://tonkyshan.cn/img/20220710174402.png)
+![20220710174402](/img/20220710174402.png)
 
 * @Configuration注解用于设定当前类为**配置类**
 * @ComponentScan注解用于设定扫描路径，此注解只能添加一次，多个数据用数组格式
@@ -880,7 +880,7 @@ public class BookDaoImpl implements BookDao {
 
 * 使用@Autowired注解开启自动装配模式(按类型)
 
-<img src="https://tonkyshan.cn/img/20220710180912.png" alt="20220710180912" style="zoom:67%;" />
+<img src="/img/20220710180912.png" alt="20220710180912" style="zoom:67%;" />
 
 自动装配基于反射设计创建对象并暴力反射对应属性为私有属性初始化数据，因此无需提供setter方法。
 
@@ -888,17 +888,17 @@ public class BookDaoImpl implements BookDao {
 
 * 使用@Qualifier注解开启指定名称装配bean
 
-<img src="https://tonkyshan.cn/img/20220710181249.png" alt="20220710181249" style="zoom:67%;" />
+<img src="/img/20220710181249.png" alt="20220710181249" style="zoom:67%;" />
 
 > tips：@Qualifier注解无法单独使用，必须配合@Autowired注解使用
 
 * 使用@Value实现简单类型注入
 
-<img src="https://tonkyshan.cn/img/20220710181531.png" alt="20220710181531" style="zoom:67%;" />
+<img src="/img/20220710181531.png" alt="20220710181531" style="zoom:67%;" />
 
 * 使用@PropertySource注解加载properties文件
 
-<img src="https://tonkyshan.cn/img/20220710182007.png" alt="20220710182007" style="zoom:67%;" />
+<img src="/img/20220710182007.png" alt="20220710182007" style="zoom:67%;" />
 
 > tips：路径仅支持单一文件配置，多文件请使用数组格式配置，不允许使用通配符*
 
@@ -991,17 +991,17 @@ public class SpringConfig {
 
 * 简单类型依赖注入
 
-![20220710185710](https://tonkyshan.cn/img/20220710185710.png)
+![20220710185710](/img/20220710185710.png)
 
 * 引用类型
 
-![20220710185754](https://tonkyshan.cn/img/20220710185754.png)
+![20220710185754](/img/20220710185754.png)
 
 引用类型注入只需要为bean定义方法设置形参即可，容器会根据类型自动装配对象
 
 #### 1.11.6注解总结
 
-![20220710190054](https://tonkyshan.cn/img/20220710190054.png)
+![20220710190054](/img/20220710190054.png)
 
 --------
 
@@ -1021,9 +1021,9 @@ mybatis配置文件换成spring整合
 * SqlSessionFactoryBean
 * MapperScannerConfigurer
 
-![20220716174524](https://tonkyshan.cn/img/20220716174524.png)
+![20220716174524](/img/20220716174524.png)
 
-![20220716174547](https://tonkyshan.cn/img/20220716174547.png)
+![20220716174547](/img/20220716174547.png)
 
 实际：把sqlMapConfig.xml换成Spring的MybatisConfig.java
 
@@ -1091,7 +1091,7 @@ public class MybatisConfig {
 }
 ```
 
-![20221214142646](https://tonkyshan.cn/img/20221214142646.png)
+![20221214142646](/img/20221214142646.png)
 
 --------
 
@@ -1155,7 +1155,7 @@ AOP(Aspect Oriented Programming)：面向切面编程，一种编程范式，指
 
 Spring理念：无入侵式/无侵入式
 
-![20220724191910](https://tonkyshan.cn/img/20220724191910.png)
+![20220724191910](/img/20220724191910.png)
 
 * 连接点(JoinPoint)：程序执行过程中的任意位置，粒度为执行方法、抛出异常、设置变量等。
   * 在SpringAOP中，理解为方法的执行
@@ -1184,7 +1184,7 @@ Spring理念：无入侵式/无侵入式
 </dependency>
 ```
 
-​                         ![20220730210002](https://tonkyshan.cn/img/20220730210002.png)                                        
+​                         ![20220730210002](/img/20220730210002.png)                                        
 
 **二、定义dao接口与实现类**
 
@@ -1373,7 +1373,7 @@ public class SpringConfig {
 * 切入点：要进行增强的方法
 * 切入点表达式：要进行增强的方法的描述方式
 
-![20220821163800](https://tonkyshan.cn/img/20220821163800.png)
+![20220821163800](/img/20220821163800.png)
 
 一、切入点表达式标准格式：动作关键字(访问修饰符  返回值  包名.类/接口名.方法名(参数)异常名)
 
@@ -1414,7 +1414,7 @@ execution(public User com..UserService.findById(..))
 execution(* *..*Service+.*(..))
 ```
 
-![20220821165726](https://tonkyshan.cn/img/20220821165726.png)
+![20220821165726](/img/20220821165726.png)
 
 ----
 
@@ -1548,7 +1548,7 @@ public void afterThrowing() {
 
 2、通知类型选择前后均可增强的类型——环绕通知
 
-![20221215192341](https://tonkyshan.cn/img/20221215192341.png)
+![20221215192341](/img/20221215192341.png)
 
 ProjectAdvice.java
 
@@ -1850,15 +1850,15 @@ public class DataSourceTransactionmanager{
 
 **案例：银行转账**
 
-![20221216134720](https://tonkyshan.cn/img/20221216134720.png)
+![20221216134720](/img/20221216134720.png)
 
 模拟异常出现，当正常执行转账操作时：Tom减100，Jerry加100
 
 当出现异常时，Tom减100，Jerry不变，这时就需要用到Spring事务
 
-<img src="https://tonkyshan.cn/img/20221216134742.png" alt="20221216134742" style="zoom:80%;" />
+<img src="/img/20221216134742.png" alt="20221216134742" style="zoom:80%;" />
 
-<img src="https://tonkyshan.cn/img/20221216134806.png" alt="20221216134806" style="zoom:80%;" />
+<img src="/img/20221216134806.png" alt="20221216134806" style="zoom:80%;" />
 
 开启Spring事务：
 
@@ -1918,9 +1918,9 @@ public class SpringConfig {
 
 -----
 
-![20221216135930](https://tonkyshan.cn/img/20221216135930.png)
+![20221216135930](/img/20221216135930.png)
 
-![20221216135953](https://tonkyshan.cn/img/20221216135953.png)
+![20221216135953](/img/20221216135953.png)
 
 **事务管理员：**发起事务方，在Spring中通常指代业务层开启事务的方法
 
@@ -1934,7 +1934,7 @@ public class SpringConfig {
 
 **事务相关配置**
 
-<img src="https://tonkyshan.cn/img/20221216140415.png" alt="20221216140415" style="zoom: 65%;" />
+<img src="/img/20221216140415.png" alt="20221216140415" style="zoom: 65%;" />
 
 Spring事务遇到以下两种异常进行回滚：Error系，运行时异常
 
@@ -1950,13 +1950,13 @@ Spring事务遇到以下两种异常进行回滚：Error系，运行时异常
 
 事务传播行为：事务协调员对事务管理员所携带事务的处理态度
 
-![20221216142442](https://tonkyshan.cn/img/20221216142442.png)
+![20221216142442](/img/20221216142442.png)
 
 解决办法：log的事务单独开一个T2
 
 在业务层接口上添加Spring事务，设置事务传播行为**REQUIRES_NEW**(需要新事务)
 
-![20221216142948](https://tonkyshan.cn/img/20221216142948.png)
+![20221216142948](/img/20221216142948.png)
 
 ---------
 

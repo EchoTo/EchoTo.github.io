@@ -14,17 +14,17 @@ categories: [kafka]
 
 ---
 
-<img src="https://tonkyshan.cn/img/20251010154925.png" alt="线程与线程之间的数据交互" style="zoom: 85%;" />
+<img src="/img/20251010154925.png" alt="线程与线程之间的数据交互" style="zoom: 85%;" />
 
-<img src="https://tonkyshan.cn/img/20251010155744.png" alt="进程与进程之间的数据交互" style="zoom: 85%;" />
+<img src="/img/20251010155744.png" alt="进程与进程之间的数据交互" style="zoom: 85%;" />
 
 **存在的问题**
 
-<img src="https://tonkyshan.cn/img/20251010160622.png" alt="线程与线程之间的数据交互" style="zoom: 85%;" />
+<img src="/img/20251010160622.png" alt="线程与线程之间的数据交互" style="zoom: 85%;" />
 
 当一个线程50/s写入，一个线程30/s消费，那么随着时间的累积会造成大量内存消耗，如果把这部分数据写入磁盘中，长期看来，也会造成大量资源消耗浪费，甚至系统不可用
 
-<img src="https://tonkyshan.cn/img/20251010165330.png" alt="进程与进程之间的数据交互" style="zoom: 85%;" />
+<img src="/img/20251010165330.png" alt="进程与进程之间的数据交互" style="zoom: 85%;" />
 
 当一个进程需要向多个进程发送数据时，需要发送两份，造成资源浪费，如果数据不同，且指定对象，要增加逻辑和不同标记作为区分，增加进程复杂度，消耗资源，降低系统的反应速度，重复发送也会对系统吞吐量造成影响
 
@@ -32,7 +32,7 @@ categories: [kafka]
 
 **解决方法**
 
-<img src="https://tonkyshan.cn/img/20251010171229.png" alt="解决方法" style="zoom: 85%;" />
+<img src="/img/20251010171229.png" alt="解决方法" style="zoom: 85%;" />
 
 进程之间不直接通讯，增加缓冲区，降低进程之间的耦合性，对数据生产和接收进行调整，使传输过程平稳高效
 
@@ -46,19 +46,19 @@ categories: [kafka]
 
 ---
 
-<img src="https://tonkyshan.cn/img/20251010194212.png" alt="JMS" style="zoom: 85%;" />
+<img src="/img/20251010194212.png" alt="JMS" style="zoom: 85%;" />
 
 **P2P模型** 
 
 点对点 point-to-point
 
-<img src="https://tonkyshan.cn/img/20251010201005.png" alt="P2P模型" style="zoom: 85%;" />
+<img src="/img/20251010201005.png" alt="P2P模型" style="zoom: 85%;" />
 
 **PS模型**
 
 同组的人只能有一个人消费，不同组的人可以消费
 
-<img src="https://tonkyshan.cn/img/20251010203646.png" alt="PS模型" style="zoom: 85%;" />
+<img src="/img/20251010203646.png" alt="PS模型" style="zoom: 85%;" />
 
 RabbitMQ、ActiveMQ、RocketMQ、Kafka
 
@@ -80,7 +80,7 @@ RabbitMQ、ActiveMQ、RocketMQ、Kafka
 
 ---
 
-<img src="https://tonkyshan.cn/img/20251011112812.png" alt="Kafka组件" style="zoom: 85%;" />
+<img src="/img/20251011112812.png" alt="Kafka组件" style="zoom: 85%;" />
 
 
 

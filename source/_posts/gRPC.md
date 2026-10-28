@@ -89,7 +89,7 @@ gRPC是由Google开源的一个高性能的RPC框架。由Stubby Google内部RPC
 * 消息 message
 * 帧 frame
 
-<img src="https://tonkyshan.cn/img/20240802160614.png" alt="20240802160614.png" style="zoom:40%;" />
+<img src="/img/20240802160614.png" alt="20240802160614.png" style="zoom:40%;" />
 
 概念
 
@@ -116,7 +116,7 @@ protobuf 的使用需要安装的protobuf的编译器，编译器的目的是把
 
 <img src="/Users/test/Library/Application Support/typora-user-images/截屏2024-08-05 09.57.54.png" alt="截屏2024-08-05 09.57.54" style="zoom:50%;" />
 
-<img src="https://tonkyshan.cn/img/20240805095754.png" alt="20240805095754.png" style="zoom:50%;" />
+<img src="/img/20240805095754.png" alt="20240805095754.png" style="zoom:50%;" />
 
 **protobuf语法**
 
@@ -170,7 +170,7 @@ protobuf 的使用需要安装的protobuf的编译器，编译器的目的是把
 
 * 基本类型
 
-  <img src="https://tonkyshan.cn/img/20240805163224.png" alt="20240805163224.png" style="zoom:90%;" />
+  <img src="/img/20240805163224.png" alt="20240805163224.png" style="zoom:90%;" />
 
 * 枚举类型
 
@@ -379,13 +379,13 @@ protobuf 的使用需要安装的protobuf的编译器，编译器的目的是把
 
   点击protobuf:compile 生成message相关信息
 
-  <img src="https://tonkyshan.cn/img/20240808161140.png" alt="20240808161140.png" />
+  <img src="/img/20240808161140.png" alt="20240808161140.png" />
 
   点击protobuf:compile-custom 生成接口相关信息
 
-  <img src="https://tonkyshan.cn/img/20240808162857.png" alt="20240808162857.png" />
+  <img src="/img/20240808162857.png" alt="20240808162857.png" />
 
-  <img src="https://tonkyshan.cn/img/20240806102313.png" alt="20240806102313.png" style="zoom:50%;" />
+  <img src="/img/20240806102313.png" alt="20240806102313.png" style="zoom:50%;" />
 
 * xxx-server服务端模块
 
@@ -622,7 +622,7 @@ public class GrpcClient2 {
 
 * 特点
 
-<img src="https://tonkyshan.cn/img/20240809113741.png" alt="20240809113741.png" style="zoom:40%;" />
+<img src="/img/20240809113741.png" alt="20240809113741.png" style="zoom:40%;" />
 
 当client发起调用后，提交数据，并且等待 服务器响应
 
@@ -641,7 +641,7 @@ service HelloService {
 
 一个请求对象，服务端可以回传多个结果对象
 
-<img src="https://tonkyshan.cn/img/20240809115637.png" alt="20240809115637.png" style="zoom:40%;" />
+<img src="/img/20240809115637.png" alt="20240809115637.png" style="zoom:40%;" />
 
 错误的认知：
 
@@ -964,7 +964,7 @@ public class GrpcClient5 {
 
 客户端可以发送多个请求消息，服务器响应多个响应消息
 
-<img src="https://tonkyshan.cn/img/20240812115511.png" alt="20240812115511.png" style="zoom:50%;" />
+<img src="/img/20240812115511.png" alt="20240812115511.png" style="zoom:50%;" />
 
 应用场景：聊天室
 
@@ -1221,9 +1221,9 @@ public class GrpcClient7 {
 
 ---
 
-<img src="https://tonkyshan.cn/img/20240812155942.png" alt="20240812155942.png" style="zoom:40%;" />
+<img src="/img/20240812155942.png" alt="20240812155942.png" style="zoom:40%;" />
 
-<img src="https://tonkyshan.cn/img/20240813095042.png" alt="20240813095042.png" style="zoom:50%;" />
+<img src="/img/20240813095042.png" alt="20240813095042.png" style="zoom:50%;" />
 
 一、搭建SpringBoot开发环境
 

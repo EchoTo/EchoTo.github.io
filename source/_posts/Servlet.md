@@ -25,7 +25,7 @@ categories: JavaWeb
 * 在Servlet规范中，指定Http服务器调用动态资源文件规则
 * 在Servlet规范中，指定Http服务器管理动态资源文件实例对象规则
 
-![](https://tonkyshan.cn/img/20211009095450.png)
+![](/img/20211009095450.png)
 
 **HTTP**
 
@@ -278,19 +278,19 @@ public class Demo01Servlet extends HttpServlet {
 
 以Tomcat8运行文件
 
-![](https://tonkyshan.cn/img/20211024105031.png)
+![](/img/20211024105031.png)
 
-![](https://tonkyshan.cn/img/20211024105116.png)
+![](/img/20211024105116.png)
 
-![20211024105134](https://tonkyshan.cn/img/20211024105134.png)
+![20211024105134](/img/20211024105134.png)
 
 在ulr处改写/one
 
-![20211024105207](https://tonkyshan.cn/img/20211024105207.png)
+![20211024105207](/img/20211024105207.png)
 
 **结果**
 
-![20211024105213](https://tonkyshan.cn/img/20211024105213.png)
+![20211024105213](/img/20211024105213.png)
 
 ------------
 
@@ -413,23 +413,23 @@ public class Demo03ServletLife extends HttpServlet {
 </web-app>
 ```
 
-![20211024123024](https://tonkyshan.cn/img/20211024123024.png)
+![20211024123024](/img/20211024123024.png)
 
-![20211024123221](https://tonkyshan.cn/img/20211024123221.png)
+![20211024123221](/img/20211024123221.png)
 
 **当服务器接收到请求时**
 
-![20211024123312](https://tonkyshan.cn/img/20211024123312.png)
+![20211024123312](/img/20211024123312.png)
 
-![20211024123435](https://tonkyshan.cn/img/20211024123435.png)
+![20211024123435](/img/20211024123435.png)
 
 **当服务器接收到请求/two时，Demo02ServletLife类被创建实例对象**
 
-![20211024123801](https://tonkyshan.cn/img/20211024123801.png)
+![20211024123801](/img/20211024123801.png)
 
 **当服务停止时，实例对象被销毁**
 
-![20211024123945](https://tonkyshan.cn/img/20211024123945.png)
+![20211024123945](/img/20211024123945.png)
 
 > 以上就是Servlet的生命周期
 
@@ -752,9 +752,9 @@ public class Demo07HttpServletResponse extends HttpServlet {
 </web-app>
 ```
 
-![20211025005414](https://tonkyshan.cn/img/20211025005414.png)
+![20211025005414](/img/20211025005414.png)
 
-![20211025005456](https://tonkyshan.cn/img/20211025005456.png)
+![20211025005456](/img/20211025005456.png)
 
 > 请求方法：GET
 
@@ -825,7 +825,7 @@ Cookie: Idea-911f4368=8fd1f75e-d0e1-4a6a-bfcb-99d355c4c7a1; _ga=GA1.1.1512127944
 
 此时POST的请求体：`username=aaa`
 
-![20220320212322](https://tonkyshan.cn/img/20220402185134.png)
+![20220320212322](/img/20220402185134.png)
 
 **一.介绍：**
 
@@ -936,9 +936,9 @@ public class Demo01HttpServletRequest extends HttpServlet {
 </web-app>
 ```
 
-![20211025012740](https://tonkyshan.cn/img/20211025012740.png)
+![20211025012740](/img/20211025012740.png)
 
-![20211025012802](https://tonkyshan.cn/img/20211025012802.png)
+![20211025012802](/img/20211025012802.png)
 
 获取URI
 
@@ -973,7 +973,7 @@ public class Demo01HttpServletRequest extends HttpServlet {
 }
 ```
 
-![20211025014106](https://tonkyshan.cn/img/20211025014106.png)
+![20211025014106](/img/20211025014106.png)
 
 ----
 
@@ -1016,7 +1016,7 @@ public class Demo02HttpServletRequest extends HttpServlet {
 </html>
 ```
 
-![20211025155822](https://tonkyshan.cn/img/20211025155822.png)
+![20211025155822](/img/20211025155822.png)
 
 ----------
 
@@ -1070,17 +1070,17 @@ public class Demo03HttpServletRequest extends HttpServlet {
 </html>
 ```
 
-![20211025192911](https://tonkyshan.cn/img/20211025192911.png)
+![20211025192911](/img/20211025192911.png)
 
-![20211025193109](https://tonkyshan.cn/img/20211025193109.png)
+![20211025193109](/img/20211025193109.png)
 
 请求方法：Get和post
 
-![20211025192922](https://tonkyshan.cn/img/20211025192922.png)
+![20211025192922](/img/20211025192922.png)
 
 > post从请求体中获取参数值，Get从请求头中获取参数值
 
-![20211026001350](https://tonkyshan.cn/img/20211026001350.png)
+![20211026001350](/img/20211026001350.png)
 
 **问题：**
 
@@ -1126,7 +1126,7 @@ public class Demo03HttpServletRequest extends HttpServlet {
 }
 ```
 
-![20211026003833](https://tonkyshan.cn/img/20211026003833.png)
+![20211026003833](/img/20211026003833.png)
 
 ------
 
@@ -1146,9 +1146,9 @@ public class Demo03HttpServletRequest extends HttpServlet {
 
 【请求对象】和【响应对象】相当于用户在服务端的代言人
 
-![20211026010609](https://tonkyshan.cn/img/20211026010609.png)
+![20211026010609](/img/20211026010609.png)
 
-![](https://tonkyshan.cn/img/20211026080541.png)
+![](/img/20211026080541.png)
 
 ------
 
@@ -1309,7 +1309,7 @@ public class TowServlet extends HttpServlet {
 }
 ```
 
-![20220329202806](https://tonkyshan.cn/img/20220329202806.png)
+![20220329202806](/img/20220329202806.png)
 
 访问OneServlet时，TwoServlet也会被访问
 
@@ -1490,7 +1490,7 @@ VALUES('King','123','男','King@163.com')
 
 **需要背下来**
 
-![20211026082257](https://tonkyshan.cn/img/20211026082257.png)
+![20211026082257](/img/20211026082257.png)
 
 ---------
 
@@ -1597,7 +1597,7 @@ public class UserAddServlet extends HttpServlet {
 
 ---------
 
-![20211027101231](https://tonkyshan.cn/img/20211027101231.png)
+![20211027101231](/img/20211027101231.png)
 
 ```java
 package com.priv.controller;
@@ -1693,7 +1693,7 @@ public class UserDeleteServlet extends HttpServlet {
 
 ------
 
-<img src="https://tonkyshan.cn/img/登录流程图.png" alt="登录流程图"  />
+<img src="/img/登录流程图.png" alt="登录流程图"  />
 
 ```html
 <!DOCTYPE html>
@@ -1922,7 +1922,7 @@ public class CookieDemo2 extends HttpServlet {
 }
 ```
 
-![20220322183907](https://tonkyshan.cn/img/202203221839817.png)
+![20220322183907](/img/202203221839817.png)
 
 **成功获取到数据**
 
@@ -1930,15 +1930,15 @@ public class CookieDemo2 extends HttpServlet {
 
 * 基于响应头Set-Cookie和请求头cookie实现
 
-![20220322195206](https://tonkyshan.cn/img/202203221952446.png)
+![20220322195206](/img/202203221952446.png)
 
 运行第一个Servlet时Cookie在响应头中 Set-Cookie：msg = hello
 
 运行第二个Servlet时Cookie在请求头中 
 
-![20220322195009](https://tonkyshan.cn/img/202203221954597.png)
+![20220322195009](/img/202203221954597.png)
 
-![20220322195114](https://tonkyshan.cn/img/202203221954150.png)
+![20220322195114](/img/202203221954150.png)
 
 **4.cookie的细节**
 
@@ -2004,7 +2004,7 @@ public class CookieDemo2 extends HttpServlet {
 
 **3.基本原理**
 
-![20220322230331](https://tonkyshan.cn/img/202203222303830.png)
+![20220322230331](/img/202203222303830.png)
 
 Session是依赖于Cookie的。来确保两次Session对象为同一个。
 
@@ -2073,7 +2073,7 @@ Java Server Pages：java服务器端页面
 
 **2.原理**
 
-![20220322205939](https://tonkyshan.cn/img/202203222059291.png)
+![20220322205939](/img/202203222059291.png)
 
 * JSP本质上就是一个Servlet
 
@@ -2205,7 +2205,7 @@ JSP定义Java代码的方式
   * 调用模型
   * 将数据交给视图进行展示
 
-![20220323231712](https://tonkyshan.cn/img/202203232317588.png)
+![20220323231712](/img/202203232317588.png)
 
 **2.优缺点**
 
@@ -2486,4 +2486,4 @@ Expression Language 表达式语言
 
 3.数据访问层：操作数据存储文件。
 
-![20220324234926](https://tonkyshan.cn/img/202203242349602.png)
+![20220324234926](/img/202203242349602.png)

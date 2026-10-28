@@ -42,11 +42,11 @@ categories: [SpringBoot,java]
 
 一、勾选Build project automatically
 
-![20230224112421](https://tonkyshan.cn/img/20230224112421.png)
+![20230224112421](/img/20230224112421.png)
 
 二、勾选Allow auto-make to start ...
 
-![20230224113030](https://tonkyshan.cn/img/20230224113030.png)
+![20230224113030](/img/20230224113030.png)
 
 激活方式：IDEA失去焦点5秒后启动热部署
 
@@ -71,7 +71,7 @@ devtools:
 
 #### 关闭热部署
 
-![20230301081745](https://tonkyshan.cn/img/20230301081745.png)
+![20230301081745](/img/20230301081745.png)
 
 **通过配置文件**
 
@@ -243,23 +243,23 @@ webEnvironment
 
 @AutoConfigureMockMvc
 
-![20230623161848](https://tonkyshan.cn/img/20230623161848.png)
+![20230623161848](/img/20230623161848.png)
 
 **匹配响应执行状态**
 
-![20230623162251](https://tonkyshan.cn/img/20230623162251.png)
+![20230623162251](/img/20230623162251.png)
 
 **匹配响应体**
 
-![20230623162419](https://tonkyshan.cn/img/20230623162419.png)
+![20230623162419](/img/20230623162419.png)
 
 **匹配响应体（json）**
 
-![20230623162612](https://tonkyshan.cn/img/20230623162612.png)
+![20230623162612](/img/20230623162612.png)
 
 **匹配响应头**
 
-![20230623162712](https://tonkyshan.cn/img/20230623162712.png)
+![20230623162712](/img/20230623162712.png)
 
 **业务层测试数据回滚**
 
@@ -269,7 +269,7 @@ webEnvironment
 
 **测试用例数据设定**
 
-![20230624142617](https://tonkyshan.cn/img/20230624142617.png)
+![20230624142617](/img/20230624142617.png)
 
 -----------
 
@@ -299,7 +299,7 @@ Druid + MyBatis-Plus + MySQL
 
 **内置持久化解决方案——JdbcTemplate**
 
-![20230624144225](https://tonkyshan.cn/img/20230624144225.png)
+![20230624144225](/img/20230624144225.png)
 
 **内嵌数据库——H2**
 
@@ -311,7 +311,7 @@ Druid + MyBatis-Plus + MySQL
 
 都可以在内存里运行，都是用java写的
 
-![20230624144620](https://tonkyshan.cn/img/20230624144620.png)
+![20230624144620](/img/20230624144620.png)
 
 * 设置当前项目为Web工程，并配置H2管理控制台参数
 
@@ -331,7 +331,7 @@ H2数据库控制台仅用于开发阶段，上线项目务必关闭控制台功
 
 **NOSQL**
 
-[**Redis**](https://tonkyshan.cn/2022/04/02/Redis/)
+[**Redis**](/2022/04/02/Redis/)
 
 jedis和lettuce(默认)：都是连接redis的客户端
 
@@ -348,7 +348,7 @@ jedis和lettuce(默认)：都是连接redis的客户端
 
 配置client-type: jedis
 
-![20230624150141](https://tonkyshan.cn/img/20230624150141.png)
+![20230624150141](/img/20230624150141.png)
 
 **Mongodb**
 

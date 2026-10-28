@@ -25,7 +25,7 @@ RabbitMQ的整体架构及核心概念：
 * queue：队列，存储消息
 * exchange：交换机，负责路由消息
 
-![RabbitMQ的整体架构](https://tonkyshan.cn/img/20241008204834.png)
+![RabbitMQ的整体架构](/img/20241008204834.png)
 
 ----
 
@@ -89,7 +89,7 @@ class PublisherApplicationTests {
     }
 ```
 
-![发送成功](https://tonkyshan.cn/img/20241009114736.png)
+![发送成功](/img/20241009114736.png)
 
 * 利用@RabbitListener注解声明要监听的队列，监听消息：
 
@@ -110,7 +110,7 @@ public class MqListener {
 }
 ```
 
-![接收消息](https://tonkyshan.cn/img/20241009115415.png)
+![接收消息](/img/20241009115415.png)
 
 ----
 
@@ -178,9 +178,9 @@ public class MqListener {
 }
 ```
 
-<img src="https://tonkyshan.cn/img/20241112154036.png" alt="20241112154036" style="zoom:67%;" />
+<img src="/img/20241112154036.png" alt="20241112154036" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/20241112154043.png" alt="20241112154043" style="zoom:67%;" />
+<img src="/img/20241112154043.png" alt="20241112154043" style="zoom:67%;" />
 
 默认情况下，RabbitMQ会将消息依次轮询投递给绑定在队列上的每一个消费者。但是这并没有考虑到消费者是否已经处理完消息，可能出现消息堆积。
 
@@ -199,9 +199,9 @@ spring:
         prefetch: 1 # 每次只能获取一条消息, 处理完成才能获取下一个消息
 ```
 
-<img src="https://tonkyshan.cn/img/20241112154411.png" alt="20241112154411" style="zoom:67%;" />
+<img src="/img/20241112154411.png" alt="20241112154411" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/20241112154421.png" alt="20241112154421" style="zoom:67%;" />
+<img src="/img/20241112154421.png" alt="20241112154421" style="zoom:67%;" />
 
 ----
 
@@ -217,7 +217,7 @@ spring:
 
 Fanout Exchange 会将接收到的消息广播到每一个跟其绑定的queue，所以也叫广播模式
 
-<img src="https://tonkyshan.cn/img/20241112155652.png" alt="20241112155652" style="zoom: 40%;" />
+<img src="/img/20241112155652.png" alt="20241112155652" style="zoom: 40%;" />
 
 案例：利用SpringAMQP演示Fanout Exchange
 
@@ -274,7 +274,7 @@ public class MqListener {
 }
 ```
 
-<img src="https://tonkyshan.cn/img/20241112161018.png" alt="20241112161018"/>
+<img src="/img/20241112161018.png" alt="20241112161018"/>
 
 -----
 
@@ -288,7 +288,7 @@ Direct Exchange会将接收到的消息根据规则路由到指定的Queue，因
 * 发布者发送消息时，指定消息的RoutingKey
 * Exchange将消息路由到BindingKey与消息RoutingKey一致的队列
 
-<img src="https://tonkyshan.cn/img/20241114105053.png" alt="20241114105053" style="zoom:50%;" />
+<img src="/img/20241114105053.png" alt="20241114105053" style="zoom:50%;" />
 
 案例：利用SpringAMQP演示DirectExchange的使用
 
@@ -349,7 +349,7 @@ public class MqListener {
 }
 ```
 
-<img src="https://tonkyshan.cn/img/20241114111614.png" alt="20241114111614"/>
+<img src="/img/20241114111614.png" alt="20241114111614"/>
 
 ----
 
@@ -361,7 +361,7 @@ TopicExchange与DirectExchange类似，区别在于routingKey可以是多个单�
 
 Queue与Exchange指定BindingKey时可以使用通配符：
 
-<img src="https://tonkyshan.cn/img/20241114141822.png" alt="20241114141822" style="zoom: 33%;" />
+<img src="/img/20241114141822.png" alt="20241114141822" style="zoom: 33%;" />
 
 案例：利用SpringAMQP演示TopicExchange的使用
 
@@ -422,7 +422,7 @@ public class MqListener {
 }
 ```
 
-<img src="https://tonkyshan.cn/img/20241114145236.png" alt="20241114145236"/>
+<img src="/img/20241114145236.png" alt="20241114145236"/>
 
 ---
 
@@ -436,7 +436,7 @@ SpringAMQP提供了几个类，用来声明队列、交换机及其绑定关系�
 * Exchange ：用于声明交换机，可以用工厂类ExchangeBuilder构建
 * Binding：用于声明队列和交换机的绑定关系，可以用工厂类BindingBuilder构建
 
-<img src="https://tonkyshan.cn/img/20241114150439.png" alt="20241114150439" style="zoom: 50%;" />
+<img src="/img/20241114150439.png" alt="20241114150439" style="zoom: 50%;" />
 
 ```java
 import org.springframework.amqp.core.*;
@@ -757,7 +757,7 @@ class PublisherApplicationTests {
 }
 ```
 
-![20241202160328](https://tonkyshan.cn/img/20241202160328.png)
+![20241202160328](/img/20241202160328.png)
 
 如果key填错
 
@@ -1032,9 +1032,9 @@ class PublisherApplicationTests {
 }
 ```
 
-![20241203110625](https://tonkyshan.cn/img/20241203110625.png)
+![20241203110625](/img/20241203110625.png)
 
-![20241203110827](https://tonkyshan.cn/img/20241203110827.png)
+![20241203110827](/img/20241203110827.png)
 
 ---
 
@@ -1126,7 +1126,7 @@ public final Message toMessage(Object object, @Nullable MessageProperties messag
 
 如果队列通过dead-letter-exchange属性指定了一个交换机，那么该队列中的死信就会投递到这个交换机中，这个交换机称为死信交换机(Dead Letter Exchange，简称DLX)
 
-<img src="https://tonkyshan.cn/img/20241205095428.png" alt="20241205095428" style="zoom: 33%;" />
+<img src="/img/20241205095428.png" alt="20241205095428" style="zoom: 33%;" />
 
 ---
 
@@ -1134,9 +1134,9 @@ public final Message toMessage(Object object, @Nullable MessageProperties messag
 
 ---------
 
-<img src="https://tonkyshan.cn/img/20241205150022.png" alt="20241205150022" style="zoom: 35%;" />
+<img src="/img/20241205150022.png" alt="20241205150022" style="zoom: 35%;" />
 
-<img src="https://tonkyshan.cn/img/20241205150035.png" alt="20241205150035" style="zoom: 38%;" />
+<img src="/img/20241205150035.png" alt="20241205150035" style="zoom: 38%;" />
 
 ----
 
@@ -1149,6 +1149,6 @@ public final Message toMessage(Object object, @Nullable MessageProperties messag
 * 如果并发较高，30分钟可能堆积消息过多，对MQ压力很大
 * 大多数订单在下单后1分钟内就会支付，但是却需要在MQ内等待30分钟，浪费资源
 
-<img src="https://tonkyshan.cn/img/20241205154259.png" alt="20241205154259" style="zoom: 38%;" />
+<img src="/img/20241205154259.png" alt="20241205154259" style="zoom: 38%;" />
 
-<img src="https://tonkyshan.cn/img/20241205154245.png" alt="20241205154245" style="zoom: 38%;" />
+<img src="/img/20241205154245.png" alt="20241205154245" style="zoom: 38%;" />

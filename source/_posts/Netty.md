@@ -25,7 +25,7 @@ non-blocking io 非阻塞IO
 
 channel有点类似于stream，它就是读写数据的**双向通道**，可以从channel将数据读入buffer，也可以将buffer的数据写入channel，而之前的stream要么是输入，要么是输出，channel比stream更为底层。
 
-<img src="https://tonkyshan.cn/img/20240819153908.png" alt="20240819153908" style="zoom:50%;" />
+<img src="/img/20240819153908.png" alt="20240819153908" style="zoom:50%;" />
 
 常见的Channel有
 
@@ -53,7 +53,7 @@ buffer则用来缓冲读写数据，常见的buffer有
 
 多线程版设计
 
-<img src="https://tonkyshan.cn/img/20240819160337.png" alt="20240819160337" style="zoom:40%;" />
+<img src="/img/20240819160337.png" alt="20240819160337" style="zoom:40%;" />
 
 缺点
 
@@ -65,7 +65,7 @@ buffer则用来缓冲读写数据，常见的buffer有
 
 线程池版设计
 
-<img src="https://tonkyshan.cn/img/20240819161310.png" alt="20240819161310" style="zoom:50%;" />
+<img src="/img/20240819161310.png" alt="20240819161310" style="zoom:50%;" />
 
 缺点
 
@@ -78,7 +78,7 @@ selector版设计
 
 selector的作用就是配合一个线程来管理多个channel，获取这些channel上发生的事件，这些channel工作在非阻塞模式下，不会让线程在一个channel上，适合连接数特别多，但流量低的场景（low traffic）
 
-<img src="https://tonkyshan.cn/img/20240819163131.png" alt="20240819163131" style="zoom:50%;" />
+<img src="/img/20240819163131.png" alt="20240819163131" style="zoom:50%;" />
 
 调用selector的select()会阻塞直到channel发生了读写就绪事件，这些事件发生，select方法就会返回这些事件交给thread来处理
 
@@ -141,27 +141,27 @@ ByteBuffer有以下重要属性
 
 开始
 
-<img src="https://tonkyshan.cn/img/20240819203022.png" alt="20240819203022" style="zoom:40%;" />
+<img src="/img/20240819203022.png" alt="20240819203022" style="zoom:40%;" />
 
 写模式下，position是写入位置，limit等于容量，下图表示写入了4个字节后的状态
 
-<img src="https://tonkyshan.cn/img/20240819203709.png" alt="20240819203709" style="zoom:40%;" />
+<img src="/img/20240819203709.png" alt="20240819203709" style="zoom:40%;" />
 
 flip动作发生后，position切换为读取位置，limit切换为读取限制
 
-<img src="https://tonkyshan.cn/img/20240819203927.png" alt="20240819203927" style="zoom:40%;" />
+<img src="/img/20240819203927.png" alt="20240819203927" style="zoom:40%;" />
 
 读取4个字节后，状态
 
-<img src="https://tonkyshan.cn/img/20240819204046.png" alt="20240819204046" style="zoom:40%;" />
+<img src="/img/20240819204046.png" alt="20240819204046" style="zoom:40%;" />
 
 clear动作发生后，状态
 
-<img src="https://tonkyshan.cn/img/20240819203022.png" alt="20240819203022" style="zoom:40%;" />
+<img src="/img/20240819203022.png" alt="20240819203022" style="zoom:40%;" />
 
 compact方法，是把未读完的部分向前压缩，然后切换至写模式
 
-<img src="https://tonkyshan.cn/img/20240819205902.png" alt="20240819205902" style="zoom:40%;" />
+<img src="/img/20240819205902.png" alt="20240819205902" style="zoom:40%;" />
 
 
 **三、ByteBuffer常见方法**
@@ -983,7 +983,7 @@ public class ServerSelector {
 
 **处理消息边界**
 
-<img src="https://tonkyshan.cn/img/20240827110517.png" alt="20240827110517" style="zoom:50%;" />
+<img src="/img/20240827110517.png" alt="20240827110517" style="zoom:50%;" />
 
 * 一种思路是固定消息长度，数据包大小一样，服务器按预定长度读取，缺点是浪费带宽
 * 另一种思路是按分隔符拆分，缺点是效率低
@@ -1447,27 +1447,27 @@ hello
 
 阻塞IO
 
-<img src="https://tonkyshan.cn/img/0039.png" alt="阻塞IO"  />
+<img src="/img/0039.png" alt="阻塞IO"  />
 
 非阻塞IO
 
-<img src="https://tonkyshan.cn/img/0035.png" alt="非阻塞IO"  />
+<img src="/img/0035.png" alt="非阻塞IO"  />
 
 多路复用
 
-<img src="https://tonkyshan.cn/img/0038.png" alt="多路复用"  />
+<img src="/img/0038.png" alt="多路复用"  />
 
 信号驱动（略）
 
 异步 IO
 
-<img src="https://tonkyshan.cn/img/0037.png" alt="异步 IO"  />
+<img src="/img/0037.png" alt="异步 IO"  />
 
 阻塞 IO vs 多路复用
 
-<img src="https://tonkyshan.cn/img/0034.png" alt="阻塞 IO"  />
+<img src="/img/0034.png" alt="阻塞 IO"  />
 
-<img src="https://tonkyshan.cn/img/0036.png" alt="多路复用"  />
+<img src="/img/0036.png" alt="多路复用"  />
 
 **三、零拷贝**
 
@@ -1488,7 +1488,7 @@ socket.getOutputStream().write(buf);
 
 内部工作流程是这样的：
 
-<img src="https://tonkyshan.cn/img/0024.png" alt="0024"  />
+<img src="/img/0024.png" alt="0024"  />
 
 1. java 本身并不具备 IO 读写能力，因此 read 方法调用后，要从 java 程序的**用户态**切换至**内核态**，去调用操作系统（Kernel）的读能力，将数据读入**内核缓冲区**。这期间用户线程阻塞，操作系统使用 DMA（Direct Memory Access）来实现文件读，其间也不会使用 cpu
 
@@ -1516,7 +1516,7 @@ socket.getOutputStream().write(buf);
 * ByteBuffer.allocate(10)  HeapByteBuffer 使用的还是 java 内存
 * ByteBuffer.allocateDirect(10)  DirectByteBuffer 使用的是操作系统内存
 
-<img src="https://tonkyshan.cn/img/0025.png" alt="0025"  />
+<img src="/img/0025.png" alt="0025"  />
 
 大部分步骤与优化前相同，不再赘述。唯有一点：java 可以使用 DirectByteBuf 将堆外内存映射到 jvm 内存中来直接访问使用
 
@@ -1530,7 +1530,7 @@ socket.getOutputStream().write(buf);
 
 进一步优化（底层采用了 linux 2.1 后提供的 sendFile 方法），java 中对应着两个 channel 调用 transferTo/transferFrom 方法拷贝数据
 
-<img src="https://tonkyshan.cn/img/0026.png" alt="0026"  />
+<img src="/img/0026.png" alt="0026"  />
 
 1. java 调用 transferTo 方法后，要从 java 程序的**用户态**切换至**内核态**，使用 DMA将数据读入**内核缓冲区**，不会使用 cpu
 2. 数据从**内核缓冲区**传输到 **socket 缓冲区**，cpu 会参与拷贝
@@ -1545,7 +1545,7 @@ socket.getOutputStream().write(buf);
 
 进一步优化（linux 2.4）
 
-<img src="https://tonkyshan.cn/img/0027.png" alt="0027"  />
+<img src="/img/0027.png" alt="0027"  />
 
 1. java 调用 transferTo 方法后，要从 java 程序的**用户态**切换至**内核态**，使用 DMA将数据读入**内核缓冲区**，不会使用 cpu
 2. 只会将一些 offset 和 length 信息拷入 **socket 缓冲区**，几乎无消耗
@@ -1716,7 +1716,7 @@ public class HelloClient {
 
 坑：换端口，有时8080服务端没反应
 
-<img src="https://tonkyshan.cn/img/20240829201328.png" alt="20240829201328"  />
+<img src="/img/20240829201328.png" alt="20240829201328"  />
 
 -----
 
@@ -1873,7 +1873,7 @@ public class EventLoopClient {
 }
 ```
 
-<img src="https://tonkyshan.cn/img/20240830141651.png" alt="20240830141651" style="zoom:80%;" />
+<img src="/img/20240830141651.png" alt="20240830141651" style="zoom:80%;" />
 
 **分工细化**
 
@@ -2209,7 +2209,7 @@ ChannelHandler用来处理Channel上的各种事件，分为入站、出站两�
 * channel.writeAndFlush 从tail 从后向前找
 * ctx.writeAndFlush 从当前节点 从后向前找
 
-<img src="https://tonkyshan.cn/img/20240909202943.png" alt="20240909202943" style="zoom:80%;" />
+<img src="/img/20240909202943.png" alt="20240909202943" style="zoom:80%;" />
 
 ```java
 import io.netty.bootstrap.ServerBootstrap;
@@ -2371,7 +2371,7 @@ ByteBuf buffer = ByteBufAllocator.DEFAULT.directBuffer(10);
 
 ByteBuf由四部分组成
 
-<img src="https://tonkyshan.cn/img/20240910200335.png" alt="20240910200335" style="zoom:50%;" />
+<img src="/img/20240910200335.png" alt="20240910200335" style="zoom:50%;" />
 
 最开始读写指针都在0位置
 
@@ -2518,7 +2518,7 @@ public static boolean release(Object msg) {
 
 零拷贝的体现之一，对原始ByteBuf进行切片成多个ByteBuf，切片后的ByteBuf并没有发生内存复制，还是使用原始ByteBuf的内存，切片后的ByteBuf维护独立的read，write指针
 
-<img src="https://tonkyshan.cn/img/0011.png" alt="0011" style="zoom:100%;" />
+<img src="/img/0011.png" alt="0011" style="zoom:100%;" />
 
 
 
@@ -2526,7 +2526,7 @@ public static boolean release(Object msg) {
 
 零拷贝的体现之一，就好比截取了原始 ByteBuf 所有内容，并且没有 max capacity 的限制，也是与原始 ByteBuf 使用同一块底层内存，只是读写指针是独立的
 
-<img src="https://tonkyshan.cn/img/0012.png" alt="0012" style="zoom:100%;" />
+<img src="/img/0012.png" alt="0012" style="zoom:100%;" />
 
 
 
@@ -2579,7 +2579,7 @@ System.out.println(ByteBufUtil.prettyHexDump(buf3));
   * 如果1001～2000这个段段数据ack回来了，窗口就可以向前滑动
   * 接收方也会维护一个窗口，只有落在窗内的数据才能允许接收
 
-<img src="https://tonkyshan.cn/img/0051.png" alt="0051" style="zoom:80%;" />
+<img src="/img/0051.png" alt="0051" style="zoom:80%;" />
 
 #### **二、分析**
 

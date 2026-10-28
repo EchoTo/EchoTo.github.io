@@ -37,7 +37,7 @@ categories: K8s
 
   ​           容器化的应用程序可以跨云服务商、跨Linux操作系统发行版进行部署
 
-<img src="https://tonkyshan.cn/img/20241205175710.png" alt="20241205175710" style="zoom: 35%;" />
+<img src="/img/20241205175710.png" alt="20241205175710" style="zoom: 35%;" />
 
 容器化部署方式也会出现一些问题：
 
@@ -86,7 +86,7 @@ Kubernetes本质是**一组服务器集群**，它可以在集群的每个节点
 * **KubeProxy：**负责提供集群内部的服务发现和负载均衡
 * **Docker：**负责节点上容器的各种操作
 
-<img src="https://tonkyshan.cn/img/20241206171029.png" alt="20241206171029" style="zoom: 55%;" />
+<img src="/img/20241206171029.png" alt="20241206171029" style="zoom: 55%;" />
 
 以部署一个nginx服务来说明kubernetes系统各个组件调用关系
 
@@ -122,7 +122,7 @@ Kubernetes本质是**一组服务器集群**，它可以在集群的每个节点
 
 **NameSpace：**命名空间，用来隔离pod的运行环境
 
-<img src="https://tonkyshan.cn/img/20241209153434.png" alt="20241209153434" style="zoom: 45%;" />
+<img src="/img/20241209153434.png" alt="20241209153434" style="zoom: 45%;" />
 
 ----
 
@@ -143,7 +143,7 @@ kubernetes集群大体上分为两类：一主多从和多主多从
 * 一主多从：一台Master节点和多台Node节点，搭建简单，但是有单机故障风险，适用于测试环境
 * 多主多从：多台Master节点和多台Node节点，搭建麻烦，安全性高，适用于生产环境
 
-<img src="https://tonkyshan.cn/img/20241209155103.png" alt="20241209155103" style="zoom: 45%;" />
+<img src="/img/20241209155103.png" alt="20241209155103" style="zoom: 45%;" />
 
 ----
 
@@ -287,7 +287,7 @@ SELINUX=disabled
 在系统选择界面按下e，设置启动环境，在语言设置后加上 selinux=0，ctrl+x启动系统
 ```
 
-<img src="https://tonkyshan.cn/img/20241212201147.png" alt="20241212201147" style="zoom: 45%;" />
+<img src="/img/20241212201147.png" alt="20241212201147" style="zoom: 45%;" />
 
 6、禁用swap分区
 
@@ -592,7 +592,7 @@ kubernetes支持多种网络插件，比如flannel、calico、canal等等，任�
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 #下载链接
-https://tonkyshan.cn/files/kube-flannel.yml
+/files/kube-flannel.yml
 # 修改文件中quay.io仓库为quay-mirror.qiniu.com
 # 现在不需要改了
  
@@ -642,7 +642,7 @@ service/nginx        NodePort    10.99.253.103   <none>        80:31676/TCP   10
 # 在电脑上访问部署的nginx服务
 ```
 
-<img src="https://tonkyshan.cn/img/20241218144649.png" alt="20241218144649" style="zoom:80%;" />
+<img src="/img/20241218144649.png" alt="20241218144649" style="zoom:80%;" />
 
 -----
 
@@ -668,7 +668,7 @@ service/nginx        NodePort    10.99.253.103   <none>        80:31676/TCP   10
 >
 >​	当然，如果pod中程序的数据需要持久化，kubernetes还提供了各种`存储`系统
 
-<img src="https://tonkyshan.cn/img/20241218152551.png" alt="20241218152551" />
+<img src="/img/20241218152551.png" alt="20241218152551" />
 
 >学习kubernetes的核心就是学习如何对集群上的`pod、pod控制器、service、存储`等各种资源进行操作 
 
@@ -1203,7 +1203,7 @@ Pod是kubernetes集群进行管理的最小单元，程序要运行必须部署�
 
 Pod可以认为是容器的封装，一个Pod中可以存在一个或多个容器
 
-<img src="https://tonkyshan.cn/img/20241224093559.png" alt="20241224093559" style="zoom: 40%;" />
+<img src="/img/20241224093559.png" alt="20241224093559" style="zoom: 40%;" />
 
 kubernetes在集群启动后，集群中的各个组件也都是以Pod方式运行的，可以通过下面命令查看
 
@@ -1729,7 +1729,7 @@ spec:
 
 ---
 
-<img src="https://tonkyshan.cn/img/20241224093559.png" alt="20241224093559" style="zoom: 40%;" />
+<img src="/img/20241224093559.png" alt="20241224093559" style="zoom: 40%;" />
 
 每个Pod中都可以包含一个或多个容器，这些容器可以分为两类：
 
@@ -2457,7 +2457,7 @@ pod-resources   1/1     Running   0          44s
   * 容器的存活性探测(liveness probe)、就绪性探测(readiness probe)
 * Pod终止过程
 
-<img src="https://tonkyshan.cn/img/20241225192322.png" alt="20241225192322" style="zoom: 40%;" />
+<img src="/img/20241225192322.png" alt="20241225192322" style="zoom: 40%;" />
 
 在整个生命周期中，Pod会出现5种**状态(相位)**，分别如下
 
@@ -4443,7 +4443,7 @@ git clone -b v0.3.6 https://github.com/kubernetes-incubator/metrics-server
 # - --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS,ExternalDNS,ExternalIP
 ```
 
-<img src="https://tonkyshan.cn/img/20250106160253.png" alt="20250106160253" />
+<img src="/img/20250106160253.png" alt="20250106160253" />
 
 ```powershell
 # 安装metrics-server, 注意镜像架构(mac用的arm，window等可用amd)
@@ -4542,7 +4542,7 @@ kubectl get hpa -n dev -w
 
 使用压测工具对service地址172.16.140.133:31552进行测压，发10000次请求，实现自动扩缩容
 
-<img src="https://tonkyshan.cn/img/20250107143343.png" alt="20250107143343" />
+<img src="/img/20250107143343.png" alt="20250107143343" />
 
 ```powershell
 # hpa变化
@@ -4831,7 +4831,7 @@ pc-job-74pmw                     1/1     Running             0          2s
 pc-job-74pmw                     0/1     Completed           0          19s
 ```
 
-<img src="https://tonkyshan.cn/img/20250107165222.png" alt="20250107165222" />
+<img src="/img/20250107165222.png" alt="20250107165222" />
 
 添加参数
 
@@ -5049,11 +5049,11 @@ No resources found in dev namespace.
 
 为了解决这个问题，kubernetes提供了Service资源，Service会对提供同一个服务的多个pod进行聚合，并且提供一个统一的入口地址，通过访问Service的入口地址就能访问到后面的pod服务
 
-<img src="https://tonkyshan.cn/img/20250108164231.png" alt="20250108164231" style="zoom:50%;" />
+<img src="/img/20250108164231.png" alt="20250108164231" style="zoom:50%;" />
 
 Service在很多情况下只是一个概念，真正起作用的其实是kube-proxy服务进程，每个Node节点上都运行着一个kube-proxy服务进程，当创建Service的时候会通过api-server向etcd写入创建的service的信息，而kube-proxy会基于监听的机制发现这种Service的变动，然后**它会将最新的Service信息转换成对应的访问规则**
 
-<img src="https://tonkyshan.cn/img/20250108165634.png" alt="20250108165634" style="zoom: 43%;" />
+<img src="/img/20250108165634.png" alt="20250108165634" style="zoom: 43%;" />
 
 kube-proxy目前支持三种工作模式：
 
@@ -5063,7 +5063,7 @@ userspace模式下，kube-proxy会为每一个Service创建一个监听端口，
 
 该模式下，kube-proxy充当了一个四层负责均衡器的角色，由于kube-proxy运行在userspace中，在进行转发处理时会增加内核和用户空间之间的数据拷贝，虽然比较稳定，但是效率比较低
 
-<img src="https://tonkyshan.cn/img/20250108203451.png" alt="userspace 模式" style="zoom: 53%;" />
+<img src="/img/20250108203451.png" alt="userspace 模式" style="zoom: 53%;" />
 
 **iptables 模式**
 
@@ -5071,7 +5071,7 @@ iptables模式下，kube-proxy为service后端的每个Pod创建对应的iptable
 
 该模式下，kube-proxy不承担四层负载均衡器的角色，只负责创建iptables规则，该模式的优点是较userspace模式效率更高，但不能提供灵活的LB策略，当后端Pod不可用时也无法进行重试
 
-<img src="https://tonkyshan.cn/img/20250108204018.png" alt="iptables 模式" style="zoom: 53%;" />
+<img src="/img/20250108204018.png" alt="iptables 模式" style="zoom: 53%;" />
 
 **ipvs 模式**
 
@@ -5079,7 +5079,7 @@ ipvs模式和iptables类似，kube-proxy监控Pod的变化并创建相应的ipvs
 
 除此以外，ipvs支持更多的LB算法
 
-<img src="https://tonkyshan.cn/img/20250108204639.png" alt="ipvs 模式" style="zoom: 47%;" />
+<img src="/img/20250108204639.png" alt="ipvs 模式" style="zoom: 47%;" />
 
 ```powershell
 # 此模式必须安装ipvs内核模块，否则会降级为iptables
@@ -5565,7 +5565,7 @@ Service对集群之外暴露服务的主要方式有两种：NotePort和LoadBala
 
 基于这种现状，kubernetes提供了Ingress资源对象，Ingress只需要一个NodePort或者一个LB就可以满足暴露多个Service的需求。工作机制大致如下图：
 
-<img src="https://tonkyshan.cn/img/20250113173427.png" alt="Ingress" style="zoom: 47%;" />
+<img src="/img/20250113173427.png" alt="Ingress" style="zoom: 47%;" />
 
 实际上，Ingress相当于一个7层的负载均衡器，是kubernetes对反向代理的一个抽象，它的工作原理类似于Nginx，可以理解成在Ingress里建立诸多映射规则，Ingress Controller通过监听这些配置规则并转化成Nginx的配置，然后对外部提供服务，在这里有两个核心概念：
 
@@ -5579,7 +5579,7 @@ Ingress(以Nginx为例)的工作原理如下：
 * Ingress控制器会将生成的Nginx配置写入到一个运行着的Nginx服务中，并动态更新
 * 到此为止，其实真正在工作的就是一个Nginx了，内部配置了用户定义的请求转发规则
 
-<img src="https://tonkyshan.cn/img/20250114103724.png" alt="Ingress" style="zoom: 47%;" />
+<img src="/img/20250114103724.png" alt="Ingress" style="zoom: 47%;" />
 
 ---
 
@@ -5600,8 +5600,8 @@ Ingress(以Nginx为例)的工作原理如下：
 
 # 获取ingress-nginx，使用的是0.30版本
 # 链接已经失效，可以自取
-# wget https://tonkyshan.cn/files/mandatory.yaml
-# wget https://tonkyshan.cn/files/service-nodeport.yaml
+# wget /files/mandatory.yaml
+# wget /files/service-nodeport.yaml
 
 # adm框架 记得把mandatory.yaml中镜像改成47.93.22.25:5000/quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0
 # yaml中是arm镜像
@@ -5637,7 +5637,7 @@ ingress-nginx   NodePort   10.108.77.232   <none>        80:32018/TCP,443:31296/
 
 **准备service和pod**
 
-<img src="https://tonkyshan.cn/img/20250114163952.png" alt="service" style="zoom: 60%;" />
+<img src="/img/20250114163952.png" alt="service" style="zoom: 60%;" />
 
 创建tomcat-nginx.yaml
 
@@ -5817,7 +5817,7 @@ ingress-nginx   NodePort   10.108.77.232   <none>        80:32018/TCP,443:31296/
 # 访问url，端口 80 http ---> 32018  443 https ---> 31296
 ```
 
-<img src="https://tonkyshan.cn/img/20250114175552.png" alt="http" style="zoom: 70%;" />
+<img src="/img/20250114175552.png" alt="http" style="zoom: 70%;" />
 
 ---
 
@@ -5905,7 +5905,7 @@ Events:
   Normal  UPDATE  118s   nginx-ingress-controller  Ingress dev/ingress-https
 ```
 
-<img src="https://tonkyshan.cn/img/20250114192552.png" alt="https" style="zoom: 70%;" />
+<img src="/img/20250114192552.png" alt="https" style="zoom: 70%;" />
 
 ---
 
@@ -5993,7 +5993,7 @@ volume-emptydir   2/2     Running   0          21s   10.244.2.105   node2   <non
 [root@master ~]# kubectl logs -f volume-emptydir -n dev -c busybox
 ```
 
-<img src="https://tonkyshan.cn/img/20250114202155.png" alt="EmptyDir" />
+<img src="/img/20250114202155.png" alt="EmptyDir" />
 
 ---
 
@@ -6057,7 +6057,7 @@ NAME              READY   STATUS    RESTARTS   AGE   IP            NODE    NOMIN
 volume-hostpath   2/2     Running   0          28s   10.244.1.84   node1   <none>           <none>
 ```
 
-<img src="https://tonkyshan.cn/img/20250114204218.png" alt="HostPath" />
+<img src="/img/20250114204218.png" alt="HostPath" />
 
 ```powershell
 # 删除pod
@@ -6153,7 +6153,7 @@ volume-nfs   2/2     Running   0          2m34s   10.244.1.85   node1   <none>  
 # 查看nfs服务器上的共享目录，发现已经有文件了
 ```
 
-<img src="https://tonkyshan.cn/img/20250115101618.png" alt="NFS" />
+<img src="/img/20250115101618.png" alt="NFS" />
 
 ---
 
@@ -6171,7 +6171,7 @@ PV(Persistent Volume)是持久化卷的意思，是对底层的共享存储的�
 
 PVC(Persistent Volume Claim)是持久卷声明的意思，是用户对于存储需求的一种声明，换句话说，PVC其实就是用户向kubernetes系统发出的一种资源需求申请
 
-<img src="https://tonkyshan.cn/img/20250115110138.png" alt="PV/PVC" style="zoom:50%;" />
+<img src="/img/20250115110138.png" alt="PV/PVC" style="zoom:50%;" />
 
 使用了PV和PVC之后，工作可以得到进一步细分：
 
@@ -6541,7 +6541,7 @@ PVC和PV是一一对应的，PV和PVC之间的互相作用遵循以下生命周�
 
   对于PV，管理员可以设定回收策略，用于设置与之绑定的PVC释放资源之后如何处理遗留数据的问题，只有PV的存储空间完成回收，才能供新的PVC绑定和使用
 
-<img src="https://tonkyshan.cn/img/20250115174041.png" alt="生命周期" style="zoom:50%;" />
+<img src="/img/20250115174041.png" alt="生命周期" style="zoom:50%;" />
 
 ----
 
@@ -6752,7 +6752,7 @@ kubernetes作为一个分布式集群的管理工具，保证集群的安全性�
 * **User Account：**一般是独立于kubernetes之外的其他服务管理的用户账号
 * **Service Account：**kubernetes管理的账号，用于为Pod中的服务进程在访问kubernetes时提供身份标识
 
-<img src="https://tonkyshan.cn/img/20250115200008.png" alt="客户端" style="zoom:50%;" />
+<img src="/img/20250115200008.png" alt="客户端" style="zoom:50%;" />
 
 **认证、授权与准入控制**
 
@@ -6762,7 +6762,7 @@ ApiServer是访问及管理资源对象的唯一入口，任何一个请求访�
 * Authorization(授权)：判断用户是否有权限对访问的资源执行特定的动作
 * Admission Control(准入控制)：用于补充授权机制以实现更加精细的访问控制功能
 
-<img src="https://tonkyshan.cn/img/20250115200843.png" alt="认证、授权与准入控制" style="zoom:50%;" />
+<img src="/img/20250115200843.png" alt="认证、授权与准入控制" style="zoom:50%;" />
 
 ---
 
@@ -6784,7 +6784,7 @@ Kubernetes集群安全的最关键点在于如何识别并认证客户端身份�
 
   这种认证方式是安全性最高的一种方式，但是同时也是操作起来最麻烦的一种方式
 
-<img src="https://tonkyshan.cn/img/20250115202732.png" alt="HTTPS证书认证" style="zoom:45%;" />
+<img src="/img/20250115202732.png" alt="HTTPS证书认证" style="zoom:45%;" />
 
 **HTTPS认证大致分为3个过程**
 
@@ -6839,7 +6839,7 @@ RBAC(Role-Based Access Control)基于角色的访问控制，主要是在描述�
 * 角色：代表着一组定义在资源上的可操作动作(权限)的集合
 * 绑定：将定义好的角色跟用户绑定在一起
 
-<img src="https://tonkyshan.cn/img/20250116095032.png" alt="权限管理" style="zoom:45%;" />
+<img src="/img/20250116095032.png" alt="权限管理" style="zoom:45%;" />
 
 RBAC引入了4个顶级资源对象：
 
@@ -7124,7 +7124,7 @@ DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
 
 ```powershell
 # 下载yaml，这个下载下来是html
-# https://tonkyshan.cn/files/recommended.yaml 可以获取
+# /files/recommended.yaml 可以获取
 [root@master ~]# wget https://raw.githubsercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 
 # 修改kubernetes-dashboard的Service类型
@@ -7205,7 +7205,7 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImZlbmhfZXM5UDJybjZRQmFfMnc4Ry00a0hfbm52
 # 直接在空白部分 键盘键入 thisisunsafe 就可以进入了 ～～真是直接敲～～
 ```
 
-<img src="https://tonkyshan.cn/img/20250116164148.png" alt="Dashboard" />
+<img src="/img/20250116164148.png" alt="Dashboard" />
 
 ---
 

@@ -19,7 +19,7 @@ categories: [JavaWeb,NoSQL]
 
 redis是一款高性能的NOSQL系列的非关系型数据库
 
-![1](https://tonkyshan.cn/img/1..bmp)
+![1](/img/1..bmp)
 
 -----
 
@@ -113,7 +113,7 @@ redis存储的是：Key，Value格式的数据，其中Key都是字符串，Valu
 * 集合类型 set
 * 有序集合类型：sortedset
 
-![2](https://tonkyshan.cn/img/2.bmp)
+![2](/img/2.bmp)
 
 -------
 
@@ -139,7 +139,7 @@ redis存储的是：Key，Value格式的数据，其中Key都是字符串，Valu
 
 可以添加一个元素到列表的头部(左边)或者尾部(右边)
 
-![3.列表list数据结构](https://tonkyshan.cn/img/3..bmp)
+![3.列表list数据结构](/img/3..bmp)
 
 1.添加：
 
@@ -286,7 +286,7 @@ public class JedisTest {
 }
 ```
 
-![20220330232805](https://tonkyshan.cn/img/20220330232805.png)
+![20220330232805](/img/20220330232805.png)
 
 * Jedis操作各种redis中的数据结构
 

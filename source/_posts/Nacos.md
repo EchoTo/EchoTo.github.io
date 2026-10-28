@@ -140,7 +140,7 @@ public class SimpleDemoMain {
 }
 ```
 
-<img src="https://tonkyshan.cn/img/20250303114956.png" alt="Nacos"/>
+<img src="/img/20250303114956.png" alt="Nacos"/>
 
 ----
 
@@ -190,9 +190,9 @@ public class SimpleDemoMain {
 
 namespace的设计是nacos基于此做多环境以及多租户(多个用户共同使用nacos)数据(**配置和服务**)隔离的
 
-<img src="https://tonkyshan.cn/img/20250303154824.png" alt="Nacos"/>
+<img src="/img/20250303154824.png" alt="Nacos"/>
 
-<img src="https://tonkyshan.cn/img/20250303154851.png" alt="Nacos"/>
+<img src="/img/20250303154851.png" alt="Nacos"/>
 
 
 
@@ -202,7 +202,7 @@ namespace的设计是nacos基于此做多环境以及多租户(多个用户共�
 * 历史版本：查看文件历史版本 回滚
 * 监听查询： 实时获取
 
-<img src="https://tonkyshan.cn/img/20250303160728.png" alt="Nacos"/>
+<img src="/img/20250303160728.png" alt="Nacos"/>
 
 ```java
 import com.alibaba.nacos.api.NacosFactory;

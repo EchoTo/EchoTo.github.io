@@ -152,7 +152,7 @@ Master主机上下载安装`openshift-ansible-3.11.764-1.tar.gz`
 
 ```powershell
 #下载链接
-# https://tonkyshan.cn/files/openshift-ansible-3.11.764-1.tar.gz
+# /files/openshift-ansible-3.11.764-1.tar.gz
 [root@master ~]# tar -zxvf openshift-ansible-openshift-ansible-3.11.764-1.tar.gz
 [root@master ~]# mv openshift-ansible-openshift-ansible-3.11.764-1/  openshift-ansible
 ```

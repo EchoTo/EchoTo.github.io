@@ -36,7 +36,7 @@ categories: 数据库
 
 结构化查询语言(Structure Query Language)：专门用来与数据库通信的语言。
 
-![20210821171708](https://tonkyshan.cn/img/202203021318347.png)
+![20210821171708](/img/202203021318347.png)
 
 优点：
 
@@ -50,7 +50,7 @@ categories: 数据库
 
 1.将数据放到表中，表再放到库中
 
-![20210821182429](https://tonkyshan.cn/img/202203021318258.png)
+![20210821182429](/img/202203021318258.png)
 
 2.一个数据库中可以有多个表，每个表都有一个名字，用来标识自己。表名具有唯一性。
 
@@ -913,7 +913,7 @@ DATE_FORMAT('2018/6/6','%Y年%m月%d日');
 #2018年6月6日
 ```
 
-<img src="https://tonkyshan.cn/img/202203021321186.png" alt="20210826113850" style="zoom:80%;" />
+<img src="/img/202203021321186.png" alt="20210826113850" style="zoom:80%;" />
 
 案例一：查询有奖金的员工名和入职日期(xx月/xx日 xx年)
 
@@ -1321,7 +1321,7 @@ ORDER BY AVG(salary) DESC;
 * 外连接：左外连接、右外连接、全外连接
 * 交叉连接
 
-<img src="https://tonkyshan.cn/img/202203021318147.png" alt="20210830112023" style="zoom:80%;" />
+<img src="/img/202203021318147.png" alt="20210830112023" style="zoom:80%;" />
 
 **一.sql192标准**
 
@@ -1715,9 +1715,9 @@ sql192和sql199**PK**
 
 可读性：sql199实现连接条件和筛选条件分离，可读性较高
 
-<img src="https://tonkyshan.cn/img/202203021318145.png" alt="20210904174554" style="zoom:67%;" />
+<img src="/img/202203021318145.png" alt="20210904174554" style="zoom:67%;" />
 
-<img src="https://tonkyshan.cn/img/202203021318153.png" alt="20210904174652" style="zoom:67%;" />
+<img src="/img/202203021318153.png" alt="20210904174652" style="zoom:67%;" />
 
 案例一：查询编号>3的女神的男朋友信息，如果有则列出信息，如果没有，则用null填充
 
@@ -1749,9 +1749,9 @@ ON d.`department_id`=e.`department_id`
 WHERE d.`department_name` IN ('SAL','IT');
 ```
 
-![20210904181727](https://tonkyshan.cn/img/202203021321533.png)
+![20210904181727](/img/202203021321533.png)
 
-![20210904181736](https://tonkyshan.cn/img/202203021321181.png)
+![20210904181736](/img/202203021321181.png)
 
 > tips：一个名字但是id不一样
 
@@ -1896,7 +1896,7 @@ HAVING MIN(salary)>(
 * 返回多行
 * 使用多行比较操作符
 
-![20210906184307](https://tonkyshan.cn/img/202203021318642.png)
+![20210906184307](/img/202203021318642.png)
 
 案例一：返回`location_id`是1400或1700的部门中的所有员工姓名
 
@@ -2687,7 +2687,7 @@ WHERE nation='中国';
 
 * 整型
 
-![20210915215236](https://tonkyshan.cn/img/202203021318221.png)
+![20210915215236](/img/202203021318221.png)
 
 分类：tinyint、smallint、mediumint、int/integer、bigint
 
@@ -2718,7 +2718,7 @@ SELECT * FROM tab_int;
 
 * 小数
 
-![20210916211328](https://tonkyshan.cn/img/202203021318228.png)
+![20210916211328](/img/202203021318228.png)
 
 特点：
 
@@ -2751,7 +2751,7 @@ SELECT * FROM tab_int;
 * `char(M)`
 * `varchar(M)`
 
-![20210917092411](https://tonkyshan.cn/img/202203021321679.png)
+![20210917092411](/img/202203021321679.png)
 
 特点：
 
@@ -2763,7 +2763,7 @@ varchar      可变长度的字符               比较节省                  �
 
 **位类型**
 
-![20210917094843](https://tonkyshan.cn/img/202203021318227.png)
+![20210917094843](/img/202203021318227.png)
 
 **binary和varbinary类型**
 
@@ -2783,7 +2783,7 @@ varchar      可变长度的字符               比较节省                  �
 
 说明：和Enum类型类似，里面可以保存0~64个成员。和Enum类型最大的区别是：Set类型一次可以选取多个成员，而Enum只能选一个，根据成员个数不同，存储所占的字节也不同。
 
-![20210919111952](https://tonkyshan.cn/img/202203021318240.png)
+![20210919111952](/img/202203021318240.png)
 
 2.较长的文本：
 
@@ -2792,7 +2792,7 @@ varchar      可变长度的字符               比较节省                  �
 
 **日期型：**
 
-![20210919112335](https://tonkyshan.cn/img/202203021321758.png)
+![20210919112335](/img/202203021321758.png)
 
 分类：
 
@@ -3065,7 +3065,7 @@ SHOW VARIABLES LIKE '%AUTO_INCREMENT%';
 SET auto_increment_increment=3;
 ```
 
-![20210926165712](https://tonkyshan.cn/img/202203021318866.png)
+![20210926165712](/img/202203021318866.png)
 
 **2.设置起始值**
 
@@ -3295,9 +3295,9 @@ ROLLBACK;#回滚
 
 **事务的并发问题**
 
-![20210928194246](https://tonkyshan.cn/img/202203021319927.png)
+![20210928194246](/img/202203021319927.png)
 
-![20210928194400](https://tonkyshan.cn/img/202203021321504.png)
+![20210928194400](/img/202203021321504.png)
 
 **演示事务的隔离级别**
 

@@ -413,7 +413,7 @@ $$
 
 作用于每一列，max为一列的最大值，min为一列的最小值，那么X''为最终结果，mx、mi分别为指定区间值，默认mx为1，mi为0
 
-<img src="https://tonkyshan.cn/img/20250805102611.png" style="zoom:50%;" />
+<img src="/img/20250805102611.png" style="zoom:50%;" />
 
 
 
@@ -1066,7 +1066,7 @@ def decision_iris():
 * sklearn.tree.export_graphviz()该函数能够导出DOT格式
   * tree.export_graphviz(estimator, out_file = 'tree.dot', feature_names = ['', ''])
 
-<img src="https://tonkyshan.cn/img/20250814142615.png" style="zoom:70%;" />
+<img src="/img/20250814142615.png" style="zoom:70%;" />
 
  优点：
 

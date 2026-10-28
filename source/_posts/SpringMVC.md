@@ -23,9 +23,9 @@ categories: [SSM,java]
 * 使用简单，开发便捷(相比于Servlet)
 * 灵活性强
 
-<img src="https://tonkyshan.cn/img/20221225135616.png" alt="20221225135616" style="zoom: 50%;" />
+<img src="/img/20221225135616.png" alt="20221225135616" style="zoom: 50%;" />
 
-<img src="https://tonkyshan.cn/img/20221225135735.png" alt="20221225135735" style="zoom: 50%;" />
+<img src="/img/20221225135735.png" alt="20221225135735" style="zoom: 50%;" />
 
 传统Servlet
 
@@ -220,7 +220,7 @@ public class ServletContainersInitConfig extends AbstractDispatcherServletInitia
 }
 ```
 
-![20221225151954](https://tonkyshan.cn/img/20221225151954.png)
+![20221225151954](/img/20221225151954.png)
 
 ------
 
@@ -389,7 +389,7 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
 * Postman是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件
 * 作用：常用于进行接口测试
 
-![20221225172844](https://tonkyshan.cn/img/20221225172844.png)
+![20221225172844](/img/20221225172844.png)
 
 -----
 
@@ -460,7 +460,7 @@ public class UserController {
 }
 ```
 
-![20221226121942](https://tonkyshan.cn/img/20221226121942.png)
+![20221226121942](/img/20221226121942.png)
 
 * 名称：@RequestMapping
 * 类型：**方法注解   类注解**
@@ -476,13 +476,13 @@ public class UserController {
 
 * 普通参数：url地址传参，地址参数名与形参变量名相同，定义形参即可接收参数
 
-<img src="https://tonkyshan.cn/img/20221226184238.png" alt="20221226184238" style="zoom: 67%;" />
+<img src="/img/20221226184238.png" alt="20221226184238" style="zoom: 67%;" />
 
 **Post请求参数**
 
 * 普通参数：form表单post请求传参，表单参数名与形参变量名相同，定义形参即可接收参数
 
-<img src="https://tonkyshan.cn/img/20221226184446.png" alt="20221226184446" style="zoom:67%;" />
+<img src="/img/20221226184446.png" alt="20221226184446" style="zoom:67%;" />
 
 ```java
 package com.priv.controller;
@@ -554,7 +554,7 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
 }
 ```
 
-![20221226185112](https://tonkyshan.cn/img/20221226185112.png)
+![20221226185112](/img/20221226185112.png)
 
 **请求参数**
 
@@ -658,9 +658,9 @@ public class UserController {
   * required：是否为必传参数
   * defaultValue：参数默认值
 
-<img src="https://tonkyshan.cn/img/20221227142138.png" alt="20221227142138" style="zoom: 67%;" />
+<img src="/img/20221227142138.png" alt="20221227142138" style="zoom: 67%;" />
 
-![20221227141117](https://tonkyshan.cn/img/20221227141117.png)
+![20221227141117](/img/20221227141117.png)
 
 **传递json数据**
 
@@ -722,7 +722,7 @@ public String listPojoParamForJson(@RequestBody List<User> list){
 
 第二步：设置发送json数据
 
-<img src="https://tonkyshan.cn/img/20221227144220.png" alt="20221227144220" style="zoom:67%;" />
+<img src="/img/20221227144220.png" alt="20221227144220" style="zoom:67%;" />
 
 第三步：开启自动转换json数据的支持
 
@@ -805,7 +805,7 @@ public interface Converter<S, T>{
 
 * @EnableWebMvc功能之一：根据类型匹配对应的类型转换器
 
-<img src="https://tonkyshan.cn/img/20221227150121.png" alt="20221227150121" style="zoom:67%;" />
+<img src="/img/20221227150121.png" alt="20221227150121" style="zoom:67%;" />
 
 ------
 
@@ -955,7 +955,7 @@ public interface HttpMessageConverter<T> {
 * 隐藏资源的访问行为，无法通过地址得知对资源是何种操作
 * 书写简化
 
-<img src="https://tonkyshan.cn/img/20221227200855.png" alt="20221227200855" style="zoom:67%;" />
+<img src="/img/20221227200855.png" alt="20221227200855" style="zoom:67%;" />
 
 * 根据REST风格对资源进行访问称为**RESTful**
 
@@ -1701,7 +1701,7 @@ methods: {
 
 #### 5.1拦截器概念
 
-<img src="https://tonkyshan.cn/img/20221228223713.png" alt="20221228223713" style="zoom:67%;" />
+<img src="/img/20221228223713.png" alt="20221228223713" style="zoom:67%;" />
 
 拦截器(Interceptor)：是一种动态拦截方法调用的机制，在SpringMVC中动态拦截控制器方法的执行
 
@@ -1831,7 +1831,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
 **执行流程**
 
-<img src="https://tonkyshan.cn/img/20221228231051.png" alt="20221228231051" style="zoom: 67%;" />
+<img src="/img/20221228231051.png" alt="20221228231051" style="zoom: 67%;" />
 
 -----
 
@@ -1898,7 +1898,7 @@ public void afterCompletion(HttpServletRequest request, HttpServletResponse resp
 * 当拦截器中出现对原始处理器的拦截，后面的拦截器均终止运行
 * 当拦截器运行中断，仅运行配置在前面的拦截器的afterCompletion操作
 
-<img src="https://tonkyshan.cn/img/20221228232349.png" alt="20221228232349" style="zoom:67%;" />
+<img src="/img/20221228232349.png" alt="20221228232349" style="zoom:67%;" />
 
 拦截器链的运行顺序
 

@@ -70,11 +70,11 @@ https://start.aliyun.com/
 
 * 手工导入坐标
 
-<img src="https://tonkyshan.cn/img/20221230182009.png" alt="20221230182009" style="zoom:50%;" />
+<img src="/img/20221230182009.png" alt="20221230182009" style="zoom:50%;" />
 
 * 手工制作引导类
 
-<img src="https://tonkyshan.cn/img/20221230182117.png" alt="20221230182117" style="zoom:67%;" />
+<img src="/img/20221230182117.png" alt="20221230182117" style="zoom:67%;" />
 
 ---------
 
@@ -390,7 +390,7 @@ SpringBoot默认配置文件application.properties，通过键值对配置对应
 
 * 修改服务器端口
 
-<img src="https://tonkyshan.cn/img/20221231133947.png" alt="20221231133947" style="zoom: 67%;" />
+<img src="/img/20221231133947.png" alt="20221231133947" style="zoom: 67%;" />
 
 ```properties
 #服务器端口配置
@@ -471,11 +471,11 @@ YAML(YAML Ain't Markup Langage)，一种数据序列化格式
 
 * 字面值表示方式
 
-<img src="https://tonkyshan.cn/img/20221231183256.png" alt="20221231183256" style="zoom:67%;" />
+<img src="/img/20221231183256.png" alt="20221231183256" style="zoom:67%;" />
 
 * 数组表示方式
 
-<img src="https://tonkyshan.cn/img/20221231183240.png" alt="20221231183240" style="zoom:67%;" />
+<img src="/img/20221231183240.png" alt="20221231183240" style="zoom:67%;" />
 
 --------
 
@@ -1298,7 +1298,7 @@ public class BookController {
 }
 ```
 
-![20230116135526](https://tonkyshan.cn/img/20230116135526.png)
+![20230116135526](/img/20230116135526.png)
 
 ##### 消息一致性处理
 

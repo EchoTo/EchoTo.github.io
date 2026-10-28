@@ -250,17 +250,17 @@ $ cat .git/refs/heads/master
 
 
 
-![v2-23bbe72110019b5dd538d61a11874cd5_b](https://tonkyshan.cn/img/v2-23bbe72110019b5dd538d61a11874cd5_b.gif)
+![v2-23bbe72110019b5dd538d61a11874cd5_b](/img/v2-23bbe72110019b5dd538d61a11874cd5_b.gif)
 
 
 
 运行`echo "333" > a.txt`将a.txt的内容从111修改成333，此时如上图可以看到，此时索引区域和git仓库没有任何变化。
 
-![1](https://tonkyshan.cn/img/1.gif)
+![1](/img/1.gif)
 
 运行`git add a.txt`将a.txt加入到索引区域，此时如上图所示，git在仓库里面新建了一个blob object，储存了新的文件内容。并且更新了索引将a.txt指向了新建的[blob object](https://www.zhihu.com/search?q=blob+object&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A96631135})。
 
-![2](https://tonkyshan.cn/img/2.gif)
+![2](/img/2.gif)
 
 运行`git commit -m 'update'`提交这次修改。如上图所示
 

@@ -1093,7 +1093,7 @@ plt.plot(month, sales,
 
 ```
 
-<img src="https://tonkyshan.cn/img/20250729144956.png" style="zoom: 33%;" />
+<img src="/img/20250729144956.png" style="zoom: 33%;" />
 
 
 
@@ -1148,7 +1148,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-<img src="https://tonkyshan.cn/img/20250730103116.png"  />
+<img src="/img/20250730103116.png"  />
 
 
 
@@ -1189,7 +1189,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-<img src="https://tonkyshan.cn/img/20250730111418.png"  />
+<img src="/img/20250730111418.png"  />
 
 
 
@@ -1247,7 +1247,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-<img src="https://tonkyshan.cn/img/20250730171821.png" style="zoom:87%;" />
+<img src="/img/20250730171821.png" style="zoom:87%;" />
 
 
 
@@ -1274,7 +1274,7 @@ plt.grid(True, axis = 'y', linestyle = '--', alpha = 0.5)
 plt.show()
 ```
 
-<img src="https://tonkyshan.cn/img/20250731135835.png" style="zoom:87%;" />
+<img src="/img/20250731135835.png" style="zoom:87%;" />
 
 * 折线图：趋势随时间变化
 * 条形图/柱状图：类别之间对比
@@ -1305,7 +1305,7 @@ sns.histplot(data = df, x = "房地产股票成交量", kde = True)
 plt.show()
 ```
 
-<img src="https://tonkyshan.cn/img/20250731152038.png" style="zoom:87%;" />
+<img src="/img/20250731152038.png" style="zoom:87%;" />
 
 ```markdown
 1. 导入与基础设置

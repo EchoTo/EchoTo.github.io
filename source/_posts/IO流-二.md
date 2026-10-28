@@ -187,7 +187,7 @@ public class Demo03PropertiesLoad {
 
 缓冲流的基本原理，是在创建流对象时，会创建一个内置的默认大小的缓冲区数组，通过缓冲区读写，减少系统IO次数，从而提高读写效率。
 
-<img src="https://tonkyshan.cn/img/202202281835217.png" alt="20210819184022" style="zoom: 50%;" />
+<img src="/img/202202281835217.png" alt="20210819184022" style="zoom: 50%;" />
 
 ------
 
@@ -541,7 +541,7 @@ public class Demo05Test {
 
 计算机要准确的存储和识别各种字符集符号，需要进行字符编码，一套字符集必然至少有一套字符编码。常见字符集有ASCII字符集、GBK字符集、Unicode字符集等。
 
-![20210820082714](https://tonkyshan.cn/img/202202281750420.png)
+![20210820082714](/img/202202281750420.png)
 
 可见，当指定了**编码**，它所对应的**字符集**自然就制定了，所以**编码**才是我们最终要关心的。
 
@@ -788,9 +788,9 @@ Java提供了一种对象**序列化**的机制。用一个字节序列可以表
 
 反之，该字节序列还可以从文件中读取回来，重构对象，对它进行**反序列化**。`对象的数据`，`对象的类型`和`对象中存储的属性`信息，都可以用来在内存中创建对象。
 
-<img src="https://tonkyshan.cn/img/202202281835204.png" alt="20210820125126" style="zoom: 67%;" />
+<img src="/img/202202281835204.png" alt="20210820125126" style="zoom: 67%;" />
 
-<img src="https://tonkyshan.cn/img/202202281750908.png" alt="20210820125835" style="zoom:67%;" />
+<img src="/img/202202281750908.png" alt="20210820125835" style="zoom:67%;" />
 
 ----------
 
@@ -968,7 +968,7 @@ public class Demo02ObjectInputStream {
 
 `Serializable`接口给需要序列化的类，提供了一个序列版本号。`serialVersionUID`该版本号的目的在于验证序列化的对象和对应类是否版本匹配。
 
-<img src="https://tonkyshan.cn/img/202202281835065.png" alt="20210820135233" style="zoom: 50%;" />
+<img src="/img/202202281835065.png" alt="20210820135233" style="zoom: 50%;" />
 
 在Person类中添加一个自定义的序列号，序列化之后再对Person类修改时反序列化时就不会抛出`InvalidClassException`异常。
 

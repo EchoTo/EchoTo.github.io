@@ -72,7 +72,7 @@ categories: [SSM,java]
 
 **2、创建user数据表**
 
-<img src="https://tonkyshan.cn/img/20221110155032.png" alt="20221110155032" style="zoom:67%;" />
+<img src="/img/20221110155032.png" alt="20221110155032" style="zoom:67%;" />
 
 **3、编写User实体类**
 
@@ -214,7 +214,7 @@ public class MyBatisTest {
 
 -----
 
-![20221110161259](https://tonkyshan.cn/img/20221110161259.png)
+![20221110161259](/img/20221110161259.png)
 
 ----
 
@@ -458,7 +458,7 @@ public class MyBatisTest {
 
 数据库环境的配置，支持多环境配置
 
-![20221111203647](https://tonkyshan.cn/img/20221111203647.png)
+![20221111203647](/img/20221111203647.png)
 
 其中，事务管理器(transactionManager) 类型有两种：
 
@@ -475,7 +475,7 @@ public class MyBatisTest {
 
 该标签的作用是加载映射的，加载方式有如下几种：
 
-![20221111204459](https://tonkyshan.cn/img/20221111204459.png)
+![20221111204459](/img/20221111204459.png)
 
 **3、Properties标签**
 
@@ -698,7 +698,7 @@ Mapper接口开发需要遵循以下规范：
 
 4、Mapper接口方法的输出参数类型和mapper.xmI中定义的每个sq|的resultType的类型相同
 
-![20221114134153](https://tonkyshan.cn/img/20221114134153.png)
+![20221114134153](/img/20221114134153.png)
 
 dao
 
@@ -976,7 +976,7 @@ sql标签
 
 ​	无论是Mybatis在预处理语句(PreparedStatement)中设置一个参数时，还是从结果集中取出一个值时，都会用类型处理器将获取的值以合适的方式转换成Java类型，下表描述了一些默认的类型处理器。
 
-![20221124153505](https://tonkyshan.cn/img/20221124153505.png)
+![20221124153505](/img/20221124153505.png)
 
 你可以重写类型处理器或创建你自己的类型处理器来处理不支持的或非标准的类型。具体做法为：实现org.apache.ibatis.type.TypeHandler接口，或继承一个很便利的类org.apache.ibatis.type.BaseTypeHandler，然
 后可以选择性地将它映射到一个JDBC类型。例如需求：一个Java中的Date数据类型，我想将之存到数据库的时候存成一
@@ -1260,7 +1260,7 @@ public class MapperTest {
 
 **一、一对一查询的模型**
 
-<img src="https://tonkyshan.cn/img/20221129113030.png" alt="20221129113030" style="zoom:67%;" />
+<img src="/img/20221129113030.png" alt="20221129113030" style="zoom:67%;" />
 
 orderMapper.xml
 
@@ -1341,7 +1341,7 @@ public class MapperTest {
 
 **二、一对多查询模型**
 
-<img src="https://tonkyshan.cn/img/20221203100547.png" style="zoom:67%;" />
+<img src="/img/20221203100547.png" style="zoom:67%;" />
 
 OrderMapper.xml
 
@@ -1457,7 +1457,7 @@ public class MapperTest {
 
 **三、多对多查询模型**
 
-<img src="https://tonkyshan.cn/img/20221203101619.png" alt="20221203101619" style="zoom:67%;" />
+<img src="/img/20221203101619.png" alt="20221203101619" style="zoom:67%;" />
 
 UserMapper.xml
 
@@ -1801,9 +1801,9 @@ public interface UserMapper {
 
 ​         实现复杂关系映射之前我们可以在映射文件中通过配置< resultMap >来实现，使用注解开发后，我们可以使用@Results注解，@Result注解，@One注解，@Many注解组合完成复杂关系的配置。
 
-<img src="https://tonkyshan.cn/img/20221203141543.png" alt="20221203141543" style="zoom: 67%;" />
+<img src="/img/20221203141543.png" alt="20221203141543" style="zoom: 67%;" />
 
-<img src="https://tonkyshan.cn/img/20221203141612.png" alt="20221203141612" style="zoom:67%;" />
+<img src="/img/20221203141612.png" alt="20221203141612" style="zoom:67%;" />
 
 **一对一**
 

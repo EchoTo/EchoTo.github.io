@@ -29,7 +29,7 @@ Maven的本质：Maven是一个项目管理工具，它包含了一个项目对�
 * 项目构建：提供标准的、跨平台的自动化项目构建方式
 * 依赖管理：方便快捷的管理项目依赖的资源(jar包)，避免资源间的版本冲突问题
 
-![20220411120954](https://tonkyshan.cn/img/20220411120954.png)
+![20220411120954](/img/20220411120954.png)
 
 ------
 
@@ -56,17 +56,17 @@ Maven的本质：Maven是一个项目管理工具，它包含了一个项目对�
   * 中央仓库中的jar都是开源的，不能存储具有版权的资源
 * 一定范围内共享资源，仅对内部开放，不对外共享
 
-![20220401224606](https://tonkyshan.cn/img/20220401224606.png)
+![20220401224606](/img/20220401224606.png)
 
 **仓库配置：**
 
-![20220411131525](https://tonkyshan.cn/img/20220411131525.png)
+![20220411131525](/img/20220411131525.png)
 
 修改本地仓库默认位置
 
 国外中央仓库由于下载速度缓慢，这里建议用阿里云的镜像仓库。
 
-![20220411122025](https://tonkyshan.cn/img/20220411122025.png)
+![20220411122025](/img/20220411122025.png)
 
 -------
 
@@ -74,7 +74,7 @@ Maven的本质：Maven是一个项目管理工具，它包含了一个项目对�
 
 ----
 
-![20220401225842](https://tonkyshan.cn/img/20220401225842.png)
+![20220401225842](/img/20220401225842.png)
 
 ------
 
@@ -120,11 +120,11 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
 
 例：运行打包命令，会自动进行编译和测试。
 
-![20220411161959](https://tonkyshan.cn/img/20220411161959.png)
+![20220411161959](/img/20220411161959.png)
 
-![20220411162028](https://tonkyshan.cn/img/20220411162028.png)
+![20220411162028](/img/20220411162028.png)
 
-![20220411162133](https://tonkyshan.cn/img/20220411162133.png)
+![20220411162133](/img/20220411162133.png)
 
 **插件**
 
@@ -266,13 +266,13 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
   * 测试程序范围有效(test文件夹范围内)
   * 是否参与打包(package指令范围内)
 
-![20220411161211](https://tonkyshan.cn/img/20220411161211.png)
+![20220411161211](/img/20220411161211.png)
 
 **依赖范围的传递性**
 
 * 带有依赖范围的资源在进行传递时，作用范围将受到影响
 
-![20220411161121](https://tonkyshan.cn/img/20220411161121.png)
+![20220411161121](/img/20220411161121.png)
 
 ---------
 
@@ -443,7 +443,7 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
   </dependencies>
   ```
 
-  ![20220413164251](https://tonkyshan.cn/img/20220413164251.png)
+  ![20220413164251](/img/20220413164251.png)
 
 -----
 
@@ -569,7 +569,7 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
 * RELEASE(发布版本)
   * 项目开发到进入阶段里程碑后，向团队外部发布较为稳定的版本，这种版本所对应的构件文件是稳定的，即便进行功能的后续开发，也不会改变当前发布版本内容，这种版本称为发布版本
 
-![20220413181257](https://tonkyshan.cn/img/20220413181257.png)
+![20220413181257](/img/20220413181257.png)
 
 -----
 
@@ -611,7 +611,7 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
 
 **多环境兼容**
 
-![20220413182619](https://tonkyshan.cn/img/20220413182619.png)
+![20220413182619](/img/20220413182619.png)
 
 **多环境配置**
 
@@ -677,7 +677,7 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
 
 **二、使用界面操作跳过测试**
 
-![20220413183632](https://tonkyshan.cn/img/20220413183632.png)
+![20220413183632](/img/20220413183632.png)
 
 **三、使用配置跳过测试**
 
@@ -707,9 +707,9 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
 
 ------
 
-![20220413185804](https://tonkyshan.cn/img/20220413185804.png)
+![20220413185804](/img/20220413185804.png)
 
-![20220413190041](https://tonkyshan.cn/img/20220413190041.png)
+![20220413190041](/img/20220413190041.png)
 
 **仓库的分类**
 
@@ -723,8 +723,8 @@ mvn archetype:generate -DgroupId={project-packaging} -DartifactId={project-name}
   * 将若干个仓库组成一个群组，简化配置
   * 仓库组不能保存资源，属于设计型仓库
 
-![20220413201842](https://tonkyshan.cn/img/20220413201842.png)
+![20220413201842](/img/20220413201842.png)
 
 **发布到私服**
 
-![20220413202405](https://tonkyshan.cn/img/20220413202405.png)
+![20220413202405](/img/20220413202405.png)
