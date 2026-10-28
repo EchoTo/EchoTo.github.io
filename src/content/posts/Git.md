@@ -100,7 +100,7 @@ reflog 和log 还是有不同的地方的– reflog记录你所有移动的记�
 > PPT 链接：
 > [https://www.lzane.com/slide/git-under-the-hood](https://link.zhihu.com/?target=https%3A//www.lzane.com/slide/git-under-the-hood)
 
-<video src="https://cdn.jsdelivr.net/gh/EchoTo/blog-img@main/img/be72a612-2397-11eb-a5d4-3e7c04448a0a.mp4"></video>
+<video src="/img/be72a612-2397-11eb-a5d4-3e7c04448a0a.mp4"></video>
 
 **前言**
 

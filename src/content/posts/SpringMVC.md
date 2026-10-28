@@ -254,7 +254,7 @@ public class ServletContainersInitConfig extends AbstractDispatcherServletInitia
 
   6、检测到有@ResponseBody直接将save()方法的返回值作为响应体返回给请求方
 
-<img src="../../../imgs/20221225153150.png" alt="20221225153150" style="zoom:67%;" />
+<img src="/img/20221225153150.png" alt="20221225153150" style="zoom:67%;" />
 
 ------
 

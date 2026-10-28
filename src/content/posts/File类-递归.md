@@ -397,7 +397,7 @@ public class Demo02Recursion {
 
 #### 代码执行图解
 
-![QQ截图20210814201633](https://jsdelivr.sianx.com/npm/blog-clouding/img/202202281743169.png)
+![QQ截图20210814201633](/img/202202281743169.png)
 
 > tips：递归一定要有条件限定，保证递归能够停止下来，次数不要太多，否则会发生栈内存溢出。
 

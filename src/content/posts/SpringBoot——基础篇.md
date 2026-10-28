@@ -56,7 +56,7 @@ public class BookController {
   * pom.xml文件
   * Application类
 
-<img src="../../../imgs/20221229134727.png" alt="20221229134727" style="zoom:67%;" />
+<img src="/img/20221229134727.png" alt="20221229134727" style="zoom:67%;" />
 
 二、通过SpringBoot官网
 
