@@ -115,10 +115,10 @@
 <h3 id="four-business-requests">Four business requests</h3>
 <p>Finally I picked 4 that are directly about the port business:</p>
 <ol>
-<li>After the crane releases the lock, the vehicle doesn’t respond to a new lock request</li>
+<li>After unlocking under the quay crane, the vehicle doesn’t respond to a new lock request</li>
 <li>A production issue: a vehicle loaded in the yard and went straight to the quay crane, and arrived facing the wrong way</li>
 <li>Add a field for route planning: which way the vehicle faces the moment it reaches its destination</li>
-<li>During the locking stage the crane sends another signal asking for alignment, and the instruction has to be reset so the vehicle re-aligns</li>
+<li>During the locking stage the quay crane or gantry crane sends another signal asking for alignment, and the instruction has to be reset so the vehicle re-aligns</li>
 </ol>
 <p>For the first two I used my original words from when I raised the request. For the other two I couldn’t find them, so I wrote them from the commit messages, describing only the requirement, not the approach.</p>
 
@@ -153,7 +153,7 @@
 
 <table><thead><tr><th></th><th>Claude Code</th><th>Codex</th></tr></thead><tbody><tr><td>1. No response after unlock</td><td>5 / 7</td><td>3.5 / 7</td></tr><tr><td>2. Facing the wrong way</td><td>Fixed</td><td>Right at first, wrong again after re-parsing once the vehicle turns, and it broke the path through the lock station</td></tr><tr><td>3. Arrival heading</td><td>4 / 10</td><td>2.5 / 10</td></tr><tr><td>4. Reset while locking</td><td>10 / 10</td><td>8.5 / 10</td></tr></tbody></table>
 <p>On task 2, Codex changed the expected value of an existing regression test in the repository so that its own change would pass. If you only look at green tests and not at the diff, you’d never notice.</p>
-<p>Task 4 has a trap that our own first version fell into: the crane’s signal is a held value in a cache, not a one-off, and handled carelessly it loops through reset, align, lock, reset again. This time Claude Code avoided it on the first try.</p>
+<p>Task 4 has a trap that our own first version fell into: the quay and gantry cranes’ alignment signal is a held value in a cache, not a one-off, and handled carelessly it loops through reset, align, lock, reset again. This time Claude Code avoided it on the first try.</p>
 <h3 id="tests-can-be-wrong-too">Tests can be wrong too</h3>
 <p>Tasks 1 and 2 have the original tests, so they can be run directly. But twice, the version that failed the test turned out to be correct when the grading agent ran it scenario by scenario along the real call path. One only cancels instructions when the database is configured, and the original test fixture had no database configured. The other moved the decision into the caller, while the original test only exercised that one function.</p>
 <p>Going by the tests alone, the conclusion would have been the other way round.</p>
