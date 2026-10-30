@@ -70,8 +70,106 @@
 <p>Codex usually lists the files it changed, the tests it ran, and that they passed.</p>
 <p>Claude Code writes down what it hasn’t confirmed. On number 1 it said it hadn’t run the new test against the old code, and that its conclusion came from reading the code. On number 4 it added the tenant setting but didn’t fill in a value for any environment, saying it didn’t know the actual tenant ID and leaving that to me.</p>
 <p>The size of the changes was mostly similar, with two exceptions: on the radar task Claude Code changed 9 lines and Codex 35; on number 5 Claude Code added 97 lines and Codex 176.</p>
+<h2 id="update-bigger-requests-and-business-requests">Update: bigger requests and business requests</h2>
+<p>The tasks above were all too small. Most of them touched one or two files, and the task text more or less pointed at the spot. So I picked 7 bigger requests from the commit history and ran another round.</p>
+<h3 id="first-a-trap">First, a trap</h3>
+<p>On the first run, Codex changed exactly the same files as the original commit on one task. Looking at the commands it ran, it had used <code>git log --all</code> to find the original commit in the repository history, then simply ran <code>git diff | git apply</code> and applied the answer.</p>
+<p>Claude Code didn’t apply it wholesale, but it also went through the history and read the original commit and design docs that were written later.</p>
+<p>The problem was mine: the worktree had been reset to before the change, but the repository still held every later commit. I switched to cloning a separate repository for each task containing only the history up to the change, and after each run I checked every command each agent had executed. Any run that went out of bounds was thrown away and rerun.</p>
+<p>Nobody told them to dig through the history. To get the job right, they go looking for anything they can use as a reference. If you evaluate agents on historical commits, guard against this first.</p>
+<h3 id="three-general-purpose-requests">Three general-purpose requests</h3>
+<p>First, three that have little to do with the business: model fallback for a code review tool, moving a scheduling service from a single instance to active–standby, and a general feature-flag mechanism. Each one changed seven or eight hundred lines originally.</p>
+<p>Bigger requests can’t be judged by the original tests directly, because the new function names don’t match. From the original commit messages I wrote a scoring rubric of 9 to 10 points per task and gave it to a separately launched agent, which didn’t know whose work was whose.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Claude Code</th><th>Codex</th></tr></thead><tbody><tr><td>Model fallback (out of 9)</td><td>6.5</td><td>7</td></tr><tr><td>Active–standby (out of 10)</td><td>9.5</td><td>6</td></tr><tr><td>Feature flags (out of 10)</td><td>10</td><td>6</td></tr><tr><td>Average time</td><td>10 min</td><td>22 min</td></tr></tbody></table>
+<p>On model fallback Codex scored slightly higher, but it added a startup check that makes the whole review exit when the check fails, which brings back exactly the problem this request was meant to fix: the review disappearing. On active–standby, Codex imported a package the repository’s rules forbid; it released the lock during handover without waiting for in-flight work to finish; and it left a component that depends on in-process state untouched, so in normal operation that component only gets part of its data.</p>
+<h3 id="four-business-requests">Four business requests</h3>
+<p>Finally I picked 4 that are directly about the port business:</p>
+<ol>
+<li>After the crane releases the lock, the vehicle doesn’t respond to a new lock request</li>
+<li>A production issue: a vehicle loaded in the yard and went straight to the quay crane, and arrived facing the wrong way</li>
+<li>Add a field for route planning: which way the vehicle faces the moment it reaches its destination</li>
+<li>During the locking stage the crane sends another signal asking for alignment, and the instruction has to be reset so the vehicle re-aligns</li>
+</ol>
+<p>For the first two I used my original words from when I raised the request. For the other two I couldn’t find them, so I wrote them from the commit messages, describing only the requirement, not the approach.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Claude Code</th><th>Codex</th></tr></thead><tbody><tr><td>1. No response after unlock</td><td>5 / 7</td><td>3.5 / 7</td></tr><tr><td>2. Facing the wrong way</td><td>Fixed</td><td>Right at first, wrong again after re-parsing once the vehicle turns, and it broke the path through the lock station</td></tr><tr><td>3. Arrival heading</td><td>4 / 10</td><td>2.5 / 10</td></tr><tr><td>4. Reset while locking</td><td>10 / 10</td><td>8.5 / 10</td></tr></tbody></table>
+<p>On task 2, Codex changed the expected value of an existing regression test in the repository so that its own change would pass. If you only look at green tests and not at the diff, you’d never notice.</p>
+<p>Task 4 has a trap that our own first version fell into: the crane’s signal is a held value in a cache, not a one-off, and handled carelessly it loops through reset, align, lock, reset again. This time Claude Code avoided it on the first try.</p>
+<h3 id="tests-can-be-wrong-too">Tests can be wrong too</h3>
+<p>Tasks 1 and 2 have the original tests, so they can be run directly. But twice, the version that failed the test turned out to be correct when the grading agent ran it scenario by scenario along the real call path. One only cancels instructions when the database is configured, and the original test fixture had no database configured. The other moved the decision into the caller, while the original test only exercised that one function.</p>
+<p>Going by the tests alone, the conclusion would have been the other way round.</p>
+<h3 id="domain-material-doubles-the-score">Domain material doubles the score</h3>
+<p>Task 3 was the hardest. The rules for arrival heading, such as when to turn around and how many times, aren’t in the code. They’re in a PDF we put together later.</p>
+<p>On the first run I accidentally let them read that PDF, even though it was written after this request, so I removed it and reran. The same Claude Code scored 8 with the PDF and 4 without it.</p>
+<p>It’s the same point as my last post: it can read the code, but the rules of the site live in our heads and our documents. Without them, it can only guess.</p>
+<h3 id="code-graphs-while-i-was-at-it">Code graphs, while I was at it</h3>
+<p>Code graphs are popular at the moment: parse the repository into a call graph, and supposedly the agent can see what a change will affect. I added a group to these rounds: the same Claude Code, but told to query the graph before making changes.</p>
+<p>Across three rounds, the results with and without the graph were about the same. Grepping and reading the code on its own already finds the full scope of a change, and on our Go project the graph also misses some cross-package calls.</p>
+<h3 id="caveats">Caveats</h3>
+<p>The rubrics follow the original implementations, which I wrote with Claude, and the grader is Claude too. All of this leans towards Claude Code, so take the scores as a rough guide. What I trust more are the specific problems the grading agent listed, because those can be checked against the code.</p>
+<p>Codex goes through my company’s gateway and was interrupted by capacity errors several times; a bigger task meant waiting twenty or thirty minutes. And each group ran each task only once.</p>
 <h2 id="finally">Finally</h2>
-<p>After this, I think the tool is most useful when the request itself isn’t fully thought through. If two agents do the same thing, that doesn’t tell you much; when they do it differently, it’s often my description that’s the problem.</p>
+<p>After the small tasks, my conclusion was that both could get them right and the gap was mostly speed and reliability. With bigger and business requests, the gap isn’t only speed. Codex’s changes are generally smaller, sometimes small enough to miss places that needed changing.</p>
+<p>The tool is still most useful when the request itself isn’t fully thought through. Where two agents do things differently is often where my description was unclear. And give them the domain material they need, and read the diff even when the tests are green.</p>
 <p>agent-race is open source on <a href="https://github.com/TonkyShan/agent-race">GitHub</a>. Try it on your own repository.</p><p class="tags"><a href="/tags/AI-Coding/">#AI Coding</a><a href="/tags/Agent/">#Agent</a><a href="/tags/Claude-Code/">#Claude Code</a><a href="/tags/Codex/">#Codex</a></p></main><footer><span>© 2022–2026 ShanTianQi · Inspired by <a href="https://bearblog.dev">Bear <span role="img" aria-label="ASCII bear logo">ʕ•ᴥ•ʔ</span></a></span></footer><script>
       // For whoever opens the console
       console.log('%cʕ•ᴥ•ʔ 凡是过往，皆为序章 → /about/2024/', 'color:#8b6fcb');
