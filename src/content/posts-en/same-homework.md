@@ -105,10 +105,10 @@ On model fallback Codex scored slightly higher, but it added a startup check tha
 
 Finally I picked 4 that are directly about the port business:
 
-1. After the crane releases the lock, the vehicle doesn't respond to a new lock request
+1. After unlocking under the quay crane, the vehicle doesn't respond to a new lock request
 2. A production issue: a vehicle loaded in the yard and went straight to the quay crane, and arrived facing the wrong way
 3. Add a field for route planning: which way the vehicle faces the moment it reaches its destination
-4. During the locking stage the crane sends another signal asking for alignment, and the instruction has to be reset so the vehicle re-aligns
+4. During the locking stage the quay crane or gantry crane sends another signal asking for alignment, and the instruction has to be reset so the vehicle re-aligns
 
 For the first two I used my original words from when I raised the request. For the other two I couldn't find them, so I wrote them from the commit messages, describing only the requirement, not the approach.
 
@@ -121,7 +121,7 @@ For the first two I used my original words from when I raised the request. For t
 
 On task 2, Codex changed the expected value of an existing regression test in the repository so that its own change would pass. If you only look at green tests and not at the diff, you'd never notice.
 
-Task 4 has a trap that our own first version fell into: the crane's signal is a held value in a cache, not a one-off, and handled carelessly it loops through reset, align, lock, reset again. This time Claude Code avoided it on the first try.
+Task 4 has a trap that our own first version fell into: the quay and gantry cranes' alignment signal is a held value in a cache, not a one-off, and handled carelessly it loops through reset, align, lock, reset again. This time Claude Code avoided it on the first try.
 
 ### Tests can be wrong too
 
