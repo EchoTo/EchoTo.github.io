@@ -14,10 +14,10 @@ function page(card: { title: string; lines: string[] }, i: number, n: number) {
   * { margin: 0; box-sizing: border-box; }
   body { width: 1080px; height: 1440px; background: #f6f4ef; color: #1d1d1f;
          font-family: "PingFang SC", "Hiragino Sans GB", sans-serif;
-         padding: 120px 100px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+         padding: 120px ${cover ? 80 : 100}px; display: flex; flex-direction: column; justify-content: center; position: relative; }
   .bar { width: 96px; height: 12px; background: #1d1d1f; margin-bottom: 64px; }
-  h1 { font-size: ${cover ? 112 : 84}px; line-height: 1.25; font-weight: 700; text-wrap: balance; }
-  p { font-size: ${cover ? 54 : 54}px; line-height: 1.55; color: ${cover ? '#555' : '#333'}; margin-top: ${cover ? 72 : 36}px; text-wrap: balance; }
+  h1 { font-size: ${cover ? 150 : 88}px; line-height: 1.25; font-weight: 700; text-wrap: balance; }
+  p { font-size: ${cover ? 64 : 54}px; line-height: 1.55; color: ${cover ? '#555' : '#333'}; margin-top: ${cover ? 72 : 36}px; text-wrap: balance; }
   .lines { margin-top: ${cover ? 24 : 72}px; }
   .n { position: absolute; bottom: 80px; right: 100px; font-size: 34px; color: #999; }
   </style></head><body>
