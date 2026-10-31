@@ -24,7 +24,7 @@ function page(card: { title: string; lines: string[] }, i: number, n: number) {
   <div class="bar"></div>
   <h1>${esc(card.title)}</h1>
   <div class="lines">${card.lines.map((l) => `<p>${esc(l)}</p>`).join('')}</div>
-  <div class="n">${i + 1} / ${n}</div>
+  ${n > 1 ? `<div class="n">${i + 1} / ${n}</div>` : ''}
   </body></html>`;
 }
 
