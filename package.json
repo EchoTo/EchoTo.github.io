@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "astro build && sh scripts/deploy.sh"
+    "deploy": "astro build && sh scripts/deploy.sh",
+    "share": "node scripts/share/share.ts",
+    "publish": "npm run deploy && node scripts/share/share.ts --new"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.4",
